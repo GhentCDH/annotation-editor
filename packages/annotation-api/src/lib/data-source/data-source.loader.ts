@@ -1,14 +1,21 @@
-import { readdirSync, readFileSync, existsSync } from 'node:fs';
-import { join } from 'node:path';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { join, relative } from 'node:path';
 
 import type { DataSourceEntry, DataSourceJsonConfig } from './data-source.types';
 
+type DataSourceModule = {
+  default: unknown;
+};
+
+/**
+ * IMPORTANT:
+ * Vite needs a statically analyzable glob.
+ * We intentionally scope it to a predictable folder structure.
+ */
+const modules = import.meta.glob<DataSourceModule>('./**/index.{ts,js}');
+
 /**
  * Scan a directory for data-source subdirectories and load their configs + clients.
- *
- * Each subdirectory must contain:
- * - `data-source.json` — config with `name`, `type`, and optional `default`
- * - `index.ts` (or `.js`) — default export of a PrismaClient instance
  */
 export const loadDataSourcesFromDir = async (
   dirPath: string,
@@ -17,6 +24,7 @@ export const loadDataSourcesFromDir = async (
 
   const entries = readdirSync(dirPath, { withFileTypes: true });
   const dirs = entries.filter((e) => e.isDirectory()).map((e) => e.name);
+
   const results: DataSourceEntry[] = [];
 
   for (const dir of dirs) {
@@ -29,11 +37,13 @@ export const loadDataSourcesFromDir = async (
       readFileSync(jsonFile, 'utf-8'),
     );
 
-    const indexFile = findModule(basePath, 'index');
-    if (!indexFile) continue;
+    const importer = resolveModule(basePath);
 
-    const mod = await import(indexFile);
+    if (!importer) continue;
+
+    const mod = await importer();
     const client = mod.default;
+
     if (!client) continue;
 
     results.push({ config, client });
@@ -42,10 +52,12 @@ export const loadDataSourcesFromDir = async (
   return results;
 };
 
-const findModule = (dir: string, name: string): string | undefined => {
-  for (const ext of ['.ts', '.js']) {
-    const p = join(dir, `${name}${ext}`);
-    if (existsSync(p)) return p;
-  }
-  return undefined;
+/**
+ * Convert filesystem path → Vite glob key safely
+ */
+const resolveModule = (absPath: string) => {
+  const rel = relative(process.cwd(), absPath).replace(/\\/g, '/');
+  const key = `./${rel}/index.ts`;
+
+  return modules[key];
 };

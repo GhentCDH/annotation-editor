@@ -1,8 +1,10 @@
 import { AnnotationDefinition } from '../annotation-defintion.type';
 import { ContextBuilder } from '@ghentcdh/w3c-utils';
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { ANNOTATION_DEF_CONFIG_TOKEN, AnnotationDefConfig } from '../utils/annotation.context-builder';
-
+import {
+  ANNOTATION_DEF_CONFIG_TOKEN,
+  type AnnotationDefConfig,
+} from '../utils/annotation.context-builder';
 
 @Injectable()
 export abstract class AnnotationDefinitionService {
@@ -10,7 +12,10 @@ export abstract class AnnotationDefinitionService {
   private groupedDefinitions: Record<string, AnnotationDefinition> = {};
   private cachedAt = 0;
 
-  constructor(@Inject(ANNOTATION_DEF_CONFIG_TOKEN)protected readonly config: AnnotationDefConfig){}
+  constructor(
+    @Inject(ANNOTATION_DEF_CONFIG_TOKEN)
+    protected readonly config: AnnotationDefConfig,
+  ) {}
 
   async findAllGrouped(): Promise<Record<string, AnnotationDefinition>> {
     await this.setDefinitions();
@@ -21,7 +26,11 @@ export abstract class AnnotationDefinitionService {
 
   async setDefinitions(force = false): Promise<void> {
     const now = Date.now();
-    if (!force && this.definitions.length && now - this.cachedAt < this.config.cacheTTLms)
+    if (
+      !force &&
+      this.definitions.length &&
+      now - this.cachedAt < this.config.cacheTTLms
+    )
       return;
 
     const definitions = await this.reloadDefinitions();

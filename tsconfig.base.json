@@ -14,10 +14,10 @@
     "baseUrl": ".",
     "paths": {
       "@ghentcdh/annotation-api": ["./packages/annotation-api/src/index.ts"],
-      "@ghentcdh/annotation-editor": ["./packages/annotation-editor/src/index.ts"],
-      "@ghentcdh/annotation-core": [
-        "./packages/annotation-core/src/index.ts"
+      "@ghentcdh/annotation-editor": [
+        "./packages/annotation-editor/src/index.ts"
       ],
+      "@ghentcdh/annotation-core": ["./packages/annotation-core/src/index.ts"]
     }
   },
   "exclude": [

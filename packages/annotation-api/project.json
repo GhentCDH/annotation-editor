@@ -3,31 +3,36 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/annotation-api/src",
   "projectType": "library",
-  "release": {
-    "version": {
-      "currentVersionResolver": "git-tag",
-      "preserveLocalDependencyProtocols": false,
-      "manifestRootsToUpdate": ["{projectRoot}", "dist/{projectRoot}"]
-    }
-  },
-  "tags": ["scope:feature", "scope:api"],
+  "tags": [],
   "targets": {
-    "build": {
-      "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/packages/annotation-api",
-        "tsConfig": "packages/annotation-api/tsconfig.lib.json",
-        "packageJson": "packages/annotation-api/package.json",
-        "main": "packages/annotation-api/src/index.ts",
-        "assets": ["packages/annotation-api/*.md"]
-      }
-    },
     "nx-release-publish": {
       "options": {
         "packageRoot": "dist/{projectRoot}"
       }
+    },
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/annotation-api",
+        "configFile": "packages/annotation-api/vite.config.mts"
+      },
+      "configurations": {
+        "production": {
+          "mode": "production"
+        },
+        "development": {
+          "mode": "development"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{projectRoot}/coverage/unit"]
     }
-  },
-  "implicitDependencies": ["annotation-core"]
+  }
 }

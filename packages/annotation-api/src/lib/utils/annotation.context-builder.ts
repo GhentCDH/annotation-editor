@@ -9,7 +9,7 @@ export type AnnotationDefConfig = {
   app: string;
   prefix: string;
   isDev: boolean;
-  cacheTTLms:number;
+  cacheTTLms: number;
 };
 
 const defaultConfig = {
@@ -23,7 +23,7 @@ const defaultConfig = {
 export const resolveConfig = (config: Partial<AnnotationDefConfig> = {}) => {
   const baseUrl = config.baseUrl ?? defaultConfig.baseUrl;
   const normalizedBaseUrl = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
-const isDev  =config.isDev ?? false
+  const isDev = config.isDev ?? false;
   const cacheTTLms = isDev ? 0 : 20 * 60 * 1000; // Cache for 20 minutes in production, no cache in development
   return {
     baseUrl: normalizedBaseUrl,
@@ -31,7 +31,7 @@ const isDev  =config.isDev ?? false
     app: config.app ?? defaultConfig.app,
     prefix: config.prefix ?? defaultConfig.prefix,
     isDev,
-    cacheTTLms
+    cacheTTLms,
   };
 };
 
