@@ -1,21 +1,31 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
-    "composite": true,
-    "declarationMap": true,
-    "emitDeclarationOnly": true,
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "importHelpers": true,
-    "isolatedModules": true,
-    "lib": ["es2022"],
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
-    "noEmitOnError": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitOverride": true,
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
+    "target": "ESNext",
     "skipLibCheck": true,
-    "strict": true,
-    "target": "es2022",
-    "customConditions": ["@annotation-editor/source"]
-  }
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@ghentcdh/annotation-api": ["./packages/annotation-api/src/index.ts"],
+      "@ghentcdh/annotation-editor": ["./packages/annotation-editor/src/index.ts"],
+      "@ghentcdh/annotation-core": [
+        "./packages/annotation-core/src/index.ts"
+      ],
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "tmp",
+    "**/playwright.config.ts",
+    "**/playwright-ct.config.ts",
+    "**/e2e/**",
+    "**/*.ct.spec.ts"
+  ]
 }

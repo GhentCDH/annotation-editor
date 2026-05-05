@@ -1,6 +1,22 @@
 {
+  "compilerOptions": {
+    "allowJs": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "outDir": "dist",
+    "allowSyntheticDefaultImports": true
+  },
   "extends": "./tsconfig.base.json",
-  "compileOnSave": false,
-  "files": [],
-  "references": []
+  "references": [],
+  "exclude": [
+    "node_modules",
+    "tmp",
+    "dist",
+    "**/playwright.config.ts",
+    "**/playwright-ct.config.ts",
+    "**/vite.e2e.config.ts",
+    "**/e2e/**",
+    "**/*.ct.spec.ts",
+    "**/playwright/**"
+  ]
 }
