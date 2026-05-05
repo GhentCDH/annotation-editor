@@ -3,7 +3,6 @@ import {
   FormValidationDef,
   KeyLabel,
 } from '../types/AnnotationConfiguration.model';
-import { SourceModel } from '../types/source.model';
 import {
   w3cAnnotation,
   type W3CAnnotation,
@@ -118,8 +117,7 @@ const createId = () => {
   return `mela:new-annotation:${Date.now()}`;
 };
 
-
-type Selector =  { source: string; start: number; end: number }
+type Selector = { source: string; start: number; end: number };
 const updateSelector = (builder: W3CAnnotationBuilder, selector: Selector) => {
   if (!builder.getSpecificResourceTargets(selector.source).length) {
     builder.addTarget({
@@ -217,7 +215,6 @@ class AnnotationUtilsImpl {
   }
 
   updateAnnotationData(annotation: W3CAnnotation, data: any) {
-    console.log(data);
     if (!data || Object.keys(data).length < 0) return annotation;
 
     const builder = this.getBuilder(annotation);

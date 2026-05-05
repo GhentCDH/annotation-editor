@@ -19,6 +19,6 @@ export class AnnotationDefinitionFromFilesService extends AnnotationDefinitionSe
     if (this.config.isDev && this._loaderFn) {
       return Promise.resolve(this._loaderFn());
     }
-    return Promise.resolve(this._initialDefinitions);
+    return Promise.resolve(this._initialDefinitions ?? []);
   };
 }

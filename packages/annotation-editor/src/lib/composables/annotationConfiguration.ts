@@ -2,16 +2,16 @@ import {
   createAnnotatedText,
   CustomAnnotationStyle,
   W3CAnnotationAdapter,
-  WordSnapper
+  WordSnapper,
 } from '@ghentcdh/annotated-text';
 import { MarkdownTextAdapter } from '@ghentcdh/annotated-text--markdown';
 import { W3CAnnotation } from '@ghentcdh/w3c-utils';
 import {
   AllowedChildrenPerType,
   AnnotationConfiguration,
-  AnnotationDefinition
+  AnnotationDefinition,
 } from '../types/AnnotationConfiguration.model';
-import { defaultRender, defaultStyle } from '../style/annotation.style';
+import { defaultRender } from '../style/annotation.style';
 import { SourceModel } from '../types/source.model';
 import { AnnotationEditorProps } from '../AnnotationEditor.properties';
 import { AnnotationUtils } from '../utils/annotation-utils';
@@ -20,6 +20,12 @@ const groupById = <KEY extends keyof AnnotationDefinition>(
   defs: AnnotationDefinition[],
   valueKey?: KEY,
 ) => {
+  if (!defs)
+    return {} as Record<
+      string,
+      AnnotationDefinition[KEY] | AnnotationDefinition
+    >;
+
   return defs.reduce(
     (acc, def) => {
       acc[def.id] = valueKey ? def[valueKey] : def;
@@ -71,7 +77,7 @@ export const createAnnotationConfiguration = (
     renderFn: defaultRender(utils),
   });
   const styleParams = () => ({
-    styleFn: (a: W3CAnnotation) => utils.getAnnotationStyle(a) ?? null
+    styleFn: (a: W3CAnnotation) => utils.getAnnotationStyle(a) ?? null,
   });
   const _createAnnotatedText = (id: string, sourceModel?: SourceModel) => {
     const annotatedText = createAnnotatedText<W3CAnnotation>(id);

@@ -6,7 +6,10 @@ import { AnnotationDefinitionFromFilesService } from './service/annotation-defin
 import { loadAnnotationDefinitionsFromDir } from './service/annotation-definition.loader';
 import { AnnotationNamespaceController } from './annotation-namespace.controller';
 import { annotationContextBuilderFactory } from './utils/context-builder.factory';
-import { ANNOTATION_DEF_CONFIG_TOKEN, AnnotationDefConfig } from './utils/annotation.context-builder';
+import {
+  ANNOTATION_DEF_CONFIG_TOKEN,
+  AnnotationDefConfig,
+} from './utils/annotation.context-builder';
 import { loadAnnotationResourcesFromDir } from './resource/annotation-resource.loader';
 import { AnnotationResourceDefinitionService } from './resource/annotation-resource-definition.service';
 import { AnnotationMetadataService } from './resource/annotation-metadata.service';
@@ -51,6 +54,7 @@ export class AnnotationApiModule {
 
     const definitions = loaderFn();
     const service = new AnnotationDefinitionFromFilesService(
+      config,
       definitions as any,
       loaderFn as any,
     );

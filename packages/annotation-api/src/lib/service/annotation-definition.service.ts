@@ -32,8 +32,7 @@ export abstract class AnnotationDefinitionService {
       now - this.cachedAt < this.config.cacheTTLms
     )
       return;
-
-    const definitions = await this.reloadDefinitions();
+    const definitions = (await this.reloadDefinitions()) ?? [];
     this.definitions = definitions;
     this.groupedDefinitions = definitions.reduce(
       (acc: Record<string, any>, current) => {

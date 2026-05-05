@@ -1,47 +1,47 @@
-/// <reference types='vitest' />
+/// <reference types="vitest" />
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
-import * as path from 'path';
+import path from 'node:path';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
 
-export default defineConfig(() => ({
-  root: import.meta.dirname,
+export default defineConfig({
+  root: __dirname,
+
   cacheDir: '../../node_modules/.vite/annotation-core',
+
   plugins: [
     nxViteTsPaths(),
     nxCopyAssetsPlugin(['*.md']),
     dts({
       entryRoot: 'src',
-      tsconfigPath: path.join(import.meta.dirname, 'tsconfig.lib.json'),
+      tsconfigPath: path.resolve(__dirname, 'tsconfig.lib.json'),
       pathsToAliases: false,
+      insertTypesEntry: true,
     }),
   ],
-  // Uncomment this if you are using workers.
-  // worker: {
-  //   plugins: () => [ nxViteTsPaths() ],
-  // },
-  // Configuration for building your library.
-  // See: https://vite.dev/guide/build.html#library-mode
+
   build: {
     outDir: '../../dist/packages/annotation-core',
     emptyOutDir: true,
     reportCompressedSize: true,
-    commonjsOptions: {
-      transformMixedEsModules: true,
-    },
+
+    target: 'node18',
+
     lib: {
-      // Could also be a dictionary or array of multiple entry points.
-      entry: 'src/index.ts',
-      name: 'utils',
+      entry: path.resolve(__dirname, 'src/index.ts'),
+      name: 'annotation-core',
       fileName: 'index',
-      // Change this to the formats you want to support.
-      // Don't forget to update your package.json as well.
-      format: ['cjs', 'esm', 'es'],
+      formats: ['es', 'cjs'],
     },
+
     rollupOptions: {
-      // External packages that should not be bundled into your library.
       external: [
+        'node:fs',
+        'node:path',
+        'node:util',
+        'node:stream',
+
         '@ghentcdh/annotated-text',
         '@ghentcdh/w3c-utils',
         'uuid',
@@ -57,6 +57,11 @@ export default defineConfig(() => ({
       ],
     },
   },
+
+  ssr: {
+    external: ['node:fs', 'node:path', 'node:util', 'node:stream'],
+  },
+
   test: {
     name: 'utils',
     watch: false,
@@ -66,7 +71,7 @@ export default defineConfig(() => ({
     reporters: ['default'],
     coverage: {
       reportsDirectory: '../../coverage/annotation-core',
-      provider: 'v8' as const,
+      provider: 'v8',
     },
   },
-}));
+});

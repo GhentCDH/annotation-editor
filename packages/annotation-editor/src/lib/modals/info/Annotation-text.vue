@@ -40,14 +40,11 @@ let annotatedTextFull: AnnotatedText<W3CAnnotation>;
 const { config, utils, sources } = useEditorState();
 
 const textData = computed(() => {
-  console.log('textData computed');
   const { textPositionSelector, sourceUri } = utils.getSourceUri(
     properties.annotation,
   )!;
 
-  console.log({ textPositionSelector, sourceUri });
   const source = sources.find((source) => source.uri === sourceUri);
-  console.log(source);
   if (!source) {
     console.warn(`Source not found for uri: ${sourceUri}`);
     return null;
