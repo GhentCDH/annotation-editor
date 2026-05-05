@@ -3,7 +3,7 @@ import {
   ModalDefinition,
   ModalStateDefinition,
 } from './AnnotationModal.definition';
-import { type Ref, ref } from 'vue';
+import { type Ref, shallowRef } from 'vue';
 import {
   AnnotationModalAction,
   AnnotationModalActionMap,
@@ -58,7 +58,7 @@ export const useAnnotationModal = (): {
   show: <K extends AnnotationModalAction>(modal: K, data: AnnotationModalActionMap[K]['show']) => void;
   close: <K extends AnnotationModalAction>(modal: K, event: AnnotationModalActionMap[K]['closeEvent']) => void;
 } => {
-  const config = ref(
+  const config = shallowRef(
     createModalConfig(annotationModalDefaults) as unknown as AnnotationModalConfig<AnnotationModalActionMap>,
   );
 

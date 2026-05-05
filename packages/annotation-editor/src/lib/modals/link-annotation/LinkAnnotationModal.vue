@@ -9,33 +9,21 @@
     <template #content>
       {{ annotation }}
       <div class="flex flex-col gap-2">
-        <AnnotationText
-          :annotation="sourceAnnotation"
-          :show-source="true"
-        />
-        <AnnotationText
-          :annotation="targetAnnotation"
-          :show-source="true"
-        />
+        <AnnotationText :annotation="sourceAnnotation!" :show-source="true" />
+        <AnnotationText :annotation="targetAnnotation!" :show-source="true" />
         <AnnotationForm
           v-if="annotationDef"
           v-model="formData"
           :annotation="annotation"
-          :annotation-type="type"
+          :annotation-type="type!"
         />
       </div>
     </template>
     <template #actions>
-      <Btn
-        color="secondary"
-        :outline="true"
-        @click="onCancel"
-      >
+      <Btn :color="'secondary' as any" :outline="true" @click="onCancel">
         Cancel
       </Btn>
-      <Btn @click="onSubmit">
-        Save
-      </Btn>
+      <Btn @click="onSubmit"> Save </Btn>
     </template>
   </Modal>
 </template>
@@ -58,7 +46,7 @@ const { utils, config } = useEditorState();
 
 const formData = ref(null);
 const annotationDef = computed(() => {
-  return config.annotation.getDefinition(props.type);
+  return config.annotation.getDefinition(props.type!);
 });
 
 const label = computed(() => {
@@ -70,8 +58,8 @@ const label = computed(() => {
 });
 const annotation = computed(() =>
   utils.createLinkAnnotation(
-    props.sourceAnnotation,
-    props.targetAnnotation,
+    props.sourceAnnotation!,
+    props.targetAnnotation!,
     annotationDef.value!.context,
   ),
 );
@@ -85,6 +73,6 @@ const onSubmit = () => {
 
 const onCancel = () => {
   utils.cancel();
-  emits('close', null);
+  emits('close', { annotation: null as any });
 };
 </script>

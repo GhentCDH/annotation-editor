@@ -16,14 +16,17 @@
           </Btn>
         </Collapse>
         <AnnotationForm
+          v-if="annotationEdit"
           v-model="formData"
           :annotation="annotationEdit"
-          :annotation-type="type"
+          :annotation-type="type!"
         />
       </div>
     </template>
     <template #actions>
-      <Btn color="secondary" :outline="true" @click="onCancel"> Cancel </Btn>
+      <Btn :color="'secondary' as any" :outline="true" @click="onCancel">
+        Cancel
+      </Btn>
       <Btn :disabled="formDisabled" @click="onSubmit"> Save </Btn>
     </template>
   </Modal>
@@ -51,7 +54,7 @@ const emits = defineEmits(AnnotationEditEmits);
 const editId = `edit-select-annotation-${Date.now()}--`;
 
 const annotationDef = computed(() => {
-  return config.annotation.getDefinition(props.type);
+  return config.annotation.getDefinition(props.type!);
 });
 
 const formData = ref(null);
@@ -73,7 +76,7 @@ const onSubmit = () => {
   if (textPositionSelector.value) {
     const currentTextPositionSelector = w3cAnnotation(
       annotationEdit.value!,
-    ).getTextPositionSelector(props.source.uri)[0];
+    ).getTextPositionSelector(props.source!.uri)[0];
 
     const length =
       currentTextPositionSelector.end - currentTextPositionSelector.start;
@@ -83,17 +86,17 @@ const onSubmit = () => {
     const annotationTextPositionSelector = {
       start,
       end,
-      source: props.parentAnnotation.id,
+      source: props.parentAnnotation!.id,
     };
 
     updatedAnnotation = utils.updateTextPositionSelector(
-      annotationEdit.value,
+      annotationEdit.value!,
       annotationTextPositionSelector,
     );
   }
 
-  const result = utils.updateAnnotationData(updatedAnnotation, formData.value);
-  result.id = props.annotation?.id ?? null;
+  const result = utils.updateAnnotationData(updatedAnnotation!, formData.value);
+  if (props.annotation?.id) result.id = props.annotation.id;
   emits('close', { annotation: result });
 };
 
@@ -105,10 +108,10 @@ const formDisabled = computed(() => {
 });
 
 const selectAll = () => {
-  const source = props.source;
+  const source = props.source!;
   const selec = textPositionSelector?.value ?? {
     start: 0,
-    end: source.content.text.length + 1,
+    end: source!.content.text.length + 1,
   };
   const selector = {
     ...selec,
@@ -126,14 +129,14 @@ const selectAll = () => {
 
 const onCancel = () => {
   utils.cancel();
-  emits('close');
+  emits('close', null);
 };
 
 const textPositionSelector = computed(() => {
   if (!props.parentAnnotation) {
     return null;
   }
-  const sourceUri = props.source.uri;
+  const sourceUri = props.source!.uri;
   return utils.getTextPositionSelector(props.parentAnnotation, sourceUri);
 });
 

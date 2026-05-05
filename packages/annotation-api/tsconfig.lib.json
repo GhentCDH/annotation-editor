@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist/packages/annotation-api",
+    "outDir": "../../dist/out-tsc",
     "declaration": true,
     "types": ["node"],
     "target": "es2021",

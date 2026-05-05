@@ -1,6 +1,18 @@
-import { inject, InjectionKey, nextTick, provide, reactive, shallowReactive, watch, watchEffect } from 'vue';
+import {
+  inject,
+  InjectionKey,
+  nextTick,
+  provide,
+  reactive,
+  shallowReactive,
+  watch,
+  watchEffect,
+} from 'vue';
 import { createAnnotationConfiguration } from './annotationConfiguration';
-import { AnnotationEditorEmitsFn, AnnotationEditorProps } from '../AnnotationEditor.properties';
+import {
+  AnnotationEditorEmitsFn,
+  AnnotationEditorProps,
+} from '../AnnotationEditor.properties';
 import { createModalConfig } from '../modals/annotationModal.composable';
 import { AnnotationUtils, annotationUtils } from '../utils/annotation-utils';
 import { AnnotationEvents, sendAnnotationEvent } from './annotation.events';
@@ -12,6 +24,7 @@ export type EditorState = {
   sources: Readonly<SourceModel[]>;
   config: Readonly<EditorConfig>;
   editorState: Readonly<EditorState_>;
+  handleFormEvents: () => void;
   sendAnnotationEvent: <KEY extends keyof AnnotationEvents>(
     event: KEY,
     data: AnnotationEvents[KEY],
@@ -135,7 +148,7 @@ export const useProvideEditorState = (
             parentAnnotation: utils.getParent(annotation),
             type: utils.getAnnotationType(annotation),
           })
-          .then((result: any|null) => {
+          .then((result: any | null) => {
             editorState.show();
             emits('select:annotation', editorState.selectedAnnotation, 'show');
 
@@ -176,6 +189,7 @@ export const useProvideEditorState = (
     config: config as Readonly<EditorConfig>,
     editorState: editorState as Readonly<EditorState_>,
     utils,
+    handleFormEvents: () => console.error('something wrong'),
     sendAnnotationEvent: sendAnnotationEvent(config, editorState, utils, emits),
   });
 };

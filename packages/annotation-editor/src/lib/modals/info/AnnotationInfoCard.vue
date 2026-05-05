@@ -2,6 +2,7 @@
   <div
     ref="cardRef"
     class="card bg-base-100 shadow-xl fixed z-50"
+    v-if="position"
     :style="{ left: `${position.x}px`, top: `${position.y}px` }"
   >
     <div class="card-body p-2">
@@ -12,7 +13,7 @@
         :schema="validation.jsonSchema"
         :ui-schema="validation.metaDataSchema"
       />
-      <LinksDetail :annotation="annotation" />
+      <LinksDetail :annotation="annotation!" />
       <Navbar :actions="actions" />
     </div>
   </div>
@@ -25,8 +26,8 @@ import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useEditorState } from '../../composables/useEditorState';
 import Metadata from './Metadata.vue';
 import LinksDetail from './LinksDetail.vue';
-import { NavbarAction } from '../../components/navbar.properties';
 import { AnnotationDefinition } from '../../types/AnnotationConfiguration.model';
+import { NavbarAction } from '../../components/navbar.properties';
 
 const properties = defineProps(AnnotationInfoCardProperties);
 
@@ -45,11 +46,11 @@ const purposeLabel = computed(() => {
 });
 
 const validation = computed(() => {
-  return annotationDef.value.schema;
+  return annotationDef.value!.schema;
 });
 
 const metadata = computed(() => {
-  return utils.getMetadata(properties.annotation, validation.value);
+  return utils.getMetadata(properties.annotation!, validation.value);
 });
 
 const close = () => {
@@ -98,13 +99,13 @@ const createActionLinks = (definition: AnnotationDefinition) => {
     label: `Add ${link.label}`,
     disabled: editorState.disableEdits,
     action: () => {
-      sendAnnotationEvent('link', { link, annotation: properties.annotation });
+      sendAnnotationEvent('link', { link });
     },
   }));
 };
 
-const actions: NavbarAction = computed(() => {
-  const definition = annotationDef.value;
+const actions = computed(() => {
+  const definition = annotationDef.value!;
   return [
     addActions(definition),
     {
@@ -114,8 +115,8 @@ const actions: NavbarAction = computed(() => {
       action: () => {
         closeNextClick.value = true;
         sendAnnotationEvent('edit', {
-          annotation: properties.annotation,
-          source: properties.source,
+          annotation: properties.annotation!,
+          source: properties.source!,
         });
       },
     },
@@ -125,12 +126,12 @@ const actions: NavbarAction = computed(() => {
       label: 'Delete',
       disabled: editorState.disableEdits,
       action: () => {
-        sendAnnotationEvent('delete', properties.annotation);
+        sendAnnotationEvent('delete', { annotation: properties.annotation! });
       },
     },
   ]
     .filter((i) => !!i)
-    .flat();
+    .flat() as NavbarAction[];
 });
 
 onMounted(() => {

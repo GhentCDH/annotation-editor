@@ -1,5 +1,6 @@
 /// <reference types='vitest' />
 import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
 import dts from 'vite-plugin-dts';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
@@ -9,9 +10,9 @@ export default defineConfig(() => ({
   root: __dirname,
   cacheDir: '../../node_modules/.vite/packages/annotation-editor',
   plugins: [
+    vue(),
     nxViteTsPaths(),
     nxCopyAssetsPlugin(['*.md']),
-    // checker({ typescript: true }),
     dts({
       entryRoot: 'src',
       tsconfigPath: path.join(__dirname, 'tsconfig.lib.json'),
@@ -43,7 +44,22 @@ export default defineConfig(() => ({
     },
     rollupOptions: {
       // External packages that should not be bundled into your library.
-      external: [],
+      external: [
+        '@ghentcdh/annotated-text',
+        'uuid',
+        '@ghentcdh/json-forms-core',
+        '@ghentcdh/tools-vue',
+        '@ghentcdh/ui',
+        '@jsonforms/core',
+        '@jsonforms/core/src/testers/testers',
+        '@jsonforms/vue',
+        '@jsonforms/vue-vanilla',
+        '@vueuse/core',
+        'axios',
+        'lodash-es',
+        'vue',
+        'vue-router',
+      ],
     },
   },
   test: {

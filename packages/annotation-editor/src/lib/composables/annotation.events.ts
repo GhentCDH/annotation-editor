@@ -28,8 +28,6 @@ type EditAnnotationData = Pick<
 
 type DeleteAnnotationData = {
   annotation: W3CAnnotation;
-  type: string;
-  source: SourceModel;
 };
 
 type LinkData = {

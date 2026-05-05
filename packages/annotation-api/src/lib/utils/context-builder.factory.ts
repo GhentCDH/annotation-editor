@@ -1,3 +1,4 @@
+import { type ContextBuilder } from '@ghentcdh/w3c-utils';
 import { z } from 'zod';
 import {
   AnnotationDefConfig,
@@ -25,7 +26,7 @@ export const annotationContextBuilderFactory = (
   id: string,
   config: AnnotationJsonConfig,
   annotationDefConfig: AnnotationDefConfig,
-) => {
+): ContextBuilder => {
   const builder = baseContextBuilder(id, annotationDefConfig);
   const columns = config.columns ?? [];
 

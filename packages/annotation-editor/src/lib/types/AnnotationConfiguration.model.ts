@@ -18,7 +18,7 @@ export type KeyLabel<KEY = string> = {
 export type FormValidationDef = {
   uiSchema: UISchemaElement;
   jsonSchema: JsonFormsLayout;
-  metaDataSchema: JsonFormsLayout;
+  metaDataSchema: UISchemaElement;
   validation: (value: any) => any;
 };
 

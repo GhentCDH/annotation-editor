@@ -32,11 +32,7 @@ const properties = defineProps<{
 const keys = computed(() => {
   const { schema, uiSchema } = properties;
 
-  console.log({ schema, uiSchema });
-  console.log(properties.data);
-
-  return uiSchema.elements.map((e) => {
-    console.log(e);
+  return (uiSchema as any).elements.map((e: any) => {
     const element = e as TextCellType;
     const def = findColumnDef(element, schema);
 

@@ -1,5 +1,5 @@
 import { ExtractPublicPropTypes, PropType } from 'vue';
-import { W3CAnnotation } from '@ghentcdh/w3c-utils';;
+import { W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { SourceModel } from '../../types/source.model';
 
 export const AnnotationEditModalProperties = {
@@ -20,7 +20,7 @@ export type AnnotationEditModalEvent = {
   annotation: W3CAnnotation;
 };
 export const AnnotationEditEmits = {
-  close: (event: AnnotationEditModalEvent) => true,
+  close: (event: AnnotationEditModalEvent | null) => true,
 };
 
 export type AnnotationEditModalShow = Pick<

@@ -13,7 +13,7 @@
           />
         </td>
         <td>
-          <Navbar :actions="actions(link)" />
+          <Navbar :actions="actions(link as any)" />
         </td>
       </tr>
     </tbody>
@@ -33,11 +33,17 @@ const props = defineProps<{ annotation: W3CAnnotation }>();
 
 const { config, editorState, utils, sendAnnotationEvent } = useEditorState();
 
-const links = computed(() => {
+type LinkDisplay = {
+  purpose: string | undefined;
+  annotation: W3CAnnotation;
+  relation: W3CAnnotation;
+};
+
+const links = computed<LinkDisplay[]>(() => {
   return utils
     .getLinks(props.annotation)
     .map((link: AnnotationLink) => {
-      const purpose = link.purpose; // utils.findPurpose(link);
+      const purpose = link.purpose;
       const relation = link.relations.find(
         (r) => r.id !== props.annotation.id,
       );
@@ -48,7 +54,7 @@ const links = computed(() => {
         relation,
       };
     })
-    .filter((link) => !!link.relation);
+    .filter((link): link is LinkDisplay => !!link.relation);
 });
 
 const actions = (link: AnnotationLink) => {
@@ -58,7 +64,7 @@ const actions = (link: AnnotationLink) => {
       label: 'Delete',
       disabled: editorState.disableEdits,
       action: () => {
-        sendAnnotationEvent('delete', link.annotation);
+        sendAnnotationEvent('delete', { annotation: link.annotation });
       },
     },
   ];

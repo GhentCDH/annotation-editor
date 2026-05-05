@@ -14,7 +14,9 @@
     "@jsonforms/core": "^3.7.0",
     "@nestjs/common": "^11.1.19",
     "@nx/eslint": "^22.7.1",
+    "uuid": "^14.0.0",
     "vue": "^3.5.33",
+    "vue-router": "^5.0.6",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -24,12 +26,15 @@
     "@swc/core": "~1.15.5",
     "@swc/helpers": "~0.5.18",
     "@types/node": "^25.6.0",
+    "@types/uuid": "^11.0.0",
+    "@vitejs/plugin-vue": "^6.0.6",
     "nx": "22.7.1",
     "prettier": "~3.6.2",
     "tslib": "^2.3.0",
     "typescript": "~5.9.2",
     "vite": "^8.0.10",
-    "vite-plugin-dts": "^5.0.0"
+    "vite-plugin-dts": "^5.0.0",
+    "vue-tsc": "^3.2.8"
   },
   "pnpm": {
     "linkWorkspacePackages": true,
@@ -45,8 +50,5 @@
       "@ghentcdh/annotated-text": "link:../vue_component_annotated_text/dist/libs/core",
       "@ghentcdh/annotated-text--markdown": "link:../vue_component_annotated_text/dist/libs/markdown"
     }
-  },
-  "workspaces": [
-    "packages/*"
-  ]
+  }
 }

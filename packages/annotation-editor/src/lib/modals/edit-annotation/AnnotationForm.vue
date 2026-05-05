@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
 
-import { W3CAnnotation } from '@ghentcdh/w3c-utils';;
+import { W3CAnnotation } from '@ghentcdh/w3c-utils';
 
 import { FormComponent } from '@ghentcdh/json-forms-vue';
 import { useEditorState } from '../../composables/useEditorState';
@@ -38,7 +38,7 @@ const annotationDef = computed(() =>
 );
 
 const formValidation = computed(() => {
-  const validation = annotationDef.value.schema;
+  const validation = annotationDef.value!.schema;
   if (!validation.uiSchema) return null;
 
   return validation;
@@ -51,7 +51,7 @@ onMounted(() => {
   }
   formData.value = utils.getMetadata(
     properties.annotation,
-    annotationDef.value.schema,
+    annotationDef.value!.schema,
   );
 });
 </script>

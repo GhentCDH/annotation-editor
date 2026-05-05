@@ -55,7 +55,7 @@ export abstract class AnnotationDefinitionService {
     return Promise.resolve(find);
   }
 
-  async getAllContextBuilders() {
+  async getAllContextBuilders(): Promise<ContextBuilder[]> {
     return (await this.findAll()).map((a) => a.context as ContextBuilder);
   }
 

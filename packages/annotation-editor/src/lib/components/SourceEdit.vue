@@ -8,7 +8,8 @@
 <script lang="ts" setup>
 import { SourceEditProperties } from './SourceEdit.properties';
 import { v4 as uuid } from 'uuid';
-import { AnnotatedText, W3CAnnotation } from '@ghentcdh/annotated-text';
+import { type AnnotatedText } from '@ghentcdh/annotated-text';
+import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { onMounted, onUnmounted, watch } from 'vue';
 import SourceNavbar from './SourceNavbar.vue';
 import { useEditorState } from '../composables/useEditorState';
@@ -57,15 +58,15 @@ watch(
 onMounted(() => {
   textAnnotation = config.annotation
     .createAnnotatedText(textUuid, properties.source)
-    .setTagLabelFn((annotation) => {
+    .setTagLabelFn((annotation: W3CAnnotation) => {
       const style = utils.getAnnotationStyle(annotation);
-      return style?.name ?? style?.id;
+      return style?.name ?? style?.id ?? 'default';
     })
     .on('click', ({ mouseEvent, event, data }) => {
       sendAnnotationEvent('select', {
-        mouseEvent,
+        mouseEvent: mouseEvent!,
         annotation: data.annotation,
-        source: properties.source,
+        source: properties.source!,
       });
     })
     .setText(properties.source?.content.text ?? '')
