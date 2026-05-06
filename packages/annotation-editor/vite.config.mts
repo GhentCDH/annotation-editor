@@ -57,6 +57,7 @@ export default defineConfig(() => ({
         'lodash-es',
         'vue',
         'vue-router',
+        'memoizee',
       ],
     },
   },

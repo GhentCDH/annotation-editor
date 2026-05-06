@@ -1,6 +1,5 @@
 <template>
   <div
-    v-if="position"
     ref="cardRef"
     class="card bg-base-100 shadow-xl fixed z-50"
     :style="{ left: `${position.x}px`, top: `${position.y}px` }"

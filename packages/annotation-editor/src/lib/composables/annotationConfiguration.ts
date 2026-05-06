@@ -2,16 +2,16 @@ import {
   createAnnotatedText,
   type CustomAnnotationStyle,
   W3CAnnotationAdapter,
-  WordSnapper
+  WordSnapper,
 } from '@ghentcdh/annotated-text';
 import { MarkdownTextAdapter } from '@ghentcdh/annotated-text--markdown';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import {
   type AllowedChildrenPerType,
   type AnnotationConfiguration,
-  type AnnotationDefinition
+  type AnnotationDefinition,
 } from '../types/AnnotationConfiguration.model';
-import { defaultRender } from '../style/annotation.style';
+import { defaultRender, styleFn } from '../style/annotation.style';
 import { type SourceModel } from '../types/source.model';
 import { type AnnotationEditorProps } from '../AnnotationEditor.properties';
 import { type AnnotationUtils } from '../utils/annotation-utils';
@@ -77,7 +77,7 @@ export const createAnnotationConfiguration = (
     renderFn: defaultRender(utils),
   });
   const styleParams = () => ({
-    styleFn: (a: W3CAnnotation) => utils.getAnnotationStyle(a) ?? null,
+    styleFn: styleFn(utils),
   });
   const _createAnnotatedText = (id: string, sourceModel?: SourceModel) => {
     const annotatedText = createAnnotatedText<W3CAnnotation>(id);
