@@ -1,4 +1,4 @@
-import { type Ref, shallowRef } from 'vue';
+import { reactive, type Ref, shallowRef } from 'vue';
 import {
   type AnnotationModalConfig,
   type ModalDefinition,
@@ -18,7 +18,7 @@ export const createModalConfig = (
     const modal: ModalStateDefinition<any, any, any> = {
       key,
       component,
-      state: useFn(),
+      state: reactive(useFn()),
     };
     modalMap.set(key, modal);
   });

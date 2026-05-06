@@ -48,6 +48,12 @@ export const selectAnnotationById = (
 
   // Skip if state already matches — prevents loop from emit → URL → watcher
   const currentAction = editorState.editorState ?? 'show';
+  console.table({
+    currentId: editorState.selectedAnnotation?.id,
+    annotationId,
+    currentAction,
+    action,
+  });
   if (
     editorState.selectedAnnotation?.id === annotationId &&
     currentAction === (action ?? 'show')
@@ -56,11 +62,11 @@ export const selectAnnotationById = (
   }
 
   const data = findAnnotationData(annotationId);
-  if (!data) return;
+  if (!data?.source) return;
 
   const { annotation, source } = data;
 
-  nextTick(() => {
+  return nextTick(() => {
     editorState.selectedAnnotation = annotation;
 
     if (action === 'edit') {

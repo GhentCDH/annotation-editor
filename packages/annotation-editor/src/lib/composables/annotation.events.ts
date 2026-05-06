@@ -73,7 +73,6 @@ const editAnnotation = (
   state.disableEdits = true;
   state.editorState = 'edit';
   emits('select:annotation', data.annotation, 'edit');
-  return;
   config.modal
     .show('edit-annotation', {
       source: data.source,

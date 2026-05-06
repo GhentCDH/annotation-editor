@@ -146,14 +146,15 @@ const onCancel = () => {
 };
 
 const textPositionSelector = computed(() => {
-  if (!props.parentAnnotation) {
+  if (!props.parentAnnotation || !props.source) {
     return null;
   }
-  const sourceUri = props.source!.uri;
-  return utils.getTextPositionSelector(props.parentAnnotation, sourceUri);
+  return utils.getTextPositionSelector(props.parentAnnotation, props.source.uri);
 });
 
 onMounted(() => {
+  if (!props.source) return;
+
   const annotations = props.annotation ? [props.annotation] : [];
   annotatedText = config.annotation
     .createAnnotatedText(editId, props.source)

@@ -1,12 +1,9 @@
 import {
-  type AnnotationInfoCardProp,
   type AnnotationInfoCardEvent,
-  type AnnotationInfoCardShow,
+  type AnnotationInfoCardProp,
+  type AnnotationInfoCardShow
 } from './AnnotationInfoCard.properties';
-import {
-  AnnotationModal,
-  type UseAnnotationModal,
-} from '../AnnotationModal.definition';
+import { AnnotationModal, type UseAnnotationModal } from '../AnnotationModal.definition';
 import { getMousePosition } from '../../utils/mouse-events';
 
 export class AnnotationInfoCard extends AnnotationModal<
@@ -14,8 +11,16 @@ export class AnnotationInfoCard extends AnnotationModal<
   AnnotationInfoCardShow,
   AnnotationInfoCardEvent
 > {
-  override show(data: AnnotationInfoCardShow) {
-    const position = data.position ?? getMousePosition(data.mouseEvent!);
+  override async show(data: AnnotationInfoCardShow) {
+    let position = data.position;
+
+    if (!position) {
+      if (!data.mouseEvent) {
+        console.warn('No position or mouse event provided');
+        return undefined;
+      }
+      position = getMousePosition(data.mouseEvent!);
+    }
     return super._show({
       annotation: data.annotation,
       source: data.source,

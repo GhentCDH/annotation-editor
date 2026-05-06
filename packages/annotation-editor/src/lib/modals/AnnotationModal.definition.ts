@@ -72,6 +72,7 @@ export abstract class AnnotationModal<DATA, SHOW_DATA, CLOSE_EVENT>
   }
 
   protected _show(data: DATA): Promise<CLOSE_EVENT> {
+    console.log('_show', data);
     return new Promise((resolve) => {
       this._resolve = resolve;
       this.data.value = data;
