@@ -1,5 +1,5 @@
 import { EditorConfig, EditorState_ } from './editorState';
-import { W3CAnnotation } from '@ghentcdh/w3c-utils';;
+import { W3CAnnotation } from '@ghentcdh/w3c-utils';
 import type { SourceModel } from '../types/source.model';
 import { AnnotationEditModalShow } from '../modals/edit-annotation/AnnotationEditModal.properties';
 import { AnnotationUtils } from '../utils/annotation-utils';
@@ -73,7 +73,7 @@ const editAnnotation = (
   state.disableEdits = true;
   state.editorState = 'edit';
   emits('select:annotation', data.annotation, 'edit');
-
+  return;
   config.modal
     .show('edit-annotation', {
       source: data.source,
@@ -130,7 +130,9 @@ const startLinking = (
   state.editorState = 'link';
   state.disableEdits = true;
   state.infoMessage = infoMessage;
-  (config.modal.getModal('link-annotation').state as any).startLink(data.link.key);
+  (config.modal.getModal('link-annotation').state as any).startLink(
+    data.link.key,
+  );
   config.modal.show('toast', {
     toastMessage: infoMessage,
     action: {

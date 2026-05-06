@@ -45,16 +45,14 @@ export default defineConfig(() => ({
     rollupOptions: {
       // External packages that should not be bundled into your library.
       external: [
+        '@ghentcdh/w3c-utils',
         '@ghentcdh/annotated-text',
+        '@ghentcdh/annotated-text--markdown',
         'uuid',
         '@ghentcdh/json-forms-core',
+        '@ghentcdh/json-forms-vue',
         '@ghentcdh/tools-vue',
         '@ghentcdh/ui',
-        '@jsonforms/core',
-        '@jsonforms/core/src/testers/testers',
-        '@jsonforms/vue',
-        '@jsonforms/vue-vanilla',
-        '@vueuse/core',
         'axios',
         'lodash-es',
         'vue',

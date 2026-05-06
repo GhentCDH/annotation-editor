@@ -8,19 +8,13 @@
       :key="source.uri"
       :title="source.content.label"
     >
-      <SourceEdit
-        v-bind="props"
-        :source="source"
-      />
+      <SourceEdit :source="source" :annotations="annotations" />
     </Collapse>
   </div>
   <AnnotationModal />
 </template>
 <script lang="ts" setup>
-import {
-  AnnotationEditorEmits,
-  AnnotationEditorProperties,
-} from './AnnotationEditor.properties';
+import { AnnotationEditorEmits, AnnotationEditorProperties } from './AnnotationEditor.properties';
 import SourceEdit from './components/SourceEdit.vue';
 import { onMounted } from 'vue';
 import AnnotationModal from './modals/AnnotationModal.vue';

@@ -1,7 +1,6 @@
 import {
   inject,
   InjectionKey,
-  nextTick,
   provide,
   reactive,
   shallowReactive,
@@ -19,6 +18,7 @@ import { AnnotationEvents, sendAnnotationEvent } from './annotation.events';
 import { EditorConfig, EditorData, EditorState_ } from './editorState';
 import { annotationModalDefaults } from '../modals/AnnotationModal.defaults';
 import { SourceModel } from '../types/source.model';
+import { selectAnnotationById } from '../modals/open-modal';
 
 export type EditorState = {
   sources: Readonly<SourceModel[]>;
@@ -85,18 +85,6 @@ export const useProvideEditorState = (
     );
   });
 
-  const getAnnotationElementCenter = (annotationId: string) => {
-    const el = document.querySelector(
-      `g[data-annotation-uid="${annotationId}"]:not([data-annotation-role="tag"])`,
-    );
-    if (!el) return null;
-    const rect = el.getBoundingClientRect();
-    return {
-      x: Math.min(rect.left + rect.width / 2, window.innerWidth - 270),
-      y: Math.min(rect.top + rect.height / 2, window.innerHeight - 200),
-    };
-  };
-
   const findAnnotationData = (annotationId: string) => {
     const annotation = (props.annotations ?? []).find(
       (a) => a.id === annotationId,
@@ -108,63 +96,7 @@ export const useProvideEditorState = (
     return { annotation, source };
   };
 
-  const selectAnnotationById = (
-    annotationId: string | undefined,
-    action: string | undefined,
-  ) => {
-    if (!annotationId) {
-      if (editorState.selectedAnnotation) {
-        config.modal.close('info-card');
-        editorState.selectedAnnotation = null;
-        editorState.editorState = null;
-      }
-      return;
-    }
-
-    // Skip if state already matches — prevents loop from emit → URL → watcher
-    const currentAction = editorState.editorState ?? 'show';
-    if (
-      editorState.selectedAnnotation?.id === annotationId &&
-      currentAction === (action ?? 'show')
-    ) {
-      return;
-    }
-
-    const data = findAnnotationData(annotationId);
-    if (!data) return;
-
-    const { annotation, source } = data;
-
-    nextTick(() => {
-      editorState.selectedAnnotation = annotation;
-
-      if (action === 'edit') {
-        editorState.disableEdits = true;
-        editorState.editorState = 'edit';
-        config.modal
-          .show('edit-annotation', {
-            source,
-            annotation,
-            parentAnnotation: utils.getParent(annotation),
-            type: utils.getAnnotationType(annotation),
-          })
-          .then((result: any | null) => {
-            editorState.show();
-            emits('select:annotation', editorState.selectedAnnotation, 'show');
-
-            if (!result?.annotation) return;
-            emits('update:annotation', result.annotation);
-          });
-      } else {
-        const position = getAnnotationElementCenter(annotationId) ?? {
-          x: window.innerWidth / 2,
-          y: window.innerHeight / 2,
-        };
-        config.modal.show('info-card', { annotation, source, position });
-        editorState.editorState = 'show';
-      }
-    });
-  };
+  const selectByIdCtx = { config, editorState, utils, emits, findAnnotationData };
 
   watch(
     [
@@ -172,7 +104,7 @@ export const useProvideEditorState = (
       () => props.selectedAnnotationAction,
       () => props.annotations,
     ],
-    ([id, action]) => selectAnnotationById(id, action),
+    ([id, action]) => selectAnnotationById(id, action, selectByIdCtx),
     { immediate: true },
   );
 

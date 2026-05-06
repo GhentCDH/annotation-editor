@@ -3,12 +3,8 @@
     v-for="{ key, component: comp, state } in config.modal.modals"
     :key="key"
   >
-    <template v-if="state?.isVisible">
-      <component
-        :is="comp"
-        v-bind="state.data"
-        @close="state.close"
-      />
+    <template v-if="state?.isVisible.value">
+      <component :is="comp" v-bind="state.data" @close="state.close" />
     </template>
   </template>
 </template>

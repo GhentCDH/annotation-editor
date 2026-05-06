@@ -36,7 +36,10 @@ export type ModalStateDefinition<DATA, SHOW_DATA, CLOSE_EVENT> = {
 };
 
 export type AnnotationModalConfig<
-  T extends Record<string, ModalTypeConfig<any, any, any>> = Record<string, ModalTypeConfig>,
+  T extends Record<string, ModalTypeConfig<any, any, any>> = Record<
+    string,
+    ModalTypeConfig
+  >,
 > = {
   modals: ModalStateDefinition<any, any, any>[];
   destroy: () => void;
@@ -52,11 +55,9 @@ export type AnnotationModalConfig<
   // FIXME any closeEvent should be correct
 };
 
-export abstract class AnnotationModal<
-  DATA,
-  SHOW_DATA,
-  CLOSE_EVENT,
-> implements AnnotationModalFn<DATA, SHOW_DATA, CLOSE_EVENT> {
+export abstract class AnnotationModal<DATA, SHOW_DATA, CLOSE_EVENT>
+  implements AnnotationModalFn<DATA, SHOW_DATA, CLOSE_EVENT>
+{
   readonly data: Ref<DATA | null> = ref(null);
   readonly isVisible: Ref<boolean> = ref(false);
   private _resolve: ((value: CLOSE_EVENT) => void) | null = null;

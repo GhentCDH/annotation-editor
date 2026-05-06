@@ -53,13 +53,23 @@ export const createModalConfig = (
 
 export const useAnnotationModal = (): {
   config: Ref<AnnotationModalConfig<AnnotationModalActionMap>>;
-  setModalDefinitions: (modalDefinitions?: Record<string, ModalDefinition>) => void;
+  setModalDefinitions: (
+    modalDefinitions?: Record<string, ModalDefinition>,
+  ) => void;
   destroy: () => void;
-  show: <K extends AnnotationModalAction>(modal: K, data: AnnotationModalActionMap[K]['show']) => void;
-  close: <K extends AnnotationModalAction>(modal: K, event: AnnotationModalActionMap[K]['closeEvent']) => void;
+  show: <K extends AnnotationModalAction>(
+    modal: K,
+    data: AnnotationModalActionMap[K]['show'],
+  ) => void;
+  close: <K extends AnnotationModalAction>(
+    modal: K,
+    event: AnnotationModalActionMap[K]['closeEvent'],
+  ) => void;
 } => {
   const config = shallowRef(
-    createModalConfig(annotationModalDefaults) as unknown as AnnotationModalConfig<AnnotationModalActionMap>,
+    createModalConfig(
+      annotationModalDefaults,
+    ) as unknown as AnnotationModalConfig<AnnotationModalActionMap>,
   );
 
   const setModalDefinitions = (
@@ -67,7 +77,9 @@ export const useAnnotationModal = (): {
   ) => {
     const allDefs = { ...annotationModalDefaults, ...modalDefinitions };
 
-    config.value = createModalConfig(allDefs) as unknown as AnnotationModalConfig<AnnotationModalActionMap>;
+    config.value = createModalConfig(
+      allDefs,
+    ) as unknown as AnnotationModalConfig<AnnotationModalActionMap>;
   };
 
   const destroy = () => {
