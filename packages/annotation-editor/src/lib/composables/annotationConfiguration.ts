@@ -1,20 +1,20 @@
 import {
   createAnnotatedText,
-  CustomAnnotationStyle,
+  type CustomAnnotationStyle,
   W3CAnnotationAdapter,
-  WordSnapper,
+  WordSnapper
 } from '@ghentcdh/annotated-text';
 import { MarkdownTextAdapter } from '@ghentcdh/annotated-text--markdown';
-import { W3CAnnotation } from '@ghentcdh/w3c-utils';
+import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import {
-  AllowedChildrenPerType,
-  AnnotationConfiguration,
-  AnnotationDefinition,
+  type AllowedChildrenPerType,
+  type AnnotationConfiguration,
+  type AnnotationDefinition
 } from '../types/AnnotationConfiguration.model';
 import { defaultRender } from '../style/annotation.style';
-import { SourceModel } from '../types/source.model';
-import { AnnotationEditorProps } from '../AnnotationEditor.properties';
-import { AnnotationUtils } from '../utils/annotation-utils';
+import { type SourceModel } from '../types/source.model';
+import { type AnnotationEditorProps } from '../AnnotationEditor.properties';
+import { type AnnotationUtils } from '../utils/annotation-utils';
 
 const groupById = <KEY extends keyof AnnotationDefinition>(
   defs: AnnotationDefinition[],

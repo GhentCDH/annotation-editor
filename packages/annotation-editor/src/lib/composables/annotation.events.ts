@@ -1,10 +1,10 @@
-import { EditorConfig, EditorState_ } from './editorState';
-import { W3CAnnotation } from '@ghentcdh/w3c-utils';
+import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
+import { type EditorConfig, type EditorState_ } from './editorState';
 import type { SourceModel } from '../types/source.model';
-import { AnnotationEditModalShow } from '../modals/edit-annotation/AnnotationEditModal.properties';
-import { AnnotationUtils } from '../utils/annotation-utils';
-import { AnnotationEditorEmitsFn } from '../AnnotationEditor.properties';
-import { KeyLabel } from '../types/AnnotationConfiguration.model';
+import { type AnnotationEditModalShow } from '../modals/edit-annotation/AnnotationEditModal.properties';
+import { type AnnotationUtils } from '../utils/annotation-utils';
+import { type AnnotationEditorEmitsFn } from '../AnnotationEditor.properties';
+import { type KeyLabel } from '../types/AnnotationConfiguration.model';
 
 type SelectAnnotationData = {
   annotation: W3CAnnotation;
@@ -100,7 +100,7 @@ const deleteAnnotation = (
   config.modal
     .show('confirm', {
       title: 'Delete link',
-      message: `Are you sure to delete this annotation?`,
+      message: 'Are you sure to delete this annotation?',
     })
     .then((result) => {
       if (!result?.confirmed) return;

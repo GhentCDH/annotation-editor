@@ -1,10 +1,10 @@
 import { type ContextBuilder } from '@ghentcdh/w3c-utils';
 import { z } from 'zod';
 import {
-  AnnotationDefConfig,
+  type AnnotationDefConfig,
   baseContextBuilder,
 } from './annotation.context-builder';
-import { AnnotationJsonConfig } from '../service/annotation-json-config.types';
+import { type AnnotationJsonConfig } from '../service/annotation-json-config.types';
 
 type JsonSchemaProperty = {
   type: string;

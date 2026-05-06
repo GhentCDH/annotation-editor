@@ -8,17 +8,20 @@
       :key="source.uri"
       :title="source.content.label"
     >
-      <SourceEdit :source="source" :annotations="annotations" />
+      <SourceEdit
+        :source="source"
+        :annotations="annotations"
+      />
     </Collapse>
   </div>
   <AnnotationModal />
 </template>
 <script lang="ts" setup>
+import { onMounted } from 'vue';
+import { Collapse } from '@ghentcdh/ui';
 import { AnnotationEditorEmits, AnnotationEditorProperties } from './AnnotationEditor.properties';
 import SourceEdit from './components/SourceEdit.vue';
-import { onMounted } from 'vue';
 import AnnotationModal from './modals/AnnotationModal.vue';
-import { Collapse } from '@ghentcdh/ui';
 import { useProvideEditorState } from './composables/useEditorState';
 
 const props = defineProps(AnnotationEditorProperties);

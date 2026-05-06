@@ -16,7 +16,7 @@ export type NavbarAction = {
 };
 
 export const NavbarProperties = {
-  actions: { type: Array as PropType<NavbarAction[]>, required: true },
+  actions: { type: Array as PropType<NavbarAction[]>, required: true as const },
 };
 
 export type NavbarProps = ExtractPublicPropTypes<typeof NavbarProperties>;

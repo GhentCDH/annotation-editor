@@ -1,20 +1,21 @@
 import {
-  AllowedChildrenPerType,
-  FormValidationDef,
-  KeyLabel,
-} from '../types/AnnotationConfiguration.model';
-import {
   w3cAnnotation,
   type W3CAnnotation,
-  W3CAnnotationBuilder,
-  W3CSpecificResource,
+  type W3CAnnotationBuilder,
+  type W3CSpecificResource
 } from '@ghentcdh/w3c-utils';
 import {
-  AnnotationContext,
+  type AnnotationContext,
+  type AnnotationDefConfig,
   AnnotationMetadataType,
-  AnnotationStyle,
-  createAnnotationStyleBody,
+  type AnnotationStyle,
+  createAnnotationStyleBody
 } from '@ghentcdh/annotation-core';
+import {
+  type AllowedChildrenPerType,
+  type FormValidationDef,
+  type KeyLabel
+} from '../types/AnnotationConfiguration.model';
 
 export type AnnotationLink = {
   purpose: string;
@@ -141,6 +142,8 @@ class AnnotationUtilsImpl {
   private readonly linkedAnnotations = new Map<string, AnnotationLink[]>();
   private annotations: W3CAnnotation[] = [];
   private allowedChildrenPerType: AllowedChildrenPerType = {};
+
+  constructor(private readonly annotationConfig: AnnotationDefConfig) {}
 
   private getBuilder(annotation: W3CAnnotation) {
     const builder = this.builderMap.get(annotation.id);
@@ -273,7 +276,7 @@ class AnnotationUtilsImpl {
     type: AnnotationContext,
   ) {
     const id = createId();
-    const styleBody = createAnnotationStyleBody(undefined, type);
+    const styleBody = createAnnotationStyleBody(this.annotationConfig, type);
     const builder = w3cAnnotation(fromAnnotation ?? undefined)
       .setId(id)
       .setMotivation('tagging');
@@ -375,6 +378,6 @@ export type AnnotationUtils = Pick<
   | 'getAnnotationType'
 >;
 
-export const annotationUtils = () => {
-  return new AnnotationUtilsImpl();
+export const annotationUtils = (annotationConfig: AnnotationDefConfig) => {
+  return new AnnotationUtilsImpl(annotationConfig);
 };

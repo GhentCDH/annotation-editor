@@ -1,5 +1,6 @@
 import vue from 'eslint-plugin-vue';
-import baseConfig from '../../eslint.config.mjs';
+import tseslint from 'typescript-eslint';
+import baseConfig from '../../eslint.config.js';
 
 export default [
   ...baseConfig,
@@ -8,8 +9,11 @@ export default [
     files: ['**/*.vue'],
     languageOptions: {
       parserOptions: {
-        parser: await import('@typescript-eslint/parser'),
+        parser: tseslint.parser,
       },
+    },
+    plugins: {
+      '@typescript-eslint': tseslint.plugin,
     },
   },
   {

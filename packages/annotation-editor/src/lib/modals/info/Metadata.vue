@@ -19,9 +19,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { ColumnDef, findColumnDef, JsonFormsLayout, TextCellType } from '@ghentcdh/json-forms-core';
+import { type ColumnDef, findColumnDef, type JsonFormsLayout, type TextCellType } from '@ghentcdh/json-forms-core';
 import { TextCell } from '@ghentcdh/ui';
-import { UISchemaElement } from '@jsonforms/core';
+import { type UISchemaElement } from '@jsonforms/core';
 
 const properties = defineProps<{
   data: any;

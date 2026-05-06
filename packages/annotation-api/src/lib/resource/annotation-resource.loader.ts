@@ -1,3 +1,4 @@
+import { type AnnotationResourceDefinition } from '@ghentcdh/annotation-core';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -8,7 +9,6 @@ import {
   resolveConfig,
   type AnnotationDefConfig,
 } from '../utils/annotation.context-builder';
-import { AnnotationResourceDefinition } from '@ghentcdh/annotation-core';
 
 export const loadAnnotationResourcesFromDir = (
   dirPath: string,

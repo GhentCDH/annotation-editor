@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { buildFilter } from '@ghentcdh/json-forms-core';
-import { DataSourceRegistry } from '../data-source';
+import { type AnnotationResourceDefinition } from '@ghentcdh/annotation-core';
+import { type AnnotationResourceDefinitionService } from './annotation-resource-definition.service';
+import { type DataSourceRegistry } from '../data-source';
 
-import { AnnotationResourceDefinitionService } from './annotation-resource-definition.service';
-import { AnnotationResourceDefinition } from '@ghentcdh/annotation-core';
 
 type MetadataRequest = {
   page: number;

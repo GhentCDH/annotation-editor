@@ -1,6 +1,6 @@
 import {
   inject,
-  InjectionKey,
+  type InjectionKey,
   provide,
   reactive,
   shallowReactive,
@@ -8,16 +8,16 @@ import {
   watchEffect,
 } from 'vue';
 import { createAnnotationConfiguration } from './annotationConfiguration';
+import { type AnnotationEvents, sendAnnotationEvent } from './annotation.events';
+import { type EditorConfig, type EditorData, type EditorState_ } from './editorState';
 import {
-  AnnotationEditorEmitsFn,
-  AnnotationEditorProps,
+  type AnnotationEditorEmitsFn,
+  type AnnotationEditorProps,
 } from '../AnnotationEditor.properties';
 import { createModalConfig } from '../modals/annotationModal.composable';
-import { AnnotationUtils, annotationUtils } from '../utils/annotation-utils';
-import { AnnotationEvents, sendAnnotationEvent } from './annotation.events';
-import { EditorConfig, EditorData, EditorState_ } from './editorState';
+import { type AnnotationUtils, annotationUtils } from '../utils/annotation-utils';
 import { annotationModalDefaults } from '../modals/AnnotationModal.defaults';
-import { SourceModel } from '../types/source.model';
+import { type SourceModel } from '../types/source.model';
 import { selectAnnotationById } from '../modals/open-modal';
 
 export type EditorState = {
@@ -40,7 +40,7 @@ export const useProvideEditorState = (
   props: AnnotationEditorProps,
   emits: AnnotationEditorEmitsFn,
 ) => {
-  const utils = annotationUtils();
+  const utils = annotationUtils(props.configuration);
 
   const config = shallowReactive<EditorConfig>({
     modal: createModalConfig(annotationModalDefaults),
@@ -96,7 +96,13 @@ export const useProvideEditorState = (
     return { annotation, source };
   };
 
-  const selectByIdCtx = { config, editorState, utils, emits, findAnnotationData };
+  const selectByIdCtx = {
+    config,
+    editorState,
+    utils,
+    emits,
+    findAnnotationData,
+  };
 
   watch(
     [

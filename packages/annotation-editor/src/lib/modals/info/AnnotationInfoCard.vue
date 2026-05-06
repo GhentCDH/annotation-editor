@@ -1,8 +1,8 @@
 <template>
   <div
+    v-if="position"
     ref="cardRef"
     class="card bg-base-100 shadow-xl fixed z-50"
-    v-if="position"
     :style="{ left: `${position.x}px`, top: `${position.y}px` }"
   >
     <div class="card-body p-2">
@@ -19,15 +19,15 @@
   </div>
 </template>
 <script lang="ts" setup>
-import Navbar from '../../components/navbar.vue';
 import { IconEnum } from '@ghentcdh/ui';
-import { AnnotationInfoCardProperties } from './AnnotationInfoCard.properties';
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
-import { useEditorState } from '../../composables/useEditorState';
+import { AnnotationInfoCardProperties } from './AnnotationInfoCard.properties';
 import Metadata from './Metadata.vue';
 import LinksDetail from './LinksDetail.vue';
-import { AnnotationDefinition } from '../../types/AnnotationConfiguration.model';
-import { NavbarAction } from '../../components/navbar.properties';
+import { useEditorState } from '../../composables/useEditorState';
+import Navbar from '../../components/navbar.vue';
+import { type AnnotationDefinition } from '../../types/AnnotationConfiguration.model';
+import { type NavbarAction } from '../../components/navbar.properties';
 
 const properties = defineProps(AnnotationInfoCardProperties);
 

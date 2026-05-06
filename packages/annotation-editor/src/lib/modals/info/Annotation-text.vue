@@ -1,12 +1,21 @@
 <template>
-  <div class="relative" @mouseenter="showFullText" @mouseleave="hideFullText">
+  <div
+    class="relative"
+    @mouseenter="showFullText"
+    @mouseleave="hideFullText"
+  >
     <component
       :is="showSource ? Collapse : 'div'"
       v-bind="showSource ? { title: 'Shhow the source' } : {}"
     >
       <div class="flex flex-row items-center gap-2">
-        <div :id="annotationTextId" class="flex-1" />
-        <div v-if="showHover">...</div>
+        <div
+          :id="annotationTextId"
+          class="flex-1"
+        />
+        <div v-if="showHover">
+          ...
+        </div>
       </div>
     </component>
     <div
@@ -17,12 +26,12 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { AnnotatedText } from '@ghentcdh/annotated-text';
+import { type AnnotatedText } from '@ghentcdh/annotated-text';
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { v4 as uuidv4 } from 'uuid';
 import { Collapse } from '@ghentcdh/ui';
+import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { useEditorState } from '../../composables/useEditorState';
-import { W3CAnnotation } from '@ghentcdh/w3c-utils';
 
 const properties = defineProps<{
   annotation: W3CAnnotation;

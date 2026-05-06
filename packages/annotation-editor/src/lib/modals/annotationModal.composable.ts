@@ -1,12 +1,12 @@
-import {
-  AnnotationModalConfig,
-  ModalDefinition,
-  ModalStateDefinition,
-} from './AnnotationModal.definition';
 import { type Ref, shallowRef } from 'vue';
 import {
-  AnnotationModalAction,
-  AnnotationModalActionMap,
+  type AnnotationModalConfig,
+  type ModalDefinition,
+  type ModalStateDefinition,
+} from './AnnotationModal.definition';
+import {
+  type AnnotationModalAction,
+  type AnnotationModalActionMap,
   annotationModalDefaults,
 } from './AnnotationModal.defaults';
 

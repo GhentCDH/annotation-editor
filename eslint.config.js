@@ -1,4 +1,4 @@
-import importPlugin from 'eslint-plugin-import';
+import importPlugin from 'eslint-plugin-import-x';
 import nx from '@nx/eslint-plugin';
 
 export default [
@@ -17,6 +17,8 @@ export default [
       '**/out-tsc',
       '**/vite.config.*.timestamp*',
       '**/vitest.config.*.timestamp*',
+      '**/vite.config.mts',
+      '**/vitest.config.mts',
     ],
   },
   {
@@ -56,9 +58,9 @@ export default [
       'no-console': ['error', { allow: ['warn', 'error'] }],
       '@typescript-eslint/no-unused-vars': 'warn',
       '@typescript-eslint/no-explicit-any': 'warn',
-      'import/named': 'off',
-      'import/no-unresolved': 'off',
-      'import/order': [
+      'import-x/named': 'off',
+      'import-x/no-unresolved': 'off',
+      'import-x/order': [
         1,
         {
           groups: [

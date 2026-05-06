@@ -1,11 +1,11 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { AnnotationDefinition } from '../annotation-defintion.type';
 import type {
   AnnotationColumnConfig,
   AnnotationJsonConfig,
 } from './annotation-json-config.types';
-import { AnnotationDefConfig } from '../utils/annotation.context-builder';
+import { type AnnotationDefinition } from '../annotation-defintion.type';
+import { type AnnotationDefConfig } from '../utils/annotation.context-builder';
 
 const buildControlElement = (column: AnnotationColumnConfig) => {
   const options: any = {};

@@ -1,31 +1,31 @@
-import { ModalDefinition, ModalTypeConfig } from './AnnotationModal.definition';
+import { type ModalDefinition, type ModalTypeConfig } from './AnnotationModal.definition';
 import { useToast } from './toast/useToast.composable';
 import ToastComponent from './toast/Toast.vue';
 import AnnotationInfoCardComponent from './info/AnnotationInfoCard.vue';
 import {
-  AnnotationInfoCardProp,
-  AnnotationInfoCardEvent,
-  AnnotationInfoCardShow,
+  type AnnotationInfoCardProp,
+  type AnnotationInfoCardEvent,
+  type AnnotationInfoCardShow,
 } from './info/AnnotationInfoCard.properties';
 import { useAnnotationInfo } from './info/useAnnotationInfo';
 import AnnotationEditModal from './edit-annotation/AnnotationEditModal.vue';
 import { useAnnotationEdit } from './edit-annotation/useAnnotationEditModal';
 import {
-  AnnotationEditModal as AnnotationEditModalType,
-  AnnotationEditModalEvent,
-  AnnotationEditModalShow,
+  type AnnotationEditModal as AnnotationEditModalType,
+  type AnnotationEditModalEvent,
+  type AnnotationEditModalShow,
 } from './edit-annotation/AnnotationEditModal.properties';
 import { useLinkAnnotation } from './link-annotation/useLinkAnnotation.composable';
-import { ConfirmCloseEvent, ConfirmProps } from './confirm/confirm.properties';
-import { EditToast } from './toast/toast.properties';
+import { type ConfirmCloseEvent, type ConfirmProps } from './confirm/confirm.properties';
+import { type EditToast } from './toast/toast.properties';
 
 import ConfirmModal from './confirm/ConfirmModal.vue';
 import { useConfirm } from './confirm/useConfirm.composable';
 import LinkAnnotationModal from './link-annotation/LinkAnnotationModal.vue';
 import {
-  LinkAnnotaitonCloseEvent,
-  LinkAnnotationProps,
-  LinkAnnotationShow,
+  type LinkAnnotaitonCloseEvent,
+  type LinkAnnotationProps,
+  type LinkAnnotationShow,
 } from './link-annotation/link-annotation.properties';
 
 export type AnnotationModalActionMap = {

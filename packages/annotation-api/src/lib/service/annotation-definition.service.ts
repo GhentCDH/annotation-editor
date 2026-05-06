@@ -1,6 +1,6 @@
-import { AnnotationDefinition } from '../annotation-defintion.type';
-import { ContextBuilder } from '@ghentcdh/w3c-utils';
+import { type ContextBuilder } from '@ghentcdh/w3c-utils';
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { type AnnotationDefinition } from '../annotation-defintion.type';
 import {
   ANNOTATION_DEF_CONFIG_TOKEN,
   type AnnotationDefConfig,

@@ -23,11 +23,11 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { IconEnum } from '@ghentcdh/ui';
-import { W3CAnnotation } from '@ghentcdh/w3c-utils';;
+import { type W3CAnnotation } from '@ghentcdh/w3c-utils';;
 import AnnotationText from './Annotation-text.vue';
 import Navbar from '../../components/navbar.vue';
 import { useEditorState } from '../../composables/useEditorState';
-import { AnnotationLink } from '../../utils/annotation-utils';
+import { type AnnotationLink } from '../../utils/annotation-utils';
 
 const props = defineProps<{ annotation: W3CAnnotation }>();
 

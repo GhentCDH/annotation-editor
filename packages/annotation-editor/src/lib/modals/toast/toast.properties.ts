@@ -3,7 +3,7 @@ import type { ExtractPublicPropTypes, PropType } from 'vue';
 export type ToastAction = { label: string; onClick: () => void };
 
 export const ToastProperties = {
-  toastMessage: { type: String, required: true },
+  toastMessage: { type: String, required: true as const },
   action: { type: Object as PropType<ToastAction>, required: false },
 };
 

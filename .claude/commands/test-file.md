@@ -33,5 +33,5 @@ describe('FeatureName', () => {
 
 After creating the test file, run the tests to verify they pass:
 ```
-npx nx test <project-name>
+pnpm nx test <project-name>
 ```

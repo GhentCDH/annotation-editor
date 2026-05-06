@@ -6,11 +6,11 @@
   <div :id="textUuid" />
 </template>
 <script lang="ts" setup>
-import { SourceEditProperties } from './SourceEdit.properties';
 import { v4 as uuid } from 'uuid';
 import { type AnnotatedText } from '@ghentcdh/annotated-text';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { onMounted, onUnmounted, watch } from 'vue';
+import { SourceEditProperties } from './SourceEdit.properties';
 import SourceNavbar from './SourceNavbar.vue';
 import { useEditorState } from '../composables/useEditorState';
 

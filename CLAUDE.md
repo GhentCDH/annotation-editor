@@ -22,11 +22,13 @@
 - Vue 3.5 with `<script setup lang="ts">`. `<template>` first, then `<script setup>`
 - Component: `Name.vue` + `Name.properties.ts`
 - Props: Vue object syntax with `PropType`, always explicit `required: true/false`
-- Export `ExtractPublicPropTypes<typeof XProps>` and emits type from properties file:
+- Always use `required: true as const` (literal `true`) so `ExtractPublicPropTypes` correctly marks required props as non-optional
+- Always use `ExtractPublicPropTypes` (never `ExtractPropTypes`) for props type extraction
+- Export `ExtractPublicPropTypes<typeof XProps>`, emits type, and `EmitFn` from properties file:
 
 ```ts
 export const XProps = {
-  options: { type: Array as PropType<T[]>, required: true },
+  options: { type: Array as PropType<T[]>, required: true as const },
   label: { type: String, required: false, default: 'label' },
 };
 export type XPropsType = ExtractPublicPropTypes<typeof XProps>;
@@ -35,6 +37,7 @@ export const XEmits = {
   select: (_item: any) => true,
 };
 export type XEmitsType = typeof XEmits;
+export type XEmitsFn = EmitFn<XEmitsType>;
 ```
 
 - Composables in `composables/` folder next to component. Naming: `useFeatureName.ts`

@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
 
-import { W3CAnnotation } from '@ghentcdh/w3c-utils';
+import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 
 import { FormComponent } from '@ghentcdh/json-forms-vue';
 import { useEditorState } from '../../composables/useEditorState';

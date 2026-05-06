@@ -1,4 +1,4 @@
-import { EditToast } from './toast.properties';
+import { type EditToast } from './toast.properties';
 import { AnnotationModal } from '../AnnotationModal.definition';
 
 export class ToastCard extends AnnotationModal<EditToast, EditToast, void> {}

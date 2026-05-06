@@ -1,9 +1,9 @@
-import { AnnotationModal } from '../AnnotationModal.definition';
 import {
-  AnnotationEditModal,
-  AnnotationEditModalEvent,
-  AnnotationEditModalShow,
+  type AnnotationEditModal,
+  type AnnotationEditModalEvent,
+  type AnnotationEditModalShow,
 } from './AnnotationEditModal.properties';
+import { AnnotationModal } from '../AnnotationModal.definition';
 
 export class AnnotationEdit extends AnnotationModal<
   AnnotationEditModal,

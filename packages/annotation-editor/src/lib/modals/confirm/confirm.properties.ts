@@ -3,8 +3,8 @@ import type { ExtractPublicPropTypes } from 'vue';
 export type ConfirmAction = { label: string; onClick: () => void };
 
 export const ConfirmProperties = {
-  title: { type: String, required: true },
-  message: { type: String, required: true },
+  title: { type: String, required: true as const },
+  message: { type: String, required: true as const },
   confirmLabel: { type: String, required: false, default: 'Ok' },
   cancelLabel: { type: String, required: false, default: 'Cancel' },
 };

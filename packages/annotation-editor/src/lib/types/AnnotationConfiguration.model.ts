@@ -1,13 +1,13 @@
 import {
-  AnnotatedText,
-  BaseAnnotation,
-  CustomAnnotationStyle,
+  type AnnotatedText,
+  type BaseAnnotation,
+  type CustomAnnotationStyle,
 } from '@ghentcdh/annotated-text';
-import { UISchemaElement } from '@jsonforms/core';
+import { type UISchemaElement } from '@jsonforms/core';
 import type { JsonFormsLayout } from '@ghentcdh/json-forms-core';
-import { SourceModel } from './source.model';
-import { AnnotationContext } from '@ghentcdh/annotation-core';
-import { W3CAnnotation } from '@ghentcdh/w3c-utils';
+import { type AnnotationContext } from '@ghentcdh/annotation-core';
+import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
+import { type SourceModel } from './source.model';
 
 export type KeyLabel<KEY = string> = {
   key: KEY;

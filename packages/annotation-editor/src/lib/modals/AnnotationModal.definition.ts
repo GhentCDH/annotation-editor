@@ -1,4 +1,4 @@
-import { Component, ref, Ref } from 'vue';
+import { type Component, ref, type Ref } from 'vue';
 
 export type ModalTypeConfig<
   DATA = void,

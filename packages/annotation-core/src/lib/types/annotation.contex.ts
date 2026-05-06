@@ -1,6 +1,6 @@
-import { ContextBuilder } from '@ghentcdh/w3c-utils';
+import { type ContextBuilder } from '@ghentcdh/w3c-utils';
 
-export const AnnotationMetadataType = `AnnotationMetadata`;
+export const AnnotationMetadataType = 'AnnotationMetadata';
 export type AnnotationContext = {
   id: string;
   name: string;

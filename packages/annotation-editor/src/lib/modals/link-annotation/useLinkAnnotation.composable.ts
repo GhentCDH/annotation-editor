@@ -1,9 +1,9 @@
-import { AnnotationModal } from '../AnnotationModal.definition';
 import {
-  LinkAnnotaitonCloseEvent,
-  LinkAnnotationProps,
-  LinkAnnotationShow,
+  type LinkAnnotaitonCloseEvent,
+  type LinkAnnotationProps,
+  type LinkAnnotationShow,
 } from './link-annotation.properties';
+import { AnnotationModal } from '../AnnotationModal.definition';
 
 export class LinkAnnotation extends AnnotationModal<
   LinkAnnotationProps,

@@ -2,7 +2,7 @@ Create or update a Zod schema following this project's conventions.
 
 `$ARGUMENTS` should describe the schema name and purpose, and optionally the target path.
 
-If no path is given, place it in the appropriate subdirectory under `libs/text/shared/src/lib/`.
+If no path is given, place it in the appropriate package under `packages/`.
 
 Follow these conventions:
 

@@ -9,8 +9,14 @@
     <template #content>
       {{ annotation }}
       <div class="flex flex-col gap-2">
-        <AnnotationText :annotation="sourceAnnotation!" :show-source="true" />
-        <AnnotationText :annotation="targetAnnotation!" :show-source="true" />
+        <AnnotationText
+          :annotation="sourceAnnotation!"
+          :show-source="true"
+        />
+        <AnnotationText
+          :annotation="targetAnnotation!"
+          :show-source="true"
+        />
         <AnnotationForm
           v-if="annotationDef"
           v-model="formData"
@@ -20,21 +26,27 @@
       </div>
     </template>
     <template #actions>
-      <Btn :color="'secondary' as any" :outline="true" @click="onCancel">
+      <Btn
+        :color="'secondary' as any"
+        :outline="true"
+        @click="onCancel"
+      >
         Cancel
       </Btn>
-      <Btn @click="onSubmit"> Save </Btn>
+      <Btn @click="onSubmit">
+        Save
+      </Btn>
     </template>
   </Modal>
 </template>
 <script setup lang="ts">
+import { Btn, Modal } from '@ghentcdh/ui';
+import { computed, ref } from 'vue';
 import {
   LinkAnnotationProperties,
   LinkEmits,
 } from './link-annotation.properties';
-import { Btn, Modal } from '@ghentcdh/ui';
 import { useEditorState } from '../../composables/useEditorState';
-import { computed, ref } from 'vue';
 import AnnotationForm from '../edit-annotation/AnnotationForm.vue';
 
 import AnnotationText from '../info/Annotation-text.vue';

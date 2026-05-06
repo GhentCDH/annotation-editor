@@ -1,6 +1,6 @@
-import { CustomAnnotationStyle } from '@ghentcdh/annotated-text';
-import { W3CAnnotation } from '@ghentcdh/w3c-utils';
-import { AnnotationUtils } from '../utils/annotation-utils';
+import { type CustomAnnotationStyle } from '@ghentcdh/annotated-text';
+import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
+import { type AnnotationUtils } from '../utils/annotation-utils';
 
 export const defaultRender =
   (utils: AnnotationUtils) =>

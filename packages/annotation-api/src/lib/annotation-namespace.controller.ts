@@ -1,9 +1,9 @@
 import { Controller, Get, Inject, Param } from '@nestjs/common';
-import { AnnotationDefinitionService } from './service/annotation-definition.service';
 import {
   AnnotationStyleContextBuilder,
   AnnotationStyleType,
 } from '@ghentcdh/annotation-core';
+import { type AnnotationDefinitionService } from './service/annotation-definition.service';
 import type { AnnotationDefConfig } from './utils/annotation.context-builder';
 import { ANNOTATION_DEF_CONFIG_TOKEN } from './utils/annotation.context-builder';
 
@@ -60,7 +60,7 @@ export class AnnotationNamespaceController {
     return allBuildser.map((b) => b.toJsonLdContext());
   }
 
-  @Get(`:type/anno.jsonld`)
+  @Get(':type/anno.jsonld')
   async getJsonLd(@Param('type') type: string) {
     const context = await this.service.getContextBuilder(type);
 

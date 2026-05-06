@@ -1,10 +1,10 @@
-import { ContextBuilder, contextBuilder } from '@ghentcdh/w3c-utils';
+import { type ContextBuilder, contextBuilder } from '@ghentcdh/w3c-utils';
 import { z } from 'zod';
 import {
-  AnnotationDefConfig,
+  type AnnotationDefConfig,
   resolveConfig,
 } from './types/annotation.def.config';
-import { AnnotationContext } from './types/annotation.contex';
+import { type AnnotationContext } from './types/annotation.contex';
 
 export const AnnotationStyleSchema = z.object({
   id: z.string(),
@@ -19,7 +19,7 @@ export const AnnotationStyleSchema = z.object({
 
 export type AnnotationStyle = z.infer<typeof AnnotationStyleSchema>;
 
-export const AnnotationStyleType = `AnnotationStyle`;
+export const AnnotationStyleType = 'AnnotationStyle';
 export const AnnotationStyleContextBuilder = (
   annotationConfig?: AnnotationDefConfig,
 ) => {
