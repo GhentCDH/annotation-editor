@@ -4,7 +4,11 @@
     :key="key"
   >
     <template v-if="state?.isVisible">
-      <component :is="comp" v-bind="state.data" @close="state.close" />
+      <component
+        :is="comp"
+        v-bind="state.data"
+        @close="state.close"
+      />
     </template>
   </template>
 </template>

@@ -1,4 +1,4 @@
-import { type Component, ref, type Ref } from 'vue';
+import { type Component, ref, type Ref, type UnwrapNestedRefs } from 'vue';
 
 export type ModalTypeConfig<
   DATA = void,
@@ -32,7 +32,7 @@ export type ModalDefinition = {
 export type ModalStateDefinition<DATA, SHOW_DATA, CLOSE_EVENT> = {
   key: string;
   component: Component;
-  state: AnnotationModalFn<DATA, SHOW_DATA, CLOSE_EVENT>;
+  state: UnwrapNestedRefs<AnnotationModalFn<DATA, SHOW_DATA, CLOSE_EVENT>>;
 };
 
 export type AnnotationModalConfig<
@@ -72,7 +72,6 @@ export abstract class AnnotationModal<DATA, SHOW_DATA, CLOSE_EVENT>
   }
 
   protected _show(data: DATA): Promise<CLOSE_EVENT> {
-    console.log('_show', data);
     return new Promise((resolve) => {
       this._resolve = resolve;
       this.data.value = data;
