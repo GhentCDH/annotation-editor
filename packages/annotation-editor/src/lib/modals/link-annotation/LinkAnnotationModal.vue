@@ -8,8 +8,14 @@
   >
     <template #content>
       <div class="flex flex-col gap-2">
-        <AnnotationText :annotation="sourceAnnotation" :show-source="true" />
-        <AnnotationText :annotation="targetAnnotation" :show-source="true" />
+        <AnnotationText
+          :annotation="sourceAnnotation"
+          :show-source="true"
+        />
+        <AnnotationText
+          :annotation="targetAnnotation"
+          :show-source="true"
+        />
         <AnnotationForm
           v-if="annotationDef"
           v-model="formData"
@@ -19,10 +25,16 @@
       </div>
     </template>
     <template #actions>
-      <Btn :color="'secondary' as any" :outline="true" @click="onCancel">
+      <Btn
+        :color="'secondary' as any"
+        :outline="true"
+        @click="onCancel"
+      >
         Cancel
       </Btn>
-      <Btn @click="onSubmit"> Save </Btn>
+      <Btn @click="onSubmit">
+        Save
+      </Btn>
     </template>
   </Modal>
 </template>

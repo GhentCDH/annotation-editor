@@ -2,18 +2,17 @@ import {
   createAnnotatedText,
   type CustomAnnotationStyle,
   W3CAnnotationAdapter,
-  WordSnapper,
+  WordSnapper
 } from '@ghentcdh/annotated-text';
 import { MarkdownTextAdapter } from '@ghentcdh/annotated-text--markdown';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import {
   type AllowedChildrenPerType,
   type AnnotationConfiguration,
-  type AnnotationDefinition,
+  type AnnotationDefinition
 } from '../types/AnnotationConfiguration.model';
 import { defaultRender, styleFn } from '../style/annotation.style';
 import { type SourceModel } from '../types/source.model';
-import { type AnnotationEditorProps } from '../AnnotationEditor.properties';
 import { type AnnotationUtils } from '../utils/annotation-utils';
 
 const groupById = <KEY extends keyof AnnotationDefinition>(
@@ -36,11 +35,10 @@ const groupById = <KEY extends keyof AnnotationDefinition>(
 };
 
 export const createAnnotationConfiguration = (
-  props: AnnotationEditorProps,
+  annotationDefinitions: AnnotationDefinition[] | undefined,
   utils: AnnotationUtils,
 ): AnnotationConfiguration => {
-  const definitions =
-    props.annotationDefinitions ?? ([] as AnnotationDefinition[]);
+  const definitions = annotationDefinitions ?? ([] as AnnotationDefinition[]);
   const definitionsMap = groupById(definitions) as Record<
     string,
     AnnotationDefinition

@@ -1,27 +1,34 @@
 import {
+  computed,
+  type ComputedRef,
   inject,
   type InjectionKey,
   provide,
   reactive,
   shallowReactive,
   watch,
-  watchEffect,
 } from 'vue';
 import { createAnnotationConfiguration } from './annotationConfiguration';
-import { type AnnotationEvents, sendAnnotationEvent } from './annotation.events';
-import { type EditorConfig, type EditorData, type EditorState_ } from './editorState';
+import {
+  type AnnotationEvents,
+  sendAnnotationEvent,
+} from './annotation.events';
+import { type EditorConfig, type EditorState_ } from './editorState';
 import {
   type AnnotationEditorEmitsFn,
   type AnnotationEditorProps,
 } from '../AnnotationEditor.properties';
 import { createModalConfig } from '../modals/annotationModal.composable';
-import { type AnnotationUtils, annotationUtils } from '../utils/annotation-utils';
+import {
+  type AnnotationUtils,
+  annotationUtils,
+} from '../utils/annotation-utils';
 import { annotationModalDefaults } from '../modals/AnnotationModal.defaults';
 import { type SourceModel } from '../types/source.model';
 import { selectAnnotationById } from '../modals/open-modal';
 
 export type EditorState = {
-  sources: Readonly<SourceModel[]>;
+  sources: ComputedRef<Readonly<SourceModel[]>>;
   config: Readonly<EditorConfig>;
   editorState: Readonly<EditorState_>;
   handleFormEvents: () => void;
@@ -44,7 +51,10 @@ export const useProvideEditorState = (
 
   const config = shallowReactive<EditorConfig>({
     modal: createModalConfig(annotationModalDefaults),
-    annotation: createAnnotationConfiguration(props, utils),
+    annotation: createAnnotationConfiguration(
+      props.annotationDefinitions,
+      utils,
+    ),
   });
 
   utils.setAnnotations(
@@ -52,11 +62,7 @@ export const useProvideEditorState = (
     config.annotation.allowedChildrenPerType,
   );
 
-  const data = reactive<EditorData>({
-    annotations: props.annotations ?? [],
-    sources: props.sources ?? [],
-    utils: utils,
-  });
+  const sources = computed(() => props.sources ?? []);
 
   const showEditorState = () => {
     if (!editorState.selectedAnnotation) {
@@ -76,14 +82,25 @@ export const useProvideEditorState = (
     reset: () => resetEditorState(),
   });
 
-  watchEffect(() => {
-    config.annotation = createAnnotationConfiguration(props, utils);
-    data.sources = props.sources ?? [];
-    utils.setAnnotations(
-      props.annotations ?? [],
-      config.annotation.allowedChildrenPerType,
-    );
-  });
+  watch(
+    () => props.annotationDefinitions,
+    () => {
+      config.annotation = createAnnotationConfiguration(
+        props.annotationDefinitions,
+        utils,
+      );
+    },
+  );
+
+  watch(
+    () => props.annotations,
+    () => {
+      utils.setAnnotations(
+        props.annotations ?? [],
+        config.annotation.allowedChildrenPerType,
+      );
+    },
+  );
 
   const findAnnotationData = (annotationId: string) => {
     const annotation = (props.annotations ?? []).find(
@@ -123,7 +140,7 @@ export const useProvideEditorState = (
   };
 
   provide(EDITOR_KEY, {
-    sources: data.sources,
+    sources,
     config: config as Readonly<EditorConfig>,
     editorState: editorState as Readonly<EditorState_>,
     utils,

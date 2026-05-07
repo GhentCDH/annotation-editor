@@ -1,12 +1,21 @@
 <template>
-  <div class="relative" @mouseenter="showFullText" @mouseleave="hideFullText">
+  <div
+    class="relative"
+    @mouseenter="showFullText"
+    @mouseleave="hideFullText"
+  >
     <component
       :is="showSource ? Collapse : 'div'"
       v-bind="showSource ? { title: textData?.text.content.label ?? '-' } : {}"
     >
       <div class="flex flex-row items-center gap-2">
-        <div :id="annotationTextId" class="flex-1" />
-        <div v-if="showHover">...</div>
+        <div
+          :id="annotationTextId"
+          class="flex-1"
+        />
+        <div v-if="showHover">
+          ...
+        </div>
       </div>
     </component>
     <div
@@ -44,7 +53,7 @@ const textData = computed(() => {
     properties.annotation,
   )!;
 
-  const source = sources.find((source) => source.uri === sourceUri);
+  const source = sources.value.find((source) => source.uri === sourceUri);
   if (!source) {
     console.warn(`Source not found for uri: ${sourceUri}`);
     return null;
