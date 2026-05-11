@@ -1,10 +1,28 @@
-import { computed, type ComputedRef, inject, type InjectionKey, provide, reactive, shallowReactive, watch } from 'vue';
+import {
+  computed,
+  type ComputedRef,
+  inject,
+  type InjectionKey,
+  provide,
+  reactive,
+  shallowReactive,
+  watch,
+} from 'vue';
 import { createAnnotationConfiguration } from './annotationConfiguration';
-import { type AnnotationEvents, sendAnnotationEvent } from './annotation.events';
+import {
+  type AnnotationEvents,
+  sendAnnotationEvent,
+} from './annotation.events';
 import { type EditorConfig, type EditorState_ } from './editorState';
-import { type AnnotationEditorEmitsFn, type AnnotationEditorProps } from '../AnnotationEditor.properties';
+import {
+  type AnnotationEditorEmitsFn,
+  type AnnotationEditorProps,
+} from '../AnnotationEditor.properties';
 import { createModalConfig } from '../modals/annotationModal.composable';
-import { type AnnotationUtils, annotationUtils } from '../utils/annotation-utils';
+import {
+  type AnnotationUtils,
+  annotationUtils,
+} from '../utils/annotation-utils';
 import { annotationModalDefaults } from '../modals/AnnotationModal.defaults';
 import { type SourceModel } from '../types/source.model';
 import { selectAnnotationById } from '../modals/open-modal';
@@ -37,6 +55,7 @@ export const useProvideEditorState = (
       props.annotationDefinitions,
       utils,
       props.textAdapter,
+      props.annotationAdapter,
     ),
   });
 
@@ -66,12 +85,16 @@ export const useProvideEditorState = (
   });
 
   watch(
-    () => props.annotationDefinitions,
+    () =>
+      props.annotationDefinitions &&
+      props.textAdapter &&
+      props.annotationAdapter,
     () => {
       config.annotation = createAnnotationConfiguration(
         props.annotationDefinitions,
         utils,
         props.textAdapter,
+        props.annotationAdapter,
       );
     },
   );

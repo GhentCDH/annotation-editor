@@ -11,11 +11,7 @@
       <div class="flex flex-col gap-2">
         <Collapse :title="label.selectLabel">
           <div :id="editId" />
-          <Btn
-            :outline="true"
-            class="mt-2"
-            @click="selectAll"
-          >
+          <Btn :outline="true" class="mt-2" @click="selectAll">
             Select all text
           </Btn>
         </Collapse>
@@ -28,19 +24,10 @@
       </div>
     </template>
     <template #actions>
-      <Btn
-        :color="'secondary' as any"
-        :outline="true"
-        @click="onCancel"
-      >
+      <Btn :color="'secondary' as any" :outline="true" @click="onCancel">
         Cancel
       </Btn>
-      <Btn
-        :disabled="formDisabled"
-        @click="onSubmit"
-      >
-        Save
-      </Btn>
+      <Btn :disabled="formDisabled" @click="onSubmit"> Save </Btn>
     </template>
   </Modal>
 </template>
@@ -50,10 +37,7 @@ import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { type AnnotatedText } from '@ghentcdh/annotated-text';
 import { w3cAnnotation, type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import AnnotationForm from './AnnotationForm.vue';
-import {
-  AnnotationEditEmits,
-  AnnotationEditModalProperties,
-} from './AnnotationEditModal.properties';
+import { AnnotationEditEmits, AnnotationEditModalProperties } from './AnnotationEditModal.properties';
 import { useEditorState } from '../../composables/useEditorState';
 
 let annotatedText: AnnotatedText<W3CAnnotation>;
@@ -149,7 +133,10 @@ const textPositionSelector = computed(() => {
   if (!props.parentAnnotation || !props.source) {
     return null;
   }
-  return utils.getTextPositionSelector(props.parentAnnotation, props.source.uri);
+  return utils.getTextPositionSelector(
+    props.parentAnnotation,
+    props.source.uri,
+  );
 });
 
 onMounted(() => {

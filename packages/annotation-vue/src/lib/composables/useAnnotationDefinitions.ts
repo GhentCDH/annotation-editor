@@ -3,18 +3,18 @@ import {
   type AnnotationDefConfig,
   type AnnotationDefinition as CoreAnnotationDefinition,
   type AnnotationJsonConfig,
-  type AnnotationStyle,
   type ContextBuilderFactory
 } from '@ghentcdh/annotation-core';
 import { type FormValidationDef, type KeyLabel, type VueAnnotationDefinition } from '../types/annotation-vue.types';
 import { AnnotationDefinitionService } from '../service/annotation-definition.service';
 import {
+  type DefinitionsFetchFn,
   type GlobModules,
   loadAnnotationDefinitionsFromConfigs,
-  loadAnnotationDefinitionsFromGlob
+  loadAnnotationDefinitionsFromGlob,
+  loadAnnotationDefinitionsFromUrl
 } from '../loader/annotation-definition.loader';
-
-type CreateHighlightStyle = (def: CoreAnnotationDefinition) => AnnotationStyle;
+import { createHighlightStyle } from '../../../../../../vue_component_annotated_text/dist/libs/core';
 
 export type AnnotationDefinitionsState = {
   configuration: AnnotationDefConfig;
@@ -24,27 +24,24 @@ export type AnnotationDefinitionsState = {
   loadFromGlob: (modules: GlobModules) => void;
   loadFromConfigs: (configs: AnnotationJsonConfig[]) => void;
   loadFromDefinitions: (defs: CoreAnnotationDefinition[]) => void;
+  loadFromUrl: (url: string, fetchFn?: DefinitionsFetchFn) => Promise<void>;
+  loading: boolean;
+  error: Error | null;
   service: AnnotationDefinitionService;
 };
 
 export type ProvideAnnotationDefinitionsOptions = {
   config: AnnotationDefConfig;
   resourceFolder?: GlobModules;
-  createHighlightStyle?: CreateHighlightStyle;
+  createHighlightStyle?: typeof createHighlightStyle;
+  activeHighlightStyle?: typeof createHighlightStyle;
   factory?: ContextBuilderFactory;
+  definitionsUrl?: string;
+  fetchFn?: DefinitionsFetchFn;
 };
 
 export const ANNOTATION_DEFINITIONS_KEY: InjectionKey<AnnotationDefinitionsState> =
   Symbol('annotation-definitions');
-
-const defaultCreateHighlightStyle = (
-  def: CoreAnnotationDefinition,
-): AnnotationStyle => ({
-  id: def.id,
-  name: def.name,
-  color: def.color,
-  target: def.target ?? 'underline',
-});
 
 const resolveKeyLabels = (
   ids: string[] | undefined,
@@ -65,7 +62,8 @@ const resolveKeyLabels = (
 const toVueDefinition = (
   def: CoreAnnotationDefinition,
   grouped: Record<string, CoreAnnotationDefinition>,
-  createStyle: CreateHighlightStyle,
+  createStyle: typeof createHighlightStyle,
+  activeStyle: typeof createHighlightStyle,
 ): VueAnnotationDefinition => {
   const schema: FormValidationDef = {
     uiSchema: def.ui_schema ?? null,
@@ -79,7 +77,11 @@ const toVueDefinition = (
     name: def.name,
     label: def.name,
     color: def.color,
-    style: createStyle(def),
+    style: {
+      default: createStyle(def.color),
+      active: activeStyle(def.color),
+    },
+    // style: createStyle(def),
     schema,
     allowedChildren: resolveKeyLabels(def.allowedChildren, grouped),
     allowedLinks: resolveKeyLabels(def.allowedLinks, grouped),
@@ -96,8 +98,8 @@ export const createAnnotationDefinitionsState = (
   options: ProvideAnnotationDefinitionsOptions,
 ): AnnotationDefinitionsState => {
   const { config, factory } = options;
-  const createStyle =
-    options.createHighlightStyle ?? defaultCreateHighlightStyle;
+  const createStyle = options.createHighlightStyle ?? createHighlightStyle;
+  const activeStyle = options.createHighlightStyle ?? createStyle;
 
   const service = markRaw(new AnnotationDefinitionService());
   const coreDefs = ref<CoreAnnotationDefinition[]>([]);
@@ -105,7 +107,7 @@ export const createAnnotationDefinitionsState = (
   const definitions = computed(() => {
     const grouped = service.findAllGrouped();
     return coreDefs.value.map((def) =>
-      toVueDefinition(def, grouped, createStyle),
+      toVueDefinition(def, grouped, createStyle, activeStyle as any),
     );
   });
 
@@ -137,6 +139,27 @@ export const createAnnotationDefinitionsState = (
     loadFromDefinitions(defs);
   };
 
+  const loading = ref(false);
+  const error = ref<Error | null>(null);
+
+  const loadFromUrl = async (url: string, fetchFn?: DefinitionsFetchFn) => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const defs = await loadAnnotationDefinitionsFromUrl(
+        url,
+        config,
+        factory,
+        fetchFn,
+      );
+      loadFromDefinitions(defs);
+    } catch (e) {
+      error.value = e instanceof Error ? e : new Error(String(e));
+    } finally {
+      loading.value = false;
+    }
+  };
+
   return reactive({
     configuration: config,
     definitions,
@@ -145,6 +168,9 @@ export const createAnnotationDefinitionsState = (
     loadFromGlob,
     loadFromConfigs,
     loadFromDefinitions,
+    loadFromUrl,
+    loading,
+    error,
     service,
   });
 };
@@ -160,6 +186,10 @@ export const provideAnnotationDefinitions = (
 
   if (options.resourceFolder) {
     state.loadFromGlob(options.resourceFolder);
+  }
+
+  if (options.definitionsUrl) {
+    state.loadFromUrl(options.definitionsUrl, options.fetchFn);
   }
 
   provide(ANNOTATION_DEFINITIONS_KEY, state);

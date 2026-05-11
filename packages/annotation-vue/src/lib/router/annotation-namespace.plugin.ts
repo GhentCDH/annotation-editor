@@ -54,6 +54,10 @@ export const AnnotationPlugin: Plugin<[AnnotationPluginOptions]> = {
       state.loadFromGlob(options.resourceFolder);
     }
 
+    if (options.definitionsUrl) {
+      state.loadFromUrl(options.definitionsUrl, options.fetchFn);
+    }
+
     app.provide(ANNOTATION_DEFINITIONS_KEY, state);
 
     installAnnotationNamespaceRoutes(options.router, state.service, {

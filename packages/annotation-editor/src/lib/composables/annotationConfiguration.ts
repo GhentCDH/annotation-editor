@@ -1,4 +1,5 @@
 import {
+  AnnotationAdapter,
   createAnnotatedText,
   type CustomAnnotationStyle,
   type TextAdapter,
@@ -39,6 +40,7 @@ export const createAnnotationConfiguration = (
   annotationDefinitions: AnnotationDefinition[] | undefined,
   utils: AnnotationUtils,
   textAdapter: TextAdapter | undefined,
+  annotationAdapter: AnnotationAdapter<W3CAnnotation> | undefined,
 ): AnnotationConfiguration => {
   const definitions = annotationDefinitions ?? ([] as AnnotationDefinition[]);
   const definitionsMap = groupById(definitions) as Record<
@@ -64,7 +66,7 @@ export const createAnnotationConfiguration = (
     definitions,
     'allowedChildren',
   ) as AllowedChildrenPerType;
-  const annotationAdapter = (source?: SourceModel) =>
+  const defaultAnnotationAdapter = (source?: SourceModel) =>
     W3CAnnotationAdapter(
       source
         ? {
@@ -92,7 +94,9 @@ export const createAnnotationConfiguration = (
 
     annotatedText
       .setSnapper(new WordSnapper())
-      .setAnnotationAdapter(annotationAdapter(sourceModel))
+      .setAnnotationAdapter(
+        annotationAdapter ?? defaultAnnotationAdapter(sourceModel),
+      )
       .setTextAdapter(textAdapter ?? MarkdownTextAdapter())
       // .setTagLabelFn(findPurpose)
       .setRenderParams(renderParams())

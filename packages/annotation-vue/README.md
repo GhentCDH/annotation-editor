@@ -1,6 +1,8 @@
 # @ghentcdh/annotation-vue
 
-Vue 3 package for working with annotation definitions client-side — no NestJS backend required. Loads JSON annotation configs, builds definitions via `@ghentcdh/annotation-core`, and exposes them as reactive Vue composables using provide/inject.
+Vue 3 package for working with annotation definitions client-side — no NestJS backend required. Loads JSON annotation
+configs, builds definitions via `@ghentcdh/annotation-core`, and exposes them as reactive Vue composables using
+provide/inject.
 
 ## Install
 
@@ -17,37 +19,40 @@ vue-router >= 4  (optional — only needed for router plugin)
 
 ### Provide/inject pattern
 
-Call `provideAnnotationDefinitions` once at the root component. All descendants use `useAnnotationDefinitions()` to inject.
+Call `provideAnnotationDefinitions` once at the root component. All descendants use `useAnnotationDefinitions()` to
+inject.
 
 **Root component (provide):**
 
 ```vue
+
 <template>
   <slot />
 </template>
 
 <script setup lang="ts">
-import { provideAnnotationDefinitions } from '@ghentcdh/annotation-vue';
+  import { provideAnnotationDefinitions } from '@ghentcdh/annotation-vue';
 
-// import.meta.glob must be a string literal — call it here, pass result in
-const resourceFolder = import.meta.glob('./configs/*.json', { eager: true });
+  // import.meta.glob must be a string literal — call it here, pass result in
+  const resourceFolder = import.meta.glob('./configs/*.json', { eager: true });
 
-const { definitions } = provideAnnotationDefinitions({
-  config: {
-    baseUrl: 'http://localhost:3000/',
-    app: 'myapp',
-    prefix: 'myapp',
-    isDev: true,
-    cacheTTLms: 0,
-  },
-  resourceFolder, // auto-loads definitions on creation
-});
+  const { definitions } = provideAnnotationDefinitions({
+    config: {
+      baseUrl: 'http://localhost:3000/',
+      app: 'myapp',
+      prefix: 'myapp',
+      isDev: true,
+      cacheTTLms: 0,
+    },
+    resourceFolder, // auto-loads definitions on creation
+  });
 </script>
 ```
 
 **Child component (inject):**
 
 ```vue
+
 <template>
   <div v-for="def in definitions" :key="def.id">
     {{ def.label }}
@@ -55,33 +60,33 @@ const { definitions } = provideAnnotationDefinitions({
 </template>
 
 <script setup lang="ts">
-import { useAnnotationDefinitions } from '@ghentcdh/annotation-vue';
+  import { useAnnotationDefinitions } from '@ghentcdh/annotation-vue';
 
-// No options needed — state is injected from ancestor
-const { definitions, getDefinitionById } = useAnnotationDefinitions();
+  // No options needed — state is injected from ancestor
+  const { definitions, getDefinitionById } = useAnnotationDefinitions();
 </script>
 ```
 
 ### provideAnnotationDefinitions options
 
-| Option | Type | Required | Description |
-|---|---|---|---|
-| `config` | `AnnotationDefConfig` | yes | Base URL, app name, prefix, cache settings |
-| `resourceFolder` | `GlobModules` | no | `import.meta.glob` result — auto-loads on creation |
-| `createHighlightStyle` | `(def) => AnnotationStyle` | no | Custom style builder |
-| `factory` | `ContextBuilderFactory` | no | Custom context builder factory |
+| Option                 | Type                       | Required | Description                                        |
+|------------------------|----------------------------|----------|----------------------------------------------------|
+| `config`               | `AnnotationDefConfig`      | yes      | Base URL, app name, prefix, cache settings         |
+| `resourceFolder`       | `GlobModules`              | no       | `import.meta.glob` result — auto-loads on creation |
+| `createHighlightStyle` | `(def) => AnnotationStyle` | no       | Custom style builder                               |
+| `factory`              | `ContextBuilderFactory`    | no       | Custom context builder factory                     |
 
 ### Returned state (both provide and inject)
 
-| Property | Type | Description |
-|---|---|---|
-| `definitions` | `ComputedRef<VueAnnotationDefinition[]>` | All definitions, reactively transformed |
-| `definitionsMap` | `ComputedRef<Record<string, VueAnnotationDefinition>>` | Definitions keyed by ID |
-| `getDefinitionById` | `(id: string) => VueAnnotationDefinition \| undefined` | Lookup by ID |
-| `loadFromGlob` | `(modules: GlobModules) => void` | Load from `import.meta.glob` result |
-| `loadFromConfigs` | `(configs: AnnotationJsonConfig[]) => void` | Load from config array |
-| `loadFromDefinitions` | `(defs: CoreAnnotationDefinition[]) => void` | Load pre-built definitions |
-| `service` | `AnnotationDefinitionService` | Underlying synchronous service |
+| Property              | Type                                                   | Description                             |
+|-----------------------|--------------------------------------------------------|-----------------------------------------|
+| `definitions`         | `ComputedRef<VueAnnotationDefinition[]>`               | All definitions, reactively transformed |
+| `definitionsMap`      | `ComputedRef<Record<string, VueAnnotationDefinition>>` | Definitions keyed by ID                 |
+| `getDefinitionById`   | `(id: string) => VueAnnotationDefinition \| undefined` | Lookup by ID                            |
+| `loadFromGlob`        | `(modules: GlobModules) => void`                       | Load from `import.meta.glob` result     |
+| `loadFromConfigs`     | `(configs: AnnotationJsonConfig[]) => void`            | Load from config array                  |
+| `loadFromDefinitions` | `(defs: CoreAnnotationDefinition[]) => void`           | Load pre-built definitions              |
+| `service`             | `AnnotationDefinitionService`                          | Underlying synchronous service          |
 
 ### Loading definitions manually
 
@@ -149,7 +154,8 @@ service.setDefinitions(defs);   // replace all definitions
 
 ### Router plugin (optional, requires `vue-router`)
 
-Registers Vue Router routes that mirror the NestJS `AnnotationNamespaceController` endpoints. Useful for serving annotation definitions client-side without a backend.
+Registers Vue Router routes that mirror the NestJS `AnnotationNamespaceController` endpoints. Useful for serving
+annotation definitions client-side without a backend.
 
 ```ts
 import { createRouter, createWebHistory } from 'vue-router';
@@ -171,19 +177,20 @@ app.use(AnnotationNamespacePlugin, {
 
 // Option B: Direct install
 import { installAnnotationNamespaceRoutes } from '@ghentcdh/annotation-vue';
+
 installAnnotationNamespaceRoutes(router, service, { basePath: '/ns' });
 ```
 
 Registered routes:
 
-| Path | Name | Description |
-|---|---|---|
-| `/ns` | `annotation-ns-all` | All definitions |
-| `/ns/anno.jsonld` | `annotation-ns-all-jsonld` | All JSON-LD contexts |
-| `/ns/:id.jsonld` | `annotation-ns-jsonld` | Single JSON-LD context |
-| `/ns/:type/anno.jsonld` | `annotation-ns-type-jsonld` | JSON-LD + forms for type |
-| `/ns/:id/schemas` | `annotation-ns-schemas` | Schemas subset for definition |
-| `/ns/:id` | `annotation-ns-by-id` | Single definition |
+| Path                    | Name                        | Description                   |
+|-------------------------|-----------------------------|-------------------------------|
+| `/ns`                   | `annotation-ns-all`         | All definitions               |
+| `/ns/anno.jsonld`       | `annotation-ns-all-jsonld`  | All JSON-LD contexts          |
+| `/ns/:id.jsonld`        | `annotation-ns-jsonld`      | Single JSON-LD context        |
+| `/ns/:type/anno.jsonld` | `annotation-ns-type-jsonld` | JSON-LD + forms for type      |
+| `/ns/:id/schemas`       | `annotation-ns-schemas`     | Schemas subset for definition |
+| `/ns/:id`               | `annotation-ns-by-id`       | Single definition             |
 
 ### Path helpers
 
@@ -198,6 +205,34 @@ paths.allJsonLd;        // '/ns/anno.jsonld'
 paths.byId('comment');  // '/ns/comment'
 paths.jsonLdById('comment'); // '/ns/comment.jsonld'
 paths.schemasById('comment'); // '/ns/comment/schemas'
+```
+
+## Resolve defintions from third party server
+
+```ts
+                                                                                                                              │
+│ // Simple — single app.use()                                                                                                        │
+│ app.use(AnnotationPlugin, {                                                                                                         │
+│   config: annotationDefConfig,                                                                                                      │
+│   router,                                                                                                                           │
+│   definitionsUrl: '/api/ns',                                                                                                        │
+│
+})
+;                                                                                                                                 │
+│                                                                                                                                     │
+│ // Custom fetch (auth headers, axios, etc.)                                                                                         │
+│ app.use(AnnotationPlugin, {                                                                                                         │
+│   config: annotationDefConfig,                                                                                                      │
+│   router,                                                                                                                           │
+│   definitionsUrl: '/api/ns',                                                                                                        │
+│   fetchFn: async (url) => {                                                                                                         │
+│     const { data } = await axios.get(url, { headers: { Authorization: `Bearer ${token}` } });                                       │
+│     return data;                                                                                                                    │
+│
+},                                                                                                                                │
+│
+})
+;                     
 ```
 
 ## Package structure

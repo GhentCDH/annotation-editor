@@ -3,6 +3,7 @@ import {
   type AnnotationStyle,
 } from '@ghentcdh/annotation-core';
 import { type ContextBuilder } from '@ghentcdh/w3c-utils';
+import { type CustomAnnotationStyle } from '@ghentcdh/annotated-text';
 
 export type KeyLabel<KEY = string> = {
   key: KEY;
@@ -22,7 +23,7 @@ export type VueAnnotationDefinition = {
   name: string;
   label: string;
   color: string;
-  style: AnnotationStyle;
+  style: CustomAnnotationStyle;
   schema: FormValidationDef;
   allowedChildren: KeyLabel[];
   allowedLinks: KeyLabel[];

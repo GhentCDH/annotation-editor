@@ -3,6 +3,7 @@ import {
   type AnnotationDefConfig,
   type AnnotationDefinition as CoreAnnotationDefinition,
 } from '@ghentcdh/annotation-core';
+import { type DefinitionsFetchFn } from '../../loader/annotation-definition.loader';
 import {
   provideAnnotationDefinitions,
   useAnnotationDefinitions,
@@ -267,5 +268,91 @@ describe('useAnnotationDefinitions', () => {
     expect(injectedState).toBeDefined();
     expect(injectedState.definitions).toEqual([]);
     expect(typeof injectedState.getDefinitionById).toBe('function');
+  });
+});
+
+describe('loadFromUrl', () => {
+  it('should initialize loading false and error null', () => {
+    const state = withProvide({ config: mockConfig });
+    expect(state.loading).toBe(false);
+    expect(state.error).toBeNull();
+  });
+
+  it('should load definitions from URL via custom fetchFn', async () => {
+    const state = withProvide({ config: mockConfig });
+
+    const mockFetchFn: DefinitionsFetchFn = vi.fn().mockResolvedValue([
+      { id: 'url-a', name: 'UrlAlpha', color: '#aaa' },
+      { id: 'url-b', name: 'UrlBeta', color: '#bbb' },
+    ]);
+
+    await state.loadFromUrl('/api/ns', mockFetchFn);
+    await nextTick();
+
+    expect(mockFetchFn).toHaveBeenCalledWith('/api/ns');
+    expect(state.loading).toBe(false);
+    expect(state.error).toBeNull();
+    expect(state.definitions).toHaveLength(2);
+    expect(state.definitions[0].id).toBe('url-a');
+    expect(state.definitions[1].id).toBe('url-b');
+  });
+
+  it('should set error on fetch failure', async () => {
+    const state = withProvide({ config: mockConfig });
+
+    const mockFetchFn: DefinitionsFetchFn = vi
+      .fn()
+      .mockRejectedValue(new Error('Network error'));
+
+    await state.loadFromUrl('/api/ns', mockFetchFn);
+    await nextTick();
+
+    expect(state.loading).toBe(false);
+    expect(state.error).toBeInstanceOf(Error);
+    expect(state.error?.message).toBe('Network error');
+    expect(state.definitions).toEqual([]);
+  });
+
+  it('should auto-fetch when definitionsUrl provided', async () => {
+    const mockFetchFn: DefinitionsFetchFn = vi.fn().mockResolvedValue([
+      { id: 'auto', name: 'Auto', color: '#000' },
+    ]);
+
+    const state = withProvide({
+      config: mockConfig,
+      definitionsUrl: '/api/ns',
+      fetchFn: mockFetchFn,
+    });
+
+    expect(mockFetchFn).toHaveBeenCalledWith('/api/ns');
+
+    // Wait for async fetch to resolve
+    await vi.waitFor(() => {
+      expect(state.definitions).toHaveLength(1);
+    });
+    expect(state.definitions[0].id).toBe('auto');
+    expect(state.loading).toBe(false);
+  });
+
+  it('should set loading true during fetch', async () => {
+    const state = withProvide({ config: mockConfig });
+
+    let resolvePromise!: (value: unknown[]) => void;
+    const mockFetchFn: DefinitionsFetchFn = vi.fn().mockReturnValue(
+      new Promise((resolve) => {
+        resolvePromise = resolve;
+      }),
+    );
+
+    const promise = state.loadFromUrl('/api/ns', mockFetchFn);
+    await nextTick();
+
+    expect(state.loading).toBe(true);
+
+    resolvePromise([]);
+    await promise;
+    await nextTick();
+
+    expect(state.loading).toBe(false);
   });
 });

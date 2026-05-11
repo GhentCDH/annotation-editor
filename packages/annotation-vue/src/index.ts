@@ -1,9 +1,11 @@
 export * from './lib/types/annotation-vue.types';
 export { AnnotationDefinitionService } from './lib/service/annotation-definition.service';
 export {
+  type DefinitionsFetchFn,
   type GlobModules,
   loadAnnotationDefinitionsFromGlob,
   loadAnnotationDefinitionsFromConfigs,
+  loadAnnotationDefinitionsFromUrl,
 } from './lib/loader/annotation-definition.loader';
 export {
   type AnnotationDefinitionsState,
