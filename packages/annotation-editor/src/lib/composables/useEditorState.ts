@@ -54,6 +54,7 @@ export const useProvideEditorState = (
     annotation: createAnnotationConfiguration(
       props.annotationDefinitions,
       utils,
+      props.textAdapter,
     ),
   });
 
@@ -88,6 +89,7 @@ export const useProvideEditorState = (
       config.annotation = createAnnotationConfiguration(
         props.annotationDefinitions,
         utils,
+        props.textAdapter,
       );
     },
   );

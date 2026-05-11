@@ -143,9 +143,165 @@ Place JSON files in the annotations directory:
 }
 ```
 
-**Supported `target` values:** `gutter`, `underline`, `highlight`
+**Advanced example with relationships:**
+
+```json
+{
+  "id": "lemma",
+  "name": "Lemma",
+  "color": "#7a8800",
+  "isRoot": false,
+  "allowedChildren": ["link_bucket"],
+  "allowedLinks": ["lemma"],
+  "icon": "<svg>...</svg>",
+  "columns": [
+    {
+      "id": "name",
+      "label": "name"
+    },
+    {
+      "id": "lemma",
+      "label": "Lemma",
+      "hiddenInMetadata": false,
+      "hiddenInForm": false,
+      "displayKey": "name",
+      "type": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "label": { "type": "string" }
+        }
+      },
+      "fieldInput": {
+        "type": "autocomplete",
+        "options": {
+          "uri": "/ns/metadata?type=lemma&filter=word:",
+          "valueKey": "id",
+          "labelKey": "label",
+          "enableCreate": true
+        }
+      }
+    }
+  ]
+}
+```
+
+**Top-level fields:**
+
+| Field | Type | Default | Description |
+|---|---|---|---|
+| `id` | `string` | — | Unique identifier for the annotation type |
+| `name` | `string` | — | Display name |
+| `color` | `string` | — | Hex color for styling |
+| `isRoot` | `boolean` | `true` | Whether this type appears as a top-level annotation option |
+| `allowedChildren` | `string[]` | — | IDs of annotation types allowed as children |
+| `allowedLinks` | `string[]` | — | IDs of annotation types that can be linked |
+| `icon` | `string` | — | SVG string for custom icon |
+| `type` | `string` | — | Optional type classifier |
+| `target` | `string` | — | `gutter`, `underline`, or `highlight` |
 
 **Supported `fieldInput.type` values:** `text`, `select`, `autocomplete`
+
+#### Directory Structure
+
+Annotation definitions are loaded from a directory where each subfolder represents one annotation type:
+
+```
+annotations/
+├── person/
+│   └── resource.json
+├── place/
+│   └── resource.json
+├── event/
+│   └── resource.json
+└── _resource/              # optional resource definitions
+    ├── persons.json
+    └── places.json
+```
+
+Each `resource.json` contains an `AnnotationJsonConfig` object.
+
+#### Frontend-Only Usage (No Backend)
+
+Annotation definitions can be built entirely client-side using `@ghentcdh/annotation-core`, without running `@ghentcdh/annotation-api`.
+
+**Static imports:**
+
+```ts
+import {
+  buildAnnotationDefinitions,
+  type AnnotationJsonConfig,
+  type AnnotationDefConfig,
+} from '@ghentcdh/annotation-core';
+
+import personConfig from './annotations/person/resource.json';
+import placeConfig from './annotations/place/resource.json';
+
+const configs: AnnotationJsonConfig[] = [personConfig, placeConfig];
+
+const defConfig: AnnotationDefConfig = {
+  baseUrl: 'https://example.org',
+  app: 'myapp',
+  prefix: 'ann',
+  isDev: true,
+};
+
+const definitions = buildAnnotationDefinitions(configs, defConfig);
+```
+
+**Dynamic loading with Vite:**
+
+Auto-discover all annotation configs without manual imports:
+
+```ts
+import {
+  buildAnnotationDefinitions,
+  type AnnotationJsonConfig,
+  type AnnotationDefConfig,
+} from '@ghentcdh/annotation-core';
+
+const modules = import.meta.glob('./annotations/*/resource.json', {
+  eager: true,
+  import: 'default',
+});
+
+const configs = Object.values(modules) as AnnotationJsonConfig[];
+const definitions = buildAnnotationDefinitions(configs, defConfig);
+```
+
+**Example project structure:**
+
+```
+src/
+└── annotations/
+    ├── person/
+    │   └── resource.json
+    ├── place/
+    │   └── resource.json
+    └── index.ts            # collect & build all definitions
+```
+
+`annotations/index.ts`:
+
+```ts
+import {
+  buildAnnotationDefinitions,
+  type AnnotationJsonConfig,
+  type AnnotationDefConfig,
+} from '@ghentcdh/annotation-core';
+
+const modules = import.meta.glob('./**/resource.json', {
+  eager: true,
+  import: 'default',
+});
+
+const configs = Object.values(modules) as AnnotationJsonConfig[];
+
+export const loadDefinitions = (defConfig: AnnotationDefConfig) =>
+  buildAnnotationDefinitions(configs, defConfig);
+```
+
+Then pass result to `<AnnotationEditor :annotation-definitions="definitions" />`.
 
 ---
 

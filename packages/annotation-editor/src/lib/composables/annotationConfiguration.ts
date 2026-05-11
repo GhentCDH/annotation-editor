@@ -1,10 +1,10 @@
 import {
   createAnnotatedText,
   type CustomAnnotationStyle,
+  type TextAdapter,
   W3CAnnotationAdapter,
   WordSnapper
 } from '@ghentcdh/annotated-text';
-import { MarkdownTextAdapter } from '@ghentcdh/annotated-text--markdown';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import {
   type AllowedChildrenPerType,
@@ -14,6 +14,7 @@ import {
 import { defaultRender, styleFn } from '../style/annotation.style';
 import { type SourceModel } from '../types/source.model';
 import { type AnnotationUtils } from '../utils/annotation-utils';
+import { MarkdownTextAdapter } from '../../../../../../vue_component_annotated_text/dist/libs/markdown';
 
 const groupById = <KEY extends keyof AnnotationDefinition>(
   defs: AnnotationDefinition[],
@@ -37,6 +38,7 @@ const groupById = <KEY extends keyof AnnotationDefinition>(
 export const createAnnotationConfiguration = (
   annotationDefinitions: AnnotationDefinition[] | undefined,
   utils: AnnotationUtils,
+  textAdapter: TextAdapter | undefined,
 ): AnnotationConfiguration => {
   const definitions = annotationDefinitions ?? ([] as AnnotationDefinition[]);
   const definitionsMap = groupById(definitions) as Record<
@@ -91,7 +93,7 @@ export const createAnnotationConfiguration = (
     annotatedText
       .setSnapper(new WordSnapper())
       .setAnnotationAdapter(annotationAdapter(sourceModel))
-      .setTextAdapter(MarkdownTextAdapter())
+      .setTextAdapter(textAdapter ?? MarkdownTextAdapter())
       // .setTagLabelFn(findPurpose)
       .setRenderParams(renderParams())
       .setStyleParams(styleParams())

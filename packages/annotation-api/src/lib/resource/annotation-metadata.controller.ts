@@ -2,12 +2,13 @@ import {
   BadRequestException,
   Controller,
   Get,
+  Inject,
   Query,
 } from '@nestjs/common';
 import { RequestSchema } from '@ghentcdh/json-forms-core';
 import { z } from 'zod';
 
-import { type AnnotationMetadataService } from './annotation-metadata.service';
+import { AnnotationMetadataService } from './annotation-metadata.service';
 
 const MetadataRequestSchema = (RequestSchema as any).extend({
   type: z.string().optional().default('register'),
@@ -31,7 +32,10 @@ const MetadataRequestPipe = {
 
 @Controller('ns/metadata')
 export class AnnotationMetadataController {
-  constructor(private readonly metadataService: AnnotationMetadataService) {}
+  constructor(
+    @Inject(AnnotationMetadataService)
+    private readonly metadataService: AnnotationMetadataService,
+  ) {}
 
   @Get()
   async search(@Query(MetadataRequestPipe) params: MetadataRequest) {

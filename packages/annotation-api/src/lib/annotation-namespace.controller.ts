@@ -1,15 +1,13 @@
 import { Controller, Get, Inject, Param } from '@nestjs/common';
-import {
-  AnnotationStyleContextBuilder,
-  AnnotationStyleType,
-} from '@ghentcdh/annotation-core';
-import { type AnnotationDefinitionService } from './service/annotation-definition.service';
+import { AnnotationStyleContextBuilder, AnnotationStyleType } from '@ghentcdh/annotation-core';
+import { AnnotationDefinitionService } from './service/annotation-definition.service';
 import type { AnnotationDefConfig } from './utils/annotation.context-builder';
 import { ANNOTATION_DEF_CONFIG_TOKEN } from './utils/annotation.context-builder';
 
 @Controller('ns')
 export class AnnotationNamespaceController {
   constructor(
+    @Inject(AnnotationDefinitionService)
     private readonly service: AnnotationDefinitionService,
     @Inject(ANNOTATION_DEF_CONFIG_TOKEN)
     private readonly annotationDefConfig: AnnotationDefConfig,
@@ -42,16 +40,19 @@ export class AnnotationNamespaceController {
       ui_schema: definition.ui_schema,
       metadata_schema: definition.metadata_schema,
       columns: definition.columns,
+      isRoot: definition.isRoot,
+      allowedChildren: definition.allowedChildren,
+      allowedLinks: definition.allowedLinks,
+      type: definition.type,
+      icon: definition.icon,
+      target: definition.target,
     };
   }
 
   @Get(':id')
   async getById(@Param('id') id: string) {
     const fromDb = await this.service.findById(id);
-    return {
-      id,
-      fromDb,
-    };
+    return fromDb;
   }
 
   @Get('anno.jsonld')

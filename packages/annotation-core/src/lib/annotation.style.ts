@@ -3,7 +3,7 @@ import { z } from 'zod';
 import {
   type AnnotationDefConfig,
   resolveConfig,
-} from './types/annotation.def.config';
+} from './utils/annotation.context-builder';
 import { type AnnotationContext } from './types/annotation.contex';
 
 export const AnnotationStyleSchema = z.object({
@@ -21,7 +21,7 @@ export type AnnotationStyle = z.infer<typeof AnnotationStyleSchema>;
 
 export const AnnotationStyleType = 'AnnotationStyle';
 export const AnnotationStyleContextBuilder = (
-  annotationConfig?: AnnotationDefConfig,
+  annotationConfig?: Partial<AnnotationDefConfig>,
 ) => {
   const { prefix, baseUrl, contextUrl } = resolveConfig(annotationConfig);
 
@@ -34,7 +34,7 @@ export const AnnotationStyleContextBuilder = (
 };
 
 export const createAnnotationStyleBody = (
-  annotationConfig: AnnotationDefConfig | undefined,
+  annotationConfig: Partial<AnnotationDefConfig> | undefined,
   style: Partial<AnnotationContext> & Pick<AnnotationContext, 'id' | 'name'>,
 ) => {
   return AnnotationStyleContextBuilder(annotationConfig).toAnnotationBody(

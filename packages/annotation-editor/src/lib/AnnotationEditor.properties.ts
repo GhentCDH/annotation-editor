@@ -5,11 +5,16 @@ import { type FormEventPayload } from '@ghentcdh/json-forms-vue';
 import { type AnnotationDefConfig } from '@ghentcdh/annotation-core';
 import type { AnnotationDefinition } from './types/AnnotationConfiguration.model';
 import type { SourceModel } from './types/source.model';
+import { type TextAdapter } from '../../../../../vue_component_annotated_text/dist/libs/core';
 
 export const AnnotationEditorProperties = {
   configuration: {
     type: Object as PropType<AnnotationDefConfig>,
     required: true as const,
+  },
+  textAdapter: {
+    type: Object as PropType<TextAdapter>,
+    required: false as const,
   },
   sources: { type: Array as PropType<SourceModel[]>, required: true as const },
   annotations: {

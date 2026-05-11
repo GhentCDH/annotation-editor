@@ -8,6 +8,11 @@ export type AnnotationContext = {
   ui_schema?: any | undefined;
   metadata_schema?: any | undefined;
   color: string;
+  type?: string;
+  icon?: string;
+  isRoot: boolean;
+  allowedChildren?: string[];
+  allowedLinks?: string[];
   created_at: Date;
   updated_at: Date;
   context: ContextBuilder;
