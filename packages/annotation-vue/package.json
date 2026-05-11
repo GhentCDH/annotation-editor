@@ -1,0 +1,20 @@
+{
+  "name": "@ghentcdh/annotation-vue",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "dependencies": {},
+  "peerDependencies": {
+    "vue": "^3.5.0",
+    "@ghentcdh/annotation-core": "*",
+    "@ghentcdh/w3c-utils": "*",
+    "vue-router": "^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "vue-router": {
+      "optional": true
+    }
+  }
+}

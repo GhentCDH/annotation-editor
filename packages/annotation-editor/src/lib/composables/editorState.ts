@@ -11,7 +11,7 @@ export type EditorConfig = {
 };
 
 export type EditorState_ = {
-  infoMessage: string | null;
+  info: { message: string; short: string } | null;
   editorState: EditorStatus;
   disableEdits: boolean;
   selectedAnnotation: W3CAnnotation | null;

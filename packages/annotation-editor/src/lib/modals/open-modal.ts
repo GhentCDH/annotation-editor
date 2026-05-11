@@ -4,6 +4,7 @@ import type { EditorConfig, EditorState_ } from '../composables/editorState';
 import type { AnnotationUtils } from '../utils/annotation-utils';
 import type { AnnotationEditorEmitsFn } from '../AnnotationEditor.properties';
 import type { SourceModel } from '../types/source.model';
+import { getAnnotationElementCenter } from '../utils/mouse-events';
 
 type AnnotationData = {
   annotation: W3CAnnotation;
@@ -16,18 +17,6 @@ type SelectByIdContext = {
   utils: AnnotationUtils;
   emits: AnnotationEditorEmitsFn;
   findAnnotationData: (id: string) => AnnotationData | null;
-};
-
-const getAnnotationElementCenter = (annotationId: string) => {
-  const el = document.querySelector(
-    `g[data-annotation-uid="${annotationId}"]:not([data-annotation-role="tag"])`,
-  );
-  if (!el) return null;
-  const rect = el.getBoundingClientRect();
-  return {
-    x: Math.min(rect.left + rect.width / 2, window.innerWidth - 270),
-    y: Math.min(rect.top + rect.height / 2, window.innerHeight - 200),
-  };
 };
 
 export const selectAnnotationById = (

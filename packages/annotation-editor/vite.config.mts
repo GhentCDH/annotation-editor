@@ -58,6 +58,7 @@ export default defineConfig(() => ({
         'vue',
         'vue-router',
         'memoizee',
+        '@vue/runtime-dom',
       ],
     },
   },

@@ -3,7 +3,9 @@
     v-bind="properties"
     @create-annotation="createAnnotation"
   />
-  <div :id="textUuid" />
+  <div class="overflow-y-auto flex-1 min-h-0">
+    <div :id="textUuid" />
+  </div>
 </template>
 <script lang="ts" setup>
 import { v4 as uuid } from 'uuid';

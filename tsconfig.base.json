@@ -17,7 +17,8 @@
       "@ghentcdh/annotation-editor": [
         "./packages/annotation-editor/src/index.ts"
       ],
-      "@ghentcdh/annotation-core": ["./packages/annotation-core/src/index.ts"]
+      "@ghentcdh/annotation-core": ["./packages/annotation-core/src/index.ts"],
+      "@ghentcdh/annotation-vue": ["./packages/annotation-vue/src/index.ts"]
     }
   },
   "exclude": [

@@ -128,7 +128,7 @@ const startLinking = (
 
   state.editorState = 'link';
   state.disableEdits = true;
-  state.infoMessage = infoMessage;
+  state.info = { message: infoMessage, short: data.link.label };
   (config.modal.getModal('link-annotation').state as any).startLink(
     data.link.key,
   );
