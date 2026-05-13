@@ -39,13 +39,13 @@ export const buildMetadataElement = (column: AnnotationColumnConfig) => ({
 });
 
 export const buildUiSchema = (columns: AnnotationColumnConfig[]) => ({
-  type: 'HorizontalLayout',
+  type: 'GridLayout',
   elements: columns.filter((col) => !col.hiddenInForm).map(buildControlElement),
   options: {},
 });
 
 export const buildMetadataSchema = (columns: AnnotationColumnConfig[]) => ({
-  type: 'HorizontalLayout',
+  type: 'GridLayout',
   elements: columns
     .filter((col) => !col.hiddenInMetadata)
     .map(buildMetadataElement),

@@ -6,6 +6,7 @@ import {
   provide,
   reactive,
   shallowReactive,
+  TemplateRef,
   watch,
 } from 'vue';
 import { createAnnotationConfiguration } from './annotationConfiguration';
@@ -46,6 +47,7 @@ const EDITOR_KEY: InjectionKey<EditorState> = Symbol('editor');
 export const useProvideEditorState = (
   props: AnnotationEditorProps,
   emits: AnnotationEditorEmitsFn,
+  containerRef: TemplateRef<HTMLElement>,
 ) => {
   const utils = annotationUtils(props.configuration);
 
@@ -134,7 +136,8 @@ export const useProvideEditorState = (
       () => props.selectedAnnotationAction,
       () => props.annotations,
     ],
-    ([id, action]) => selectAnnotationById(id, action, selectByIdCtx),
+    ([id, action]) =>
+      selectAnnotationById(containerRef, id, action, selectByIdCtx),
     { immediate: true },
   );
 
@@ -152,7 +155,13 @@ export const useProvideEditorState = (
     editorState: editorState as Readonly<EditorState_>,
     utils,
     handleFormEvents: () => console.error('something wrong'),
-    sendAnnotationEvent: sendAnnotationEvent(config, editorState, utils, emits),
+    sendAnnotationEvent: sendAnnotationEvent(
+      config,
+      editorState,
+      utils,
+      emits,
+      containerRef,
+    ),
   });
 };
 

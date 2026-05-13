@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+@import '@ghentcdh/ui/index.css';
+
+@source "../";

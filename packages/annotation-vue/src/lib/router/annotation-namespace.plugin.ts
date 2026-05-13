@@ -3,10 +3,10 @@ import { type Router } from 'vue-router';
 import { type AnnotationDefConfig } from '@ghentcdh/annotation-core';
 import { type AnnotationDefinitionService } from '../service/annotation-definition.service';
 import {
-  type ProvideAnnotationDefinitionsOptions,
-  type AnnotationDefinitionsState,
   ANNOTATION_DEFINITIONS_KEY,
+  type AnnotationDefinitionsState,
   createAnnotationDefinitionsState,
+  type ProvideAnnotationDefinitionsOptions
 } from '../composables/useAnnotationDefinitions';
 import { createAnnotationNamespaceRoutes } from './annotation-namespace.routes';
 
@@ -47,7 +47,10 @@ export const AnnotationNamespacePlugin: Plugin<
 };
 
 export const AnnotationPlugin: Plugin<[AnnotationPluginOptions]> = {
-  install(app: App, options: AnnotationPluginOptions): AnnotationDefinitionsState {
+  install(
+    app: App,
+    options: AnnotationPluginOptions,
+  ): AnnotationDefinitionsState {
     const state = createAnnotationDefinitionsState(options);
 
     if (options.resourceFolder) {

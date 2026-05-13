@@ -1,4 +1,4 @@
-import { nextTick } from 'vue';
+import { nextTick, TemplateRef } from 'vue';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import type { EditorConfig, EditorState_ } from '../composables/editorState';
 import type { AnnotationUtils } from '../utils/annotation-utils';
@@ -20,6 +20,7 @@ type SelectByIdContext = {
 };
 
 export const selectAnnotationById = (
+  container: TemplateRef<HTMLElement>,
   annotationId: string | undefined,
   action: string | undefined,
   ctx: SelectByIdContext,
@@ -71,7 +72,10 @@ export const selectAnnotationById = (
           emits('update:annotation', result.annotation);
         });
     } else {
-      const position = getAnnotationElementCenter(annotationId) ?? {
+      const position = getAnnotationElementCenter(
+        container.value!,
+        annotationId,
+      ) ?? {
         x: window.innerWidth / 2,
         y: window.innerHeight / 2,
       };

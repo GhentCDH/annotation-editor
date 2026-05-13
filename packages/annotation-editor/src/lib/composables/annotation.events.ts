@@ -5,11 +5,13 @@ import { type AnnotationEditModalShow } from '../modals/edit-annotation/Annotati
 import { type AnnotationUtils } from '../utils/annotation-utils';
 import { type AnnotationEditorEmitsFn } from '../AnnotationEditor.properties';
 import { type KeyLabel } from '../types/AnnotationConfiguration.model';
+import { TemplateRef } from 'vue';
 
 type SelectAnnotationData = {
   annotation: W3CAnnotation;
   source: SourceModel;
   mouseEvent: MouseEvent;
+  containerRef?: HTMLElement;
 };
 
 type CreateAnnotationData = Pick<
@@ -181,6 +183,7 @@ const handleSelectAnnotation = (
   config: EditorConfig,
   state: EditorState_,
   emits: AnnotationEditorEmitsFn,
+  containerRef: HTMLElement,
 ) => {
   if (state.editorState === 'link') {
     endLink(data, config, state, emits);
@@ -197,6 +200,7 @@ const handleSelectAnnotation = (
     return;
   }
 
+  data.containerRef = containerRef;
   config.modal.show('info-card', data);
   state.selectedAnnotation = data.annotation;
   state.editorState = 'show';
@@ -210,6 +214,7 @@ export const sendAnnotationEvent =
     editorState: EditorState_,
     utils: AnnotationUtils,
     emits: AnnotationEditorEmitsFn,
+    containerRef: TemplateRef<HTMLElement>,
   ) =>
   <KEY extends keyof AnnotationEvents>(
     event: KEY,
@@ -222,6 +227,7 @@ export const sendAnnotationEvent =
           config,
           editorState,
           emits,
+          containerRef.value!,
         );
       case 'edit':
         return editAnnotation(

@@ -4,13 +4,13 @@ import {
   type CustomAnnotationStyle,
   type TextAdapter,
   W3CAnnotationAdapter,
-  WordSnapper
+  WordSnapper,
 } from '@ghentcdh/annotated-text';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import {
   type AllowedChildrenPerType,
   type AnnotationConfiguration,
-  type AnnotationDefinition
+  type AnnotationDefinition,
 } from '../types/AnnotationConfiguration.model';
 import { defaultRender, styleFn } from '../style/annotation.style';
 import { type SourceModel } from '../types/source.model';

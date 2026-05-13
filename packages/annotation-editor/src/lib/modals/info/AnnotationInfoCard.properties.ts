@@ -1,4 +1,4 @@
-import type { ExtractPublicPropTypes, PropType } from 'vue';
+import { ExtractPublicPropTypes, PropType } from 'vue';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import type { SourceModel } from '../../types/source.model';
 
@@ -19,4 +19,5 @@ export type AnnotationInfoCardEvent = void;
 export type AnnotationInfoCardShow = {
   mouseEvent?: MouseEvent;
   position?: { x: number; y: number };
+  containerRef: HTMLElement;
 } & Pick<AnnotationInfoCardProp, 'source' | 'annotation'>;
