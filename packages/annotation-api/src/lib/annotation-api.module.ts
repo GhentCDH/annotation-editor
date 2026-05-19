@@ -1,5 +1,4 @@
 import { type DynamicModule, Module, type Type } from '@nestjs/common';
-import { DataSourceRegistry, loadDataSourcesFromDir } from './data-source';
 
 import { AnnotationDefinitionService } from './service/annotation-definition.service';
 import { AnnotationDefinitionFromFilesService } from './service/annotation-definition-from-files.service';
@@ -12,8 +11,6 @@ import {
 } from './utils/annotation.context-builder';
 import { loadAnnotationResourcesFromDir } from './resource/annotation-resource.loader';
 import { AnnotationResourceDefinitionService } from './resource/annotation-resource-definition.service';
-import { AnnotationMetadataService } from './resource/annotation-metadata.service';
-import { AnnotationMetadataController } from './resource/annotation-metadata.controller';
 
 type AnnotationApiConfig = {
   annotationDefinitionService: Type<AnnotationDefinitionService>;
@@ -42,7 +39,6 @@ export class AnnotationApiModule {
 
   static async forResourceDir(
     dirPath: string,
-    dataSourcesPath: string,
     config: AnnotationDefConfig,
   ): Promise<DynamicModule> {
     const loaderFn = () =>
@@ -60,37 +56,25 @@ export class AnnotationApiModule {
     );
 
     const resourceDefs = loadAnnotationResourcesFromDir(dirPath, config);
-    const dataSources = await loadDataSourcesFromDir(dataSourcesPath);
-    const registry = new DataSourceRegistry(dataSources);
     const resourceDefService = new AnnotationResourceDefinitionService(
       resourceDefs,
-    );
-    const metadataService = new AnnotationMetadataService(
-      registry,
-      resourceDefService,
     );
 
     return {
       module: AnnotationApiModule,
       global: true,
-      controllers: [
-        AnnotationMetadataController,
-        AnnotationNamespaceController,
-      ],
+      controllers: [AnnotationNamespaceController],
       providers: [
         { provide: ANNOTATION_DEF_CONFIG_TOKEN, useValue: config },
         { provide: AnnotationDefinitionService, useValue: service },
-        { provide: DataSourceRegistry, useValue: registry },
         {
           provide: AnnotationResourceDefinitionService,
           useValue: resourceDefService,
         },
-        { provide: AnnotationMetadataService, useValue: metadataService },
       ],
       exports: [
         AnnotationDefinitionService,
         AnnotationResourceDefinitionService,
-        AnnotationMetadataService,
       ],
     };
   }

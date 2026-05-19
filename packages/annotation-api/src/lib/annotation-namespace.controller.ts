@@ -3,8 +3,10 @@ import { AnnotationStyleContextBuilder, AnnotationStyleType } from '@ghentcdh/an
 import { AnnotationDefinitionService } from './service/annotation-definition.service';
 import type { AnnotationDefConfig } from './utils/annotation.context-builder';
 import { ANNOTATION_DEF_CONFIG_TOKEN } from './utils/annotation.context-builder';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('ns')
+@ApiTags('Annotations NS')
 export class AnnotationNamespaceController {
   constructor(
     @Inject(AnnotationDefinitionService)
@@ -69,7 +71,5 @@ export class AnnotationNamespaceController {
       jsonLd: context.toJsonLdContext(),
       forms: context.toJsonSchema(),
     };
-
-    return context.toJsonLdContext();
   }
 }

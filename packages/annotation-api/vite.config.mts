@@ -8,7 +8,7 @@ import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
 export default defineConfig({
   root: __dirname,
 
-  cacheDir: '../../node_modules/.vite/annotation-core',
+  cacheDir: '../../node_modules/.vite/annotation-api',
 
   plugins: [
     nxViteTsPaths(),
@@ -22,7 +22,7 @@ export default defineConfig({
   ],
 
   build: {
-    outDir: '../../dist/packages/annotation-core',
+    outDir: '../../dist/packages/annotation-api',
     emptyOutDir: true,
     reportCompressedSize: true,
 
@@ -30,7 +30,7 @@ export default defineConfig({
 
     lib: {
       entry: path.resolve(__dirname, 'src/index.ts'),
-      name: 'annotation-core',
+      name: 'annotation-api',
       fileName: 'index',
       formats: ['es', 'cjs'],
     },
@@ -39,21 +39,17 @@ export default defineConfig({
       external: [
         'node:fs',
         'node:path',
-        'node:util',
-        'node:stream',
 
-        '@ghentcdh/annotated-text',
-        '@ghentcdh/w3c-utils',
-        'uuid',
+        '@ghentcdh/annotation-core',
         '@ghentcdh/json-forms-core',
-        '@ghentcdh/tools-vue',
-        '@ghentcdh/ui',
-        '@jsonforms/core',
-        '@jsonforms/core/src/testers/testers',
-        '@jsonforms/vue',
-        '@jsonforms/vue-vanilla',
-        'axios',
-        'lodash-es',
+        '@ghentcdh/w3c-utils',
+        '@nestjs/common',
+        '@nestjs/common/decorators',
+        '@nestjs/swagger',
+        '@nestjs/core',
+        'reflect-metadata',
+        /^@nestjs\/.*/,
+        'zod',
       ],
     },
   },

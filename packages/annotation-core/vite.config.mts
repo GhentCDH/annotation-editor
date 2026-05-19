@@ -17,12 +17,6 @@ export default defineConfig(() => ({
       pathsToAliases: false,
     }),
   ],
-  // Uncomment this if you are using workers.
-  // worker: {
-  //   plugins: () => [ nxViteTsPaths() ],
-  // },
-  // Configuration for building your library.
-  // See: https://vite.dev/guide/build.html#library-mode
   build: {
     outDir: '../../dist/packages/annotation-core',
     emptyOutDir: true,
@@ -31,17 +25,13 @@ export default defineConfig(() => ({
       transformMixedEsModules: true,
     },
     lib: {
-      // Could also be a dictionary or array of multiple entry points.
       entry: 'src/index.ts',
-      name: 'utils',
+      name: 'annotation-core',
       fileName: 'index',
-      // Change this to the formats you want to support.
-      // Don't forget to update your package.json as well.
       format: ['cjs', 'esm', 'es'],
     },
     rollupOptions: {
-      // External packages that should not be bundled into your library.
-      external: [],
+      external: ['@ghentcdh/w3c-utils', 'zod'],
     },
   },
   test: {

@@ -92,7 +92,6 @@ import { AnnotationApiModule } from '@ghentcdh/annotation-api';
   imports: [
     AnnotationApiModule.forResourceDir(
       resolve(import.meta.dirname, 'annotations'),
-      resolve(import.meta.dirname, 'data-sources'),
       {
         baseUrl: process.env.ANNOTATION_BASE_URL,
         cacheTTLms: 0,
@@ -111,16 +110,12 @@ export class AppModule {}
 | Parameter | Description |
 |---|---|
 | `dirPath` | Path to directory containing annotation definition JSON files |
-| `dataSourcesPath` | Path to directory containing data source configurations |
 | `config` | `AnnotationDefConfig` with optional `isDev` and `cacheTTLms` |
 
 The module registers globally and provides:
 
 - `AnnotationDefinitionService` — load and cache annotation definitions
-- `AnnotationResourceDefinitionService` — manage resource type definitions
-- `AnnotationMetadataService` — paginated metadata queries with filtering and sorting
 - `AnnotationNamespaceController` — REST endpoint at `ns/`
-- `AnnotationMetadataController` — REST endpoint at `ns/metadata`
 
 #### Annotation Definition JSON
 
@@ -175,7 +170,7 @@ Place JSON files in the annotations directory:
       "fieldInput": {
         "type": "autocomplete",
         "options": {
-          "uri": "/ns/metadata?type=lemma&filter=word:",
+          "uri": "/api/lemma?filter=word:",
           "valueKey": "id",
           "labelKey": "label",
           "enableCreate": true

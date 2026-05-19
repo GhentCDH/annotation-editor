@@ -19,12 +19,6 @@ export default defineConfig(() => ({
       pathsToAliases: false,
     }),
   ],
-  // Uncomment this if you are using workers.
-  // worker: {
-  //  plugins: [ nxViteTsPaths() ],
-  // },
-  // Configuration for building your library.
-  // See: https://vitejs.dev/guide/build.html#library-mode
   build: {
     outDir: '../../dist/packages/annotation-editor',
     emptyOutDir: true,
@@ -33,32 +27,23 @@ export default defineConfig(() => ({
       transformMixedEsModules: true,
     },
     lib: {
-      // Could also be a dictionary or array of multiple entry points.
       entry: 'src/index.ts',
       name: 'AnnotationEditor',
       fileName: 'index',
-      // Change this to the formats you want to support.
-      // Don't forget to update your package.json as well.
-      // formats: ["es" as const],
       format: ['cjs', 'esm', 'es'],
     },
     rollupOptions: {
-      // External packages that should not be bundled into your library.
       external: [
-        '@ghentcdh/w3c-utils',
         '@ghentcdh/annotated-text',
-        '@ghentcdh/annotated-text--markdown',
-        'uuid',
+        '@ghentcdh/annotation-core',
         '@ghentcdh/json-forms-core',
         '@ghentcdh/json-forms-vue',
-        '@ghentcdh/tools-vue',
         '@ghentcdh/ui',
-        'axios',
-        'lodash-es',
+        '@ghentcdh/w3c-utils',
+        '@jsonforms/core',
+        'uuid',
         'vue',
-        'vue-router',
-        'memoizee',
-        '@vue/runtime-dom',
+        'zod',
       ],
     },
   },

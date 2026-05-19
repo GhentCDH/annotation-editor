@@ -32,11 +32,12 @@ export default defineConfig(() => ({
     },
     rollupOptions: {
       external: [
+        '@ghentcdh/annotated-text',
+        '@ghentcdh/annotation-core',
+        '@ghentcdh/w3c-utils',
         'vue',
         '@vue/runtime-dom',
         'vue-router',
-        '@ghentcdh/annotation-core',
-        '@ghentcdh/w3c-utils',
       ],
     },
   },

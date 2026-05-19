@@ -5,5 +5,4 @@ export * from './lib/service/annotation-definition.loader';
 export * from './lib/service/annotation-json-config.types';
 export * from './lib/annotation-defintion.type';
 export * from './lib/resource/annotation-resource-definition.service';
-export * from './lib/resource/annotation-metadata.service';
 export * from './lib/resource/annotation-resource.loader';

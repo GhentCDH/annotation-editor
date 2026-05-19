@@ -8,7 +8,7 @@
     @close-modal="onCancel"
   >
     <template #content>
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-row gap-2">
         <Collapse :title="label.selectLabel">
           <div :id="editId" />
           <Btn :outline="true" class="mt-2" @click="selectAll">

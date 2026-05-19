@@ -5,10 +5,7 @@ import { type FormEventPayload } from '@ghentcdh/json-forms-vue';
 import { type AnnotationDefConfig } from '@ghentcdh/annotation-core';
 import type { AnnotationDefinition } from './types/AnnotationConfiguration.model';
 import type { SourceModel } from './types/source.model';
-import {
-  AnnotationAdapter,
-  type TextAdapter,
-} from '@ghentcdh/vue_component_annotated_text';
+import { AnnotationAdapter, type TextAdapter } from '@ghentcdh/annotated-text';
 
 export const AnnotationEditorProperties = {
   modalView: { type: Boolean, required: false as const, default: true },

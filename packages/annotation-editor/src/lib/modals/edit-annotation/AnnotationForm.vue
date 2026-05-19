@@ -1,5 +1,5 @@
 <template>
-  <FormComponent
+  <JsonForm
     v-if="formValidation"
     :id="`annotation-selection-modal`"
     :form-data="formData"
@@ -16,7 +16,7 @@ import { computed, onMounted } from 'vue';
 
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 
-import { FormComponent } from '@ghentcdh/json-forms-vue';
+import { JsonForm } from '@ghentcdh/json-forms-vue';
 import { useEditorState } from '../../composables/useEditorState';
 
 const formData = defineModel<any>();

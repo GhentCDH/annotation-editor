@@ -14,6 +14,7 @@
     "@ghentcdh/w3c-utils": "link:../vue_component_annotated_text/dist/libs/w3c/utils",
     "@jsonforms/core": "^3.7.0",
     "@nestjs/common": "^11.1.19",
+    "@nestjs/swagger": "^11.4.3",
     "@nx/eslint": "^22.7.1",
     "memoizee": "^0.4.17",
     "uuid": "^14.0.0",
