@@ -1,4 +1,4 @@
-import { nextTick, TemplateRef } from 'vue';
+import { nextTick, type TemplateRef } from 'vue';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import type { EditorConfig, EditorState_ } from '../composables/editorState';
 import type { AnnotationUtils } from '../utils/annotation-utils';

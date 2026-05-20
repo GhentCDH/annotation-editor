@@ -1,15 +1,18 @@
 <template>
   <div
+    ref="containerRef"
     class="grid gap-2 py-2 relative"
     :style="{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }"
-    ref="containerRef"
   >
     <Collapse
       v-for="source in sources"
       :key="source.uri"
       :title="source.content.label ?? ''"
     >
-      <SourceEdit :source="source" :annotations="annotations" />
+      <SourceEdit
+        :source="source"
+        :annotations="annotations"
+      />
     </Collapse>
     <AnnotationModal />
   </div>

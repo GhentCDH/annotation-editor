@@ -34,7 +34,7 @@ const keys = computed(() => {
 
   return (uiSchema as any).elements.map((e: any) => {
     const element = e as TextCellType;
-    const def = findColumnDef(element, schema);
+    const def = findColumnDef(element, schema.schema);
 
     return {
       ...def,

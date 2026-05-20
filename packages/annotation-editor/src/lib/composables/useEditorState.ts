@@ -6,7 +6,7 @@ import {
   provide,
   reactive,
   shallowReactive,
-  TemplateRef,
+  type TemplateRef,
   watch,
 } from 'vue';
 import { createAnnotationConfiguration } from './annotationConfiguration';

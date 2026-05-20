@@ -7,16 +7,16 @@
       <component
         :is="comp"
         v-bind="state.data"
-        @close="state.close"
         :modal-view="modalView"
+        @close="state.close"
       />
     </template>
   </template>
 </template>
 <script lang="ts" setup>
 import { onUnmounted } from 'vue';
-import { useEditorState } from '../composables/useEditorState';
 import { AnnotationModalProperties } from './AnnotationModal.properties';
+import { useEditorState } from '../composables/useEditorState';
 
 const props = defineProps(AnnotationModalProperties);
 const { config } = useEditorState();

@@ -3,9 +3,9 @@ import type { EmitFn, ExtractPublicPropTypes, PropType } from 'vue';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { type FormEventPayload } from '@ghentcdh/json-forms-vue';
 import { type AnnotationDefConfig } from '@ghentcdh/annotation-core';
+import { type AnnotationAdapter, type TextAdapter } from '@ghentcdh/annotated-text';
 import type { AnnotationDefinition } from './types/AnnotationConfiguration.model';
 import type { SourceModel } from './types/source.model';
-import { AnnotationAdapter, type TextAdapter } from '@ghentcdh/annotated-text';
 
 export const AnnotationEditorProperties = {
   modalView: { type: Boolean, required: false as const, default: true },

@@ -1,5 +1,8 @@
 <template>
-  <SourceNavbar v-bind="properties" @create-annotation="createAnnotation" />
+  <SourceNavbar
+    v-bind="properties"
+    @create-annotation="createAnnotation"
+  />
   <div class="overflow-y-auto flex-1 min-h-0">
     <div :id="textUuid" />
   </div>

@@ -1,5 +1,5 @@
 import {
-  AnnotationAdapter,
+  type AnnotationAdapter,
   createAnnotatedText,
   type CustomAnnotationStyle,
   type TextAdapter,
@@ -7,6 +7,7 @@ import {
   WordSnapper,
 } from '@ghentcdh/annotated-text';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
+import { MarkdownTextAdapter } from '@ghentcdh/annotated-text--markdown';
 import {
   type AllowedChildrenPerType,
   type AnnotationConfiguration,
@@ -15,7 +16,6 @@ import {
 import { defaultRender, styleFn } from '../style/annotation.style';
 import { type SourceModel } from '../types/source.model';
 import { type AnnotationUtils } from '../utils/annotation-utils';
-import { MarkdownTextAdapter } from '@ghentcdh/annotated-text--markdown';
 
 const groupById = <KEY extends keyof AnnotationDefinition>(
   defs: AnnotationDefinition[],

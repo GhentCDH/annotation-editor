@@ -15,14 +15,14 @@ importers:
         specifier: ^1.0.7
         version: 1.0.7(@ghentcdh/annotated-text@1.0.7(@types/node@25.6.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.8.4))(@types/node@25.6.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.8.4)
       '@ghentcdh/json-forms-core':
-        specifier: ^1.0.1
-        version: 1.0.1(@anatine/zod-openapi@2.2.8(openapi3-ts@4.5.0)(zod@4.4.3))(@jsonforms/core@3.7.0)(zod@4.4.3)
+        specifier: ^1.0.3
+        version: 1.0.3(@jsonforms/core@3.7.0)(zod@4.4.3)
       '@ghentcdh/json-forms-vue':
-        specifier: ^1.0.1
-        version: 1.0.1(@ghentcdh/json-forms-core@1.0.1(@anatine/zod-openapi@2.2.8(openapi3-ts@4.5.0)(zod@4.4.3))(@jsonforms/core@3.7.0)(zod@4.4.3))(@ghentcdh/tools-vue@1.0.1(axios@1.15.0)(vue@3.5.33(typescript@5.9.3)))(@ghentcdh/ui@1.0.1(@ghentcdh/tools-vue@1.0.1(axios@1.15.0)(vue@3.5.33(typescript@5.9.3)))(@heroicons/vue@2.2.0(vue@3.5.33(typescript@5.9.3)))(@tiptap/pm@3.23.5)(@tiptap/starter-kit@3.23.5)(@tiptap/vue-3@3.23.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.23.5(@tiptap/pm@3.23.5))(@tiptap/pm@3.23.5)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.23.5(@tiptap/pm@3.23.5)))(uuid@14.0.0)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3)))(@jsonforms/core@3.7.0)(@vueuse/core@14.3.0(vue@3.5.33(typescript@5.9.3)))(axios@1.15.0)(lodash-es@4.18.1)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))
+        specifier: ^1.0.3
+        version: 1.0.3(@ghentcdh/json-forms-core@1.0.3(@jsonforms/core@3.7.0)(zod@4.4.3))(@ghentcdh/tools-vue@1.0.1(axios@1.15.0)(vue@3.5.33(typescript@5.9.3)))(@ghentcdh/ui@1.0.3(@ghentcdh/tools-vue@1.0.1(axios@1.15.0)(vue@3.5.33(typescript@5.9.3)))(@heroicons/vue@2.2.0(vue@3.5.33(typescript@5.9.3)))(@tiptap/pm@3.23.5)(@tiptap/starter-kit@3.23.5)(@tiptap/vue-3@3.23.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.23.5(@tiptap/pm@3.23.5))(@tiptap/pm@3.23.5)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.23.5(@tiptap/pm@3.23.5)))(uuid@14.0.0)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3)))(@jsonforms/core@3.7.0)(@vueuse/core@14.3.0(vue@3.5.33(typescript@5.9.3)))(axios@1.15.0)(lodash-es@4.18.1)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))
       '@ghentcdh/ui':
-        specifier: ^1.0.1
-        version: 1.0.1(@ghentcdh/tools-vue@1.0.1(axios@1.15.0)(vue@3.5.33(typescript@5.9.3)))(@heroicons/vue@2.2.0(vue@3.5.33(typescript@5.9.3)))(@tiptap/pm@3.23.5)(@tiptap/starter-kit@3.23.5)(@tiptap/vue-3@3.23.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.23.5(@tiptap/pm@3.23.5))(@tiptap/pm@3.23.5)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.23.5(@tiptap/pm@3.23.5)))(uuid@14.0.0)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))
+        specifier: ^1.0.3
+        version: 1.0.3(@ghentcdh/tools-vue@1.0.1(axios@1.15.0)(vue@3.5.33(typescript@5.9.3)))(@heroicons/vue@2.2.0(vue@3.5.33(typescript@5.9.3)))(@tiptap/pm@3.23.5)(@tiptap/starter-kit@3.23.5)(@tiptap/vue-3@3.23.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.23.5(@tiptap/pm@3.23.5))(@tiptap/pm@3.23.5)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.23.5(@tiptap/pm@3.23.5)))(uuid@14.0.0)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))
       '@ghentcdh/w3c-utils':
         specifier: ^1.0.7
         version: 1.0.7(@types/node@25.6.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.8.4)
@@ -93,6 +93,9 @@ importers:
       eslint-plugin-vue:
         specifier: ^10.9.1
         version: 10.9.1(@typescript-eslint/parser@8.59.2(eslint@10.3.0)(typescript@5.9.3))(eslint@10.3.0)(vue-eslint-parser@10.4.0(eslint@10.3.0))
+      husky:
+        specifier: ^9.1.7
+        version: 9.1.7
       jsonc-eslint-parser:
         specifier: ^3.1.0
         version: 3.1.0
@@ -160,12 +163,6 @@ importers:
         version: 4.6.4(vue@3.5.33(typescript@5.9.3))
 
 packages:
-
-  '@anatine/zod-openapi@2.2.8':
-    resolution: {integrity: sha512-iyM8mB556KdiZ6a1GTZ67ACLnJakU1hrzzXoh7PLaReldAdMq88MlZn/Ir/U56/TBuQctBhh/4seo0b0B343uw==}
-    peerDependencies:
-      openapi3-ts: ^4.1.2
-      zod: ^3.20.0
 
   '@babel/code-frame@7.29.0':
     resolution: {integrity: sha512-9NhCeYjq9+3uxgdtp20LSiJXJvN0FeCtNGpJxuMFZ1Kv3cWUNb6DOhJwUvcVCzKGR66cw4njwM6hrJLqgOwbcw==}
@@ -946,15 +943,14 @@ packages:
   '@ghentcdh/annotated-text@1.0.7':
     resolution: {integrity: sha512-YKPdkq62QNcl3RZ0X8dOn9jwlB9iCfPoYf3riF1Ve0TF98EJ/ETU49IZcWIdebseA8hKIVRnx2yuRdEQ2hJQEg==}
 
-  '@ghentcdh/json-forms-core@1.0.1':
-    resolution: {integrity: sha512-aIR8mhT2OCyJfKki2TztNMk6eHWphRZ3LcUIHuP+MJDua0YcR5nHvwVrRj60iTm9gEwamxj7yo2NCSUWCu4Z2g==}
+  '@ghentcdh/json-forms-core@1.0.3':
+    resolution: {integrity: sha512-0Ph9KMQ7A+Y5MowEwJdnKKRvV9LsO2xAf3tS+JTpSNR4mVCFzULs9NOPGhtM/wGiDOG7hVTayfRbdom8a/On5g==}
     peerDependencies:
-      '@anatine/zod-openapi': 2.2.8
       '@jsonforms/core': 3.7.0
       zod: 4.3.6
 
-  '@ghentcdh/json-forms-vue@1.0.1':
-    resolution: {integrity: sha512-Qn6i74hA97XUnaRD1XqrUr9txMeSYQJm81x73C2Tx69Z7dTQx88Gsq6jVoUNvF6xR+TPlIiVoiA1oxalaALMIQ==}
+  '@ghentcdh/json-forms-vue@1.0.3':
+    resolution: {integrity: sha512-bbEYraaT023v1NfeGeu8Wsh9PNZ1Of4EeFE+Z8LIvfcCMyQuGH0IiHV9AEkh4Cd73ZpTFRp2OLTVhIjdtBIsEQ==}
     peerDependencies:
       '@ghentcdh/json-forms-core': '>=0.0.1'
       '@ghentcdh/tools-vue': '>=0.6.0'
@@ -972,8 +968,8 @@ packages:
       axios: ^1.0.0
       vue: ^3.5.0
 
-  '@ghentcdh/ui@1.0.1':
-    resolution: {integrity: sha512-ZI4rzV+pKwcub+GysfDnzhZMSgmlvmCkl8oFfCCJrzVnLPANlKPIkuRDJ0r+LDvCcjctC9c6t711hkb2YKqJzw==}
+  '@ghentcdh/ui@1.0.3':
+    resolution: {integrity: sha512-mHLgj9y+lOqaCm38K4j+liNWadSFapi0HzDQZZLhK7RfpViTljTW1uFDb5evRnYqmSC9l/kREEMEwRXWk0kDBQ==}
     peerDependencies:
       '@ghentcdh/tools-vue': '>=0.6.0'
       '@heroicons/vue': ^2.2.0
@@ -1983,6 +1979,9 @@ packages:
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
 
+  '@types/estree@1.0.9':
+    resolution: {integrity: sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg==}
+
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
@@ -2432,6 +2431,10 @@ packages:
     resolution: {integrity: sha512-1pHv8LX9CpKut1Zp4EXey7Z8OfH11ONNH6Dhi2WDUt31VVZFXZzKwXcysBgqSumFCmR+0dqjMK5v5JiFHzi0+g==}
     engines: {node: 20 || >=22}
 
+  balanced-match@4.0.4:
+    resolution: {integrity: sha512-BLrgEcRTwX2o6gGxGOCNyMvGSp35YofuYzw9h1IMTRmKqttAZZVU67bdb9Pr2vUHA8+j3i2tJfjO6C6+4myGTA==}
+    engines: {node: 18 || 20 || >=22}
+
   base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
 
@@ -2452,6 +2455,10 @@ packages:
   brace-expansion@5.0.2:
     resolution: {integrity: sha512-Pdk8c9poy+YhOgVWw1JNN22/HcivgKWwpxKq04M/jTmHyCZn12WPJebZxdjSa5TmBqISrUSgNYU3eRORljfCCw==}
     engines: {node: 20 || >=22}
+
+  brace-expansion@5.0.6:
+    resolution: {integrity: sha512-kLpxurY4Z4r9sgMsyG0Z9uzsBlgiU/EFKhj/h91/8yHu0edo7XuixOIH3VcJ8kkxs6/jPzoI6U9Vj3WqbMQ94g==}
+    engines: {node: 18 || 20 || >=22}
 
   browserslist@4.28.2:
     resolution: {integrity: sha512-48xSriZYYg+8qXna9kwqjIVzuQxi+KYWp2+5nCYnYKPTr0LvD89Jqk2Or5ogxz0NUMfIjhh2lIUX/LyX9B4oIg==}
@@ -3068,6 +3075,11 @@ packages:
   hookable@5.5.3:
     resolution: {integrity: sha512-Yc+BQe8SvoXH1643Qez1zqLRmbA5rCL+sSmk6TVos0LWVfNIB7PGncdlId77WzLGSIB5KaWgTaNTs2lNVEI6VQ==}
 
+  husky@9.1.7:
+    resolution: {integrity: sha512-5gs5ytaNjBrh5Ow3zrvdUUY+0VxIuWVL4i9irt6friV+BqdCfmV11CQTWMiBYWHbXhco+J1kHfTOUkePhCDvMA==}
+    engines: {node: '>=18'}
+    hasBin: true
+
   iconv-lite@0.6.3:
     resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
     engines: {node: '>=0.10.0'}
@@ -3359,6 +3371,10 @@ packages:
     resolution: {integrity: sha512-oRjTw/97aTBN0RHbYCdtF1MQfvusSIBQM0IZEgzl6426+8jSC0nF1a/GmnVLpfB9yyr6g6FTqWqiZVbxrtaCIg==}
     engines: {node: 18 || 20 || >=22}
 
+  minimatch@10.2.5:
+    resolution: {integrity: sha512-MULkVLfKGYDFYejP07QOurDLLQpcjk7Fw+7jXS2R2czRQzR56yHRveU5NDJEOviH+hETZKSkIk5c+T23GjFUMg==}
+    engines: {node: 18 || 20 || >=22}
+
   minimist@1.2.8:
     resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
 
@@ -3425,9 +3441,6 @@ packages:
   open@8.4.2:
     resolution: {integrity: sha512-7x81NCL719oNbsq/3mh+hVrAWmFuEYUqrq/Iw3kUzH8ReypT9QQ0BLoJS7/G9k6N81XjW4qHWtjWwe/9eLy1EQ==}
     engines: {node: '>=12'}
-
-  openapi3-ts@4.5.0:
-    resolution: {integrity: sha512-jaL+HgTq2Gj5jRcfdutgRGLosCy/hT8sQf6VOy+P+g36cZOjI1iukdPnijC+4CmeRzg/jEllJUboEic2FhxhtQ==}
 
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
@@ -3797,6 +3810,11 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
+  semver@7.8.0:
+    resolution: {integrity: sha512-AcM7dV/5ul4EekoQ29Agm5vri8JNqRyj39o0qpX6vDF2GZrtutZl5RwgD1XnZjiTAfncsJhMI48QQH3sN87YNA==}
+    engines: {node: '>=10'}
+    hasBin: true
+
   shebang-command@2.0.0:
     resolution: {integrity: sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA==}
     engines: {node: '>=8'}
@@ -3935,10 +3953,6 @@ packages:
     engines: {node: '>=18.12'}
     peerDependencies:
       typescript: '>=4.8.4'
-
-  ts-deepmerge@6.2.1:
-    resolution: {integrity: sha512-8CYSLazCyj0DJDpPIxOFzJG46r93uh6EynYjuey+bxcLltBeqZL7DMfaE5ZPzZNFlav7wx+2TDa/mBl8gkTYzw==}
-    engines: {node: '>=14.13.1'}
 
   tsconfig-paths@4.2.0:
     resolution: {integrity: sha512-NoZ4roiN7LnbKn9QqE1amc9DJfzvZXxF4xDavcOWt1BPkdx+m+0gJuPM+S0vCe7zTJMYUP0R8pO2XMr+Y8oLIg==}
@@ -4356,12 +4370,6 @@ packages:
     resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
 
 snapshots:
-
-  '@anatine/zod-openapi@2.2.8(openapi3-ts@4.5.0)(zod@4.4.3)':
-    dependencies:
-      openapi3-ts: 4.5.0
-      ts-deepmerge: 6.2.1
-      zod: 4.4.3
 
   '@babel/code-frame@7.29.0':
     dependencies:
@@ -5206,7 +5214,7 @@ snapshots:
     dependencies:
       '@eslint/object-schema': 3.0.5
       debug: 4.4.3
-      minimatch: 10.2.4
+      minimatch: 10.2.5
     transitivePeerDependencies:
       - supports-color
 
@@ -5300,17 +5308,16 @@ snapshots:
       - tsx
       - yaml
 
-  '@ghentcdh/json-forms-core@1.0.1(@anatine/zod-openapi@2.2.8(openapi3-ts@4.5.0)(zod@4.4.3))(@jsonforms/core@3.7.0)(zod@4.4.3)':
+  '@ghentcdh/json-forms-core@1.0.3(@jsonforms/core@3.7.0)(zod@4.4.3)':
     dependencies:
-      '@anatine/zod-openapi': 2.2.8(openapi3-ts@4.5.0)(zod@4.4.3)
       '@jsonforms/core': 3.7.0
       zod: 4.4.3
 
-  '@ghentcdh/json-forms-vue@1.0.1(@ghentcdh/json-forms-core@1.0.1(@anatine/zod-openapi@2.2.8(openapi3-ts@4.5.0)(zod@4.4.3))(@jsonforms/core@3.7.0)(zod@4.4.3))(@ghentcdh/tools-vue@1.0.1(axios@1.15.0)(vue@3.5.33(typescript@5.9.3)))(@ghentcdh/ui@1.0.1(@ghentcdh/tools-vue@1.0.1(axios@1.15.0)(vue@3.5.33(typescript@5.9.3)))(@heroicons/vue@2.2.0(vue@3.5.33(typescript@5.9.3)))(@tiptap/pm@3.23.5)(@tiptap/starter-kit@3.23.5)(@tiptap/vue-3@3.23.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.23.5(@tiptap/pm@3.23.5))(@tiptap/pm@3.23.5)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.23.5(@tiptap/pm@3.23.5)))(uuid@14.0.0)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3)))(@jsonforms/core@3.7.0)(@vueuse/core@14.3.0(vue@3.5.33(typescript@5.9.3)))(axios@1.15.0)(lodash-es@4.18.1)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))':
+  '@ghentcdh/json-forms-vue@1.0.3(@ghentcdh/json-forms-core@1.0.3(@jsonforms/core@3.7.0)(zod@4.4.3))(@ghentcdh/tools-vue@1.0.1(axios@1.15.0)(vue@3.5.33(typescript@5.9.3)))(@ghentcdh/ui@1.0.3(@ghentcdh/tools-vue@1.0.1(axios@1.15.0)(vue@3.5.33(typescript@5.9.3)))(@heroicons/vue@2.2.0(vue@3.5.33(typescript@5.9.3)))(@tiptap/pm@3.23.5)(@tiptap/starter-kit@3.23.5)(@tiptap/vue-3@3.23.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.23.5(@tiptap/pm@3.23.5))(@tiptap/pm@3.23.5)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.23.5(@tiptap/pm@3.23.5)))(uuid@14.0.0)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3)))(@jsonforms/core@3.7.0)(@vueuse/core@14.3.0(vue@3.5.33(typescript@5.9.3)))(axios@1.15.0)(lodash-es@4.18.1)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))':
     dependencies:
-      '@ghentcdh/json-forms-core': 1.0.1(@anatine/zod-openapi@2.2.8(openapi3-ts@4.5.0)(zod@4.4.3))(@jsonforms/core@3.7.0)(zod@4.4.3)
+      '@ghentcdh/json-forms-core': 1.0.3(@jsonforms/core@3.7.0)(zod@4.4.3)
       '@ghentcdh/tools-vue': 1.0.1(axios@1.15.0)(vue@3.5.33(typescript@5.9.3))
-      '@ghentcdh/ui': 1.0.1(@ghentcdh/tools-vue@1.0.1(axios@1.15.0)(vue@3.5.33(typescript@5.9.3)))(@heroicons/vue@2.2.0(vue@3.5.33(typescript@5.9.3)))(@tiptap/pm@3.23.5)(@tiptap/starter-kit@3.23.5)(@tiptap/vue-3@3.23.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.23.5(@tiptap/pm@3.23.5))(@tiptap/pm@3.23.5)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.23.5(@tiptap/pm@3.23.5)))(uuid@14.0.0)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))
+      '@ghentcdh/ui': 1.0.3(@ghentcdh/tools-vue@1.0.1(axios@1.15.0)(vue@3.5.33(typescript@5.9.3)))(@heroicons/vue@2.2.0(vue@3.5.33(typescript@5.9.3)))(@tiptap/pm@3.23.5)(@tiptap/starter-kit@3.23.5)(@tiptap/vue-3@3.23.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.23.5(@tiptap/pm@3.23.5))(@tiptap/pm@3.23.5)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.23.5(@tiptap/pm@3.23.5)))(uuid@14.0.0)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))
       '@jsonforms/core': 3.7.0
       '@vueuse/core': 14.3.0(vue@3.5.33(typescript@5.9.3))
       axios: 1.15.0
@@ -5323,7 +5330,7 @@ snapshots:
       axios: 1.15.0
       vue: 3.5.33(typescript@5.9.3)
 
-  '@ghentcdh/ui@1.0.1(@ghentcdh/tools-vue@1.0.1(axios@1.15.0)(vue@3.5.33(typescript@5.9.3)))(@heroicons/vue@2.2.0(vue@3.5.33(typescript@5.9.3)))(@tiptap/pm@3.23.5)(@tiptap/starter-kit@3.23.5)(@tiptap/vue-3@3.23.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.23.5(@tiptap/pm@3.23.5))(@tiptap/pm@3.23.5)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.23.5(@tiptap/pm@3.23.5)))(uuid@14.0.0)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))':
+  '@ghentcdh/ui@1.0.3(@ghentcdh/tools-vue@1.0.1(axios@1.15.0)(vue@3.5.33(typescript@5.9.3)))(@heroicons/vue@2.2.0(vue@3.5.33(typescript@5.9.3)))(@tiptap/pm@3.23.5)(@tiptap/starter-kit@3.23.5)(@tiptap/vue-3@3.23.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.23.5(@tiptap/pm@3.23.5))(@tiptap/pm@3.23.5)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.23.5(@tiptap/pm@3.23.5)))(uuid@14.0.0)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))':
     dependencies:
       '@ghentcdh/tools-vue': 1.0.1(axios@1.15.0)(vue@3.5.33(typescript@5.9.3))
       '@heroicons/vue': 2.2.0(vue@3.5.33(typescript@5.9.3))
@@ -6254,6 +6261,8 @@ snapshots:
 
   '@types/estree@1.0.8': {}
 
+  '@types/estree@1.0.9': {}
+
   '@types/json-schema@7.0.15': {}
 
   '@types/linkify-it@3.0.5': {}
@@ -6758,6 +6767,8 @@ snapshots:
 
   balanced-match@4.0.3: {}
 
+  balanced-match@4.0.4: {}
+
   base64-js@1.5.1: {}
 
   baseline-browser-mapping@2.10.27: {}
@@ -6775,6 +6786,10 @@ snapshots:
   brace-expansion@5.0.2:
     dependencies:
       balanced-match: 4.0.3
+
+  brace-expansion@5.0.6:
+    dependencies:
+      balanced-match: 4.0.4
 
   browserslist@4.28.2:
     dependencies:
@@ -7225,7 +7240,7 @@ snapshots:
   eslint-scope@9.1.2:
     dependencies:
       '@types/esrecurse': 4.3.1
-      '@types/estree': 1.0.8
+      '@types/estree': 1.0.9
       esrecurse: 4.3.0
       estraverse: 5.3.0
 
@@ -7244,7 +7259,7 @@ snapshots:
       '@humanfs/node': 0.16.8
       '@humanwhocodes/module-importer': 1.0.1
       '@humanwhocodes/retry': 0.4.3
-      '@types/estree': 1.0.8
+      '@types/estree': 1.0.9
       ajv: 6.15.0
       cross-spawn: 7.0.6
       debug: 4.4.3
@@ -7262,7 +7277,7 @@ snapshots:
       imurmurhash: 0.1.4
       is-glob: 4.0.3
       json-stable-stringify-without-jsonify: 1.0.1
-      minimatch: 10.2.4
+      minimatch: 10.2.5
       natural-compare: 1.4.0
       optionator: 0.9.4
     transitivePeerDependencies:
@@ -7431,6 +7446,8 @@ snapshots:
       function-bind: 1.1.2
 
   hookable@5.5.3: {}
+
+  husky@9.1.7: {}
 
   iconv-lite@0.6.3:
     dependencies:
@@ -7667,6 +7684,10 @@ snapshots:
     dependencies:
       brace-expansion: 5.0.2
 
+  minimatch@10.2.5:
+    dependencies:
+      brace-expansion: 5.0.6
+
   minimist@1.2.8: {}
 
   mlly@1.8.2:
@@ -7844,10 +7865,6 @@ snapshots:
       define-lazy-prop: 2.0.0
       is-docker: 2.2.1
       is-wsl: 2.2.0
-
-  openapi3-ts@4.5.0:
-    dependencies:
-      yaml: 2.8.4
 
   optionator@0.9.4:
     dependencies:
@@ -8272,6 +8289,8 @@ snapshots:
 
   semver@7.7.4: {}
 
+  semver@7.8.0: {}
+
   shebang-command@2.0.0:
     dependencies:
       shebang-regex: 3.0.0
@@ -8395,8 +8414,6 @@ snapshots:
   ts-api-utils@2.5.0(typescript@5.9.3):
     dependencies:
       typescript: 5.9.3
-
-  ts-deepmerge@6.2.1: {}
 
   tsconfig-paths@4.2.0:
     dependencies:
@@ -8647,7 +8664,7 @@ snapshots:
       eslint-visitor-keys: 5.0.1
       espree: 11.2.0
       esquery: 1.7.0
-      semver: 7.7.4
+      semver: 7.8.0
     transitivePeerDependencies:
       - supports-color
 

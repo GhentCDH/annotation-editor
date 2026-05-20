@@ -58,6 +58,7 @@ export default [
       'no-console': ['error', { allow: ['warn', 'error'] }],
       '@typescript-eslint/no-unused-vars': 'warn',
       '@typescript-eslint/no-explicit-any': 'warn',
+      'import-x/default': 'off',
       'import-x/named': 'off',
       'import-x/no-unresolved': 'off',
       'import-x/order': [

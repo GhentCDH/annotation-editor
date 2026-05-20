@@ -1,6 +1,7 @@
 import { type App, type Plugin } from 'vue';
 import { type Router } from 'vue-router';
 import { type AnnotationDefConfig } from '@ghentcdh/annotation-core';
+import { createAnnotationNamespaceRoutes } from './annotation-namespace.routes';
 import { type AnnotationDefinitionService } from '../service/annotation-definition.service';
 import {
   ANNOTATION_DEFINITIONS_KEY,
@@ -8,7 +9,6 @@ import {
   createAnnotationDefinitionsState,
   type ProvideAnnotationDefinitionsOptions
 } from '../composables/useAnnotationDefinitions';
-import { createAnnotationNamespaceRoutes } from './annotation-namespace.routes';
 
 export type AnnotationNamespacePluginOptions = {
   router: Router;

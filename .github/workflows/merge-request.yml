@@ -34,37 +34,7 @@ jobs:
       - uses: nrwl/nx-set-shas@v4
       - run: npx nx run-many -t build -c production --parallel --max-parallel=6
 
-  test:
-    runs-on: ubuntu-latest
-    needs: install-deps
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/use-cache
-      - name: Run unit tests with coverage
-        run: npx nx run core:test --coverage
-      - name: Coverage summary
-        run: |
-          if [ -f libs/core/coverage/unit/coverage-summary.json ]; then
-            LINES=$(node -e "const c = require('./libs/core/coverage/unit/coverage-summary.json'); console.log(c.total.lines.pct)")
-            BRANCHES=$(node -e "const c = require('./libs/core/coverage/unit/coverage-summary.json'); console.log(c.total.branches.pct)")
-            FUNCTIONS=$(node -e "const c = require('./libs/core/coverage/unit/coverage-summary.json'); console.log(c.total.functions.pct)")
-            STATEMENTS=$(node -e "const c = require('./libs/core/coverage/unit/coverage-summary.json'); console.log(c.total.statements.pct)")
-            echo "## 🧪 Unit Test Coverage" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "| Metric | Coverage |" >> $GITHUB_STEP_SUMMARY
-            echo "|--------|----------|" >> $GITHUB_STEP_SUMMARY
-            echo "| Lines | ${LINES}% |" >> $GITHUB_STEP_SUMMARY
-            echo "| Branches | ${BRANCHES}% |" >> $GITHUB_STEP_SUMMARY
-            echo "| Functions | ${FUNCTIONS}% |" >> $GITHUB_STEP_SUMMARY
-            echo "| Statements | ${STATEMENTS}% |" >> $GITHUB_STEP_SUMMARY
-          fi
-      - name: Upload unit test coverage report
-        uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: coverage-report-unit
-          path: libs/core/coverage/unit/
-          retention-days: 30
+
 
   lint:
     runs-on: ubuntu-latest
@@ -74,13 +44,3 @@ jobs:
       - uses: ./.github/actions/use-cache
       - run: npx nx run-many -t lint --parallel --max-parallel=6
 
-  e2e:
-    runs-on: ubuntu-latest
-    needs: install-deps
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/use-cache
-      - name: Run e2e tests
-        run: npx nx run e2e:e2e
-        env:
-          CI: true

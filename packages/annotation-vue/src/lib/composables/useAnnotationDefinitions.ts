@@ -5,6 +5,7 @@ import {
   type AnnotationJsonConfig,
   type ContextBuilderFactory
 } from '@ghentcdh/annotation-core';
+import { createHighlightStyle } from '@ghentcdh/annotated-text';
 import { type FormValidationDef, type KeyLabel, type VueAnnotationDefinition } from '../types/annotation-vue.types';
 import { AnnotationDefinitionService } from '../service/annotation-definition.service';
 import {
@@ -14,7 +15,6 @@ import {
   loadAnnotationDefinitionsFromGlob,
   loadAnnotationDefinitionsFromUrl
 } from '../loader/annotation-definition.loader';
-import { createHighlightStyle } from '@ghentcdh/annotated-text';
 
 export type AnnotationDefinitionsState = {
   configuration: AnnotationDefConfig;
