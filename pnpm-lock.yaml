@@ -141,6 +141,9 @@ importers:
 
   packages/annotation-core:
     dependencies:
+      '@ghentcdh/w3c-utils':
+        specifier: ^1.0.6
+        version: 1.0.7(@types/node@25.6.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.8.4)
       zod:
         specifier: ^4.3.6
         version: 4.4.3
@@ -149,6 +152,9 @@ importers:
 
   packages/annotation-vue:
     dependencies:
+      '@ghentcdh/annotated-text':
+        specifier: ^1.0.7
+        version: 1.0.7(@types/node@25.6.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.8.4)
       '@ghentcdh/annotation-core':
         specifier: workspace:*
         version: link:../annotation-core
