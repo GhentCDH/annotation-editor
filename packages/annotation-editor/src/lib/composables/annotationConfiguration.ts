@@ -15,7 +15,7 @@ import {
 import { defaultRender, styleFn } from '../style/annotation.style';
 import { type SourceModel } from '../types/source.model';
 import { type AnnotationUtils } from '../utils/annotation-utils';
-import { MarkdownTextAdapter } from '../../../../../../vue_component_annotated_text/dist/libs/markdown';
+import { MarkdownTextAdapter } from '@ghentcdh/annotated-text--markdown';
 
 const groupById = <KEY extends keyof AnnotationDefinition>(
   defs: AnnotationDefinition[],

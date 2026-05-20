@@ -14,7 +14,7 @@ import {
   loadAnnotationDefinitionsFromGlob,
   loadAnnotationDefinitionsFromUrl
 } from '../loader/annotation-definition.loader';
-import { createHighlightStyle } from '../../../../../../vue_component_annotated_text/dist/libs/core';
+import { createHighlightStyle } from '@ghentcdh/annotated-text';
 
 export type AnnotationDefinitionsState = {
   configuration: AnnotationDefConfig;

@@ -6,12 +6,12 @@
   "private": true,
   "packageManager": "pnpm@10.30.1",
   "dependencies": {
-    "@ghentcdh/annotated-text": "link:../vue_component_annotated_text/dist/libs/core",
-    "@ghentcdh/annotated-text--markdown": "link:../vue_component_annotated_text/dist/libs/markdown",
-    "@ghentcdh/json-forms-core": "link:../ghentcdh/dist/libs/json-forms/core",
-    "@ghentcdh/json-forms-vue": "link:../ghentcdh/dist/libs/json-forms/vue",
-    "@ghentcdh/ui": "link:../ghentcdh/dist/libs/ui",
-    "@ghentcdh/w3c-utils": "link:../vue_component_annotated_text/dist/libs/w3c/utils",
+    "@ghentcdh/annotated-text": "^1.0.7",
+    "@ghentcdh/annotated-text--markdown": "^1.0.7",
+    "@ghentcdh/json-forms-core": "^1.0.1",
+    "@ghentcdh/json-forms-vue": "^1.0.1",
+    "@ghentcdh/ui": "^1.0.1",
+    "@ghentcdh/w3c-utils": "^1.0.7",
     "@jsonforms/core": "^3.7.0",
     "@nestjs/common": "^11.1.19",
     "@nestjs/swagger": "^11.4.3",
@@ -53,7 +53,8 @@
     "onlyBuiltDependencies": [
       "better-sqlite3"
     ],
-    "overrides": {
+    "overrides": {},
+    "_overrides": {
       "@ghentcdh/json-forms-vue": "link:../ghentcdh/dist/libs/json-forms/vue",
       "@ghentcdh/json-forms-core": "link:../ghentcdh/dist/libs/json-forms/core",
       "@ghentcdh/ui": "link:../ghentcdh/dist/libs/ui",
