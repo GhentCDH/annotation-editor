@@ -12,7 +12,7 @@ import {
 } from '@ghentcdh/annotation-core';
 import {
   type AllowedChildrenPerType,
-  AnnotationDefinition,
+  type AnnotationDefinition,
   type FormValidationDef,
   type KeyLabel,
 } from '../types/AnnotationConfiguration.model';

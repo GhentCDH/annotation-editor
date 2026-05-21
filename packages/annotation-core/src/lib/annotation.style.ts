@@ -2,7 +2,7 @@ import { type ContextBuilder, contextBuilder } from '@ghentcdh/w3c-utils';
 import { z } from 'zod';
 import { type AnnotationDefConfig, resolveConfig } from './utils/annotation.context-builder';
 import { type AnnotationContext } from './types/annotation.contex';
-import { AnnotationDefinition } from './types/annotation-definition.type';
+import { type AnnotationDefinition } from './types/annotation-definition.type';
 
 export const AnnotationStyleSchema = z.object({
   id: z.string(),
