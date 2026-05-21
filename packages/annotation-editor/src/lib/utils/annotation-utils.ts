@@ -2,19 +2,19 @@ import {
   w3cAnnotation,
   type W3CAnnotation,
   type W3CAnnotationBuilder,
-  type W3CSpecificResource
+  type W3CSpecificResource,
 } from '@ghentcdh/w3c-utils';
 import {
-  type AnnotationContext,
   type AnnotationDefConfig,
   AnnotationMetadataType,
   type AnnotationStyle,
-  createAnnotationStyleBody
+  createAnnotationStyleBody,
 } from '@ghentcdh/annotation-core';
 import {
   type AllowedChildrenPerType,
+  AnnotationDefinition,
   type FormValidationDef,
-  type KeyLabel
+  type KeyLabel,
 } from '../types/AnnotationConfiguration.model';
 
 export type AnnotationLink = {
@@ -126,7 +126,6 @@ const updateSelector = (builder: W3CAnnotationBuilder, selector: Selector) => {
       source: selector.source,
     });
   }
-
   builder.updateTextPositionSelector(
     { start: selector.start, end: selector.end },
     selector.source,
@@ -273,7 +272,7 @@ class AnnotationUtilsImpl {
 
   private _create(
     fromAnnotation: W3CAnnotation | null,
-    type: AnnotationContext,
+    type: AnnotationDefinition,
   ) {
     const id = createId();
     const styleBody = createAnnotationStyleBody(this.annotationConfig, type);
@@ -290,7 +289,7 @@ class AnnotationUtilsImpl {
 
   createAnnotation(
     fromAnnotation: W3CAnnotation | null,
-    type: AnnotationContext,
+    type: AnnotationDefinition,
     selector?: Selector,
   ) {
     const builder = this._create(fromAnnotation, type);
@@ -298,14 +297,13 @@ class AnnotationUtilsImpl {
     if (selector) {
       updateSelector(builder, selector);
     }
-
     return builder.build();
   }
 
   createLinkAnnotation = (
     sourceAnnotation: W3CAnnotation,
     targetAnnotation: W3CAnnotation,
-    type: AnnotationContext,
+    type: AnnotationDefinition,
   ): W3CAnnotation => {
     const builder = this._create(null, type);
 

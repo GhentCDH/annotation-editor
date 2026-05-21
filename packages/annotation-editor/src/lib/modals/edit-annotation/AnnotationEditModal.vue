@@ -11,11 +11,7 @@
       <div class="flex flex-row gap-2">
         <Collapse :title="label.selectLabel">
           <div :id="editId" />
-          <Btn
-            :outline="true"
-            class="mt-2"
-            @click="selectAll"
-          >
+          <Btn :outline="true" class="mt-2" @click="selectAll">
             Select all text
           </Btn>
         </Collapse>
@@ -28,19 +24,10 @@
       </div>
     </template>
     <template #actions>
-      <Btn
-        :color="'secondary' as any"
-        :outline="true"
-        @click="onCancel"
-      >
+      <Btn :color="'secondary' as any" :outline="true" @click="onCancel">
         Cancel
       </Btn>
-      <Btn
-        :disabled="formDisabled"
-        @click="onSubmit"
-      >
-        Save
-      </Btn>
+      <Btn :disabled="formDisabled" @click="onSubmit"> Save </Btn>
     </template>
   </Modal>
 </template>
@@ -130,7 +117,7 @@ const selectAll = () => {
 
   annotationEdit.value = annotationEdit.value
     ? utils.updateTextPositionSelector(annotationEdit.value, selector)
-    : utils.createAnnotation(null, annotationDef.value!.context, selector);
+    : utils.createAnnotation(null, annotationDef.value!, selector);
 
   annotatedText
     .setAnnotationAdapter({ create: false, edit: true })

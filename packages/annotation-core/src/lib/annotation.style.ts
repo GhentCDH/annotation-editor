@@ -1,10 +1,8 @@
 import { type ContextBuilder, contextBuilder } from '@ghentcdh/w3c-utils';
 import { z } from 'zod';
-import {
-  type AnnotationDefConfig,
-  resolveConfig,
-} from './utils/annotation.context-builder';
+import { type AnnotationDefConfig, resolveConfig } from './utils/annotation.context-builder';
 import { type AnnotationContext } from './types/annotation.contex';
+import { AnnotationDefinition } from './types/annotation-definition.type';
 
 export const AnnotationStyleSchema = z.object({
   id: z.string(),
@@ -28,14 +26,12 @@ export const AnnotationStyleContextBuilder = (
   return contextBuilder(prefix, baseUrl)
     .setType(prefix, AnnotationStyleType)
     .setContextUri(`${contextUrl}${AnnotationStyleType}.jsonld`)
-    .parseZodSchema(
-      AnnotationStyleSchema as any,
-    ) as ContextBuilder<any>;
+    .parseZodSchema(AnnotationStyleSchema as any) as ContextBuilder<any>;
 };
 
 export const createAnnotationStyleBody = (
   annotationConfig: Partial<AnnotationDefConfig> | undefined,
-  style: Partial<AnnotationContext> & Pick<AnnotationContext, 'id' | 'name'>,
+  style: Partial<AnnotationDefinition> & Pick<AnnotationContext, 'id' | 'name'>,
 ) => {
   return AnnotationStyleContextBuilder(annotationConfig).toAnnotationBody(
     style,
