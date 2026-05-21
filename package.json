@@ -10,9 +10,9 @@
   "dependencies": {
     "@ghentcdh/annotated-text": "^1.0.7",
     "@ghentcdh/annotated-text--markdown": "^1.0.7",
-    "@ghentcdh/json-forms-core": "^1.0.3",
-    "@ghentcdh/json-forms-vue": "^1.0.3",
-    "@ghentcdh/ui": "^1.0.3",
+    "@ghentcdh/json-forms-core": "^1.0.4",
+    "@ghentcdh/json-forms-vue": "^1.0.4",
+    "@ghentcdh/ui": "^1.0.4",
     "@ghentcdh/w3c-utils": "^1.0.7",
     "@jsonforms/core": "^3.7.0",
     "@nestjs/common": "^11.1.19",
