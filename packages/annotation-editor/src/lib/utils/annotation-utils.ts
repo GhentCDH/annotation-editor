@@ -275,7 +275,7 @@ class AnnotationUtilsImpl {
     type: AnnotationDefinition,
   ) {
     const id = createId();
-    const styleBody = createAnnotationStyleBody(this.annotationConfig, type);
+    const styleBody = createAnnotationStyleBody(this.annotationConfig, type.context);
     const builder = w3cAnnotation(fromAnnotation ?? undefined)
       .setId(id)
       .setMotivation('tagging');

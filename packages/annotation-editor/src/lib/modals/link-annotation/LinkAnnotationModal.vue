@@ -68,7 +68,7 @@ const annotation = computed(() =>
   utils.createLinkAnnotation(
     props.sourceAnnotation!,
     props.targetAnnotation!,
-    annotationDef.value!.context,
+    annotationDef.value!,
   ),
 );
 

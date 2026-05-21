@@ -162,7 +162,7 @@ onMounted(() => {
     .on('annotation-create--end', ({ mouseEvent, event, data: _data }) => {
       annotationEdit.value = utils.createAnnotation(
         _data.annotation,
-        annotationDef.value!.context,
+        annotationDef.value!,
       );
       annotatedText
         .setAnnotations([annotationEdit.value])
