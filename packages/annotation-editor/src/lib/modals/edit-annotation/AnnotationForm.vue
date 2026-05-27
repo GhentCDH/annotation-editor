@@ -5,10 +5,8 @@
     :form-data="formData"
     :schema="formValidation.jsonSchema"
     :ui-schema="formValidation.uiSchema"
-    @valid="onValid($event)"
     @change="onChange"
     @errors="onErrors"
-    @events="handleFormEvents"
   />
 </template>
 <script setup lang="ts">
@@ -23,24 +21,28 @@ const formData = defineModel<any>();
 const onChange = (data: any) => {
   formData.value = data;
 };
-const onErrors = (errors: any) => {};
-
-const onValid = (valid: boolean) => {};
+const onErrors = (errors: any) => {
+  emits('valid', errors.length === 0);
+};
 
 const properties = defineProps<{
-  annotation?: W3CAnnotation;
+  annotation?: W3CAnnotation | null;
   annotationType: string;
 }>();
 
-const { config, utils, handleFormEvents } = useEditorState();
+const emits = defineEmits(['valid']);
+
+const { config, utils } = useEditorState();
 const annotationDef = computed(() =>
   config.annotation.getDefinition(properties.annotationType),
 );
 
 const formValidation = computed(() => {
   const validation = annotationDef.value!.schema;
-  if (!validation.uiSchema) return null;
-
+  if (!validation.uiSchema) {
+    emits('valid', true);
+    return null;
+  }
   return validation;
 });
 

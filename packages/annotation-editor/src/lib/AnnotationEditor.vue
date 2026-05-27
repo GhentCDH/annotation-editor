@@ -1,6 +1,7 @@
 <template>
   <div
     ref="containerRef"
+    data-testid="annotation-editor"
     class="grid gap-2 py-2 relative"
     :style="{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }"
   >

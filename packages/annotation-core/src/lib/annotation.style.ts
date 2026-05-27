@@ -1,8 +1,11 @@
 import { type ContextBuilder, contextBuilder } from '@ghentcdh/w3c-utils';
 import { z } from 'zod';
+import { Debugger } from '@ghentcdh/annotated-text';
 import { type AnnotationDefConfig, resolveConfig } from './utils/annotation.context-builder';
 import { type AnnotationContext } from './types/annotation.contex';
 import { type AnnotationDefinition } from './types/annotation-definition.type';
+
+const CONTEXT = 'annotation.style';
 
 export const AnnotationStyleSchema = z.object({
   id: z.string(),
@@ -36,4 +39,20 @@ export const createAnnotationStyleBody = (
   return AnnotationStyleContextBuilder(annotationConfig).toAnnotationBody(
     style,
   );
+};
+
+export const createAnnotationStyleBodyUnsafe = (
+  annotationConfig: Partial<AnnotationDefConfig> | undefined,
+  style: Partial<AnnotationDefinition> & Pick<AnnotationContext, 'id' | 'name'>,
+) => {
+  const parsed =
+    AnnotationStyleContextBuilder(annotationConfig).toAnnotationBodyUnsafe(
+      style,
+    );
+
+  if (!parsed.success) {
+    Debugger.debug(CONTEXT, 'AnnotationStyleContextBuilder safe parse failed');
+    Debugger.warn(parsed.error);
+  }
+  return parsed;
 };

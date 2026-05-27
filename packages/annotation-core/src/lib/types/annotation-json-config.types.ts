@@ -2,6 +2,7 @@ export type AnnotationColumnFieldInput = {
   type: 'autocomplete' | 'text' | 'select';
   options: {
     uri?: string;
+    resource?: string;
     valueKey?: string;
     labelKey?: string;
     enableCreate?: boolean | string;

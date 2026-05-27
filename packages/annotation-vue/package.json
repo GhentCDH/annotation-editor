@@ -5,9 +5,7 @@
   "type": "module",
   "main": "./index.js",
   "types": "./index.d.ts",
-  "dependencies": {
-    "@ghentcdh/annotated-text": "^1.0.7"
-  },
+  "dependencies": {},
   "peerDependencies": {
     "vue": "^3.5.0",
     "@ghentcdh/annotation-core": "workspace:*",

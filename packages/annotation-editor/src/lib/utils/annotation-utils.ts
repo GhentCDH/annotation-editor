@@ -8,7 +8,8 @@ import {
   type AnnotationDefConfig,
   AnnotationMetadataType,
   type AnnotationStyle,
-  createAnnotationStyleBody,
+  AnnotationStyleContextBuilder,
+  createAnnotationStyleBodyUnsafe,
 } from '@ghentcdh/annotation-core';
 import {
   type AllowedChildrenPerType,
@@ -118,7 +119,7 @@ const createId = () => {
   return `mela:new-annotation:${Date.now()}`;
 };
 
-type Selector = { source: string; start: number; end: number };
+export type Selector = { source: string; start: number; end: number };
 const updateSelector = (builder: W3CAnnotationBuilder, selector: Selector) => {
   if (!builder.getSpecificResourceTargets(selector.source).length) {
     builder.addTarget({
@@ -275,7 +276,10 @@ class AnnotationUtilsImpl {
     type: AnnotationDefinition,
   ) {
     const id = createId();
-    const styleBody = createAnnotationStyleBody(this.annotationConfig, type.context);
+    const styleBody = createAnnotationStyleBodyUnsafe(
+      this.annotationConfig,
+      type.context,
+    ).body;
     const builder = w3cAnnotation(fromAnnotation ?? undefined)
       .setId(id)
       .setMotivation('tagging');
@@ -290,13 +294,34 @@ class AnnotationUtilsImpl {
   createAnnotation(
     fromAnnotation: W3CAnnotation | null,
     type: AnnotationDefinition,
-    selector?: Selector,
+    data: any | null,
+    extraTextPositionSelector?: Selector,
   ) {
-    const builder = this._create(fromAnnotation, type);
-
-    if (selector) {
-      updateSelector(builder, selector);
+    const builder = w3cAnnotation(fromAnnotation ?? undefined).setMotivation(
+      'tagging',
+    );
+    if (!fromAnnotation?.id) {
+      builder.setId(createId());
     }
+
+    // Add the style
+    const styleBody = AnnotationStyleContextBuilder(
+      this.annotationConfig,
+    ).toAnnotationBody(type)!;
+
+    builder.addBody(styleBody);
+
+    // Add the metadata
+    if (data && Object.keys(data).length > 0) {
+      data.type = data.type ?? AnnotationMetadataType;
+      data.purpose = data.purpose ?? getAnnotationType(builder);
+      builder.updateBodyByType(data.type, data);
+    }
+
+    // Additional positionselector
+    if (extraTextPositionSelector)
+      updateSelector(builder, extraTextPositionSelector);
+
     return builder.build();
   }
 

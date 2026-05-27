@@ -32,7 +32,6 @@ export type EditorState = {
   sources: ComputedRef<Readonly<SourceModel[]>>;
   config: Readonly<EditorConfig>;
   editorState: Readonly<EditorState_>;
-  handleFormEvents: () => void;
   sendAnnotationEvent: <KEY extends keyof AnnotationEvents>(
     event: KEY,
     data: AnnotationEvents[KEY],
@@ -154,7 +153,6 @@ export const useProvideEditorState = (
     config: config as Readonly<EditorConfig>,
     editorState: editorState as Readonly<EditorState_>,
     utils,
-    handleFormEvents: () => console.error('something wrong'),
     sendAnnotationEvent: sendAnnotationEvent(
       config,
       editorState,

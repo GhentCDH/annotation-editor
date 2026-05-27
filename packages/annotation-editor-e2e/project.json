@@ -1,0 +1,31 @@
+{
+  "name": "annotation-editor-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/annotation-editor-e2e/src",
+  "projectType": "application",
+  "tags": ["e2e"],
+  "targets": {
+    "e2e": {
+      "executor": "@nx/playwright:playwright",
+      "outputs": ["{workspaceRoot}/dist/.playwright/packages/annotation-editor-e2e"],
+      "options": {
+        "config": "packages/annotation-editor-e2e/playwright.config.ts"
+      }
+    },
+    "serve-playground": {
+      "executor": "@nx/vite:dev-server",
+      "options": {
+        "buildTarget": "annotation-editor-e2e:build-playground",
+        "port": 4175
+      }
+    },
+    "build-playground": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/annotation-editor-e2e",
+        "configFile": "packages/annotation-editor-e2e/vite.config.ts"
+      }
+    }
+  }
+}

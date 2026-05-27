@@ -10,12 +10,9 @@ export const buildControlElement = (column: AnnotationColumnConfig) => {
     if (type === 'autocomplete') {
       options.dataField = 'data';
       if (fieldOptions.uri) options.uri = fieldOptions.uri;
-      if (fieldOptions.valueKey || fieldOptions.labelKey) {
-        options.field = {
-          id: fieldOptions.valueKey,
-          label: fieldOptions.labelKey,
-        };
-      }
+      if (fieldOptions.resource) options.resource = fieldOptions.resource;
+      if (fieldOptions.valueKey) options.valueKey = fieldOptions.valueKey;
+      if (fieldOptions.labelKey) options.labelKey = fieldOptions.labelKey;
       if (fieldOptions.enableCreate !== undefined) {
         options.enableCreate = fieldOptions.enableCreate;
       }
