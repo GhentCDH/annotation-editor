@@ -257,20 +257,6 @@ class AnnotationUtilsImpl {
     return this.annotations.find((a) => a.id === parentUri.source) ?? null;
   }
 
-  updateTextPositionSelector(
-    annotation: W3CAnnotation,
-    selector: { source: string; start: number; end: number },
-  ) {
-    const builder = this.getBuilder(annotation);
-    updateSelector(builder, selector);
-    return builder.build();
-  }
-
-  updateAnnotationBuilder(annotation: W3CAnnotation) {
-    this.builderMap.set(annotation.id, w3cAnnotation(annotation));
-    return annotation;
-  }
-
   private _create(
     fromAnnotation: W3CAnnotation | null,
     type: AnnotationDefinition,
@@ -415,10 +401,8 @@ export type AnnotationUtils = Pick<
   | 'getParent'
   | 'createLinkAnnotation'
   | 'cancel'
-  | 'updateTextPositionSelector'
   | 'getSourceUri'
   | 'getMetadata'
-  | 'updateAnnotationBuilder'
   | 'getAnnotationStyle'
   | 'getAnnotationType'
   | 'createAnnotationFromSelector'

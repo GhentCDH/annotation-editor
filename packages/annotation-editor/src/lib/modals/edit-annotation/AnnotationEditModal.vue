@@ -16,7 +16,6 @@
           </Btn>
         </Collapse>
         <div class="w-max max-w-lg">
-          {{ formData }}
           <AnnotationForm
             v-model="formData"
             :annotation="annotation"
@@ -42,7 +41,7 @@ import { w3cAnnotation, type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import AnnotationForm from './AnnotationForm.vue';
 import { AnnotationEditEmits, AnnotationEditModalProperties } from './AnnotationEditModal.properties';
 import { useEditorState } from '../../composables/useEditorState';
-import { annotationUtils, type Selector } from '../../utils/annotation-utils';
+import { type Selector } from '../../utils/annotation-utils';
 
 let annotatedText: AnnotatedText<W3CAnnotation>;
 const props = defineProps(AnnotationEditModalProperties);
@@ -167,11 +166,15 @@ const selectAll = () => {
   //   .setAnnotationAdapter({ create: false, edit: true })
   //   .setAnnotations([annotationEdit.value]);
 
-  annotationSelector.value = annotationUtils.createAnnotationFromSelector(
+  annotationSelector.value = utils.createAnnotationFromSelector(
     annotationDef.value!,
     null,
     selector,
   );
+
+  annotatedText
+    .setAnnotationAdapter({ create: false, edit: true })
+    .setAnnotations([annotationSelector.value]);
 };
 
 const onCancel = () => {
@@ -195,6 +198,14 @@ onMounted(() => {
   if (!props.source) return;
 
   const annotations = props.annotation ? [props.annotation] : [];
+
+  if (props.annotation) {
+    annotationSelector.value = utils.createAnnotationFromSelector(
+      annotationDef.value!,
+      props.annotation,
+      null,
+    );
+  }
   annotatedText = config.annotation
     .createAnnotatedText(editId, props.source)
     .setAnnotationAdapter({ edit: true, create: !props.annotation })
