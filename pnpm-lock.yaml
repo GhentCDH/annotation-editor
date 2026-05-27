@@ -9,20 +9,20 @@ importers:
   .:
     dependencies:
       '@ghentcdh/annotated-text':
-        specifier: ^1.0.9
-        version: 1.0.9(@types/node@25.6.0)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0)
+        specifier: ^1.0.10
+        version: 1.0.10(@types/node@25.6.0)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0)
       '@ghentcdh/annotated-text--markdown':
-        specifier: ^1.0.9
-        version: 1.0.9(@ghentcdh/annotated-text@1.0.9(@types/node@25.6.0)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0))(@types/node@25.6.0)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0)
+        specifier: ^1.0.10
+        version: 1.0.10(@ghentcdh/annotated-text@1.0.10(@types/node@25.6.0)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0))(@types/node@25.6.0)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0)
       '@ghentcdh/json-forms-core':
-        specifier: ^1.0.5
-        version: 1.0.5(@jsonforms/core@3.7.0)(zod@4.4.3)
+        specifier: ^1.1.0
+        version: 1.1.0(@jsonforms/core@3.7.0)(zod@4.4.3)
       '@ghentcdh/json-forms-vue':
-        specifier: ^1.0.5
-        version: 1.0.5(@ghentcdh/json-forms-core@1.0.5(@jsonforms/core@3.7.0)(zod@4.4.3))(@ghentcdh/tools-vue@1.0.1(axios@1.16.0)(vue@3.5.33(typescript@5.9.3)))(@ghentcdh/ui@1.0.5(@ghentcdh/tools-vue@1.0.1(axios@1.16.0)(vue@3.5.33(typescript@5.9.3)))(@heroicons/vue@2.2.0(vue@3.5.33(typescript@5.9.3)))(@tiptap/pm@3.23.5)(@tiptap/starter-kit@3.23.5)(@tiptap/vue-3@3.23.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.23.6(@tiptap/pm@3.23.5))(@tiptap/pm@3.23.5)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.23.6(@tiptap/pm@3.23.5)))(uuid@14.0.0)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3)))(@jsonforms/core@3.7.0)(@vueuse/core@14.3.0(vue@3.5.33(typescript@5.9.3)))(axios@1.16.0)(lodash-es@4.18.1)(vee-validate@4.15.1(vue@3.5.33(typescript@5.9.3)))(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))
+        specifier: ^1.1.0
+        version: 1.1.0(@ghentcdh/json-forms-core@1.1.0(@jsonforms/core@3.7.0)(zod@4.4.3))(@ghentcdh/tools-vue@1.0.1(axios@1.16.0)(vue@3.5.33(typescript@5.9.3)))(@ghentcdh/ui@1.1.0(@ghentcdh/tools-vue@1.0.1(axios@1.16.0)(vue@3.5.33(typescript@5.9.3)))(@heroicons/vue@2.2.0(vue@3.5.33(typescript@5.9.3)))(@playwright/test@1.60.0)(@tiptap/pm@3.23.5)(@tiptap/starter-kit@3.23.5)(@tiptap/vue-3@3.23.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.23.6(@tiptap/pm@3.23.5))(@tiptap/pm@3.23.5)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.23.6(@tiptap/pm@3.23.5)))(uuid@14.0.0)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3)))(@jsonforms/core@3.7.0)(@playwright/test@1.60.0)(@vueuse/core@14.3.0(vue@3.5.33(typescript@5.9.3)))(axios@1.16.0)(lodash-es@4.18.1)(vee-validate@4.15.1(vue@3.5.33(typescript@5.9.3)))(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))(zod@4.4.3)
       '@ghentcdh/ui':
-        specifier: ^1.0.5
-        version: 1.0.5(@ghentcdh/tools-vue@1.0.1(axios@1.16.0)(vue@3.5.33(typescript@5.9.3)))(@heroicons/vue@2.2.0(vue@3.5.33(typescript@5.9.3)))(@tiptap/pm@3.23.5)(@tiptap/starter-kit@3.23.5)(@tiptap/vue-3@3.23.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.23.6(@tiptap/pm@3.23.5))(@tiptap/pm@3.23.5)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.23.6(@tiptap/pm@3.23.5)))(uuid@14.0.0)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))
+        specifier: ^1.1.0
+        version: 1.1.0(@ghentcdh/tools-vue@1.0.1(axios@1.16.0)(vue@3.5.33(typescript@5.9.3)))(@heroicons/vue@2.2.0(vue@3.5.33(typescript@5.9.3)))(@playwright/test@1.60.0)(@tiptap/pm@3.23.5)(@tiptap/starter-kit@3.23.5)(@tiptap/vue-3@3.23.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.23.6(@tiptap/pm@3.23.5))(@tiptap/pm@3.23.5)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.23.6(@tiptap/pm@3.23.5)))(uuid@14.0.0)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))
       '@ghentcdh/w3c-utils':
         specifier: link:../vue_component_annotated_text/dist/libs/w3c/utils
         version: link:../vue_component_annotated_text/dist/libs/w3c/utils
@@ -165,6 +165,9 @@ importers:
 
   packages/annotation-core:
     dependencies:
+      '@ghentcdh/annotated-text':
+        specifier: ^1.0.9
+        version: 1.0.10(@types/node@25.6.0)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0)
       '@ghentcdh/w3c-utils':
         specifier: ^1.0.6
         version: 1.0.9(@types/node@25.6.0)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0)
@@ -178,6 +181,9 @@ importers:
 
   packages/annotation-vue:
     dependencies:
+      '@ghentcdh/annotated-text':
+        specifier: ^1.0.9
+        version: 1.0.10(@types/node@25.6.0)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0)
       '@ghentcdh/annotation-core':
         specifier: workspace:*
         version: link:../annotation-core
@@ -1003,33 +1009,38 @@ packages:
   '@floating-ui/utils@0.2.11':
     resolution: {integrity: sha512-RiB/yIh78pcIxl6lLMG0CgBXAZ2Y0eVHqMPYugu+9U0AeT6YBeiJpf7lbdJNIugFP5SIjwNRgo4DhR1Qxi26Gg==}
 
-  '@ghentcdh/annotated-text--markdown@1.0.9':
-    resolution: {integrity: sha512-Y8/d2iUEqy7NKLv3SxhFBGwFECLdxpwb/TPjb+hwMb31hWAnvc5JXqTlj1YjHkCD4VGAyUk48B3nbZFedXOinQ==}
+  '@ghentcdh/annotated-text--markdown@1.0.10':
+    resolution: {integrity: sha512-uTMbHvyRJZxalAhjY75qXVr9Ul2pJqI6NT1wQpu3mVP3xe8FpZlPR3QFL11g6HojTJ45MrtxrUlhJB+HdxqRrw==}
     peerDependencies:
       '@ghentcdh/annotated-text': ^1.0.3
 
-  '@ghentcdh/annotated-text@1.0.9':
-    resolution: {integrity: sha512-mcvYzCPwTptP5oac5DhVor6V+0zgXWTNjb7wFFyhfNGEwa4z41TiI86KZIagKyUt4ApM4gfP22j6jaKY1UdZQQ==}
+  '@ghentcdh/annotated-text@1.0.10':
+    resolution: {integrity: sha512-sLZIHym0rLDIc6cnulA5c9GgIQUfPDjzTZGVafNOW+SEjK1BcJcpyJx5y4a+n1EbVyNF7Bd/rdXQx+LXtHzA7g==}
 
-  '@ghentcdh/json-forms-core@1.0.5':
-    resolution: {integrity: sha512-rbpOHZKUceHAsyEuUyLbO0oYK9pAzT0gFe4KMgH67HVHIH9RC4Jv+5opPh/cMk2tO+A5O0+AzUyelRSH8lj/QA==}
+  '@ghentcdh/json-forms-core@1.1.0':
+    resolution: {integrity: sha512-dnBco+kp5hicT+Z6uD2mLMCmjoJlJOJjRrjJFcPpZ/eQ1ShH+dzz+MLk9Y1T01X0nUCGLByupB2rhjWe8vCcUQ==}
     peerDependencies:
       '@jsonforms/core': 3.7.0
       zod: 4.3.6
 
-  '@ghentcdh/json-forms-vue@1.0.5':
-    resolution: {integrity: sha512-HfWe2awsNNmMik9YDIwO+hYE4MAW/2ImBeqFFlRYZ5V8/arYlpFMmp1CqahQkQ1FttSqplwb9fQIQsfUA4HR7w==}
+  '@ghentcdh/json-forms-vue@1.1.0':
+    resolution: {integrity: sha512-4D/g8Jz5GJ5Hol/ggvQs4bh6Qwukwstf39BPJNGx6OJYB4JZ31QFQpxbLWz3M5l5fxap18syuynW9HwMLaF+Nw==}
     peerDependencies:
       '@ghentcdh/json-forms-core': '>=0.0.1'
       '@ghentcdh/tools-vue': '>=0.6.0'
       '@ghentcdh/ui': '>=0.6.0'
       '@jsonforms/core': ^3.4.0
+      '@playwright/test': '>=1.50.0'
       '@vueuse/core': ^14.0.0
       axios: ^1.0.0
       lodash-es: ^4.17.0
       vee-validate: '>=4.0.0'
       vue: ^3.5.0
       vue-router: ^5.0.0
+      zod: ^4.0.0
+    peerDependenciesMeta:
+      '@playwright/test':
+        optional: true
 
   '@ghentcdh/tools-vue@1.0.1':
     resolution: {integrity: sha512-VNaEx10gwrhQmtmnY+e2VDXYfZtuJ84r3j4Lspl+IPMPmjGIDlcn2dM26VG1PnFZxKPyeSEib7xazpNFhdLL9Q==}
@@ -1037,11 +1048,12 @@ packages:
       axios: ^1.0.0
       vue: ^3.5.0
 
-  '@ghentcdh/ui@1.0.5':
-    resolution: {integrity: sha512-65DBBo9HyX9iH3Xccfiy8E7DUYKLOcqOuWXXtBa3GFefhIB8gGiU8wgZAmbGxOcLZYOIesFjksJ3g7DP8ZJddA==}
+  '@ghentcdh/ui@1.1.0':
+    resolution: {integrity: sha512-X0wbt6iO1MJvxVIGL2ESgSUWFQE3gyqQSM3lK12qlqWRJiHPR60Irf/IW437l32a6BOU1zn61I3LEMnMf68Qcg==}
     peerDependencies:
       '@ghentcdh/tools-vue': '>=0.6.0'
       '@heroicons/vue': ^2.2.0
+      '@playwright/test': '>=1.50.0'
       '@tiptap/pm': ^3.0.0
       '@tiptap/starter-kit': ^3.0.0
       '@tiptap/vue-3': ^3.0.0
@@ -1049,6 +1061,12 @@ packages:
       uuid: ^11.0.0
       vue: ^3.5.0
       vue-router: ^5.0.0
+    peerDependenciesMeta:
+      '@playwright/test':
+        optional: true
+
+  '@ghentcdh/w3c-utils@1.0.10':
+    resolution: {integrity: sha512-vtEP2ap/u+mjGBU2I9xvsnjdu5yadHESXoCwX9XLMUx2ETrkn2e2c2DE9FMXE6rEDXYaGBYIPIQCSGO+VRH2Rw==}
 
   '@ghentcdh/w3c-utils@1.0.6':
     resolution: {integrity: sha512-uQ/nHUDGQ2XdLg3c9oaBQcKYgjXkeb6t0vbJRU2lnu2plQ//EA0FLLetCZpaR8QAKRvJLFHS4qTIm+LM5EOMIg==}
@@ -5973,9 +5991,9 @@ snapshots:
 
   '@floating-ui/utils@0.2.11': {}
 
-  '@ghentcdh/annotated-text--markdown@1.0.9(@ghentcdh/annotated-text@1.0.9(@types/node@25.6.0)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0))(@types/node@25.6.0)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0)':
+  '@ghentcdh/annotated-text--markdown@1.0.10(@ghentcdh/annotated-text@1.0.10(@types/node@25.6.0)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0))(@types/node@25.6.0)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0)':
     dependencies:
-      '@ghentcdh/annotated-text': 1.0.9(@types/node@25.6.0)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0)
+      '@ghentcdh/annotated-text': 1.0.10(@types/node@25.6.0)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0)
       markdown-it: 14.1.1
       memoizee: 0.4.17
       uuid: 13.0.0
@@ -6003,9 +6021,9 @@ snapshots:
       - tsx
       - yaml
 
-  '@ghentcdh/annotated-text@1.0.9(@types/node@25.6.0)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0)':
+  '@ghentcdh/annotated-text@1.0.10(@types/node@25.6.0)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0)':
     dependencies:
-      '@ghentcdh/w3c-utils': 1.0.9(@types/node@25.6.0)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0)
+      '@ghentcdh/w3c-utils': 1.0.10(@types/node@25.6.0)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0)
       d3: 7.9.0
       lodash-es: 4.18.1
       memoizee: 0.4.17
@@ -6033,16 +6051,16 @@ snapshots:
       - tsx
       - yaml
 
-  '@ghentcdh/json-forms-core@1.0.5(@jsonforms/core@3.7.0)(zod@4.4.3)':
+  '@ghentcdh/json-forms-core@1.1.0(@jsonforms/core@3.7.0)(zod@4.4.3)':
     dependencies:
       '@jsonforms/core': 3.7.0
       zod: 4.4.3
 
-  '@ghentcdh/json-forms-vue@1.0.5(@ghentcdh/json-forms-core@1.0.5(@jsonforms/core@3.7.0)(zod@4.4.3))(@ghentcdh/tools-vue@1.0.1(axios@1.16.0)(vue@3.5.33(typescript@5.9.3)))(@ghentcdh/ui@1.0.5(@ghentcdh/tools-vue@1.0.1(axios@1.16.0)(vue@3.5.33(typescript@5.9.3)))(@heroicons/vue@2.2.0(vue@3.5.33(typescript@5.9.3)))(@tiptap/pm@3.23.5)(@tiptap/starter-kit@3.23.5)(@tiptap/vue-3@3.23.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.23.6(@tiptap/pm@3.23.5))(@tiptap/pm@3.23.5)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.23.6(@tiptap/pm@3.23.5)))(uuid@14.0.0)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3)))(@jsonforms/core@3.7.0)(@vueuse/core@14.3.0(vue@3.5.33(typescript@5.9.3)))(axios@1.16.0)(lodash-es@4.18.1)(vee-validate@4.15.1(vue@3.5.33(typescript@5.9.3)))(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))':
+  '@ghentcdh/json-forms-vue@1.1.0(@ghentcdh/json-forms-core@1.1.0(@jsonforms/core@3.7.0)(zod@4.4.3))(@ghentcdh/tools-vue@1.0.1(axios@1.16.0)(vue@3.5.33(typescript@5.9.3)))(@ghentcdh/ui@1.1.0(@ghentcdh/tools-vue@1.0.1(axios@1.16.0)(vue@3.5.33(typescript@5.9.3)))(@heroicons/vue@2.2.0(vue@3.5.33(typescript@5.9.3)))(@playwright/test@1.60.0)(@tiptap/pm@3.23.5)(@tiptap/starter-kit@3.23.5)(@tiptap/vue-3@3.23.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.23.6(@tiptap/pm@3.23.5))(@tiptap/pm@3.23.5)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.23.6(@tiptap/pm@3.23.5)))(uuid@14.0.0)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3)))(@jsonforms/core@3.7.0)(@playwright/test@1.60.0)(@vueuse/core@14.3.0(vue@3.5.33(typescript@5.9.3)))(axios@1.16.0)(lodash-es@4.18.1)(vee-validate@4.15.1(vue@3.5.33(typescript@5.9.3)))(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))(zod@4.4.3)':
     dependencies:
-      '@ghentcdh/json-forms-core': 1.0.5(@jsonforms/core@3.7.0)(zod@4.4.3)
+      '@ghentcdh/json-forms-core': 1.1.0(@jsonforms/core@3.7.0)(zod@4.4.3)
       '@ghentcdh/tools-vue': 1.0.1(axios@1.16.0)(vue@3.5.33(typescript@5.9.3))
-      '@ghentcdh/ui': 1.0.5(@ghentcdh/tools-vue@1.0.1(axios@1.16.0)(vue@3.5.33(typescript@5.9.3)))(@heroicons/vue@2.2.0(vue@3.5.33(typescript@5.9.3)))(@tiptap/pm@3.23.5)(@tiptap/starter-kit@3.23.5)(@tiptap/vue-3@3.23.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.23.6(@tiptap/pm@3.23.5))(@tiptap/pm@3.23.5)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.23.6(@tiptap/pm@3.23.5)))(uuid@14.0.0)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))
+      '@ghentcdh/ui': 1.1.0(@ghentcdh/tools-vue@1.0.1(axios@1.16.0)(vue@3.5.33(typescript@5.9.3)))(@heroicons/vue@2.2.0(vue@3.5.33(typescript@5.9.3)))(@playwright/test@1.60.0)(@tiptap/pm@3.23.5)(@tiptap/starter-kit@3.23.5)(@tiptap/vue-3@3.23.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.23.6(@tiptap/pm@3.23.5))(@tiptap/pm@3.23.5)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.23.6(@tiptap/pm@3.23.5)))(uuid@14.0.0)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))
       '@jsonforms/core': 3.7.0
       '@vueuse/core': 14.3.0(vue@3.5.33(typescript@5.9.3))
       axios: 1.16.0
@@ -6050,13 +6068,16 @@ snapshots:
       vee-validate: 4.15.1(vue@3.5.33(typescript@5.9.3))
       vue: 3.5.33(typescript@5.9.3)
       vue-router: 5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3))
+      zod: 4.4.3
+    optionalDependencies:
+      '@playwright/test': 1.60.0
 
   '@ghentcdh/tools-vue@1.0.1(axios@1.16.0)(vue@3.5.33(typescript@5.9.3))':
     dependencies:
       axios: 1.16.0
       vue: 3.5.33(typescript@5.9.3)
 
-  '@ghentcdh/ui@1.0.5(@ghentcdh/tools-vue@1.0.1(axios@1.16.0)(vue@3.5.33(typescript@5.9.3)))(@heroicons/vue@2.2.0(vue@3.5.33(typescript@5.9.3)))(@tiptap/pm@3.23.5)(@tiptap/starter-kit@3.23.5)(@tiptap/vue-3@3.23.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.23.6(@tiptap/pm@3.23.5))(@tiptap/pm@3.23.5)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.23.6(@tiptap/pm@3.23.5)))(uuid@14.0.0)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))':
+  '@ghentcdh/ui@1.1.0(@ghentcdh/tools-vue@1.0.1(axios@1.16.0)(vue@3.5.33(typescript@5.9.3)))(@heroicons/vue@2.2.0(vue@3.5.33(typescript@5.9.3)))(@playwright/test@1.60.0)(@tiptap/pm@3.23.5)(@tiptap/starter-kit@3.23.5)(@tiptap/vue-3@3.23.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.23.6(@tiptap/pm@3.23.5))(@tiptap/pm@3.23.5)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.23.6(@tiptap/pm@3.23.5)))(uuid@14.0.0)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))':
     dependencies:
       '@ghentcdh/tools-vue': 1.0.1(axios@1.16.0)(vue@3.5.33(typescript@5.9.3))
       '@heroicons/vue': 2.2.0(vue@3.5.33(typescript@5.9.3))
@@ -6067,6 +6088,35 @@ snapshots:
       uuid: 14.0.0
       vue: 3.5.33(typescript@5.9.3)
       vue-router: 5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3))
+    optionalDependencies:
+      '@playwright/test': 1.60.0
+
+  '@ghentcdh/w3c-utils@1.0.10(@types/node@25.6.0)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0)':
+    dependencies:
+      vitest: 4.0.9(@types/node@25.6.0)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0)
+      zod: 4.3.6
+    transitivePeerDependencies:
+      - '@edge-runtime/vm'
+      - '@types/debug'
+      - '@types/node'
+      - '@vitest/browser-playwright'
+      - '@vitest/browser-preview'
+      - '@vitest/browser-webdriverio'
+      - '@vitest/ui'
+      - happy-dom
+      - jiti
+      - jsdom
+      - less
+      - lightningcss
+      - msw
+      - sass
+      - sass-embedded
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+      - tsx
+      - yaml
 
   '@ghentcdh/w3c-utils@1.0.6(@types/node@25.6.0)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0)':
     dependencies:
