@@ -1,11 +1,11 @@
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import {
   type AnnotationResourceDefinition,
   type AnnotationResourceJsonConfig,
   resolveConfig,
   type AnnotationDefConfig,
 } from '@ghentcdh/annotation-core';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 export const loadAnnotationResourcesFromDir = (
   dirPath: string,

@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { AnnotationDefinitionService } from './annotation-definition.service';
 import { type AnnotationDefinition, type AnnotationDefConfig } from '@ghentcdh/annotation-core';
+import { AnnotationDefinitionService } from './annotation-definition.service';
 import { ANNOTATION_DEF_CONFIG_TOKEN } from '../utils/annotation.context-builder';
 
 type AnnotationDefinitionLoaderFn = () => AnnotationDefinition[];
