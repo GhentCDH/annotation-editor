@@ -42,7 +42,7 @@ import { w3cAnnotation, type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import AnnotationForm from './AnnotationForm.vue';
 import { AnnotationEditEmits, AnnotationEditModalProperties } from './AnnotationEditModal.properties';
 import { useEditorState } from '../../composables/useEditorState';
-import { type Selector } from '../../utils/annotation-utils';
+import { annotationUtils, type Selector } from '../../utils/annotation-utils';
 
 let annotatedText: AnnotatedText<W3CAnnotation>;
 const props = defineProps(AnnotationEditModalProperties);
@@ -166,6 +166,12 @@ const selectAll = () => {
   // annotatedText
   //   .setAnnotationAdapter({ create: false, edit: true })
   //   .setAnnotations([annotationEdit.value]);
+
+  annotationSelector.value = annotationUtils.createAnnotationFromSelector(
+    annotationDef.value!,
+    null,
+    selector,
+  );
 };
 
 const onCancel = () => {

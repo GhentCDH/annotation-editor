@@ -382,6 +382,28 @@ class AnnotationUtilsImpl {
     const builder = this.getBuilder(annotation);
     return getAnnotationType(builder);
   };
+
+  createAnnotationFromSelector(
+    type: AnnotationDefinition,
+    annotation: W3CAnnotation | null,
+    selector: Selector | null,
+  ) {
+    const builder = w3cAnnotation(annotation ?? undefined)
+      .setMotivation('tagging')
+      .setId(createId());
+
+    // Add the style
+    const styleBody = AnnotationStyleContextBuilder(
+      this.annotationConfig,
+    ).toAnnotationBody(type)!;
+
+    builder.addBody(styleBody);
+
+    // Additional positionselector
+    if (selector) updateSelector(builder, selector);
+
+    return builder.build();
+  }
 }
 
 export type AnnotationUtils = Pick<
@@ -399,6 +421,7 @@ export type AnnotationUtils = Pick<
   | 'updateAnnotationBuilder'
   | 'getAnnotationStyle'
   | 'getAnnotationType'
+  | 'createAnnotationFromSelector'
 >;
 
 export const annotationUtils = (annotationConfig: AnnotationDefConfig) => {
