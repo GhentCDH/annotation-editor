@@ -1,6 +1,5 @@
 import {
   type AnnotationDefinition as CoreAnnotationDefinition,
-  type AnnotationStyle,
 } from '@ghentcdh/annotation-core';
 import { type ContextBuilder } from '@ghentcdh/w3c-utils';
 import { type CustomAnnotationStyle } from '@ghentcdh/annotated-text';
@@ -35,4 +34,3 @@ export type VueAnnotationDefinition = {
   _core: CoreAnnotationDefinition;
 };
 
-export type { AnnotationStyle };

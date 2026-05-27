@@ -4,11 +4,8 @@ import { AnnotationDefinitionService } from './service/annotation-definition.ser
 import { AnnotationDefinitionFromFilesService } from './service/annotation-definition-from-files.service';
 import { loadAnnotationDefinitionsFromDir } from './service/annotation-definition.loader';
 import { AnnotationNamespaceController } from './annotation-namespace.controller';
-import { annotationContextBuilderFactory } from './utils/context-builder.factory';
-import {
-  ANNOTATION_DEF_CONFIG_TOKEN,
-  type AnnotationDefConfig,
-} from './utils/annotation.context-builder';
+import { annotationContextBuilderFactory, type AnnotationDefConfig } from '@ghentcdh/annotation-core';
+import { ANNOTATION_DEF_CONFIG_TOKEN } from './utils/annotation.context-builder';
 import { loadAnnotationResourcesFromDir } from './resource/annotation-resource.loader';
 import { AnnotationResourceDefinitionService } from './resource/annotation-resource-definition.service';
 

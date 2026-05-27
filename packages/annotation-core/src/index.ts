@@ -3,8 +3,16 @@ export * from './lib/types/annotation-json-config.types';
 export * from './lib/types/annotation-definition.type';
 export * from './lib/types/annotation-resource-json-config.types';
 export * from './lib/types/annotation-resource.types';
-export * from './lib/annotation.style';
+export {
+  type AnnotationStyle,
+  AnnotationStyleType,
+  AnnotationStyleContextBuilder,
+  createAnnotationStyleBodyUnsafe,
+} from './lib/annotation.style';
 export * from './lib/utils/annotation.context-builder';
-export * from './lib/utils/annotation-schema.builder';
+export {
+  buildUiSchema,
+  buildMetadataSchema,
+} from './lib/utils/annotation-schema.builder';
 export * from './lib/utils/context-builder.factory';
 export * from './lib/utils/annotation-definition.builder';

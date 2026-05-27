@@ -98,7 +98,6 @@ export const createAnnotationConfiguration = (
         annotationAdapter ?? defaultAnnotationAdapter(sourceModel),
       )
       .setTextAdapter(textAdapter ?? MarkdownTextAdapter())
-      // .setTagLabelFn(findPurpose)
       .setRenderParams(renderParams())
       .setStyleParams(styleParams())
       .registerStyles(styles);

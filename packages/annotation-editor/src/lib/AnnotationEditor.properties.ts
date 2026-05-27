@@ -54,5 +54,4 @@ export const AnnotationEditorEmits = {
   ) => true,
 };
 
-export type AnnotationEditorEmitsType = typeof AnnotationEditorEmits;
-export type AnnotationEditorEmitsFn = EmitFn<AnnotationEditorEmitsType>;
+export type AnnotationEditorEmitsFn = EmitFn<typeof AnnotationEditorEmits>;

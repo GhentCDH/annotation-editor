@@ -11,7 +11,11 @@
       <div class="flex flex-row gap-2">
         <Collapse :title="label.selectLabel">
           <div :id="editId" />
-          <Btn :outline="true" class="mt-2" @click="selectAll">
+          <Btn
+            :outline="true"
+            class="mt-2"
+            @click="selectAll"
+          >
             Select all text
           </Btn>
         </Collapse>
@@ -26,10 +30,19 @@
       </div>
     </template>
     <template #actions>
-      <Btn :color="'secondary' as any" :outline="true" @click="onCancel">
+      <Btn
+        :color="'secondary' as any"
+        :outline="true"
+        @click="onCancel"
+      >
         Cancel
       </Btn>
-      <Btn :disabled="formDisabled" @click="onSubmit"> Save </Btn>
+      <Btn
+        :disabled="formDisabled"
+        @click="onSubmit"
+      >
+        Save
+      </Btn>
     </template>
   </Modal>
 </template>
@@ -48,7 +61,6 @@ const props = defineProps(AnnotationEditModalProperties);
 
 const { config, utils } = useEditorState();
 
-// const annotationEdit = ref<W3CAnnotation | null>(props.annotation ?? null);
 const emits = defineEmits(AnnotationEditEmits);
 
 const editId = `edit-select-annotation-${Date.now()}--`;
@@ -103,36 +115,6 @@ const onSubmit = () => {
   // Submit it to the parent so if needed it can be saved to the server
   (result as any).id = props.annotation?.id ?? null;
   emits('close', { annotation: result });
-
-  // if(!props.annotation){
-  //   updatedAnnotation= this.ann
-  // }
-  //
-  // if (textPositionSelector.value) {
-  //   const currentTextPositionSelector = w3cAnnotation(
-  //     annotationEdit.value!,
-  //   ).getTextPositionSelector(props.source!.uri)[0];
-  //
-  //   const length =
-  //     currentTextPositionSelector.end - currentTextPositionSelector.start;
-  //   const start =
-  //     textPositionSelector.value.start - currentTextPositionSelector.start;
-  //   const end = start + length;
-  //   const annotationTextPositionSelector = {
-  //     start,
-  //     end,
-  //     source: props.parentAnnotation!.id,
-  //   };
-  //
-  //   updatedAnnotation = utils.updateTextPositionSelector(
-  //     annotationSelector.value!,
-  //     annotationTextPositionSelector,
-  //   );
-  // }
-  //
-  // const result = utils.updateAnnotationData(updatedAnnotation!, formData.value);
-  // if (props.annotation?.id) result.id = props.annotation.id;
-  // emits('close', { annotation: result });
 };
 
 const onValid = (valid: boolean) => {
@@ -156,15 +138,6 @@ const selectAll = () => {
     ...selec,
     source: source.uri,
   };
-  // annotationSelector.value=//;
-  // FIXME
-  // annotationEdit.value = annotationEdit.value
-  //   ? utils.updateTextPositionSelector(annotationEdit.value, selector)
-  //   : utils.createAnnotation(null, annotationDef.value!, selector);
-  //
-  // annotatedText
-  //   .setAnnotationAdapter({ create: false, edit: true })
-  //   .setAnnotations([annotationEdit.value]);
 
   annotationSelector.value = utils.createAnnotationFromSelector(
     annotationDef.value!,

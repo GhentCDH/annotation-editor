@@ -81,7 +81,6 @@ const toVueDefinition = (
       default: createStyle(def.color),
       active: activeStyle(def.color),
     },
-    // style: createStyle(def),
     schema,
     allowedChildren: resolveKeyLabels(def.allowedChildren, grouped),
     allowedLinks: resolveKeyLabels(def.allowedLinks, grouped),
@@ -99,7 +98,7 @@ export const createAnnotationDefinitionsState = (
 ): AnnotationDefinitionsState => {
   const { config, factory } = options;
   const createStyle = options.createHighlightStyle ?? createHighlightStyle;
-  const activeStyle = options.createHighlightStyle ?? createStyle;
+  const activeStyle = options.activeHighlightStyle ?? createStyle;
 
   const service = markRaw(new AnnotationDefinitionService());
   const coreDefs = ref<CoreAnnotationDefinition[]>([]);

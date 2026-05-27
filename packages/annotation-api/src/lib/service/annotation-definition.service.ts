@@ -1,10 +1,7 @@
 import { type ContextBuilder } from '@ghentcdh/w3c-utils';
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { type AnnotationDefinition } from '../annotation-defintion.type';
-import {
-  ANNOTATION_DEF_CONFIG_TOKEN,
-  type AnnotationDefConfig,
-} from '../utils/annotation.context-builder';
+import { type AnnotationDefinition, type AnnotationDefConfig } from '@ghentcdh/annotation-core';
+import { ANNOTATION_DEF_CONFIG_TOKEN } from '../utils/annotation.context-builder';
 
 @Injectable()
 export abstract class AnnotationDefinitionService {
@@ -73,6 +70,5 @@ export abstract class AnnotationDefinitionService {
     if (!def) throw new NotFoundException();
 
     return def.context as ContextBuilder;
-    // return createContextBuilder(def);
   }
 }

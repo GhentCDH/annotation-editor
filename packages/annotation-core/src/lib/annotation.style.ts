@@ -16,7 +16,6 @@ export const AnnotationStyleSchema = z.object({
     .default('underline'),
   color: z.string().optional(),
 });
-// .passthrough();
 
 export type AnnotationStyle = z.infer<typeof AnnotationStyleSchema>;
 
@@ -30,15 +29,6 @@ export const AnnotationStyleContextBuilder = (
     .setType(prefix, AnnotationStyleType)
     .setContextUri(`${contextUrl}${AnnotationStyleType}.jsonld`)
     .parseZodSchema(AnnotationStyleSchema as any) as ContextBuilder<any>;
-};
-
-export const createAnnotationStyleBody = (
-  annotationConfig: Partial<AnnotationDefConfig> | undefined,
-  style: Partial<AnnotationDefinition> & Pick<AnnotationContext, 'id' | 'name'>,
-) => {
-  return AnnotationStyleContextBuilder(annotationConfig).toAnnotationBody(
-    style,
-  );
 };
 
 export const createAnnotationStyleBodyUnsafe = (

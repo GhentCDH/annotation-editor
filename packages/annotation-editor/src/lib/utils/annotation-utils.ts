@@ -9,7 +9,6 @@ import {
   AnnotationMetadataType,
   type AnnotationStyle,
   AnnotationStyleContextBuilder,
-  createAnnotationStyleBodyUnsafe,
 } from '@ghentcdh/annotation-core';
 import {
   type AllowedChildrenPerType,
@@ -217,17 +216,6 @@ class AnnotationUtilsImpl {
     return this;
   }
 
-  updateAnnotationData(annotation: W3CAnnotation, data: any) {
-    if (!data || Object.keys(data).length < 0) return annotation;
-
-    const builder = this.getBuilder(annotation);
-    data.type = data.type ?? AnnotationMetadataType;
-    data.purpose = data.purpose ?? getAnnotationType(builder);
-    const updated = builder.updateBodyByType(data.type, data).build();
-
-    return updated;
-  }
-
   getLinks(annotation: W3CAnnotation) {
     return this.linkedAnnotations.get(annotation.id) ?? [];
   }
@@ -257,45 +245,23 @@ class AnnotationUtilsImpl {
     return this.annotations.find((a) => a.id === parentUri.source) ?? null;
   }
 
-  private _create(
-    fromAnnotation: W3CAnnotation | null,
-    type: AnnotationDefinition,
-  ) {
-    const id = createId();
-    const styleBody = createAnnotationStyleBodyUnsafe(
-      this.annotationConfig,
-      type.context,
-    ).body;
-    const builder = w3cAnnotation(fromAnnotation ?? undefined)
-      .setId(id)
-      .setMotivation('tagging');
-
-    if (styleBody) builder.addBody(styleBody);
-
-    this.builderMap.set(id, builder);
-
-    return builder;
-  }
-
   createAnnotation(
     fromAnnotation: W3CAnnotation | null,
     type: AnnotationDefinition,
     data: any | null,
     extraTextPositionSelector?: Selector,
   ) {
-    const builder = w3cAnnotation(fromAnnotation ?? undefined).setMotivation(
-      'tagging',
-    );
-    if (!fromAnnotation?.id) {
-      builder.setId(createId());
-    }
-
     // Add the style
     const styleBody = AnnotationStyleContextBuilder(
       this.annotationConfig,
     ).toAnnotationBody(type)!;
 
-    builder.addBody(styleBody);
+    const builder = w3cAnnotation(fromAnnotation ?? undefined)
+      .setMotivation('tagging')
+      .addBody(styleBody);
+    if (!fromAnnotation?.id) {
+      builder.setId(createId());
+    }
 
     // Add the metadata
     if (data && Object.keys(data).length > 0) {
@@ -315,8 +281,24 @@ class AnnotationUtilsImpl {
     sourceAnnotation: W3CAnnotation,
     targetAnnotation: W3CAnnotation,
     type: AnnotationDefinition,
+    data: any | null,
   ): W3CAnnotation => {
-    const builder = this._create(null, type);
+    // Add the style
+    const styleBody = AnnotationStyleContextBuilder(
+      this.annotationConfig,
+    ).toAnnotationBody(type)!;
+
+    const builder = w3cAnnotation()
+      .setMotivation('tagging')
+      .setId(createId())
+      .addBody(styleBody);
+
+    // Add the metadata
+    if (data && Object.keys(data).length > 0) {
+      data.type = data.type ?? AnnotationMetadataType;
+      data.purpose = data.purpose ?? getAnnotationType(builder);
+      builder.updateBodyByType(data.type, data);
+    }
 
     builder
       .addTarget({
@@ -395,7 +377,6 @@ class AnnotationUtilsImpl {
 export type AnnotationUtils = Pick<
   typeof AnnotationUtilsImpl.prototype,
   | 'createAnnotation'
-  | 'updateAnnotationData'
   | 'getLinks'
   | 'getTextPositionSelector'
   | 'getParent'

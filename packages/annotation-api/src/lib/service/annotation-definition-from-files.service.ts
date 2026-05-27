@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { AnnotationDefinitionService } from './annotation-definition.service';
-import { type AnnotationDefinition } from '../annotation-defintion.type';
-import { ANNOTATION_DEF_CONFIG_TOKEN, type AnnotationDefConfig } from '../utils/annotation.context-builder';
+import { type AnnotationDefinition, type AnnotationDefConfig } from '@ghentcdh/annotation-core';
+import { ANNOTATION_DEF_CONFIG_TOKEN } from '../utils/annotation.context-builder';
 
-export type AnnotationDefinitionLoaderFn = () => AnnotationDefinition[];
+type AnnotationDefinitionLoaderFn = () => AnnotationDefinition[];
 
 @Injectable()
 export class AnnotationDefinitionFromFilesService extends AnnotationDefinitionService {

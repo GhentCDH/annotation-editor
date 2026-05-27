@@ -1,8 +1,7 @@
 import { Controller, Get, Inject, Param } from '@nestjs/common';
-import { AnnotationStyleContextBuilder, AnnotationStyleType } from '@ghentcdh/annotation-core';
+import { type AnnotationDefConfig, AnnotationStyleContextBuilder, AnnotationStyleType } from '@ghentcdh/annotation-core';
 import { ApiTags } from '@nestjs/swagger';
 import { AnnotationDefinitionService } from './service/annotation-definition.service';
-import type { AnnotationDefConfig } from './utils/annotation.context-builder';
 import { ANNOTATION_DEF_CONFIG_TOKEN } from './utils/annotation.context-builder';
 
 @Controller('ns')

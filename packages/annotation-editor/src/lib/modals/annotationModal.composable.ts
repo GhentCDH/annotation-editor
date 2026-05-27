@@ -1,14 +1,10 @@
-import { reactive, type Ref, shallowRef } from 'vue';
+import { reactive } from 'vue';
 import {
   type AnnotationModalConfig,
   type ModalDefinition,
   type ModalStateDefinition,
 } from './AnnotationModal.definition';
-import {
-  type AnnotationModalAction,
-  type AnnotationModalActionMap,
-  annotationModalDefaults,
-} from './AnnotationModal.defaults';
+import { annotationModalDefaults } from './AnnotationModal.defaults';
 
 export const createModalConfig = (
   modalDefinitions: Record<string, ModalDefinition> = {},
@@ -51,61 +47,3 @@ export const createModalConfig = (
   };
 };
 
-export const useAnnotationModal = (): {
-  config: Ref<AnnotationModalConfig<AnnotationModalActionMap>>;
-  setModalDefinitions: (
-    modalDefinitions?: Record<string, ModalDefinition>,
-  ) => void;
-  destroy: () => void;
-  show: <K extends AnnotationModalAction>(
-    modal: K,
-    data: AnnotationModalActionMap[K]['show'],
-  ) => void;
-  close: <K extends AnnotationModalAction>(
-    modal: K,
-    event: AnnotationModalActionMap[K]['closeEvent'],
-  ) => void;
-} => {
-  const config = shallowRef(
-    createModalConfig(
-      annotationModalDefaults,
-    ) as unknown as AnnotationModalConfig<AnnotationModalActionMap>,
-  );
-
-  const setModalDefinitions = (
-    modalDefinitions: Record<string, ModalDefinition> = {},
-  ) => {
-    const allDefs = { ...annotationModalDefaults, ...modalDefinitions };
-
-    config.value = createModalConfig(
-      allDefs,
-    ) as unknown as AnnotationModalConfig<AnnotationModalActionMap>;
-  };
-
-  const destroy = () => {
-    config.value?.destroy();
-  };
-
-  const show = <K extends AnnotationModalAction>(
-    modal: K,
-    data: AnnotationModalActionMap[K]['show'],
-  ) => {
-    config.value?.show(modal, data);
-  };
-
-  const close = <K extends AnnotationModalAction>(
-    modal: K,
-    event: AnnotationModalActionMap[K]['closeEvent'],
-  ) => {
-    const modalState = config.value?.modals.find((m) => m.key === modal);
-    modalState?.state.close(event);
-  };
-
-  return {
-    config,
-    setModalDefinitions,
-    destroy,
-    show,
-    close,
-  };
-};

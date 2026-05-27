@@ -8,33 +8,22 @@
   >
     <template #content>
       <div class="flex flex-col gap-2">
-        <AnnotationText
-          :annotation="sourceAnnotation"
-          :show-source="true"
-        />
-        <AnnotationText
-          :annotation="targetAnnotation"
-          :show-source="true"
-        />
+        <AnnotationText :annotation="sourceAnnotation" :show-source="true" />
+        <AnnotationText :annotation="targetAnnotation" :show-source="true" />
         <AnnotationForm
           v-if="annotationDef"
           v-model="formData"
           :annotation="annotation"
           :annotation-type="type!"
+          @valid="onValid"
         />
       </div>
     </template>
     <template #actions>
-      <Btn
-        :color="'secondary' as any"
-        :outline="true"
-        @click="onCancel"
-      >
+      <Btn :color="'secondary' as any" :outline="true" @click="onCancel">
         Cancel
       </Btn>
-      <Btn @click="onSubmit">
-        Save
-      </Btn>
+      <Btn @click="onSubmit" :disabled="!valid"> Save </Btn>
     </template>
   </Modal>
 </template>
@@ -49,6 +38,7 @@ import AnnotationText from '../info/Annotation-text.vue';
 
 const props = defineProps(LinkAnnotationProperties);
 const emits = defineEmits(LinkEmits);
+const valid = ref(false);
 
 const { utils, config } = useEditorState();
 
@@ -57,6 +47,10 @@ const annotationDef = computed(() => {
   return config.annotation.getDefinition(props.type!);
 });
 
+const onValid = (v: boolean) => {
+  valid.value = v;
+};
+
 const label = computed(() => {
   const _label = annotationDef.value?.label ?? props.type;
 
@@ -64,18 +58,20 @@ const label = computed(() => {
     title: `Create ${_label} link`,
   };
 });
-const annotation = computed(() =>
-  utils.createLinkAnnotation(
-    props.sourceAnnotation!,
-    props.targetAnnotation!,
-    annotationDef.value!,
-  ),
-);
+
+// TODO later can come from input if we make update available
+const annotation = computed(() => undefined);
 
 const onSubmit = () => {
-  if (!annotation.value) return;
+  if (!valid.value) return;
+  const result = utils.createLinkAnnotation(
+    props.sourceAnnotation!,
+    props.targetAnnotation,
+    annotationDef.value!,
+    formData.value,
+  );
 
-  const result = utils.updateAnnotationData(annotation.value, formData.value);
+  // const result = utils.updateAnnotationData(annotation.value, formData.value);
   emits('close', { annotation: result });
 };
 
