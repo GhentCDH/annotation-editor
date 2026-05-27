@@ -64,7 +64,7 @@
     "onlyBuiltDependencies": [
       "better-sqlite3"
     ],
-    "overrides": {
+    "__overrides": {
       "@ghentcdh/annotated-text": "link:../vue_component_annotated_text/dist/libs/core",
       "@ghentcdh/annotated-text--markdown": "link:../vue_component_annotated_text/dist/libs/markdown",
       "@ghentcdh/json-forms-vue": "link:../ghentcdh/dist/libs/json-forms/vue",
