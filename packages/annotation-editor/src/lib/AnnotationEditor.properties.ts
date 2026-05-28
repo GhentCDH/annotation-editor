@@ -1,7 +1,6 @@
 import type { EmitFn, ExtractPublicPropTypes, PropType } from 'vue';
 
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-import { type FormEventPayload } from '@ghentcdh/json-forms-vue';
 import { type AnnotationDefConfig } from '@ghentcdh/annotation-core';
 import { type AnnotationAdapter, type TextAdapter } from '@ghentcdh/annotated-text';
 import type { AnnotationDefinition } from './types/AnnotationConfiguration.model';
@@ -47,7 +46,7 @@ export const AnnotationEditorEmits = {
   'update:annotation': (annotation: W3CAnnotation) => Promise<W3CAnnotation>,
   'delete:annotation': (annotation: W3CAnnotation) => Promise<W3CAnnotation>,
   'create:annotation': (annotation: W3CAnnotation) => Promise<W3CAnnotation>,
-  'create:annotation:events': (_payload: FormEventPayload) => true,
+  'create:annotation:events': (_payload: any) => true,
   'select:annotation': (
     _annotation: W3CAnnotation | null,
     _action: string | null,
