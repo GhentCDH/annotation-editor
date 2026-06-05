@@ -18,7 +18,13 @@
         "./packages/annotation-editor/src/index.ts"
       ],
       "@ghentcdh/annotation-core": ["./packages/annotation-core/src/index.ts"],
-      "@ghentcdh/annotation-vue": ["./packages/annotation-vue/src/index.ts"]
+      "@ghentcdh/annotation-vue": ["./packages/annotation-vue/src/index.ts"],
+      "@ghentcdh/annotation-preview": [
+        "./packages/annotation-preview/src/index.ts"
+      ],
+      "@ghentcdh/annotation-ui": [
+        "./packages/annotation-ui/src/index.ts"
+      ]
     }
   },
   "exclude": [
