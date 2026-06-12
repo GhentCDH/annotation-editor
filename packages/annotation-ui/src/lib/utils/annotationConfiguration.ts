@@ -8,14 +8,14 @@ import {
 } from '@ghentcdh/annotated-text';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { MarkdownTextAdapter } from '@ghentcdh/annotated-text--markdown';
+import { defaultRender, styleFn } from './annotation.style';
+import { type AnnotationUtils } from './annotation-utils';
 import {
   type AllowedChildrenPerType,
   type AnnotationConfiguration,
   type AnnotationDefinition,
 } from '../types/AnnotationConfiguration.model';
-import { defaultRender, styleFn } from './annotation.style';
 import { type SourceModel } from '../types/source.model';
-import { type AnnotationUtils } from './annotation-utils';
 
 const groupById = <KEY extends keyof AnnotationDefinition>(
   defs: AnnotationDefinition[],

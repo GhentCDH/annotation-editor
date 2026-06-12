@@ -15,13 +15,12 @@ import {
   annotationUtils,
   type AnnotationUtils,
   createModalConfig,
-  getAnnotationElementCenter,
+  getAnnotationElementCenter, type SourceModel 
 } from '@ghentcdh/annotation-ui';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { type PreviewConfig, type PreviewState_ } from './previewState';
 import { type AnnotationPreviewProps, type AnnotationPreviewEmitsFn } from '../AnnotationPreview.properties';
 import { previewModalDefaults } from '../modals/PreviewModal.defaults';
-import type { SourceModel } from '@ghentcdh/annotation-ui';
 
 export type PreviewSelectEvent = {
   annotation: W3CAnnotation;

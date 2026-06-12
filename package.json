@@ -10,10 +10,10 @@
   "dependencies": {
     "@ghentcdh/annotated-text": "^1.0.10",
     "@ghentcdh/annotated-text--markdown": "^1.0.10",
-    "@ghentcdh/json-forms-core": "^1.1.0",
-    "@ghentcdh/json-forms-vue": "^1.1.0",
-    "@ghentcdh/ui": "^1.1.0",
-    "@ghentcdh/w3c-utils": "link:../vue_component_annotated_text/dist/libs/w3c/utils",
+    "@ghentcdh/json-forms-core": "^2.0.0",
+    "@ghentcdh/json-forms-vue": "^2.0.0",
+    "@ghentcdh/ui": "^2.0.0",
+    "@ghentcdh/w3c-utils": "^1.0.10",
     "@jsonforms/core": "^3.7.0",
     "@nestjs/common": "^11.1.19",
     "@nestjs/swagger": "^11.4.3",
@@ -63,20 +63,6 @@
     "dedupeInjectedDeps": false,
     "onlyBuiltDependencies": [
       "better-sqlite3"
-    ],
-    "__overrides": {
-      "@ghentcdh/annotated-text": "link:../vue_component_annotated_text/dist/libs/core",
-      "@ghentcdh/annotated-text--markdown": "link:../vue_component_annotated_text/dist/libs/markdown",
-      "@ghentcdh/json-forms-vue": "link:../ghentcdh/dist/libs/json-forms/vue",
-      "@ghentcdh/json-forms-core": "link:../ghentcdh/dist/libs/json-forms/core"
-    },
-    "_overrides": {
-      "@ghentcdh/json-forms-vue": "link:../ghentcdh/dist/libs/json-forms/vue",
-      "@ghentcdh/json-forms-core": "link:../ghentcdh/dist/libs/json-forms/core",
-      "@ghentcdh/ui": "link:../ghentcdh/dist/libs/ui",
-      "@ghentcdh/w3c-utils": "link:../vue_component_annotated_text/dist/libs/w3c/utils",
-      "@ghentcdh/annotated-text": "link:../vue_component_annotated_text/dist/libs/core",
-      "@ghentcdh/annotated-text--markdown": "link:../vue_component_annotated_text/dist/libs/markdown"
-    }
+    ]
   }
 }
