@@ -6,6 +6,9 @@ on:
       - v*.*.*
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 permissions:
   contents: write
   pages: write
@@ -15,7 +18,17 @@ jobs:
   publish:
     name: Publish
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write # needed for provenance data generation
     steps:
+      - name: Verify NPM token
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+          npm whoami
+          npm token list
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -28,10 +41,10 @@ jobs:
         run: pnpm install
 
       - name: Build
-        run: npx nx build core --production && npx nx build w3c-utils && npx nx build markdown
+        run: npx nx run-many -t build --parallel --max-parallel=6
 
       - name: Publish package on NPM
-        run: npx nx release publish --access public --verbose
+        run: npx nx release publish --access public --yes
         shell: bash
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

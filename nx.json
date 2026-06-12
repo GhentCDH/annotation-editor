@@ -21,5 +21,18 @@
         }
       }
     }
-  ]
+  ],
+  "release": {
+    "version": {
+      "conventionalCommits": true,
+      "preVersionCommand": "npx nx run-many -t build"
+    },
+    "changelog": {
+      "automaticFromRef": true,
+      "workspaceChangelog": {
+        "createRelease": "github",
+        "file": "RELEASE_NOTES.md"
+      }
+    }
+  }
 }
