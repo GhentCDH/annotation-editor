@@ -36,8 +36,7 @@ export default defineConfig(() => ({
       external: [
         '@ghentcdh/annotated-text',
         '@ghentcdh/annotation-core',
-        '@ghentcdh/json-forms-core',
-        '@ghentcdh/json-forms-vue',
+        '@ghentcdh/crouton-forms-vue',
         '@ghentcdh/ui',
         '@ghentcdh/w3c-utils',
         '@jsonforms/core',

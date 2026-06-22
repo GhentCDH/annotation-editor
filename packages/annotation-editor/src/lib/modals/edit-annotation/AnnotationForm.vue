@@ -14,7 +14,7 @@ import { computed, onMounted } from 'vue';
 
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 
-import { JsonForm } from '@ghentcdh/json-forms-vue';
+import { JsonForm } from '@ghentcdh/crouton-forms-vue';
 import { useEditorState } from '../../composables/useEditorState';
 
 const formData = defineModel<any>();

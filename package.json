@@ -10,8 +10,9 @@
   "dependencies": {
     "@ghentcdh/annotated-text": "^1.0.10",
     "@ghentcdh/annotated-text--markdown": "^1.0.10",
-    "@ghentcdh/json-forms-core": "^2.0.0",
-    "@ghentcdh/json-forms-vue": "^2.0.0",
+    "@ghentcdh/crouton-core": "file:../crouton/dist/crouton-core",
+    "@ghentcdh/crouton-forms-vue": "file:../crouton/dist/crouton-forms-vue",
+    "@ghentcdh/crouton-vue": "file:../crouton/dist/crouton-vue",
     "@ghentcdh/ui": "^2.0.0",
     "@ghentcdh/w3c-utils": "^1.0.10",
     "@jsonforms/core": "^3.7.0",

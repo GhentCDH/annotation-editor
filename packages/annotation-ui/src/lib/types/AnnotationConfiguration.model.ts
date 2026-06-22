@@ -4,10 +4,10 @@ import {
   type CustomAnnotationStyle,
 } from '@ghentcdh/annotated-text';
 import { type UISchemaElement } from '@jsonforms/core';
-import type { JsonFormsLayout } from '@ghentcdh/json-forms-core';
 import { type AnnotationContext } from '@ghentcdh/annotation-core';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { type SourceModel } from './source.model';
+import { JsonFormsLayout } from '@ghentcdh/crouton-core';
 
 export type KeyLabel<KEY = string> = {
   key: KEY;

@@ -35,8 +35,6 @@ export default defineConfig(() => ({
         '@ghentcdh/annotated-text',
         '@ghentcdh/annotated-text--markdown',
         '@ghentcdh/annotation-core',
-        '@ghentcdh/json-forms-core',
-        '@ghentcdh/json-forms-vue',
         '@ghentcdh/ui',
         '@ghentcdh/w3c-utils',
         '@jsonforms/core',

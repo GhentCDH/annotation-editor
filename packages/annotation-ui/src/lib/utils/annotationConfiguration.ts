@@ -73,13 +73,6 @@ export const createAnnotationConfiguration = (
   const _createAnnotatedText = (id: string, sourceModel?: SourceModel) => {
     const annotatedText = createAnnotatedText<W3CAnnotation>(id);
 
-    if (sourceModel) {
-      const { content } = sourceModel;
-      annotatedText.setText(content.text).setTextAdapter({
-        textDirection: content.textDirection,
-      });
-    }
-
     annotatedText
       .setSnapper(new WordSnapper())
       .setAnnotationAdapter(
@@ -89,6 +82,13 @@ export const createAnnotationConfiguration = (
       .setRenderParams(renderParams())
       .setStyleParams(styleParams())
       .registerStyles(styles);
+
+    if (sourceModel) {
+      const { content } = sourceModel;
+      annotatedText
+        .setText(content.text)
+        .setTextAdapter({ textDirection: content.textDirection });
+    }
 
     return annotatedText;
   };
