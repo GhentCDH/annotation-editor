@@ -8,7 +8,9 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "ESNext",
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
@@ -22,9 +24,7 @@
       "@ghentcdh/annotation-preview": [
         "./packages/annotation-preview/src/index.ts"
       ],
-      "@ghentcdh/annotation-ui": [
-        "./packages/annotation-ui/src/index.ts"
-      ]
+      "@ghentcdh/annotation-ui": ["./packages/annotation-ui/src/index.ts"]
     }
   },
   "exclude": [

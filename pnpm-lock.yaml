@@ -14,12 +14,15 @@ importers:
       '@ghentcdh/annotated-text--markdown':
         specifier: ^1.0.10
         version: 1.0.10(@ghentcdh/annotated-text@1.0.10(@types/node@25.6.0)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0))(@types/node@25.6.0)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)(sass-embedded@1.99.0)(sass@1.99.0)(yaml@2.9.0)
-      '@ghentcdh/json-forms-core':
-        specifier: ^2.0.0
-        version: 2.0.0(@jsonforms/core@3.7.0)(zod@4.4.3)
-      '@ghentcdh/json-forms-vue':
-        specifier: ^2.0.0
-        version: 2.0.0(@ghentcdh/json-forms-core@2.0.0(@jsonforms/core@3.7.0)(zod@4.4.3))(@ghentcdh/ui@2.0.0(@ghentcdh/json-forms-core@2.0.0(@jsonforms/core@3.7.0)(zod@4.4.3))(@playwright/test@1.60.0)(@tiptap/pm@3.26.1)(@tiptap/starter-kit@3.26.1)(@tiptap/vue-3@3.26.1(@floating-ui/dom@1.7.6)(@tiptap/core@3.26.1(@tiptap/pm@3.26.1))(@tiptap/pm@3.26.1)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.26.1(@tiptap/pm@3.26.1)))(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3)))(@playwright/test@1.60.0)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))
+      '@ghentcdh/crouton-core':
+        specifier: file:../crouton/dist/crouton-core
+        version: crouton-core@file:../crouton/dist/crouton-core
+      '@ghentcdh/crouton-forms-vue':
+        specifier: file:../crouton/dist/crouton-forms-vue
+        version: file:../crouton/dist/crouton-forms-vue(@ghentcdh/ui@2.0.0(@ghentcdh/json-forms-core@2.0.0(@jsonforms/core@3.7.0)(zod@4.4.3))(@playwright/test@1.60.0)(@tiptap/pm@3.26.1)(@tiptap/starter-kit@3.26.1)(@tiptap/vue-3@3.26.1(@floating-ui/dom@1.7.6)(@tiptap/core@3.26.1(@tiptap/pm@3.26.1))(@tiptap/pm@3.26.1)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.26.1(@tiptap/pm@3.26.1)))(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3)))(@jsonforms/core@3.7.0)(@playwright/test@1.60.0)(crouton-core@file:../crouton/dist/crouton-core)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))(zod@4.4.3)
+      '@ghentcdh/crouton-vue':
+        specifier: file:../crouton/dist/crouton-vue
+        version: file:../crouton/dist/crouton-vue(d32e05416832395636637634724c102d)
       '@ghentcdh/ui':
         specifier: ^2.0.0
         version: 2.0.0(@ghentcdh/json-forms-core@2.0.0(@jsonforms/core@3.7.0)(zod@4.4.3))(@playwright/test@1.60.0)(@tiptap/pm@3.26.1)(@tiptap/starter-kit@3.26.1)(@tiptap/vue-3@3.26.1(@floating-ui/dom@1.7.6)(@tiptap/core@3.26.1(@tiptap/pm@3.26.1))(@tiptap/pm@3.26.1)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.26.1(@tiptap/pm@3.26.1)))(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))
@@ -1021,23 +1024,36 @@ packages:
   '@ghentcdh/annotated-text@1.0.10':
     resolution: {integrity: sha512-sLZIHym0rLDIc6cnulA5c9GgIQUfPDjzTZGVafNOW+SEjK1BcJcpyJx5y4a+n1EbVyNF7Bd/rdXQx+LXtHzA7g==}
 
+  '@ghentcdh/crouton-forms-vue@file:../crouton/dist/crouton-forms-vue':
+    resolution: {directory: ../crouton/dist/crouton-forms-vue, type: directory}
+    peerDependencies:
+      '@ghentcdh/crouton-core': workspace:*
+      '@ghentcdh/ui': '*'
+      '@jsonforms/core': '>=3.0.0'
+      '@playwright/test': '*'
+      vue: '>=3.0.0'
+      vue-router: '>=4.0.0'
+      zod: ^4.0.0
+    peerDependenciesMeta:
+      '@playwright/test':
+        optional: true
+
+  '@ghentcdh/crouton-vue@file:../crouton/dist/crouton-vue':
+    resolution: {directory: ../crouton/dist/crouton-vue, type: directory}
+    peerDependencies:
+      '@ghentcdh/crouton-forms-vue': '*'
+      '@ghentcdh/ui': '*'
+      '@jsonforms/core': '>=3.0.0'
+      axios: '>=1.0.0'
+      vue: '>=3.0.0'
+      vue-router: '>=4.0.0'
+      zod: ^4.0.0
+
   '@ghentcdh/json-forms-core@2.0.0':
     resolution: {integrity: sha512-2v6inZzYU1OUEAqnYIqTRUECM4bnqjmPfPkP++ClOEsSDpfTlLH63m6D+j+ppgi5/i2G44KSMfqrlxu0k45OuQ==}
     peerDependencies:
       '@jsonforms/core': 3.7.0
       zod: 4.3.6
-
-  '@ghentcdh/json-forms-vue@2.0.0':
-    resolution: {integrity: sha512-cu/KHUwHRsapki112B9FB5jnAXoLNzLMgXCizJHOZdwxPkToIJXjBKCg8FKxn/3t0J5aumYlYEvmkTZ8gc6rDQ==}
-    peerDependencies:
-      '@ghentcdh/json-forms-core': '>=0.0.1'
-      '@ghentcdh/ui': '>=0.6.0'
-      '@playwright/test': '>=1.50.0'
-      vue: ^3.5.0
-      vue-router: ^5.0.0
-    peerDependenciesMeta:
-      '@playwright/test':
-        optional: true
 
   '@ghentcdh/ui@2.0.0':
     resolution: {integrity: sha512-ZwuqEAvsqG3Bdq6lOobwV+J9ovAlQaermWbyITO8a/KGMmB5sGJpbnh7LeCAqWUm34EhNqP9725AnY91SbPtZQ==}
@@ -2927,6 +2943,9 @@ packages:
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
+
+  crouton-core@file:../crouton/dist/crouton-core:
+    resolution: {directory: ../crouton/dist/crouton-core, type: directory}
 
   cssesc@3.0.0:
     resolution: {integrity: sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==}
@@ -6038,21 +6057,33 @@ snapshots:
       - tsx
       - yaml
 
-  '@ghentcdh/json-forms-core@2.0.0(@jsonforms/core@3.7.0)(zod@4.4.3)':
+  '@ghentcdh/crouton-forms-vue@file:../crouton/dist/crouton-forms-vue(@ghentcdh/ui@2.0.0(@ghentcdh/json-forms-core@2.0.0(@jsonforms/core@3.7.0)(zod@4.4.3))(@playwright/test@1.60.0)(@tiptap/pm@3.26.1)(@tiptap/starter-kit@3.26.1)(@tiptap/vue-3@3.26.1(@floating-ui/dom@1.7.6)(@tiptap/core@3.26.1(@tiptap/pm@3.26.1))(@tiptap/pm@3.26.1)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.26.1(@tiptap/pm@3.26.1)))(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3)))(@jsonforms/core@3.7.0)(@playwright/test@1.60.0)(crouton-core@file:../crouton/dist/crouton-core)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))(zod@4.4.3)':
     dependencies:
-      '@jsonforms/core': 3.7.0
-      zod: 4.4.3
-
-  '@ghentcdh/json-forms-vue@2.0.0(@ghentcdh/json-forms-core@2.0.0(@jsonforms/core@3.7.0)(zod@4.4.3))(@ghentcdh/ui@2.0.0(@ghentcdh/json-forms-core@2.0.0(@jsonforms/core@3.7.0)(zod@4.4.3))(@playwright/test@1.60.0)(@tiptap/pm@3.26.1)(@tiptap/starter-kit@3.26.1)(@tiptap/vue-3@3.26.1(@floating-ui/dom@1.7.6)(@tiptap/core@3.26.1(@tiptap/pm@3.26.1))(@tiptap/pm@3.26.1)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.26.1(@tiptap/pm@3.26.1)))(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3)))(@playwright/test@1.60.0)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))':
-    dependencies:
-      '@ghentcdh/json-forms-core': 2.0.0(@jsonforms/core@3.7.0)(zod@4.4.3)
+      '@ghentcdh/crouton-core': crouton-core@file:../crouton/dist/crouton-core
       '@ghentcdh/ui': 2.0.0(@ghentcdh/json-forms-core@2.0.0(@jsonforms/core@3.7.0)(zod@4.4.3))(@playwright/test@1.60.0)(@tiptap/pm@3.26.1)(@tiptap/starter-kit@3.26.1)(@tiptap/vue-3@3.26.1(@floating-ui/dom@1.7.6)(@tiptap/core@3.26.1(@tiptap/pm@3.26.1))(@tiptap/pm@3.26.1)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.26.1(@tiptap/pm@3.26.1)))(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))
+      '@jsonforms/core': 3.7.0
       vee-validate: 4.15.1(vue@3.5.33(typescript@5.9.3))
       vue: 3.5.33(typescript@5.9.3)
       vue-router: 5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3))
       zod: 4.4.3
     optionalDependencies:
       '@playwright/test': 1.60.0
+
+  '@ghentcdh/crouton-vue@file:../crouton/dist/crouton-vue(d32e05416832395636637634724c102d)':
+    dependencies:
+      '@ghentcdh/crouton-forms-vue': file:../crouton/dist/crouton-forms-vue(@ghentcdh/ui@2.0.0(@ghentcdh/json-forms-core@2.0.0(@jsonforms/core@3.7.0)(zod@4.4.3))(@playwright/test@1.60.0)(@tiptap/pm@3.26.1)(@tiptap/starter-kit@3.26.1)(@tiptap/vue-3@3.26.1(@floating-ui/dom@1.7.6)(@tiptap/core@3.26.1(@tiptap/pm@3.26.1))(@tiptap/pm@3.26.1)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.26.1(@tiptap/pm@3.26.1)))(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3)))(@jsonforms/core@3.7.0)(@playwright/test@1.60.0)(crouton-core@file:../crouton/dist/crouton-core)(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))(zod@4.4.3)
+      '@ghentcdh/ui': 2.0.0(@ghentcdh/json-forms-core@2.0.0(@jsonforms/core@3.7.0)(zod@4.4.3))(@playwright/test@1.60.0)(@tiptap/pm@3.26.1)(@tiptap/starter-kit@3.26.1)(@tiptap/vue-3@3.26.1(@floating-ui/dom@1.7.6)(@tiptap/core@3.26.1(@tiptap/pm@3.26.1))(@tiptap/pm@3.26.1)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.26.1(@tiptap/pm@3.26.1)))(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))
+      '@jsonforms/core': 3.7.0
+      axios: 1.16.0
+      lodash-es: 4.18.1
+      vue: 3.5.33(typescript@5.9.3)
+      vue-router: 5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3))
+      zod: 4.4.3
+
+  '@ghentcdh/json-forms-core@2.0.0(@jsonforms/core@3.7.0)(zod@4.4.3)':
+    dependencies:
+      '@jsonforms/core': 3.7.0
+      zod: 4.4.3
 
   '@ghentcdh/ui@2.0.0(@ghentcdh/json-forms-core@2.0.0(@jsonforms/core@3.7.0)(zod@4.4.3))(@playwright/test@1.60.0)(@tiptap/pm@3.26.1)(@tiptap/starter-kit@3.26.1)(@tiptap/vue-3@3.26.1(@floating-ui/dom@1.7.6)(@tiptap/core@3.26.1(@tiptap/pm@3.26.1))(@tiptap/pm@3.26.1)(vue@3.5.33(typescript@5.9.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.26.1(@tiptap/pm@3.26.1)))(vue-router@5.0.6(@vue/compiler-sfc@3.5.33)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))':
     dependencies:
@@ -8000,6 +8031,8 @@ snapshots:
       path-key: 3.1.1
       shebang-command: 2.0.0
       which: 2.0.2
+
+  crouton-core@file:../crouton/dist/crouton-core: {}
 
   cssesc@3.0.0: {}
 
