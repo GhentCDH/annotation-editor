@@ -33,6 +33,7 @@ export default defineUserConfig({
         },
       },
     },
+    vuePluginOptions: {},
   }),
   theme: hopeTheme({
     docsRepo: 'https://github.com/GhentCDH/annotation-editor',
