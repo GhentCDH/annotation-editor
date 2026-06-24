@@ -1,9 +1,12 @@
 {
   "name": "@ghentcdh/annotation-preview",
-  "version": "0.0.1-3",
+  "version": "0.0.1-alpha",
   "module": "./index.mjs",
   "types": "./index.d.ts",
-  "repository.url": "https://github.com/GhentCDH/annotation-editor",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GhentCDH/annotation-editor"
+  },
   "exports": {
     ".": {
       "types": "./index.d.ts",

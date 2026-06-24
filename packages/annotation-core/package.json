@@ -1,7 +1,11 @@
 {
   "name": "@ghentcdh/annotation-core",
-  "version": "0.0.1",
+  "version": "0.0.1-alpha",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GhentCDH/annotation-editor"
+  },
   "type": "module",
   "main": "./index.js",
   "types": "./index.d.ts",
