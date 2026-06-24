@@ -1,6 +1,6 @@
 {
   "name": "@ghentcdh/annotation-preview",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.2",
   "module": "./index.mjs",
   "types": "./index.d.ts",
   "repository": {

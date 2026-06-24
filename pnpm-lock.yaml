@@ -193,9 +193,6 @@ importers:
       '@ghentcdh/annotated-text':
         specifier: ^1.0.9
         version: 1.0.10(@types/debug@4.1.13)(@types/node@25.6.0)(jiti@2.7.0)(jsdom@29.1.1)(lightningcss@1.32.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)
-      '@ghentcdh/annotation-core':
-        specifier: workspace:*
-        version: link:../annotation-core
       '@ghentcdh/w3c-utils':
         specifier: '*'
         version: 1.0.9(@types/debug@4.1.13)(@types/node@25.6.0)(jiti@2.7.0)(jsdom@29.1.1)(lightningcss@1.32.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)
