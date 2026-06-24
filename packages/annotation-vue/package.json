@@ -12,7 +12,7 @@
     "vue": "^3.5.0",
     "@ghentcdh/annotation-core": "workspace:*",
     "@ghentcdh/w3c-utils": "*",
-    "vue-router": "^4.0.0"
+    "vue-router": "^5.0.0"
   },
   "peerDependenciesMeta": {
     "vue-router": {
