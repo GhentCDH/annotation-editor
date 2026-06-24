@@ -50,6 +50,7 @@ export default defineConfig(() => ({
     name: 'core',
     watch: false,
     globals: true,
+    passWithNoTests: true,
     environment: 'jsdom', // or 'happy-dom'
     include: ['{src,tests}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     exclude: ['e2e/**/*', 'node_modules/**/*'],

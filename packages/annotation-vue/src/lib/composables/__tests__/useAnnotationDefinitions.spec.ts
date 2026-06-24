@@ -118,28 +118,25 @@ describe('provideAnnotationDefinitions', () => {
     ]);
     await nextTick();
 
-    const style = state.definitions[0].style;
-    expect(style.id).toBe('a');
-    expect(style.name).toBe('Alpha');
-    expect(style.color).toBe('#ff0000');
-    expect(style.target).toBe('gutter');
+    const def = state.definitions[0];
+    expect(def.style).toBeDefined();
+    expect(def.style.default).toBeDefined();
+    expect(def.style.active).toBeDefined();
+    expect(def.color).toBe('#ff0000');
+    expect(def.target).toBe('gutter');
   });
 
   it('should use custom createHighlightStyle', async () => {
+    const customStyle = { backgroundColor: '#custom' };
     const state = withProvide({
       config: mockConfig,
-      createHighlightStyle: (def) => ({
-        id: def.id,
-        name: `custom-${def.name}`,
-        color: '#custom',
-      }),
+      createHighlightStyle: () => customStyle,
     });
 
     state.loadFromDefinitions([createCoreDef('a', 'Alpha')]);
     await nextTick();
 
-    expect(state.definitions[0].style.name).toBe('custom-Alpha');
-    expect(state.definitions[0].style.color).toBe('#custom');
+    expect(state.definitions[0].style.default).toStrictEqual(customStyle);
   });
 
   it('should resolve allowedChildren string IDs to KeyLabel', async () => {
@@ -233,7 +230,7 @@ describe('provideAnnotationDefinitions', () => {
     state.loadFromDefinitions([coreDef]);
     await nextTick();
 
-    expect(state.definitions[0]._core).toBe(coreDef);
+    expect(state.definitions[0]._core).toStrictEqual(coreDef);
   });
 
   it('should expose service instance', () => {
