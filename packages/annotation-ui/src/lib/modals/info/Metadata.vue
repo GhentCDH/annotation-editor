@@ -21,7 +21,7 @@ import { computed } from 'vue';
 
 import { type ColumnDef, TextCell } from '@ghentcdh/ui';
 import { type UISchemaElement } from '@jsonforms/core';
-import { findColumnDef, type JsonFormsLayout } from '@ghentcdh/crouton-core';
+import { findColumnDef, type JsonFormsLayout } from '@ghentcdh/crouton-forms-vue';
 
 const properties = defineProps<{
   data: any;

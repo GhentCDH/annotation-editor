@@ -10,9 +10,9 @@
   "dependencies": {
     "@ghentcdh/annotated-text": "^1.0.10",
     "@ghentcdh/annotated-text--markdown": "^1.0.10",
-    "@ghentcdh/crouton-forms-vue": "0.0.1-alpha.1",
-    "@ghentcdh/crouton-vue": "0.0.1-alpha.1",
-    "@ghentcdh/ui": "^2.0.0",
+    "@ghentcdh/crouton-forms-vue": "0.0.1-alpha.5",
+    "@ghentcdh/crouton-vue": "0.0.1-alpha.5",
+    "@ghentcdh/ui": "^3.0.0",
     "@ghentcdh/w3c-utils": "^1.0.10",
     "@jsonforms/core": "^3.7.0",
     "@nestjs/common": "^11.1.19",
@@ -41,6 +41,7 @@
     "@vitejs/plugin-vue": "^6.0.6",
     "@vitest/coverage-v8": "^3.2.4",
     "@vue/test-utils": "^2.4.6",
+    "@vuepress/bundler-vite": "2.0.0-rc.26",
     "eslint-plugin-import-x": "^4.16.2",
     "eslint-plugin-vue": "^10.9.1",
     "husky": "^9.1.7",
@@ -57,7 +58,6 @@
     "vite-plugin-dts": "^5.0.0",
     "vitest": "^3.2.4",
     "vue-tsc": "^3.2.8",
-    "@vuepress/bundler-vite": "2.0.0-rc.26",
     "vuepress": "2.0.0-rc.26",
     "vuepress-theme-hope": "2.0.0-rc.107"
   },

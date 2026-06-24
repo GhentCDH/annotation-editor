@@ -20,7 +20,7 @@
 import { computed } from 'vue';
 
 import { type ColumnDef, TextCell } from '@ghentcdh/ui';
-import { findColumnDef, type JsonFormsLayout } from '@ghentcdh/crouton-core';
+import { findColumnDef, type JsonFormsLayout } from '@ghentcdh/crouton-forms-vue';
 import { type UISchemaElement } from '@jsonforms/core';
 
 const properties = defineProps<{

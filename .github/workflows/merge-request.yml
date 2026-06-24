@@ -12,17 +12,14 @@ permissions:
 
 env:
   DEPENDENCIES_CACHE: cache-node-modules
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   install-deps:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/use-cache
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
@@ -30,30 +27,29 @@ jobs:
     runs-on: ubuntu-latest
     needs: install-deps
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/use-cache
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - uses: nrwl/nx-set-shas@v4
+      - uses: nrwl/nx-set-shas@v5
       - run: npx nx run-many -t build -c production --parallel --max-parallel=6
 
   test:
     runs-on: ubuntu-latest
     needs: install-deps
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - uses: ./.github/actions/use-cache
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
     - name: Run unit tests with coverage
-      continue-on-error: true
       run: npx nx run-many -t test --parallel --max-parallel=6
 
   lint:
     runs-on: ubuntu-latest
     needs: install-deps
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/use-cache
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
