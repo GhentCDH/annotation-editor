@@ -17,6 +17,10 @@ export default defineConfig(() => ({
       entryRoot: 'src',
       tsconfigPath: path.join(__dirname, 'tsconfig.lib.json'),
       pathsToAliases: false,
+      bundledPackages: [
+        '@ghentcdh/annotation-core',
+        '@ghentcdh/annotation-ui',
+      ],
     }),
   ],
   build: {
@@ -35,7 +39,7 @@ export default defineConfig(() => ({
     rollupOptions: {
       external: [
         '@ghentcdh/annotated-text',
-        '@ghentcdh/annotation-core',
+        '@ghentcdh/annotated-text--markdown',
         '@ghentcdh/crouton-forms-vue',
         '@ghentcdh/ui',
         '@ghentcdh/w3c-utils',

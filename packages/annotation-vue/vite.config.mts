@@ -15,6 +15,7 @@ export default defineConfig(() => ({
       entryRoot: 'src',
       tsconfigPath: path.join(import.meta.dirname, 'tsconfig.lib.json'),
       pathsToAliases: false,
+      bundledPackages: ['@ghentcdh/annotation-core'],
     }),
   ],
   build: {
@@ -33,11 +34,11 @@ export default defineConfig(() => ({
     rollupOptions: {
       external: [
         '@ghentcdh/annotated-text',
-        '@ghentcdh/annotation-core',
         '@ghentcdh/w3c-utils',
         'vue',
         '@vue/runtime-dom',
         'vue-router',
+        'zod',
       ],
     },
   },

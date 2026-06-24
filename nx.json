@@ -23,6 +23,12 @@
     }
   ],
   "release": {
+    "projects": [
+      "annotation-api",
+      "annotation-editor",
+      "annotation-preview",
+      "annotation-vue"
+    ],
     "version": {
       "conventionalCommits": true,
       "preVersionCommand": "npx nx run-many -t build"

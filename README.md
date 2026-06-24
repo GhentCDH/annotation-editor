@@ -1,3 +1,11 @@
+[![Build](https://github.com/GhentCDH/annotation-editor/actions/workflows/merge-request.yml/badge.svg)](https://github.com/GhentCDH/annotation-editor/actions/workflows/merge-request.yml)
+[![Publish](https://github.com/GhentCDH/annotation-editor/actions/workflows/publish.yml/badge.svg)](https://github.com/GhentCDH/annotation-editor/actions/workflows/publish.yml)
+[![Publish Docs](https://github.com/GhentCDH/annotation-editor/actions/workflows/publish-docs.yml/badge.svg)](https://github.com/GhentCDH/annotation-editor/actions/workflows/publish-docs.yml)
+[![annotation-editor](https://img.shields.io/npm/v/@ghentcdh/annotation-editor.svg?label=annotation-editor)](https://www.npmjs.com/package/@ghentcdh/annotation-editor)
+[![annotation-api](https://img.shields.io/npm/v/@ghentcdh/annotation-api.svg?label=annotation-api)](https://www.npmjs.com/package/@ghentcdh/annotation-api)
+[![annotation-vue](https://img.shields.io/npm/v/@ghentcdh/annotation-vue.svg?label=annotation-vue)](https://www.npmjs.com/package/@ghentcdh/annotation-vue)
+[![annotation-preview](https://img.shields.io/npm/v/@ghentcdh/annotation-preview.svg?label=annotation-preview)](https://www.npmjs.com/package/@ghentcdh/annotation-preview)
+
 # Annotation Editor
 
 Monorepo for W3C-compliant annotation editing. Provides a NestJS API module for serving annotation definitions, a shared core library for types and validation, and a Vue 3 editor component for creating and managing annotations on text sources.

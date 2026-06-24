@@ -1,7 +1,6 @@
 {
   "name": "@ghentcdh/annotation-vue",
   "version": "0.0.1-alpha",
-  "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/GhentCDH/annotation-editor"
@@ -14,9 +13,9 @@
   },
   "peerDependencies": {
     "vue": "^3.5.0",
-    "@ghentcdh/annotation-core": "workspace:*",
     "@ghentcdh/w3c-utils": "*",
-    "vue-router": "^5.0.0"
+    "vue-router": "^5.0.0",
+    "zod": "^4.0.0"
   },
   "peerDependenciesMeta": {
     "vue-router": {

@@ -18,6 +18,7 @@ export default defineConfig({
       tsconfigPath: path.resolve(__dirname, 'tsconfig.lib.json'),
       pathsToAliases: false,
       insertTypesEntry: true,
+      bundledPackages: ['@ghentcdh/annotation-core'],
     }),
   ],
 
@@ -40,7 +41,7 @@ export default defineConfig({
         'node:fs',
         'node:path',
 
-        '@ghentcdh/annotation-core',
+        '@ghentcdh/annotated-text',
         '@ghentcdh/json-forms-core',
         '@ghentcdh/w3c-utils',
         '@nestjs/common',

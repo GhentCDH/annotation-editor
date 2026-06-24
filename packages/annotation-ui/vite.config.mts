@@ -17,6 +17,7 @@ export default defineConfig(() => ({
       entryRoot: 'src',
       tsconfigPath: path.join(__dirname, 'tsconfig.lib.json'),
       pathsToAliases: false,
+      bundledPackages: ['@ghentcdh/annotation-core'],
     }),
   ],
   build: {
@@ -34,7 +35,6 @@ export default defineConfig(() => ({
       external: [
         '@ghentcdh/annotated-text',
         '@ghentcdh/annotated-text--markdown',
-        '@ghentcdh/annotation-core',
         '@ghentcdh/ui',
         '@ghentcdh/w3c-utils',
         '@jsonforms/core',
