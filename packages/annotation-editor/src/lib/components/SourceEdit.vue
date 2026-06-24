@@ -4,7 +4,10 @@
     @create-annotation="createAnnotation"
   />
   <div class="overflow-y-auto flex-1 min-h-0">
-    <div :id="textUuid" :dir="source.content.textDirection" />
+    <div
+      :id="textUuid"
+      :dir="source.content.textDirection"
+    />
   </div>
 </template>
 <script lang="ts" setup>

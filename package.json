@@ -10,9 +10,8 @@
   "dependencies": {
     "@ghentcdh/annotated-text": "^1.0.10",
     "@ghentcdh/annotated-text--markdown": "^1.0.10",
-    "@ghentcdh/crouton-core": "file:../crouton/dist/crouton-core",
-    "@ghentcdh/crouton-forms-vue": "file:../crouton/dist/crouton-forms-vue",
-    "@ghentcdh/crouton-vue": "file:../crouton/dist/crouton-vue",
+    "@ghentcdh/crouton-forms-vue": "0.0.1-alpha.1",
+    "@ghentcdh/crouton-vue": "0.0.1-alpha.1",
     "@ghentcdh/ui": "^2.0.0",
     "@ghentcdh/w3c-utils": "^1.0.10",
     "@jsonforms/core": "^3.7.0",
@@ -57,7 +56,10 @@
     "vite": "^8.0.10",
     "vite-plugin-dts": "^5.0.0",
     "vitest": "^3.2.4",
-    "vue-tsc": "^3.2.8"
+    "vue-tsc": "^3.2.8",
+    "@vuepress/bundler-vite": "2.0.0-rc.26",
+    "vuepress": "2.0.0-rc.26",
+    "vuepress-theme-hope": "2.0.0-rc.107"
   },
   "pnpm": {
     "linkWorkspacePackages": true,

@@ -1,10 +1,16 @@
 <template>
   <table class="border border-gray-300 table table-zebra table-sm">
     <tbody>
-      <tr v-for="key in keys" :key="key.id">
+      <tr
+        v-for="key in keys"
+        :key="key.id"
+      >
         <th>{{ key.label }}</th>
         <td>
-          <TextCell :column="key" :data="data" />
+          <TextCell
+            :column="key"
+            :data="data"
+          />
         </td>
       </tr>
     </tbody>
@@ -13,8 +19,8 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { ColumnDef, TextCell } from '@ghentcdh/ui';
-import { findColumnDef, JsonFormsLayout } from '@ghentcdh/crouton-core';
+import { type ColumnDef, TextCell } from '@ghentcdh/ui';
+import { findColumnDef, type JsonFormsLayout } from '@ghentcdh/crouton-core';
 import { type UISchemaElement } from '@jsonforms/core';
 
 const properties = defineProps<{

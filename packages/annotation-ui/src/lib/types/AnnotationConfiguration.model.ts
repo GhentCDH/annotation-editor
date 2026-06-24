@@ -6,8 +6,8 @@ import {
 import { type UISchemaElement } from '@jsonforms/core';
 import { type AnnotationContext } from '@ghentcdh/annotation-core';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
+import { type JsonFormsLayout } from '@ghentcdh/crouton-core';
 import { type SourceModel } from './source.model';
-import { JsonFormsLayout } from '@ghentcdh/crouton-core';
 
 export type KeyLabel<KEY = string> = {
   key: KEY;
