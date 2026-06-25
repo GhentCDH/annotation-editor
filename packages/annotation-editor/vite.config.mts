@@ -4,7 +4,13 @@ import vue from '@vitejs/plugin-vue';
 import dts from 'vite-plugin-dts';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
+import { bundleDtsImports } from '../../tools/vite/bundle-dts-imports.mts';
 import * as path from 'path';
+
+const bundledPackages = [
+  '@ghentcdh/annotation-core',
+  '@ghentcdh/annotation-ui',
+];
 
 export default defineConfig(() => ({
   root: __dirname,
@@ -17,11 +23,12 @@ export default defineConfig(() => ({
       entryRoot: 'src',
       tsconfigPath: path.join(__dirname, 'tsconfig.lib.json'),
       pathsToAliases: false,
-      bundledPackages: [
-        '@ghentcdh/annotation-core',
-        '@ghentcdh/annotation-ui',
-      ],
     }),
+    bundleDtsImports(
+      '../../dist/packages/annotation-editor',
+      bundledPackages,
+      __dirname
+    ),
   ],
   build: {
     outDir: '../../dist/packages/annotation-editor',

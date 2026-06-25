@@ -13,6 +13,12 @@
     "build": {
       "executor": "@nx/vite:build",
       "outputs": ["{options.outputPath}"],
+      "dependsOn": [
+        {
+          "projects": ["annotation-core", "annotation-ui"],
+          "target": "build"
+        }
+      ],
       "options": {
         "outputPath": "dist/packages/annotation-editor",
         "configFile": "packages/annotation-editor/vite.config.mts"

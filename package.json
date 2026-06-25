@@ -11,6 +11,8 @@
     "@eslint/js": "^10.0.1",
     "@ghentcdh/annotated-text": "^1.0.10",
     "@ghentcdh/annotated-text--markdown": "^1.0.10",
+    "@ghentcdh/annotation-core": "workspace:*",
+    "@ghentcdh/annotation-ui": "workspace:*",
     "@ghentcdh/crouton-forms-vue": "0.0.1-alpha.7",
     "@ghentcdh/crouton-vue": "0.0.1-alpha.7",
     "@ghentcdh/ui": "^3.0.1",
