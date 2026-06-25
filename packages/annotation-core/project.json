@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/annotation-core/src",
   "projectType": "library",
-  "tags": [],
+  "tags": ["scope:annotation", "type:util"],
   "targets": {
 "build": {
       "executor": "@nx/vite:build",

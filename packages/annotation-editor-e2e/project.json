@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/annotation-editor-e2e/src",
   "projectType": "application",
-  "tags": ["e2e"],
+  "tags": ["scope:annotation", "type:e2e"],
   "targets": {
     "e2e": {
       "executor": "@nx/playwright:playwright",

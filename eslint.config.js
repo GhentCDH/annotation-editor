@@ -30,9 +30,34 @@ export default [
           enforceBuildableLibDependency: true,
           allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?[jt]s$'],
           depConstraints: [
+            // util: only depends on other util — no ui, backend, or cli
             {
-              sourceTag: '*',
-              onlyDependOnLibsWithTags: ['*'],
+              sourceTag: 'type:util',
+              onlyDependOnLibsWithTags: ['type:util'],
+            },
+            // backend (NestJS): only util — no Vue
+            {
+              sourceTag: 'type:backend',
+              onlyDependOnLibsWithTags: ['type:util'],
+            },
+            // ui (Vue): util + other ui — no NestJS
+            {
+              sourceTag: 'type:ui',
+              onlyDependOnLibsWithTags: ['type:util', 'type:ui'],
+            },
+            // e2e: can use util + ui
+            {
+              sourceTag: 'type:e2e',
+              onlyDependOnLibsWithTags: ['type:util', 'type:ui', 'type:e2e'],
+            },
+            // feature isolation: editor and preview cannot depend on each other
+            {
+              sourceTag: 'feature:editor',
+              notDependOnLibsWithTags: ['feature:preview'],
+            },
+            {
+              sourceTag: 'feature:preview',
+              notDependOnLibsWithTags: ['feature:editor'],
             },
           ],
         },
