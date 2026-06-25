@@ -5,11 +5,5 @@ export * from './lib/service/annotation-definition.loader';
 export * from './lib/resource/annotation-resource-definition.service';
 export * from './lib/resource/annotation-resource.loader';
 export * from './lib/utils/annotation.context-builder';
-export {
-  type AnnotationColumnFieldInput,
-  type AnnotationColumnConfig,
-  type AnnotationJsonConfig,
-  annotationColumnDefinition,
-  annotationDefinition,
-  type AnnotationDefinition,
-} from '@ghentcdh/annotation-core';
+// Re-export everything from annotation-core for consumers who only depend on annotation-api
+export * from '@ghentcdh/annotation-core';
