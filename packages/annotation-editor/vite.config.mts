@@ -40,8 +40,8 @@ export default defineConfig(() => ({
     lib: {
       entry: 'src/index.ts',
       name: 'AnnotationEditor',
-      fileName: 'index',
-      format: ['cjs', 'esm', 'es'],
+      fileName: (format) => (format === 'es' ? 'index.mjs' : 'index.js'),
+      formats: ['es', 'cjs'],
     },
     rollupOptions: {
       external: [

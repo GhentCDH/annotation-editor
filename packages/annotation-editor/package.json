@@ -5,6 +5,7 @@
     "type": "git",
     "url": "https://github.com/GhentCDH/annotation-editor"
   },
+  "main": "./index.js",
   "module": "./index.mjs",
   "types": "./index.d.ts",
   "exports": {
@@ -13,7 +14,7 @@
       "import": "./index.mjs",
       "require": "./index.js"
     },
-    "./index.css": "./index.css",
+    "./index.css": "./annotation-editor.css",
     "./package.json": "./package.json"
   }
 }
