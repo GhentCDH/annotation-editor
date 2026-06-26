@@ -1,3 +1,13 @@
+## 0.0.1-alpha.7 (2026-06-26)
+
+### 🩹 Fixes
+
+- exports in packages ([1170914](https://github.com/GhentCDH/annotation-editor/commit/1170914))
+
+### ❤️ Thank You
+
+- Bo Vandersteene
+
 ## 0.0.1-alpha.6 (2026-06-25)
 
 This was a version bump only, there were no code changes.
