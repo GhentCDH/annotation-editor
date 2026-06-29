@@ -4,6 +4,8 @@ import { viteBundler } from '@vuepress/bundler-vite';
 import { defineUserConfig } from 'vuepress';
 import { hopeTheme } from 'vuepress-theme-hope';
 
+import guideSideBar from '../guide/typedoc_sidebar.json' with { type: 'json' };
+
 export default defineUserConfig({
   base: process.env.DOCS_BASE ? `${process.env.DOCS_BASE}/` : '/',
   title: 'Annotation Editor',
@@ -16,19 +18,34 @@ export default defineUserConfig({
       resolve: {
         alias: {
           '@ghentcdh/annotation-editor': fileURLToPath(
-            new URL('../../packages/annotation-editor/src/index.ts', import.meta.url),
+            new URL(
+              '../../packages/annotation-editor/src/index.ts',
+              import.meta.url,
+            ),
           ),
           '@ghentcdh/annotation-preview': fileURLToPath(
-            new URL('../../packages/annotation-preview/src/index.ts', import.meta.url),
+            new URL(
+              '../../packages/annotation-preview/src/index.ts',
+              import.meta.url,
+            ),
           ),
           '@ghentcdh/annotation-vue': fileURLToPath(
-            new URL('../../packages/annotation-vue/src/index.ts', import.meta.url),
+            new URL(
+              '../../packages/annotation-vue/src/index.ts',
+              import.meta.url,
+            ),
           ),
           '@ghentcdh/annotation-ui': fileURLToPath(
-            new URL('../../packages/annotation-ui/src/index.ts', import.meta.url),
+            new URL(
+              '../../packages/annotation-ui/src/index.ts',
+              import.meta.url,
+            ),
           ),
           '@ghentcdh/annotation-core': fileURLToPath(
-            new URL('../../packages/annotation-core/src/index.ts', import.meta.url),
+            new URL(
+              '../../packages/annotation-core/src/index.ts',
+              import.meta.url,
+            ),
           ),
         },
       },
@@ -61,11 +78,7 @@ export default defineUserConfig({
     sidebar: [
       {
         text: 'Guide',
-        children: [
-          '/guide/quick-start.md',
-          '/guide/annotation-editor.md',
-          '/guide/annotation-preview.md',
-        ],
+        children: guideSideBar,
       },
     ],
   }),
