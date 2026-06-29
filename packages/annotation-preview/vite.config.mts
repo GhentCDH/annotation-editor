@@ -27,7 +27,7 @@ export default defineConfig(() => ({
     bundleDtsImports(
       '../../dist/packages/annotation-preview',
       bundledPackages,
-      __dirname
+      __dirname,
     ),
   ],
   build: {
@@ -46,7 +46,6 @@ export default defineConfig(() => ({
     rollupOptions: {
       external: [
         '@ghentcdh/annotated-text',
-        '@ghentcdh/annotated-text--markdown',
         '@ghentcdh/ui',
         '@ghentcdh/w3c-utils',
         '@jsonforms/core',

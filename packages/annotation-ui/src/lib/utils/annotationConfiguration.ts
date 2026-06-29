@@ -2,12 +2,12 @@ import {
   type AnnotationAdapter,
   createAnnotatedText,
   type CustomAnnotationStyle,
+  PlainTextAdapter,
   type TextAdapter,
   W3CAnnotationAdapter,
   WordSnapper,
 } from '@ghentcdh/annotated-text';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-import { MarkdownTextAdapter } from '@ghentcdh/annotated-text--markdown';
 import { defaultRender, styleFn } from './annotation.style';
 import { type AnnotationUtils } from './annotation-utils';
 import {
@@ -78,7 +78,7 @@ export const createAnnotationConfiguration = (
       .setAnnotationAdapter(
         annotationAdapter ?? defaultAnnotationAdapter(sourceModel),
       )
-      .setTextAdapter(textAdapter ?? MarkdownTextAdapter())
+      .setTextAdapter(textAdapter ?? PlainTextAdapter())
       .setRenderParams(renderParams())
       .setStyleParams(styleParams())
       .registerStyles(styles);
