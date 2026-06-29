@@ -1,0 +1,32 @@
+{
+  "id": "keyconcepts",
+  "name": "Key Concepts",
+  "color": "#712793",
+  "target": "highlight",
+  "columns": [
+    {
+      "id": "value",
+      "label": "Term",
+      "type": { "type": "string" },
+      "fieldInput": {
+        "type": "text",
+        "options": {}
+      }
+    },
+    {
+      "id": "language",
+      "label": "Language",
+      "type": { "type": "string" },
+      "fieldInput": {
+        "type": "select",
+        "options": {
+          "values": [
+            { "value": "en", "label": "English" },
+            { "value": "nl", "label": "Dutch" },
+            { "value": "ar", "label": "Arabic" }
+          ]
+        }
+      }
+    }
+  ]
+}

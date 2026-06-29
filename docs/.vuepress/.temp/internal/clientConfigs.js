@@ -18,6 +18,7 @@ import * as clientConfig16 from '/Users/bovandersteene/project/ugent/annotations
 import * as clientConfig17 from '/Users/bovandersteene/project/ugent/annotations/annotation-editor/node_modules/.pnpm/@vuepress+plugin-nprogress@2.0.0-rc.130_@vuepress+bundler-vite@2.0.0-rc.26_@types+node@_1ce1bea005f4c85c7d977286ed3334ac/node_modules/@vuepress/plugin-nprogress/dist/client/config.js'
 import * as clientConfig18 from '/Users/bovandersteene/project/ugent/annotations/annotation-editor/node_modules/.pnpm/@vuepress+plugin-redirect@2.0.0-rc.130_@vuepress+bundler-vite@2.0.0-rc.26_@types+node@2_953ae53c0fd45ce722c20637e9015007/node_modules/@vuepress/plugin-redirect/dist/client/config.js'
 import * as clientConfig19 from '/Users/bovandersteene/project/ugent/annotations/annotation-editor/docs/.vuepress/.temp/theme-hope/config.js'
+import * as clientConfig20 from '/Users/bovandersteene/project/ugent/annotations/annotation-editor/docs/.vuepress/client.ts'
 
 export const clientConfigs = [
   clientConfig0,
@@ -40,4 +41,5 @@ export const clientConfigs = [
   clientConfig17,
   clientConfig18,
   clientConfig19,
+  clientConfig20,
 ].map((m) => m.default).filter(Boolean)

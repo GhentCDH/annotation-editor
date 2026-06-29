@@ -4,8 +4,11 @@ export const buildControlElement = (column: AnnotationColumnConfig) => {
   const options: any = {};
 
   if (column.fieldInput) {
-    const { type, options: fieldOptions } = column.fieldInput;
+    const { type } = column.fieldInput;
+    const fieldOptions = column.fieldInput.options ?? {};
     options.format = type;
+
+    if (fieldOptions.colspan) options.colspan = fieldOptions.colspan;
 
     if (type === 'autocomplete') {
       options.dataField = 'data';
@@ -16,6 +19,16 @@ export const buildControlElement = (column: AnnotationColumnConfig) => {
       if (fieldOptions.enableCreate !== undefined) {
         options.enableCreate = fieldOptions.enableCreate;
       }
+    }
+
+    if (type === 'select') {
+      if (fieldOptions.values) options.values = fieldOptions.values;
+      if (fieldOptions.clearable !== undefined)
+        options.clearable = fieldOptions.clearable;
+      if (fieldOptions.storeValue !== undefined)
+        options.storeValue = fieldOptions.storeValue;
+      if (fieldOptions.emitObject !== undefined)
+        options.emitObject = fieldOptions.emitObject;
     }
   }
 

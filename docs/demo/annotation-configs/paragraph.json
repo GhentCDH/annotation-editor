@@ -1,0 +1,19 @@
+{
+  "id": "paragraph",
+  "name": "paragraph",
+  "color": "#1e55cf",
+  "target": "gutter",
+  "allowedChildren": ["animals", "keyconcepts", "emotion"],
+  "isRoot": true,
+  "columns": [
+    {
+      "id": "value",
+      "label": "Value",
+      "type": { "type": "string" },
+      "fieldInput": {
+        "type": "text",
+        "options": {}
+      }
+    }
+  ]
+}

@@ -1,16 +1,18 @@
 <template>
+  <JsonForm
+    :id="`annotation-selection-modal`"
+    :form-data="data"
+    :readonly="true"
+    :schema="schema"
+    :ui-schema="uiSchema"
+  />
   <table class="border border-gray-300 table table-zebra table-sm">
     <tbody>
-      <tr
-        v-for="key in keys"
-        :key="key.id"
-      >
+      <tr v-for="key in keys" :key="key.id">
+        <th>{{ key }}</th>
         <th>{{ key.label }}</th>
         <td>
-          <TextCell
-            :column="key"
-            :data="data"
-          />
+          <TextCell :column="key" :data="data" />
         </td>
       </tr>
     </tbody>
@@ -20,7 +22,7 @@
 import { computed } from 'vue';
 
 import { type ColumnDef, TextCell } from '@ghentcdh/ui';
-import { findColumnDef, type JsonFormsLayout } from '@ghentcdh/crouton-forms-vue';
+import { findColumnDef, JsonForm, type JsonFormsLayout } from '@ghentcdh/crouton-forms-vue';
 import { type UISchemaElement } from '@jsonforms/core';
 
 const properties = defineProps<{

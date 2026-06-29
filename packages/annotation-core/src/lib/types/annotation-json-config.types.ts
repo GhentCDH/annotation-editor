@@ -1,11 +1,17 @@
 export type AnnotationColumnFieldInput = {
   type: 'autocomplete' | 'text' | 'select';
+  position?: number;
   options: {
     uri?: string;
     resource?: string;
     valueKey?: string;
     labelKey?: string;
     enableCreate?: boolean | string;
+    colspan?: number;
+    clearable?: boolean;
+    storeValue?: boolean;
+    emitObject?: boolean;
+    values?: { value: string; label: string }[];
   };
 };
 

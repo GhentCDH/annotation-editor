@@ -122,8 +122,17 @@ const copyMd = (
   });
 };
 
+// ── root README → docs/guide/demo.md (appears in guide sidebar) ──────────────
+if (fs.existsSync('README.md')) {
+  // eslint-disable-next-line no-console
+  console.log('Copying README.md to docs/guide/demo.md');
+  fs.copyFileSync('README.md', path.join(docsPath, 'guide/demo.md'));
+}
+
 // ── guide (committed directly in docs/guide) ─────────────────────────────────
+// Run after the README copy so demo.md is included in the generated sidebar.
 createMenu('guide');
+createMenu('demo');
 
 // ── root README → docs home ───────────────────────────────────────────────────
 copyMd('', '', { depth: 1, readmeOnly: true });

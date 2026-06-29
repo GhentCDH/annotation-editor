@@ -5,6 +5,7 @@ import { defineUserConfig } from 'vuepress';
 import { hopeTheme } from 'vuepress-theme-hope';
 
 import guideSideBar from '../guide/typedoc_sidebar.json' with { type: 'json' };
+import demoSideBar from '../demo/typedoc_sidebar.json' with { type: 'json' };
 
 export default defineUserConfig({
   base: process.env.DOCS_BASE ? `${process.env.DOCS_BASE}/` : '/',
@@ -17,6 +18,18 @@ export default defineUserConfig({
       plugins: [tailwindcss()],
       resolve: {
         alias: {
+          '@ghentcdh/annotation-editor/index.css': fileURLToPath(
+            new URL(
+              '../../packages/annotation-editor/src/lib/styles.css',
+              import.meta.url,
+            ),
+          ),
+          '@ghentcdh/annotation-preview/index.css': fileURLToPath(
+            new URL(
+              '../../packages/annotation-preview/src/lib/styles.css',
+              import.meta.url,
+            ),
+          ),
           '@ghentcdh/annotation-editor': fileURLToPath(
             new URL(
               '../../packages/annotation-editor/src/index.ts',
@@ -47,6 +60,7 @@ export default defineUserConfig({
               import.meta.url,
             ),
           ),
+          '@demo': fileURLToPath(new URL('../demo', import.meta.url)),
         },
       },
     },
@@ -79,6 +93,10 @@ export default defineUserConfig({
       {
         text: 'Guide',
         children: guideSideBar,
+      },
+      {
+        text: 'Demo',
+        children: demoSideBar,
       },
     ],
   }),

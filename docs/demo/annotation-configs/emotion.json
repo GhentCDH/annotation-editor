@@ -1,0 +1,17 @@
+{
+  "id": "emotion",
+  "name": "Emotion",
+  "color": "#f3ff4d",
+  "target": "highlight",
+  "columns": [
+    {
+      "id": "name",
+      "label": "name",
+      "type": { "type": "string" },
+      "fieldInput": {
+        "colspan": 12,
+        "type": "string"
+      }
+    }
+  ]
+}
