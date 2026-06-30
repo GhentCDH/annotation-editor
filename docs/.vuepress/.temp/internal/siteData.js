@@ -1,1 +1,0 @@
-export const siteData = JSON.parse("{\"base\":\"/\",\"lang\":\"en-US\",\"title\":\"Annotation Editor\",\"description\":\"W3C-compliant annotation editing components for Vue 3\",\"head\":[],\"locales\":{}}")
