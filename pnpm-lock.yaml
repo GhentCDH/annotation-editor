@@ -32,13 +32,13 @@ importers:
         version: link:packages/annotation-ui
       '@ghentcdh/crouton-forms-vue':
         specifier: 0.0.1-alpha.18
-        version: 0.0.1-alpha.18(@ghentcdh/ui@3.0.2(@ghentcdh/json-forms-core@3.0.2)(@playwright/test@1.61.1)(@tiptap/pm@3.27.1)(@tiptap/starter-kit@3.27.1)(@tiptap/vue-3@3.27.1(@floating-ui/dom@1.7.6)(@tiptap/core@3.27.1(@tiptap/pm@3.27.1))(@tiptap/pm@3.27.1)(vue@3.5.39(typescript@6.0.3)))(vue-router@5.1.0(@vue/compiler-sfc@3.5.39)(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3)))(@jsonforms/core@3.8.0)(@playwright/test@1.61.1)(vue-router@5.1.0(@vue/compiler-sfc@3.5.39)(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3))(zod@4.4.3)
+        version: 0.0.1-alpha.18(@ghentcdh/ui@3.0.3(@ghentcdh/json-forms-core@3.0.2)(@playwright/test@1.61.1)(@tiptap/pm@3.27.1)(@tiptap/starter-kit@3.27.1)(@tiptap/vue-3@3.27.1(@floating-ui/dom@1.7.6)(@tiptap/core@3.27.1(@tiptap/pm@3.27.1))(@tiptap/pm@3.27.1)(vue@3.5.39(typescript@6.0.3)))(vue-router@5.1.0(@vue/compiler-sfc@3.5.39)(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3)))(@jsonforms/core@3.8.0)(@playwright/test@1.61.1)(vue-router@5.1.0(@vue/compiler-sfc@3.5.39)(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3))(zod@4.4.3)
       '@ghentcdh/crouton-vue':
         specifier: 0.0.1-alpha.18
-        version: 0.0.1-alpha.18(3a2bbc35920b005722ce2fdf8ff1d735)
+        version: 0.0.1-alpha.18(19fb768f5464d604818f4e7da47f82f7)
       '@ghentcdh/ui':
-        specifier: ^3.0.2
-        version: 3.0.2(@ghentcdh/json-forms-core@3.0.2)(@playwright/test@1.61.1)(@tiptap/pm@3.27.1)(@tiptap/starter-kit@3.27.1)(@tiptap/vue-3@3.27.1(@floating-ui/dom@1.7.6)(@tiptap/core@3.27.1(@tiptap/pm@3.27.1))(@tiptap/pm@3.27.1)(vue@3.5.39(typescript@6.0.3)))(vue-router@5.1.0(@vue/compiler-sfc@3.5.39)(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3))
+        specifier: ^3.0.3
+        version: 3.0.3(@ghentcdh/json-forms-core@3.0.2)(@playwright/test@1.61.1)(@tiptap/pm@3.27.1)(@tiptap/starter-kit@3.27.1)(@tiptap/vue-3@3.27.1(@floating-ui/dom@1.7.6)(@tiptap/core@3.27.1(@tiptap/pm@3.27.1))(@tiptap/pm@3.27.1)(vue@3.5.39(typescript@6.0.3)))(vue-router@5.1.0(@vue/compiler-sfc@3.5.39)(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3))
       '@ghentcdh/w3c-utils':
         specifier: ^1.0.10
         version: 1.0.10(@types/debug@4.1.13)(@types/node@26.0.1)(jiti@2.7.0)(jsdom@29.1.1)(lightningcss@1.32.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)
@@ -188,7 +188,7 @@ importers:
         version: 1.0.10(@types/debug@4.1.13)(@types/node@26.0.1)(jiti@2.7.0)(jsdom@29.1.1)(lightningcss@1.32.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)
       '@ghentcdh/crouton-forms-vue':
         specifier: 0.0.1-alpha.18
-        version: 0.0.1-alpha.18(@ghentcdh/ui@3.0.2(@ghentcdh/json-forms-core@3.0.2)(@playwright/test@1.61.1)(@tiptap/pm@3.27.1)(@tiptap/starter-kit@3.27.1)(@tiptap/vue-3@3.27.1(@floating-ui/dom@1.7.6)(@tiptap/core@3.27.1(@tiptap/pm@3.27.1))(@tiptap/pm@3.27.1)(vue@3.5.39(typescript@6.0.3)))(vue-router@5.1.0(@vue/compiler-sfc@3.5.39)(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3)))(@jsonforms/core@3.8.0)(@playwright/test@1.61.1)(vue-router@5.1.0(@vue/compiler-sfc@3.5.39)(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3))(zod@4.4.3)
+        version: 0.0.1-alpha.18(@ghentcdh/ui@3.0.3(@ghentcdh/json-forms-core@3.0.2)(@playwright/test@1.61.1)(@tiptap/pm@3.27.1)(@tiptap/starter-kit@3.27.1)(@tiptap/vue-3@3.27.1(@floating-ui/dom@1.7.6)(@tiptap/core@3.27.1(@tiptap/pm@3.27.1))(@tiptap/pm@3.27.1)(vue@3.5.39(typescript@6.0.3)))(vue-router@5.1.0(@vue/compiler-sfc@3.5.39)(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3)))(@jsonforms/core@3.8.0)(@playwright/test@1.61.1)(vue-router@5.1.0(@vue/compiler-sfc@3.5.39)(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3))(zod@4.4.3)
       '@ghentcdh/w3c-utils':
         specifier: ^1.0.10
         version: 1.0.10(@types/debug@4.1.13)(@types/node@26.0.1)(jiti@2.7.0)(jsdom@29.1.1)(lightningcss@1.32.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)
@@ -1283,8 +1283,8 @@ packages:
     resolution: {integrity: sha512-aaUWPFrbeiYH0/n8f1WH5wFVGkJFTjcC5+97ISSwrloxpee22gpzDDcb90hvFev5SOPdvUcHeIToMmdmNw9GmA==}
     deprecated: Moved to @ghentcdh/crouton-core. This package is now a re-export shim and will be removed in a future release.
 
-  '@ghentcdh/ui@3.0.2':
-    resolution: {integrity: sha512-HUBPee67JpD3osk0/fFf7uwc1KmawGmi2zm5GH18q5jtxTVVv/ySdwgYxPVQPneaissswutbNwRvs/XTM14hIA==}
+  '@ghentcdh/ui@3.0.3':
+    resolution: {integrity: sha512-JRY11WGvei60i+rsAzWbZI06Uf238OstNYWcZRSLGSq5wLCT6c7NHfV7YZFM/LSPJ0EuP6X2LQKJI0Dr2puMNQ==}
     peerDependencies:
       '@ghentcdh/json-forms-core': '>=0.0.1'
       '@playwright/test': '>=1.50.0'
@@ -7562,9 +7562,9 @@ snapshots:
       - tsx
       - yaml
 
-  '@ghentcdh/crouton-forms-vue@0.0.1-alpha.18(@ghentcdh/ui@3.0.2(@ghentcdh/json-forms-core@3.0.2)(@playwright/test@1.61.1)(@tiptap/pm@3.27.1)(@tiptap/starter-kit@3.27.1)(@tiptap/vue-3@3.27.1(@floating-ui/dom@1.7.6)(@tiptap/core@3.27.1(@tiptap/pm@3.27.1))(@tiptap/pm@3.27.1)(vue@3.5.39(typescript@6.0.3)))(vue-router@5.1.0(@vue/compiler-sfc@3.5.39)(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3)))(@jsonforms/core@3.8.0)(@playwright/test@1.61.1)(vue-router@5.1.0(@vue/compiler-sfc@3.5.39)(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3))(zod@4.4.3)':
+  '@ghentcdh/crouton-forms-vue@0.0.1-alpha.18(@ghentcdh/ui@3.0.3(@ghentcdh/json-forms-core@3.0.2)(@playwright/test@1.61.1)(@tiptap/pm@3.27.1)(@tiptap/starter-kit@3.27.1)(@tiptap/vue-3@3.27.1(@floating-ui/dom@1.7.6)(@tiptap/core@3.27.1(@tiptap/pm@3.27.1))(@tiptap/pm@3.27.1)(vue@3.5.39(typescript@6.0.3)))(vue-router@5.1.0(@vue/compiler-sfc@3.5.39)(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3)))(@jsonforms/core@3.8.0)(@playwright/test@1.61.1)(vue-router@5.1.0(@vue/compiler-sfc@3.5.39)(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3))(zod@4.4.3)':
     dependencies:
-      '@ghentcdh/ui': 3.0.2(@ghentcdh/json-forms-core@3.0.2)(@playwright/test@1.61.1)(@tiptap/pm@3.27.1)(@tiptap/starter-kit@3.27.1)(@tiptap/vue-3@3.27.1(@floating-ui/dom@1.7.6)(@tiptap/core@3.27.1(@tiptap/pm@3.27.1))(@tiptap/pm@3.27.1)(vue@3.5.39(typescript@6.0.3)))(vue-router@5.1.0(@vue/compiler-sfc@3.5.39)(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3))
+      '@ghentcdh/ui': 3.0.3(@ghentcdh/json-forms-core@3.0.2)(@playwright/test@1.61.1)(@tiptap/pm@3.27.1)(@tiptap/starter-kit@3.27.1)(@tiptap/vue-3@3.27.1(@floating-ui/dom@1.7.6)(@tiptap/core@3.27.1(@tiptap/pm@3.27.1))(@tiptap/pm@3.27.1)(vue@3.5.39(typescript@6.0.3)))(vue-router@5.1.0(@vue/compiler-sfc@3.5.39)(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3))
       '@jsonforms/core': 3.8.0
       vee-validate: 4.15.1(vue@3.5.39(typescript@6.0.3))
       vue: 3.5.39(typescript@6.0.3)
@@ -7573,10 +7573,10 @@ snapshots:
     optionalDependencies:
       '@playwright/test': 1.61.1
 
-  '@ghentcdh/crouton-vue@0.0.1-alpha.18(3a2bbc35920b005722ce2fdf8ff1d735)':
+  '@ghentcdh/crouton-vue@0.0.1-alpha.18(19fb768f5464d604818f4e7da47f82f7)':
     dependencies:
-      '@ghentcdh/crouton-forms-vue': 0.0.1-alpha.18(@ghentcdh/ui@3.0.2(@ghentcdh/json-forms-core@3.0.2)(@playwright/test@1.61.1)(@tiptap/pm@3.27.1)(@tiptap/starter-kit@3.27.1)(@tiptap/vue-3@3.27.1(@floating-ui/dom@1.7.6)(@tiptap/core@3.27.1(@tiptap/pm@3.27.1))(@tiptap/pm@3.27.1)(vue@3.5.39(typescript@6.0.3)))(vue-router@5.1.0(@vue/compiler-sfc@3.5.39)(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3)))(@jsonforms/core@3.8.0)(@playwright/test@1.61.1)(vue-router@5.1.0(@vue/compiler-sfc@3.5.39)(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3))(zod@4.4.3)
-      '@ghentcdh/ui': 3.0.2(@ghentcdh/json-forms-core@3.0.2)(@playwright/test@1.61.1)(@tiptap/pm@3.27.1)(@tiptap/starter-kit@3.27.1)(@tiptap/vue-3@3.27.1(@floating-ui/dom@1.7.6)(@tiptap/core@3.27.1(@tiptap/pm@3.27.1))(@tiptap/pm@3.27.1)(vue@3.5.39(typescript@6.0.3)))(vue-router@5.1.0(@vue/compiler-sfc@3.5.39)(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3))
+      '@ghentcdh/crouton-forms-vue': 0.0.1-alpha.18(@ghentcdh/ui@3.0.3(@ghentcdh/json-forms-core@3.0.2)(@playwright/test@1.61.1)(@tiptap/pm@3.27.1)(@tiptap/starter-kit@3.27.1)(@tiptap/vue-3@3.27.1(@floating-ui/dom@1.7.6)(@tiptap/core@3.27.1(@tiptap/pm@3.27.1))(@tiptap/pm@3.27.1)(vue@3.5.39(typescript@6.0.3)))(vue-router@5.1.0(@vue/compiler-sfc@3.5.39)(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3)))(@jsonforms/core@3.8.0)(@playwright/test@1.61.1)(vue-router@5.1.0(@vue/compiler-sfc@3.5.39)(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3))(zod@4.4.3)
+      '@ghentcdh/ui': 3.0.3(@ghentcdh/json-forms-core@3.0.2)(@playwright/test@1.61.1)(@tiptap/pm@3.27.1)(@tiptap/starter-kit@3.27.1)(@tiptap/vue-3@3.27.1(@floating-ui/dom@1.7.6)(@tiptap/core@3.27.1(@tiptap/pm@3.27.1))(@tiptap/pm@3.27.1)(vue@3.5.39(typescript@6.0.3)))(vue-router@5.1.0(@vue/compiler-sfc@3.5.39)(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3))
       '@jsonforms/core': 3.8.0
       axios: 1.16.0
       lodash-es: 4.18.1
@@ -7586,7 +7586,7 @@ snapshots:
 
   '@ghentcdh/json-forms-core@3.0.2': {}
 
-  '@ghentcdh/ui@3.0.2(@ghentcdh/json-forms-core@3.0.2)(@playwright/test@1.61.1)(@tiptap/pm@3.27.1)(@tiptap/starter-kit@3.27.1)(@tiptap/vue-3@3.27.1(@floating-ui/dom@1.7.6)(@tiptap/core@3.27.1(@tiptap/pm@3.27.1))(@tiptap/pm@3.27.1)(vue@3.5.39(typescript@6.0.3)))(vue-router@5.1.0(@vue/compiler-sfc@3.5.39)(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3))':
+  '@ghentcdh/ui@3.0.3(@ghentcdh/json-forms-core@3.0.2)(@playwright/test@1.61.1)(@tiptap/pm@3.27.1)(@tiptap/starter-kit@3.27.1)(@tiptap/vue-3@3.27.1(@floating-ui/dom@1.7.6)(@tiptap/core@3.27.1(@tiptap/pm@3.27.1))(@tiptap/pm@3.27.1)(vue@3.5.39(typescript@6.0.3)))(vue-router@5.1.0(@vue/compiler-sfc@3.5.39)(esbuild@0.28.1)(rolldown@1.1.3)(rollup@4.62.2)(vite@8.1.0(@types/node@26.0.1)(esbuild@0.28.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3))':
     dependencies:
       '@ghentcdh/json-forms-core': 3.0.2
       vue: 3.5.39(typescript@6.0.3)

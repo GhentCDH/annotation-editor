@@ -1,3 +1,20 @@
+## 0.0.1-alpha.8 (2026-06-30)
+
+### 🚀 Features
+
+- use plain text adapter as default ([4df3b30](https://github.com/GhentCDH/annotation-editor/commit/4df3b30))
+- add crouton-create-cli ([c6b5cd6](https://github.com/GhentCDH/annotation-editor/commit/c6b5cd6))
+- add layout to editor component ([7d59478](https://github.com/GhentCDH/annotation-editor/commit/7d59478))
+
+### 🩹 Fixes
+
+- enums on docker ([d671db2](https://github.com/GhentCDH/annotation-editor/commit/d671db2))
+- enums on docker ([f94a77d](https://github.com/GhentCDH/annotation-editor/commit/f94a77d))
+
+### ❤️ Thank You
+
+- Bo Vandersteene
+
 ## 0.0.1-alpha.7 (2026-06-26)
 
 ### 🩹 Fixes
