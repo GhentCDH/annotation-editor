@@ -1,3 +1,13 @@
+## 0.0.1-alpha.9 (2026-06-30)
+
+### 🩹 Fixes
+
+- warning ([6eafa87](https://github.com/GhentCDH/annotation-editor/commit/6eafa87))
+
+### ❤️ Thank You
+
+- Bo Vandersteene
+
 ## 0.0.1-alpha.8 (2026-06-30)
 
 ### 🚀 Features
