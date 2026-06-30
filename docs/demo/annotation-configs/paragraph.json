@@ -1,0 +1,9 @@
+{
+  "id": "paragraph",
+  "name": "paragraph",
+  "color": "#1e55cf",
+  "target": "gutter",
+  "allowedChildren": ["animals", "keyconcepts", "emotion"],
+  "isRoot": true,
+  "columns": []
+}

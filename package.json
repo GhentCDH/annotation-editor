@@ -12,8 +12,8 @@
     "@ghentcdh/annotated-text": "^1.0.10",
     "@ghentcdh/annotation-core": "workspace:*",
     "@ghentcdh/annotation-ui": "workspace:*",
-    "@ghentcdh/crouton-forms-vue": "0.0.1-alpha.7",
-    "@ghentcdh/crouton-vue": "0.0.1-alpha.7",
+    "@ghentcdh/crouton-forms-vue": "0.0.1-alpha.18",
+    "@ghentcdh/crouton-vue": "0.0.1-alpha.18",
     "@ghentcdh/ui": "^3.0.2",
     "@ghentcdh/w3c-utils": "^1.0.10",
     "@jsonforms/core": "^3.7.0",
@@ -66,5 +66,10 @@
     "onlyBuiltDependencies": [
       "better-sqlite3"
     ]
+  },
+  "dependencies": {
+    "@tiptap/markdown": "^3.27.1",
+    "@tiptap/starter-kit": "^3.27.1",
+    "@tiptap/vue-3": "^3.27.1"
   }
 }

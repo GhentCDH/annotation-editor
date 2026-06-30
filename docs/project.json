@@ -4,14 +4,22 @@
   "projectType": "application",
   "sourceRoot": "docs",
   "targets": {
+    "build:menu": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node tools/doc/vuepress.mjs"
+      }
+    },
     "serve": {
       "executor": "nx:run-commands",
+      "dependsOn": ["build:menu"],
       "options": {
         "command": "vuepress dev docs"
       }
     },
     "build": {
       "executor": "nx:run-commands",
+      "dependsOn": ["build:menu"],
       "options": {
         "command": "vuepress build docs"
       }

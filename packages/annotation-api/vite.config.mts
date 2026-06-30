@@ -42,6 +42,7 @@ export default defineConfig({
         'node:path',
 
         '@ghentcdh/annotated-text',
+        '@ghentcdh/crouton-forms-vue',
         '@ghentcdh/json-forms-core',
         '@ghentcdh/w3c-utils',
         '@nestjs/common',

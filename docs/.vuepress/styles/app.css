@@ -1,0 +1,14 @@
+@import 'tailwindcss';
+
+@source '../../demo';
+@source '../../../packages/annotation-editor/src';
+@source '../../../packages/annotation-preview/src';
+@source '../../../packages/annotation-vue/src';
+@source '../../../packages/annotation-ui/src';
+
+@import '@ghentcdh/ui/index.css';
+@import '@ghentcdh/crouton-forms-vue/styles.css';
+@import '@ghentcdh/annotated-text/annotated-text.css';
+@import '@ghentcdh/crouton-vue/styles.css';
+@import '@ghentcdh/annotation-preview/index.css';
+@import '@ghentcdh/annotation-editor/index.css';

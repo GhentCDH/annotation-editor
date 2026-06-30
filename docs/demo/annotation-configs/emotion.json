@@ -1,0 +1,23 @@
+{
+  "id": "emotion",
+  "name": "Emotion",
+  "color": "#f3ff4d",
+  "target": "highlight",
+  "columns": [
+    {
+      "id": "concept",
+      "label": "Concept",
+      "type": { "type": "string" }
+    },
+    {
+      "id": "domain",
+      "label": "Domain",
+      "type": { "type": "string" }
+    },
+    {
+      "id": "sentiment",
+      "label": "Sentiment",
+      "type": { "type": "string" }
+    }
+  ]
+}

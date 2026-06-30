@@ -16,7 +16,8 @@ import {
   unref,
   watch,
   watchEffect
-} from "./chunk-KHJB2MGL.js";
+} from "./chunk-IGIIN7CG.js";
+import "./chunk-G3PMV62Z.js";
 
 // node_modules/.pnpm/@vue+devtools-api@6.6.4/node_modules/@vue/devtools-api/lib/esm/env.js
 function getDevtoolsGlobalHook() {
@@ -176,7 +177,7 @@ function setupDevtoolsPlugin(pluginDescriptor, setupFn) {
   }
 }
 
-// node_modules/.pnpm/vue-router@4.6.4_vue@3.5.33_typescript@5.9.3_/node_modules/vue-router/dist/devtools-EWN81iOl.mjs
+// node_modules/.pnpm/vue-router@4.6.4_vue@3.5.39_typescript@6.0.3_/node_modules/vue-router/dist/devtools-EWN81iOl.mjs
 var isBrowser = typeof document !== "undefined";
 function isRouteComponent(component) {
   return typeof component === "object" || "displayName" in component || "props" in component || "__vccOpts" in component;
@@ -1026,7 +1027,7 @@ function omit(obj, keys) {
   return ret;
 }
 
-// node_modules/.pnpm/vue-router@4.6.4_vue@3.5.33_typescript@5.9.3_/node_modules/vue-router/dist/vue-router.mjs
+// node_modules/.pnpm/vue-router@4.6.4_vue@3.5.39_typescript@6.0.3_/node_modules/vue-router/dist/vue-router.mjs
 var createBaseLocation = () => location.protocol + "//" + location.host;
 function createCurrentLocation(base, location$1) {
   const { pathname, search, hash } = location$1;

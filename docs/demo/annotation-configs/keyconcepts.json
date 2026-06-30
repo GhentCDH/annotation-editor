@@ -1,0 +1,35 @@
+{
+  "id": "keyconcepts",
+  "name": "Key Concepts",
+  "color": "#712793",
+  "target": "highlight",
+  "columns": [
+    {
+      "id": "concept",
+      "label": "Concept",
+      "type": { "type": "string" },
+      "fieldInput": {
+        "type": "text",
+        "options": {}
+      }
+    },
+    {
+      "id": "domain",
+      "label": "Domain",
+      "type": { "type": "string" },
+      "fieldInput": {
+        "type": "text",
+        "options": {}
+      }
+    },
+    {
+      "id": "abstractConcept",
+      "label": "Abstract Concept",
+      "type": { "type": "boolean" },
+      "fieldInput": {
+        "type": "boolean",
+        "options": {}
+      }
+    }
+  ]
+}

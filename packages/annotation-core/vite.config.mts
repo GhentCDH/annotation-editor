@@ -31,7 +31,7 @@ export default defineConfig(() => ({
       format: ['cjs', 'esm', 'es'],
     },
     rollupOptions: {
-      external: ['@ghentcdh/w3c-utils', 'zod'],
+      external: ['@ghentcdh/w3c-utils', '@ghentcdh/crouton-forms-vue', 'zod'],
     },
   },
   test: {

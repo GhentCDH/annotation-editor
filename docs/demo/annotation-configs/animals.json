@@ -1,0 +1,80 @@
+{
+  "id": "animals",
+  "name": "Animals",
+  "color": "#65a378",
+  "target": "highlight",
+  "allowedLinks": ["emotion"],
+  "columns": [
+    {
+      "id": "name",
+      "label": "name",
+      "type": { "type": "string" },
+      "fieldInput": {
+        "position": 1,
+        "options": {}
+      }
+    },
+    {
+      "id": "gender",
+      "label": "Gender",
+      "type": { "type": "string" },
+      "fieldInput": {
+        "type": "select",
+        "position": 2,
+        "options": {
+          "colspan": 4,
+          "clearable": false,
+          "storeValue": true,
+          "emitObject": true,
+          "values": [
+            { "value": "female", "label": "Female" },
+            { "value": "male", "label": "Male" }
+          ]
+        }
+      }
+    },
+    {
+      "id": "animalType",
+      "label": "Animal Type",
+      "type": { "type": "string" },
+      "fieldInput": {
+        "type": "select",
+        "position": 3,
+        "options": {
+          "colspan": 6,
+          "clearable": false,
+          "storeValue": true,
+          "emitObject": true,
+          "values": [
+            { "value": "dog", "label": "Dog" },
+            { "value": "parrot", "label": "parrot" }
+          ]
+        }
+      }
+    },
+    {
+      "id": "breed",
+      "label": "breed",
+      "required": false,
+      "type": { "type": "string" },
+      "fieldInput": {
+        "position": 4,
+        "options": {
+          "colspan": 6
+        }
+      }
+    },
+    {
+      "id": "species",
+      "label": "Species",
+      "required": false,
+      "type": { "type": "string" },
+      "fieldInput": {
+        "position": 4,
+        "options": {
+          "colspan": 6
+        }
+      }
+    }
+  ]
+}
