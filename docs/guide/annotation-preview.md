@@ -58,7 +58,7 @@ const onSelect = (annotation: W3CAnnotation | null, action: string | null) => {
 | `annotations` | `W3CAnnotation[]` | ✓ | — | Annotations to highlight |
 | `annotationDefinitions` | `AnnotationDefinition[]` | ✓ | — | Available annotation types (used for labels and styles) |
 | `cols` | `number` | — | `2` | Number of grid columns (ignored when `layout` is set) |
-| `layout` | `PreviewLayout` | — | `undefined` | Custom CSS grid layout — see [Custom layout](#custom-layout) |
+| `layout` | `GridLayout` | — | `undefined` | Custom CSS grid layout — see [Custom layout](#custom-layout). Also available as `PreviewLayout` (deprecated alias). |
 | `selectedAnnotationId` | `string` | — | `undefined` | Highlight a specific annotation on mount |
 | `textAdapter` | `TextAdapter` | — | `undefined` | Custom adapter for text rendering |
 | `annotationAdapter` | `AnnotationAdapter` | — | `undefined` | Custom adapter for annotation rendering |
@@ -71,12 +71,12 @@ const onSelect = (annotation: W3CAnnotation | null, action: string | null) => {
 
 ## Custom layout
 
-By default the sources are placed in an equal-width column grid controlled by `cols`. For more control — e.g. a commentary pane spanning the full width below two source panes — pass a `PreviewLayout` object.
+By default sources are placed in an equal-width column grid controlled by `cols`. For more control — e.g. a commentary pane spanning the full width below two source panes — pass a `GridLayout` object (`PreviewLayout` is a deprecated alias).
 
 ```ts
-import { type PreviewLayout } from '@ghentcdh/annotation-preview';
+import { type GridLayout } from '@ghentcdh/annotation-preview';
 
-const layout: PreviewLayout = {
+const layout: GridLayout = {
   // 2-D array of CSS grid-area names; repeat a name to span
   areas: [
     ['original', 'translation'],
@@ -95,7 +95,7 @@ const layout: PreviewLayout = {
 };
 ```
 
-### PreviewLayout type
+### GridLayout type
 
 ```ts
 type PaneConfig = {
@@ -105,7 +105,7 @@ type PaneConfig = {
   area: string;
 };
 
-type PreviewLayout = {
+type GridLayout = {
   areas: string[][];     // rows of area names
   columns?: string;      // grid-template-columns CSS value
   rows?: string;         // grid-template-rows CSS value

@@ -3,6 +3,7 @@ import type { EmitFn, ExtractPublicPropTypes, PropType } from 'vue';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { type AnnotationDefConfig } from '@ghentcdh/annotation-core';
 import { type AnnotationAdapter, type TextAdapter } from '@ghentcdh/annotated-text';
+import type { GridLayout } from '@ghentcdh/annotation-ui';
 import type { AnnotationDefinition } from './types/AnnotationConfiguration.model';
 import type { SourceModel } from './types/source.model';
 
@@ -26,6 +27,7 @@ export const AnnotationEditorProperties = {
     required: true as const,
   },
   cols: { type: Number, required: false, default: 2 },
+  layout: { type: Object as PropType<GridLayout>, required: false, default: undefined },
   annotationDefinitions: {
     type: Array as PropType<AnnotationDefinition[]>,
     required: true as const,
