@@ -1,67 +1,67 @@
 {
-  "hash": "c597dee1",
+  "hash": "1a1b33a5",
   "configHash": "2f6240d1",
-  "lockfileHash": "b7f1b342",
-  "browserHash": "1a1bb54c",
+  "lockfileHash": "fe8a8153",
+  "browserHash": "8755c56a",
   "optimized": {
     "@vue/devtools-api": {
       "src": "../../../../node_modules/.pnpm/@vue+devtools-api@8.1.4/node_modules/@vue/devtools-api/dist/index.js",
       "file": "@vue_devtools-api.js",
-      "fileHash": "1e441c17",
+      "fileHash": "d171e488",
       "needsInterop": false
     },
     "@vuepress/shared": {
       "src": "../../../../node_modules/.pnpm/@vuepress+shared@2.0.0-rc.26/node_modules/@vuepress/shared/dist/index.js",
       "file": "@vuepress_shared.js",
-      "fileHash": "ddb40e5a",
+      "fileHash": "78d611a4",
       "needsInterop": false
     },
     "vue": {
       "src": "../../../../node_modules/.pnpm/vue@3.5.39_typescript@6.0.3/node_modules/vue/dist/vue.runtime.esm-bundler.js",
       "file": "vue.js",
-      "fileHash": "dff86875",
+      "fileHash": "1d30d38e",
       "needsInterop": false
     },
     "vue-router": {
       "src": "../../../../node_modules/.pnpm/vue-router@4.6.4_vue@3.5.39_typescript@6.0.3_/node_modules/vue-router/dist/vue-router.mjs",
       "file": "vue-router.js",
-      "fileHash": "7d63dba0",
+      "fileHash": "9ad62718",
       "needsInterop": false
     },
     "@ghentcdh/crouton-forms-vue": {
-      "src": "../../../../node_modules/.pnpm/@ghentcdh+crouton-forms-vue@0.0.1-alpha.7_@ghentcdh+ui@3.0.2_@ghentcdh+json-forms-core@_39a68c373ad7434666b1a34a95870809/node_modules/@ghentcdh/crouton-forms-vue/dist/index.js",
+      "src": "../../../../node_modules/.pnpm/@ghentcdh+crouton-forms-vue@0.0.1-alpha.18_@ghentcdh+ui@3.0.2_@ghentcdh+json-forms-core_e859788abd7c851fd8ffa68947831221/node_modules/@ghentcdh/crouton-forms-vue/dist/index.js",
       "file": "@ghentcdh_crouton-forms-vue.js",
-      "fileHash": "e416ac02",
+      "fileHash": "f5752461",
       "needsInterop": false
     },
     "@ghentcdh/ui": {
-      "src": "../../../../node_modules/.pnpm/@ghentcdh+ui@3.0.2_@ghentcdh+json-forms-core@3.0.2_@playwright+test@1.61.1_vue-router@5_068176e5913910ea8211f0da89a31270/node_modules/@ghentcdh/ui/index.mjs",
+      "src": "../../../../node_modules/.pnpm/@ghentcdh+ui@3.0.2_@ghentcdh+json-forms-core@3.0.2_@playwright+test@1.61.1_@tiptap+pm@3_f52a3f4f22f0b12cc5b3b9a0bc147cb4/node_modules/@ghentcdh/ui/index.mjs",
       "file": "@ghentcdh_ui.js",
-      "fileHash": "b8cd5e76",
-      "needsInterop": false
-    },
-    "@ghentcdh/w3c-utils": {
-      "src": "../../../../node_modules/.pnpm/@ghentcdh+w3c-utils@1.0.10_@types+debug@4.1.13_@types+node@26.0.1_jiti@2.7.0_jsdom@29.1_5f2bfa8410aef0ed2a26b95df841fb25/node_modules/@ghentcdh/w3c-utils/index.js",
-      "file": "@ghentcdh_w3c-utils.js",
-      "fileHash": "847ef813",
-      "needsInterop": false
-    },
-    "zod": {
-      "src": "../../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/index.js",
-      "file": "zod.js",
-      "fileHash": "5fe46936",
-      "needsInterop": false
-    },
-    "@ghentcdh/annotated-text": {
-      "src": "../../../../node_modules/.pnpm/@ghentcdh+annotated-text@1.0.10_@types+debug@4.1.13_@types+node@26.0.1_jiti@2.7.0_jsdom_2ca041e5732cae42ced08c99998e149d/node_modules/@ghentcdh/annotated-text/index.js",
-      "file": "@ghentcdh_annotated-text.js",
-      "fileHash": "f1eda125",
+      "fileHash": "16557afc",
       "needsInterop": false
     },
     "uuid": {
       "src": "../../../../node_modules/.pnpm/uuid@14.0.1/node_modules/uuid/dist/index.js",
       "file": "uuid.js",
-      "fileHash": "a64f3981",
+      "fileHash": "273e949c",
+      "needsInterop": false
+    },
+    "zod": {
+      "src": "../../../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/index.js",
+      "file": "zod.js",
+      "fileHash": "cf895a86",
+      "needsInterop": false
+    },
+    "@ghentcdh/w3c-utils": {
+      "src": "../../../../node_modules/.pnpm/@ghentcdh+w3c-utils@1.0.10_@types+debug@4.1.13_@types+node@26.0.1_jiti@2.7.0_jsdom@29.1_5f2bfa8410aef0ed2a26b95df841fb25/node_modules/@ghentcdh/w3c-utils/index.js",
+      "file": "@ghentcdh_w3c-utils.js",
+      "fileHash": "8143008a",
+      "needsInterop": false
+    },
+    "@ghentcdh/annotated-text": {
+      "src": "../../../../node_modules/.pnpm/@ghentcdh+annotated-text@1.0.10_@types+debug@4.1.13_@types+node@26.0.1_jiti@2.7.0_jsdom_2ca041e5732cae42ced08c99998e149d/node_modules/@ghentcdh/annotated-text/index.js",
+      "file": "@ghentcdh_annotated-text.js",
+      "fileHash": "a1631e35",
       "needsInterop": false
     }
   },
@@ -69,26 +69,26 @@
     "dist-RMZDD2X6": {
       "file": "dist-RMZDD2X6.js"
     },
-    "Markdown-BjFpy32Y-BPM2EELG": {
-      "file": "Markdown-BjFpy32Y-BPM2EELG.js"
+    "Markdown-BjFpy32Y-JF7MHLAQ": {
+      "file": "Markdown-BjFpy32Y-JF7MHLAQ.js"
     },
-    "chunk-ZXVJOS5O": {
-      "file": "chunk-ZXVJOS5O.js"
+    "chunk-YGDCI56X": {
+      "file": "chunk-YGDCI56X.js"
     },
-    "chunk-J2A44X4R": {
-      "file": "chunk-J2A44X4R.js"
+    "chunk-J55AVFBU": {
+      "file": "chunk-J55AVFBU.js"
     },
     "chunk-LEWRBSIK": {
       "file": "chunk-LEWRBSIK.js"
+    },
+    "chunk-IGIIN7CG": {
+      "file": "chunk-IGIIN7CG.js"
     },
     "chunk-FPTZYYNI": {
       "file": "chunk-FPTZYYNI.js"
     },
     "chunk-LLZLWDDG": {
       "file": "chunk-LLZLWDDG.js"
-    },
-    "chunk-IGIIN7CG": {
-      "file": "chunk-IGIIN7CG.js"
     },
     "chunk-G3PMV62Z": {
       "file": "chunk-G3PMV62Z.js"

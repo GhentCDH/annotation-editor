@@ -16,6 +16,11 @@ export default defineUserConfig({
   bundler: viteBundler({
     viteOptions: {
       plugins: [tailwindcss()],
+      build: {
+        rollupOptions: {
+          external: ['tiptap-markdown'],
+        },
+      },
       resolve: {
         alias: {
           '@ghentcdh/annotation-editor/index.css': fileURLToPath(

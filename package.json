@@ -66,5 +66,10 @@
     "onlyBuiltDependencies": [
       "better-sqlite3"
     ]
+  },
+  "dependencies": {
+    "@tiptap/markdown": "^3.27.1",
+    "@tiptap/starter-kit": "^3.27.1",
+    "@tiptap/vue-3": "^3.27.1"
   }
 }
