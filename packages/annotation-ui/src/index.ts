@@ -1,6 +1,7 @@
 // Types
 export * from './lib/types/source.model';
 export * from './lib/types/AnnotationConfiguration.model';
+export * from './lib/types/grid-layout.types';
 
 // Utils
 export * from './lib/utils/annotation-utils';
