@@ -18,6 +18,7 @@ export type AnnotationColumnFieldInput = {
 export type AnnotationColumnConfig = {
   id: string;
   label: string;
+  required?: boolean;
   hiddenInMetadata?: boolean;
   hiddenInForm?: boolean;
   displayKey?: string;

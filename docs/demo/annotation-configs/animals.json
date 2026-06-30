@@ -55,6 +55,7 @@
     {
       "id": "breed",
       "label": "breed",
+      "required": false,
       "type": { "type": "string" },
       "fieldInput": {
         "position": 4,
@@ -66,7 +67,8 @@
     {
       "id": "species",
       "label": "Species",
-      "type": { "type": "string", "required": false },
+      "required": false,
+      "type": { "type": "string" },
       "fieldInput": {
         "position": 4,
         "options": {

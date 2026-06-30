@@ -35,9 +35,8 @@ export const annotationContextBuilderFactory = (
   const schemaProps: Record<string, z.ZodTypeAny> = {};
   for (const col of columns) {
     if (col.type) {
-      schemaProps[col.id] = jsonSchemaPropertyToZod(
-        col.type as JsonSchemaProperty,
-      );
+      const schema = jsonSchemaPropertyToZod(col.type as JsonSchemaProperty);
+      schemaProps[col.id] = col.required === false ? schema.optional() : schema;
     }
   }
 

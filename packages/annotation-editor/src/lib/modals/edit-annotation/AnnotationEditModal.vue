@@ -16,7 +16,6 @@
           </Btn>
         </Collapse>
         <div class="w-max max-w-lg">
-          {{ formData }}
           <AnnotationForm
             v-model="formData"
             :annotation="annotation"

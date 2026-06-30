@@ -76,7 +76,7 @@ export const collection = {
           name: 'Flanel',
           gender: 'male',
           animalType: 'parrot',
-          species: 'African Grey',
+          species: 'Blue Yellow Macaw',
         },
       ],
       target: {

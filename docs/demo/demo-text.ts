@@ -237,5 +237,4 @@ const defs = provideAnnotationDefinitions({
   resourceFolder,
 });
 
-console.log(defs.definitions);
 export const definitions = defs.definitions;

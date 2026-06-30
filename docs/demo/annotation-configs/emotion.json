@@ -5,13 +5,19 @@
   "target": "highlight",
   "columns": [
     {
-      "id": "name",
-      "label": "name",
-      "type": { "type": "string" },
-      "fieldInput": {
-        "colspan": 12,
-        "type": "string"
-      }
+      "id": "concept",
+      "label": "Concept",
+      "type": { "type": "string" }
+    },
+    {
+      "id": "domain",
+      "label": "Domain",
+      "type": { "type": "string" }
+    },
+    {
+      "id": "sentiment",
+      "label": "Sentiment",
+      "type": { "type": "string" }
     }
   ]
 }

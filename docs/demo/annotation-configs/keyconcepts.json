@@ -5,8 +5,8 @@
   "target": "highlight",
   "columns": [
     {
-      "id": "value",
-      "label": "Term",
+      "id": "concept",
+      "label": "Concept",
       "type": { "type": "string" },
       "fieldInput": {
         "type": "text",
@@ -14,18 +14,21 @@
       }
     },
     {
-      "id": "language",
-      "label": "Language",
+      "id": "domain",
+      "label": "Domain",
       "type": { "type": "string" },
       "fieldInput": {
-        "type": "select",
-        "options": {
-          "values": [
-            { "value": "en", "label": "English" },
-            { "value": "nl", "label": "Dutch" },
-            { "value": "ar", "label": "Arabic" }
-          ]
-        }
+        "type": "text",
+        "options": {}
+      }
+    },
+    {
+      "id": "abstractConcept",
+      "label": "Abstract Concept",
+      "type": { "type": "boolean" },
+      "fieldInput": {
+        "type": "boolean",
+        "options": {}
       }
     }
   ]

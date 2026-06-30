@@ -1,6 +1,6 @@
 # Editor
 
-<div>
+<div class="relative block absolute w-full m-0">
  <AnnotationEditor
     :configuration="config"
     :sources="sourcesPlainTxt"
