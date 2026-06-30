@@ -1,0 +1,901 @@
+- generic [ref=e2]:
+  - link "Skip to main content" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e4]:
+    - banner [ref=e5]:
+      - link "Take me home" [ref=e7] [cursor=pointer]:
+        - /url: /annotation-editor/
+        - text: Annotation Editor
+      - navigation [ref=e9]:
+        - link "Home" [ref=e11] [cursor=pointer]:
+          - /url: /annotation-editor/
+        - link "Guide" [ref=e13] [cursor=pointer]:
+          - /url: /annotation-editor/guide/quick-start.html
+      - button "auto icon" [ref=e16] [cursor=pointer]:
+        - img "auto icon" [ref=e17]
+    - complementary [ref=e21]:
+      - list [ref=e22]:
+        - listitem [ref=e23]:
+          - generic [ref=e24]:
+            - paragraph [ref=e25]:
+              - generic [ref=e26]: Guide
+            - list [ref=e27]:
+              - listitem [ref=e28]:
+                - link "AnnotationEditor" [ref=e29] [cursor=pointer]:
+                  - /url: /annotation-editor/guide/annotation-editor.html
+              - listitem [ref=e30]:
+                - link "AnnotationPreview" [ref=e31] [cursor=pointer]:
+                  - /url: /annotation-editor/guide/annotation-preview.html
+              - listitem [ref=e32]:
+                - link "Annotation Editor" [ref=e33] [cursor=pointer]:
+                  - /url: /annotation-editor/guide/demo.html
+              - listitem [ref=e34]:
+                - link "Quick Start" [ref=e35] [cursor=pointer]:
+                  - /url: /annotation-editor/guide/quick-start.html
+        - listitem [ref=e36]:
+          - generic [ref=e37]:
+            - paragraph [ref=e38]:
+              - generic [ref=e39]: Demo
+            - list [ref=e40]:
+              - listitem [ref=e41]:
+                - generic [ref=e42]:
+                  - paragraph [ref=e43] [cursor=pointer]:
+                    - link "Annotation configs" [ref=e44]:
+                      - /url: /annotation-editor/
+                  - list
+              - listitem [ref=e45]:
+                - link "Editor" [ref=e46] [cursor=pointer]:
+                  - /url: /annotation-editor/demo/editor.html
+              - listitem [ref=e47]:
+                - link "Preview" [ref=e48] [cursor=pointer]:
+                  - /url: /annotation-editor/demo/preview.html
+    - main [ref=e49]:
+      - navigation [ref=e50]
+      - generic [ref=e51]:
+        - heading "Annotation Editor" [level=1] [ref=e52]
+        - generic [ref=e53]:
+          - generic "Writing Date📅" [ref=e54] [cursor=pointer]:
+            - img "calendar icon" [ref=e55]
+            - generic [ref=e57]: 6/30/26
+            - text: Writing Date📅
+          - generic "Reading Time⌛" [ref=e58] [cursor=pointer]:
+            - img "timer icon" [ref=e59]
+            - generic [ref=e61]: About 4 min
+            - text: Reading Time⌛
+        - separator [ref=e62]
+      - complementary [ref=e64]:
+        - generic [ref=e65]: On This Page
+        - list [ref=e67]:
+          - listitem [ref=e68]:
+            - link "Packages" [ref=e69] [cursor=pointer]:
+              - /url: "#packages"
+          - listitem [ref=e70]:
+            - link "Requirements" [ref=e71] [cursor=pointer]:
+              - /url: "#requirements"
+          - listitem [ref=e72]:
+            - link "Setup" [ref=e73] [cursor=pointer]:
+              - /url: "#setup"
+          - listitem [ref=e74]:
+            - link "Build" [ref=e75] [cursor=pointer]:
+              - /url: "#build"
+          - listitem [ref=e76]:
+            - link "Packages" [ref=e77] [cursor=pointer]:
+              - /url: "#packages-1"
+          - listitem [ref=e78]:
+            - list [ref=e79]:
+              - listitem [ref=e80]:
+                - link "@ghentcdh/annotation-core" [ref=e81] [cursor=pointer]:
+                  - /url: "#ghentcdh-annotation-core"
+              - listitem [ref=e82]:
+                - list [ref=e83]:
+                  - listitem [ref=e84]:
+                    - link "AnnotationDefConfig" [ref=e85] [cursor=pointer]:
+                      - /url: "#annotationdefconfig"
+                  - listitem [ref=e86]:
+                    - link "AnnotationStyle" [ref=e87] [cursor=pointer]:
+                      - /url: "#annotationstyle"
+              - listitem [ref=e88]:
+                - link "@ghentcdh/annotation-api" [ref=e89] [cursor=pointer]:
+                  - /url: "#ghentcdh-annotation-api"
+              - listitem [ref=e90]:
+                - list [ref=e91]:
+                  - listitem [ref=e92]:
+                    - link "Module Registration" [ref=e93] [cursor=pointer]:
+                      - /url: "#module-registration"
+                  - listitem [ref=e94]:
+                    - link "Annotation Definition JSON" [ref=e95] [cursor=pointer]:
+                      - /url: "#annotation-definition-json"
+                  - listitem [ref=e96]:
+                    - link "Directory Structure" [ref=e97] [cursor=pointer]:
+                      - /url: "#directory-structure"
+                  - listitem [ref=e98]:
+                    - link "Frontend-Only Usage (No Backend)" [ref=e99] [cursor=pointer]:
+                      - /url: "#frontend-only-usage-no-backend"
+              - listitem [ref=e100]:
+                - link "@ghentcdh/annotation-editor" [ref=e101] [cursor=pointer]:
+                  - /url: "#ghentcdh-annotation-editor"
+              - listitem [ref=e102]:
+                - list [ref=e103]:
+                  - listitem [ref=e104]:
+                    - link "Basic Usage" [ref=e105] [cursor=pointer]:
+                      - /url: "#basic-usage"
+                  - listitem [ref=e106]:
+                    - link "Props" [ref=e107] [cursor=pointer]:
+                      - /url: "#props"
+                  - listitem [ref=e108]:
+                    - link "Events" [ref=e109] [cursor=pointer]:
+                      - /url: "#events"
+                  - listitem [ref=e110]:
+                    - link "SourceModel" [ref=e111] [cursor=pointer]:
+                      - /url: "#sourcemodel"
+          - listitem [ref=e112]:
+            - link "Architecture" [ref=e113] [cursor=pointer]:
+              - /url: "#architecture"
+          - listitem [ref=e114]:
+            - link "Development" [ref=e115] [cursor=pointer]:
+              - /url: "#development"
+          - listitem [ref=e116]:
+            - link "License" [ref=e117] [cursor=pointer]:
+              - /url: "#license"
+          - listitem [ref=e118]:
+            - link "Credits" [ref=e119] [cursor=pointer]:
+              - /url: "#credits"
+      - generic [ref=e121]:
+        - paragraph [ref=e122]:
+          - link "Build" [ref=e123] [cursor=pointer]:
+            - /url: https://github.com/GhentCDH/annotation-editor/actions/workflows/merge-request.yml
+            - img "Build" [ref=e124]
+          - link "Publish" [ref=e125] [cursor=pointer]:
+            - /url: https://github.com/GhentCDH/annotation-editor/actions/workflows/publish.yml
+            - img "Publish" [ref=e126]
+          - link "Publish Docs" [ref=e127] [cursor=pointer]:
+            - /url: https://github.com/GhentCDH/annotation-editor/actions/workflows/publish-docs.yml
+            - img "Publish Docs" [ref=e128]
+          - link "annotation-editor" [ref=e129] [cursor=pointer]:
+            - /url: https://www.npmjs.com/package/@ghentcdh/annotation-editor
+            - img "annotation-editor" [ref=e130]
+          - link "annotation-api" [ref=e131] [cursor=pointer]:
+            - /url: https://www.npmjs.com/package/@ghentcdh/annotation-api
+            - img "annotation-api" [ref=e132]
+          - link "annotation-vue" [ref=e133] [cursor=pointer]:
+            - /url: https://www.npmjs.com/package/@ghentcdh/annotation-vue
+            - img "annotation-vue" [ref=e134]
+          - link "annotation-preview" [ref=e135] [cursor=pointer]:
+            - /url: https://www.npmjs.com/package/@ghentcdh/annotation-preview
+            - img "annotation-preview" [ref=e136]
+        - heading "Annotation Editor" [level=1] [ref=e137]:
+          - link "Annotation Editor" [ref=e138] [cursor=pointer]:
+            - /url: "#annotation-editor"
+        - paragraph [ref=e139]: Monorepo for W3C-compliant annotation editing. Provides a NestJS API module for serving annotation definitions, a shared core library for types and validation, and a Vue 3 editor component for creating and managing annotations on text sources.
+        - heading "Packages" [level=2] [ref=e140]:
+          - link "Packages" [ref=e141] [cursor=pointer]:
+            - /url: "#packages"
+        - table [ref=e142]:
+          - rowgroup [ref=e143]:
+            - row "Package Description" [ref=e144]:
+              - columnheader "Package" [ref=e145]
+              - columnheader "Description" [ref=e146]
+          - rowgroup [ref=e147]:
+            - row "@ghentcdh/annotation-core Shared types, Zod schemas, and configuration utilities" [ref=e148]:
+              - cell "@ghentcdh/annotation-core" [ref=e149]:
+                - code [ref=e150]: "@ghentcdh/annotation-core"
+              - cell "Shared types, Zod schemas, and configuration utilities" [ref=e151]
+            - row "@ghentcdh/annotation-editor Vue 3 annotation editor component" [ref=e152]:
+              - cell "@ghentcdh/annotation-editor" [ref=e153]:
+                - code [ref=e154]: "@ghentcdh/annotation-editor"
+              - cell "Vue 3 annotation editor component" [ref=e155]
+            - row "@ghentcdh/annotation-api NestJS module for annotation definition services" [ref=e156]:
+              - cell "@ghentcdh/annotation-api" [ref=e157]:
+                - code [ref=e158]: "@ghentcdh/annotation-api"
+              - cell "NestJS module for annotation definition services" [ref=e159]
+        - heading "Requirements" [level=2] [ref=e160]:
+          - link "Requirements" [ref=e161] [cursor=pointer]:
+            - /url: "#requirements"
+        - list [ref=e162]:
+          - listitem [ref=e163]: Node.js 20+
+          - listitem [ref=e164]: pnpm 10+
+        - heading "Setup" [level=2] [ref=e165]:
+          - link "Setup" [ref=e166] [cursor=pointer]:
+            - /url: "#setup"
+        - generic [ref=e167]:
+          - text: bash
+          - button "Copy code" [ref=e168] [cursor=pointer]
+          - code [ref=e170]:
+            - generic [ref=e171]: pnpm install
+        - heading "Build" [level=2] [ref=e174]:
+          - link "Build" [ref=e175] [cursor=pointer]:
+            - /url: "#build"
+        - generic [ref=e176]:
+          - text: bash
+          - button "Copy code" [ref=e177] [cursor=pointer]
+          - code [ref=e179]:
+            - generic [ref=e180]: pnpm nx build annotation-core
+            - generic [ref=e181]: pnpm nx build annotation-editor
+            - generic [ref=e182]: pnpm nx build annotation-api
+        - heading "Packages" [level=2] [ref=e187]:
+          - link "Packages" [ref=e188] [cursor=pointer]:
+            - /url: "#packages-1"
+        - heading "@ghentcdh/annotation-core" [level=3] [ref=e189]:
+          - link "@ghentcdh/annotation-core" [ref=e190] [cursor=pointer]:
+            - /url: "#ghentcdh-annotation-core"
+        - paragraph [ref=e191]: Shared types and configuration utilities used by both the API and the editor.
+        - heading "AnnotationDefConfig" [level=4] [ref=e192]:
+          - link "AnnotationDefConfig" [ref=e193] [cursor=pointer]:
+            - /url: "#annotationdefconfig"
+        - generic [ref=e194]:
+          - text: ts
+          - button "Copy code" [ref=e195] [cursor=pointer]
+          - code [ref=e197]:
+            - generic [ref=e198]: "import { type AnnotationDefConfig, resolveConfig } from '@ghentcdh/annotation-core';"
+            - generic [ref=e199]: "const config: AnnotationDefConfig = {"
+            - generic [ref=e200]: "baseUrl: 'https://api.example.com/',"
+            - generic [ref=e201]: "app: 'my-app',"
+            - generic [ref=e202]: "prefix: 'my-prefix',"
+            - generic [ref=e203]: "};"
+            - generic [ref=e204]: // resolveConfig normalizes the config and generates contextUrl
+            - generic [ref=e205]: const resolved = resolveConfig(config);
+            - generic [ref=e206]: // resolved.baseUrl → 'https://api.example.com/'
+            - generic [ref=e207]: // resolved.contextUrl → 'https://api.example.com/ns/'
+            - generic [ref=e208]: // resolved.app → 'my-app'
+            - generic [ref=e209]: // resolved.prefix → 'my-prefix'
+        - paragraph [ref=e225]:
+          - strong [ref=e226]: "Defaults:"
+        - table [ref=e227]:
+          - rowgroup [ref=e228]:
+            - row "Property Default" [ref=e229]:
+              - columnheader "Property" [ref=e230]
+              - columnheader "Default" [ref=e231]
+          - rowgroup [ref=e232]:
+            - row "baseUrl http://localhost:3000/" [ref=e233]:
+              - cell "baseUrl" [ref=e234]:
+                - code [ref=e235]: baseUrl
+              - cell "http://localhost:3000/" [ref=e236]:
+                - code [ref=e237]: http://localhost:3000/
+            - row "app annotation-app" [ref=e238]:
+              - cell "app" [ref=e239]:
+                - code [ref=e240]: app
+              - cell "annotation-app" [ref=e241]:
+                - code [ref=e242]: annotation-app
+            - row "prefix annotation" [ref=e243]:
+              - cell "prefix" [ref=e244]:
+                - code [ref=e245]: prefix
+              - cell "annotation" [ref=e246]:
+                - code [ref=e247]: annotation
+        - heading "AnnotationStyle" [level=4] [ref=e248]:
+          - link "AnnotationStyle" [ref=e249] [cursor=pointer]:
+            - /url: "#annotationstyle"
+        - generic [ref=e250]:
+          - text: ts
+          - button "Copy code" [ref=e251] [cursor=pointer]
+          - code [ref=e253]:
+            - generic [ref=e254]: "import { type AnnotationStyle, AnnotationStyleSchema } from '@ghentcdh/annotation-core';"
+            - generic [ref=e255]: "const style: AnnotationStyle = {"
+            - generic [ref=e256]: "id: 'highlight-red',"
+            - generic [ref=e257]: "name: 'Red Highlight',"
+            - generic [ref=e258]: "target: 'highlight', // 'gutter' | 'underline' | 'highlight'"
+            - generic [ref=e259]: "color: '#FF0000',"
+            - generic [ref=e260]: "};"
+        - separator [ref=e270]
+        - heading "@ghentcdh/annotation-api" [level=3] [ref=e271]:
+          - link "@ghentcdh/annotation-api" [ref=e272] [cursor=pointer]:
+            - /url: "#ghentcdh-annotation-api"
+        - paragraph [ref=e273]: NestJS module that serves annotation definitions and metadata. Definitions are loaded from JSON config files on disk.
+        - heading "Module Registration" [level=4] [ref=e274]:
+          - link "Module Registration" [ref=e275] [cursor=pointer]:
+            - /url: "#module-registration"
+        - generic [ref=e276]:
+          - text: ts
+          - button "Copy code" [ref=e277] [cursor=pointer]
+          - code [ref=e279]:
+            - generic [ref=e280]: "import { resolve } from 'node:path';"
+            - generic [ref=e281]: "import { Module } from '@nestjs/common';"
+            - generic [ref=e282]: "import { AnnotationApiModule } from '@ghentcdh/annotation-api';"
+            - generic [ref=e283]: "@Module({"
+            - generic [ref=e284]: "imports: ["
+            - generic [ref=e285]: AnnotationApiModule.forResourceDir(
+            - generic [ref=e286]: resolve(import.meta.dirname, 'annotations'),
+            - generic [ref=e287]: "{"
+            - generic [ref=e288]: "baseUrl: process.env.ANNOTATION_BASE_URL,"
+            - generic [ref=e289]: "cacheTTLms: 0,"
+            - generic [ref=e290]: "isDev: false,"
+            - generic [ref=e291]: "app: process.env.ANNOTATION_APP ?? 'my-app',"
+            - generic [ref=e292]: "prefix: process.env.ANNOTATION_PREFIX ?? 'my-prefix',"
+            - generic [ref=e293]: "},"
+            - generic [ref=e294]: ),
+            - generic [ref=e295]: "],"
+            - generic [ref=e296]: "})"
+            - generic [ref=e297]: "export class AppModule {}"
+        - paragraph [ref=e318]:
+          - strong [ref=e319]: "Parameters:"
+        - table [ref=e320]:
+          - rowgroup [ref=e321]:
+            - row "Parameter Description" [ref=e322]:
+              - columnheader "Parameter" [ref=e323]
+              - columnheader "Description" [ref=e324]
+          - rowgroup [ref=e325]:
+            - row "dirPath Path to directory containing annotation definition JSON files" [ref=e326]:
+              - cell "dirPath" [ref=e327]:
+                - code [ref=e328]: dirPath
+              - cell "Path to directory containing annotation definition JSON files" [ref=e329]
+            - row "config AnnotationDefConfig with optional isDev and cacheTTLms" [ref=e330]:
+              - cell "config" [ref=e331]:
+                - code [ref=e332]: config
+              - cell "AnnotationDefConfig with optional isDev and cacheTTLms" [ref=e333]:
+                - code [ref=e334]: AnnotationDefConfig
+                - text: with optional
+                - code [ref=e335]: isDev
+                - text: and
+                - code [ref=e336]: cacheTTLms
+        - paragraph [ref=e337]: "The module registers globally and provides:"
+        - list [ref=e338]:
+          - listitem [ref=e339]:
+            - code [ref=e340]: AnnotationDefinitionService
+            - text: — load and cache annotation definitions
+          - listitem [ref=e341]:
+            - code [ref=e342]: AnnotationNamespaceController
+            - text: — REST endpoint at
+            - code [ref=e343]: ns/
+        - heading "Annotation Definition JSON" [level=4] [ref=e344]:
+          - link "Annotation Definition JSON" [ref=e345] [cursor=pointer]:
+            - /url: "#annotation-definition-json"
+        - paragraph [ref=e346]: "Place JSON files in the annotations directory:"
+        - generic [ref=e347]:
+          - text: json
+          - button "Copy code" [ref=e348] [cursor=pointer]
+          - code [ref=e350]:
+            - generic [ref=e351]: "{"
+            - generic [ref=e352]: "\"id\": \"comment\","
+            - generic [ref=e353]: "\"name\": \"Comment\","
+            - generic [ref=e354]: "\"color\": \"#4A90D9\","
+            - generic [ref=e355]: "\"target\": \"highlight\","
+            - generic [ref=e356]: "\"columns\": ["
+            - generic [ref=e357]: "{"
+            - generic [ref=e358]: "\"id\": \"text\","
+            - generic [ref=e359]: "\"label\": \"Comment text\","
+            - generic [ref=e360]: "\"type\": { \"type\": \"string\" },"
+            - generic [ref=e361]: "\"fieldInput\": { \"type\": \"text\" }"
+            - generic [ref=e362]: "}"
+            - generic [ref=e363]: "]"
+            - generic [ref=e364]: "}"
+        - paragraph [ref=e380]:
+          - strong [ref=e381]: "Advanced example with relationships:"
+        - generic [ref=e382]:
+          - text: json
+          - button "Copy code" [ref=e383] [cursor=pointer]
+          - code [ref=e385]:
+            - generic [ref=e386]: "{"
+            - generic [ref=e387]: "\"id\": \"lemma\","
+            - generic [ref=e388]: "\"name\": \"Lemma\","
+            - generic [ref=e389]: "\"color\": \"#7a8800\","
+            - generic [ref=e390]: "\"isRoot\": false,"
+            - generic [ref=e391]: "\"allowedChildren\": [\"link_bucket\"],"
+            - generic [ref=e392]: "\"allowedLinks\": [\"lemma\"],"
+            - generic [ref=e393]: "\"icon\": \"<svg>...</svg>\","
+            - generic [ref=e394]: "\"columns\": ["
+            - generic [ref=e395]: "{"
+            - generic [ref=e396]: "\"id\": \"name\","
+            - generic [ref=e397]: "\"label\": \"name\""
+            - generic [ref=e398]: "},"
+            - generic [ref=e399]: "{"
+            - generic [ref=e400]: "\"id\": \"lemma\","
+            - generic [ref=e401]: "\"label\": \"Lemma\","
+            - generic [ref=e402]: "\"hiddenInMetadata\": false,"
+            - generic [ref=e403]: "\"hiddenInForm\": false,"
+            - generic [ref=e404]: "\"displayKey\": \"name\","
+            - generic [ref=e405]: "\"type\": {"
+            - generic [ref=e406]: "\"type\": \"object\","
+            - generic [ref=e407]: "\"properties\": {"
+            - generic [ref=e408]: "\"id\": { \"type\": \"string\" },"
+            - generic [ref=e409]: "\"label\": { \"type\": \"string\" }"
+            - generic [ref=e410]: "}"
+            - generic [ref=e411]: "},"
+            - generic [ref=e412]: "\"fieldInput\": {"
+            - generic [ref=e413]: "\"type\": \"autocomplete\","
+            - generic [ref=e414]: "\"options\": {"
+            - generic [ref=e415]: "\"uri\": \"/api/lemma?filter=word:\","
+            - generic [ref=e416]: "\"valueKey\": \"id\","
+            - generic [ref=e417]: "\"labelKey\": \"label\","
+            - generic [ref=e418]: "\"enableCreate\": true"
+            - generic [ref=e419]: "}"
+            - generic [ref=e420]: "}"
+            - generic [ref=e421]: "}"
+            - generic [ref=e422]: "]"
+            - generic [ref=e423]: "}"
+        - paragraph [ref=e463]:
+          - strong [ref=e464]: "Top-level fields:"
+        - table [ref=e465]:
+          - rowgroup [ref=e466]:
+            - row "Field Type Default Description" [ref=e467]:
+              - columnheader "Field" [ref=e468]
+              - columnheader "Type" [ref=e469]
+              - columnheader "Default" [ref=e470]
+              - columnheader "Description" [ref=e471]
+          - rowgroup [ref=e472]:
+            - row "id string — Unique identifier for the annotation type" [ref=e473]:
+              - cell "id" [ref=e474]:
+                - code [ref=e475]: id
+              - cell "string" [ref=e476]:
+                - code [ref=e477]: string
+              - cell "—" [ref=e478]
+              - cell "Unique identifier for the annotation type" [ref=e479]
+            - row "name string — Display name" [ref=e480]:
+              - cell "name" [ref=e481]:
+                - code [ref=e482]: name
+              - cell "string" [ref=e483]:
+                - code [ref=e484]: string
+              - cell "—" [ref=e485]
+              - cell "Display name" [ref=e486]
+            - row "color string — Hex color for styling" [ref=e487]:
+              - cell "color" [ref=e488]:
+                - code [ref=e489]: color
+              - cell "string" [ref=e490]:
+                - code [ref=e491]: string
+              - cell "—" [ref=e492]
+              - cell "Hex color for styling" [ref=e493]
+            - row "isRoot boolean true Whether this type appears as a top-level annotation option" [ref=e494]:
+              - cell "isRoot" [ref=e495]:
+                - code [ref=e496]: isRoot
+              - cell "boolean" [ref=e497]:
+                - code [ref=e498]: boolean
+              - cell "true" [ref=e499]:
+                - code [ref=e500]: "true"
+              - cell "Whether this type appears as a top-level annotation option" [ref=e501]
+            - row "allowedChildren string[] — IDs of annotation types allowed as children" [ref=e502]:
+              - cell "allowedChildren" [ref=e503]:
+                - code [ref=e504]: allowedChildren
+              - cell "string[]" [ref=e505]:
+                - code [ref=e506]: string[]
+              - cell "—" [ref=e507]
+              - cell "IDs of annotation types allowed as children" [ref=e508]
+            - row "allowedLinks string[] — IDs of annotation types that can be linked" [ref=e509]:
+              - cell "allowedLinks" [ref=e510]:
+                - code [ref=e511]: allowedLinks
+              - cell "string[]" [ref=e512]:
+                - code [ref=e513]: string[]
+              - cell "—" [ref=e514]
+              - cell "IDs of annotation types that can be linked" [ref=e515]
+            - row "icon string — SVG string for custom icon" [ref=e516]:
+              - cell "icon" [ref=e517]:
+                - code [ref=e518]: icon
+              - cell "string" [ref=e519]:
+                - code [ref=e520]: string
+              - cell "—" [ref=e521]
+              - cell "SVG string for custom icon" [ref=e522]
+            - row "type string — Optional type classifier" [ref=e523]:
+              - cell "type" [ref=e524]:
+                - code [ref=e525]: type
+              - cell "string" [ref=e526]:
+                - code [ref=e527]: string
+              - cell "—" [ref=e528]
+              - cell "Optional type classifier" [ref=e529]
+            - row "target string — gutter, underline, or highlight" [ref=e530]:
+              - cell "target" [ref=e531]:
+                - code [ref=e532]: target
+              - cell "string" [ref=e533]:
+                - code [ref=e534]: string
+              - cell "—" [ref=e535]
+              - cell "gutter, underline, or highlight" [ref=e536]:
+                - code [ref=e537]: gutter
+                - text: ","
+                - code [ref=e538]: underline
+                - text: ", or"
+                - code [ref=e539]: highlight
+        - paragraph [ref=e540]:
+          - strong [ref=e541]:
+            - text: Supported
+            - code [ref=e542]: fieldInput.type
+            - text: "values:"
+          - code [ref=e543]: text
+          - text: ","
+          - code [ref=e544]: select
+          - text: ","
+          - code [ref=e545]: autocomplete
+        - heading "Directory Structure" [level=4] [ref=e546]:
+          - link "Directory Structure" [ref=e547] [cursor=pointer]:
+            - /url: "#directory-structure"
+        - paragraph [ref=e548]: "Annotation definitions are loaded from a directory where each subfolder represents one annotation type:"
+        - generic [ref=e549]:
+          - button "Copy code" [ref=e550] [cursor=pointer]
+          - code [ref=e552]:
+            - generic [ref=e553]: annotations/
+            - generic [ref=e554]: ├── person/
+            - generic [ref=e555]: │ └── resource.json
+            - generic [ref=e556]: ├── place/
+            - generic [ref=e557]: │ └── resource.json
+            - generic [ref=e558]: ├── event/
+            - generic [ref=e559]: │ └── resource.json
+            - generic [ref=e560]: "└── _resource/ # optional resource definitions"
+            - generic [ref=e561]: ├── persons.json
+            - generic [ref=e562]: └── places.json
+        - paragraph [ref=e574]:
+          - text: Each
+          - code [ref=e575]: resource.json
+          - text: contains an
+          - code [ref=e576]: AnnotationJsonConfig
+          - text: object.
+        - heading "Frontend-Only Usage (No Backend)" [level=4] [ref=e577]:
+          - link "Frontend-Only Usage (No Backend)" [ref=e578] [cursor=pointer]:
+            - /url: "#frontend-only-usage-no-backend"
+        - paragraph [ref=e579]:
+          - text: Annotation definitions can be built entirely client-side using
+          - code [ref=e580]: "@ghentcdh/annotation-core"
+          - text: ", without running"
+          - code [ref=e581]: "@ghentcdh/annotation-api"
+          - text: .
+        - paragraph [ref=e582]:
+          - strong [ref=e583]: "Static imports:"
+        - generic [ref=e584]:
+          - text: ts
+          - button "Copy code" [ref=e585] [cursor=pointer]
+          - code [ref=e587]:
+            - generic [ref=e588]: "import {"
+            - generic [ref=e589]: buildAnnotationDefinitions,
+            - generic [ref=e590]: type AnnotationJsonConfig,
+            - generic [ref=e591]: type AnnotationDefConfig,
+            - generic [ref=e592]: "} from '@ghentcdh/annotation-core';"
+            - generic [ref=e593]: import personConfig from './annotations/person/resource.json';
+            - generic [ref=e594]: import placeConfig from './annotations/place/resource.json';
+            - generic [ref=e595]: "const configs: AnnotationJsonConfig[] = [personConfig, placeConfig];"
+            - generic [ref=e596]: "const defConfig: AnnotationDefConfig = {"
+            - generic [ref=e597]: "baseUrl: 'https://example.org',"
+            - generic [ref=e598]: "app: 'myapp',"
+            - generic [ref=e599]: "prefix: 'ann',"
+            - generic [ref=e600]: "isDev: true,"
+            - generic [ref=e601]: "};"
+            - generic [ref=e602]: const definitions = buildAnnotationDefinitions(configs, defConfig);
+        - paragraph [ref=e623]:
+          - strong [ref=e624]: "Dynamic loading with Vite:"
+        - paragraph [ref=e625]: "Auto-discover all annotation configs without manual imports:"
+        - generic [ref=e626]:
+          - text: ts
+          - button "Copy code" [ref=e627] [cursor=pointer]
+          - code [ref=e629]:
+            - generic [ref=e630]: "import {"
+            - generic [ref=e631]: buildAnnotationDefinitions,
+            - generic [ref=e632]: type AnnotationJsonConfig,
+            - generic [ref=e633]: type AnnotationDefConfig,
+            - generic [ref=e634]: "} from '@ghentcdh/annotation-core';"
+            - generic [ref=e635]: "const modules = import.meta.glob('./annotations/*/resource.json', {"
+            - generic [ref=e636]: "eager: true,"
+            - generic [ref=e637]: "import: 'default',"
+            - generic [ref=e638]: "});"
+            - generic [ref=e639]: const configs = Object.values(modules) as AnnotationJsonConfig[];
+            - generic [ref=e640]: const definitions = buildAnnotationDefinitions(configs, defConfig);
+        - paragraph [ref=e655]:
+          - strong [ref=e656]: "Example project structure:"
+        - generic [ref=e657]:
+          - button "Copy code" [ref=e658] [cursor=pointer]
+          - code [ref=e660]:
+            - generic [ref=e661]: src/
+            - generic [ref=e662]: └── annotations/
+            - generic [ref=e663]: ├── person/
+            - generic [ref=e664]: │ └── resource.json
+            - generic [ref=e665]: ├── place/
+            - generic [ref=e666]: │ └── resource.json
+            - generic [ref=e667]: "└── index.ts # collect & build all definitions"
+        - paragraph [ref=e676]:
+          - code [ref=e677]: annotations/index.ts
+          - text: ":"
+        - generic [ref=e678]:
+          - text: ts
+          - button "Copy code" [ref=e679] [cursor=pointer]
+          - code [ref=e681]:
+            - generic [ref=e682]: "import {"
+            - generic [ref=e683]: buildAnnotationDefinitions,
+            - generic [ref=e684]: type AnnotationJsonConfig,
+            - generic [ref=e685]: type AnnotationDefConfig,
+            - generic [ref=e686]: "} from '@ghentcdh/annotation-core';"
+            - generic [ref=e687]: "const modules = import.meta.glob('./**/resource.json', {"
+            - generic [ref=e688]: "eager: true,"
+            - generic [ref=e689]: "import: 'default',"
+            - generic [ref=e690]: "});"
+            - generic [ref=e691]: const configs = Object.values(modules) as AnnotationJsonConfig[];
+            - generic [ref=e692]: "export const loadDefinitions = (defConfig: AnnotationDefConfig) =>"
+            - generic [ref=e693]: buildAnnotationDefinitions(configs, defConfig);
+        - paragraph [ref=e710]:
+          - text: Then pass result to
+          - code [ref=e711]: <AnnotationEditor :annotation-definitions="definitions" />
+          - text: .
+        - separator [ref=e712]
+        - heading "@ghentcdh/annotation-editor" [level=3] [ref=e713]:
+          - link "@ghentcdh/annotation-editor" [ref=e714] [cursor=pointer]:
+            - /url: "#ghentcdh-annotation-editor"
+        - paragraph [ref=e715]: Vue 3 component for annotating text sources. Renders sources in collapsible panels with inline annotation creation, editing, linking, and deletion.
+        - heading "Basic Usage" [level=4] [ref=e716]:
+          - link "Basic Usage" [ref=e717] [cursor=pointer]:
+            - /url: "#basic-usage"
+        - generic [ref=e718]:
+          - text: vue
+          - button "Copy code" [ref=e719] [cursor=pointer]
+          - code [ref=e721]:
+            - generic [ref=e722]: <template>
+            - generic [ref=e723]: <AnnotationEditor
+            - generic [ref=e724]: :configuration="configuration"
+            - generic [ref=e725]: :sources="sources"
+            - generic [ref=e726]: :annotations="annotations"
+            - generic [ref=e727]: :annotation-definitions="definitions"
+            - generic [ref=e728]: :selected-annotation-id="selectedAnnotationId"
+            - generic [ref=e729]: :selected-annotation-action="selectedAnnotationAction"
+            - generic [ref=e730]: "@create:annotation=\"onCreate\""
+            - generic [ref=e731]: "@update:annotation=\"onUpdate\""
+            - generic [ref=e732]: "@delete:annotation=\"onDelete\""
+            - generic [ref=e733]: "@select:annotation=\"onSelect\""
+            - generic [ref=e734]: />
+            - generic [ref=e735]: </template>
+            - generic [ref=e736]: <script setup lang="ts">
+            - generic [ref=e737]: "import { computed } from 'vue';"
+            - generic [ref=e738]: "import { useRoute, useRouter } from 'vue-router';"
+            - generic [ref=e739]: "import { AnnotationEditor } from '@ghentcdh/annotation-editor';"
+            - generic [ref=e740]: "import { type AnnotationDefConfig } from '@ghentcdh/annotation-core';"
+            - generic [ref=e741]: "import { type W3CAnnotation } from '@ghentcdh/w3c-utils';"
+            - generic [ref=e742]: "import type { SourceModel } from '@ghentcdh/annotation-editor';"
+            - generic [ref=e743]: const route = useRoute();
+            - generic [ref=e744]: const router = useRouter();
+            - generic [ref=e745]: "const configuration: AnnotationDefConfig = {"
+            - generic [ref=e746]: "baseUrl: import.meta.env.VITE_ANNOTATION_BASE_URL,"
+            - generic [ref=e747]: "app: import.meta.env.VITE_ANNOTATION_APP ?? 'my-app',"
+            - generic [ref=e748]: "prefix: import.meta.env.VITE_ANNOTATION_PREFIX ?? 'my-prefix',"
+            - generic [ref=e749]: "};"
+            - generic [ref=e750]: // Sources to annotate
+            - generic [ref=e751]: "const sources: SourceModel[] = ["
+            - generic [ref=e752]: "{"
+            - generic [ref=e753]: "id: 'source-1',"
+            - generic [ref=e754]: "uri: 'https://example.com/text/1',"
+            - generic [ref=e755]: "type: 'text',"
+            - generic [ref=e756]: "content: {"
+            - generic [ref=e757]: "text: 'The text content to annotate.',"
+            - generic [ref=e758]: "label: 'Source Document',"
+            - generic [ref=e759]: "textDirection: 'ltr',"
+            - generic [ref=e760]: "processingLanguage: 'en',"
+            - generic [ref=e761]: "},"
+            - generic [ref=e762]: "},"
+            - generic [ref=e763]: "];"
+            - generic [ref=e764]: // Annotations loaded from your API
+            - generic [ref=e765]: "const annotations: W3CAnnotation[] = [];"
+            - generic [ref=e766]: // Annotation type definitions loaded from your API
+            - generic [ref=e767]: const definitions = [];
+            - generic [ref=e768]: // URL-based annotation selection
+            - generic [ref=e769]: const selectedAnnotationId = computed(
+            - generic [ref=e770]: () => route.query.annotationId as string | undefined,
+            - generic [ref=e771]: );
+            - generic [ref=e772]: const selectedAnnotationAction = computed(
+            - generic [ref=e773]: () => route.query.action as string | undefined,
+            - generic [ref=e774]: );
+            - generic [ref=e775]: // Event handlers — should call your API and return the updated annotation
+            - generic [ref=e776]: "const onCreate = (annotation: W3CAnnotation) => {"
+            - generic [ref=e777]: // POST to your API, return the created annotation
+            - generic [ref=e778]: "};"
+            - generic [ref=e779]: "const onUpdate = (annotation: W3CAnnotation) => {"
+            - generic [ref=e780]: // PUT to your API, return the updated annotation
+            - generic [ref=e781]: "};"
+            - generic [ref=e782]: "const onDelete = (annotation: W3CAnnotation) => {"
+            - generic [ref=e783]: // DELETE from your API, return the deleted annotation
+            - generic [ref=e784]: "};"
+            - generic [ref=e785]: // Sync selection state to URL
+            - generic [ref=e786]: const onSelect = (
+            - generic [ref=e787]: "annotation: W3CAnnotation | null,"
+            - generic [ref=e788]: "action: string | null,"
+            - generic [ref=e789]: ") => {"
+            - generic [ref=e790]: "const query = { ...route.query };"
+            - generic [ref=e791]: "if (annotation) {"
+            - generic [ref=e792]: query.annotationId = annotation.id;
+            - generic [ref=e793]: "} else {"
+            - generic [ref=e794]: delete query.annotationId;
+            - generic [ref=e795]: "}"
+            - generic [ref=e796]: "if (action) {"
+            - generic [ref=e797]: query.action = action;
+            - generic [ref=e798]: "} else {"
+            - generic [ref=e799]: delete query.action;
+            - generic [ref=e800]: "}"
+            - generic [ref=e801]: "router.replace({ query });"
+            - generic [ref=e802]: "};"
+            - generic [ref=e803]: </script>
+        - heading "Props" [level=4] [ref=e895]:
+          - link "Props" [ref=e896] [cursor=pointer]:
+            - /url: "#props"
+        - table [ref=e897]:
+          - rowgroup [ref=e898]:
+            - row "Prop Type Required Default Description" [ref=e899]:
+              - columnheader "Prop" [ref=e900]
+              - columnheader "Type" [ref=e901]
+              - columnheader "Required" [ref=e902]
+              - columnheader "Default" [ref=e903]
+              - columnheader "Description" [ref=e904]
+          - rowgroup [ref=e905]:
+            - row "configuration AnnotationDefConfig yes — API connection configuration" [ref=e906]:
+              - cell "configuration" [ref=e907]:
+                - code [ref=e908]: configuration
+              - cell "AnnotationDefConfig" [ref=e909]:
+                - code [ref=e910]: AnnotationDefConfig
+              - cell "yes" [ref=e911]
+              - cell "—" [ref=e912]
+              - cell "API connection configuration" [ref=e913]
+            - row "sources SourceModel[] yes — Text sources to display and annotate" [ref=e914]:
+              - cell "sources" [ref=e915]:
+                - code [ref=e916]: sources
+              - cell "SourceModel[]" [ref=e917]:
+                - code [ref=e918]: SourceModel[]
+              - cell "yes" [ref=e919]
+              - cell "—" [ref=e920]
+              - cell "Text sources to display and annotate" [ref=e921]
+            - row "annotations W3CAnnotation[] yes — Existing annotations to render" [ref=e922]:
+              - cell "annotations" [ref=e923]:
+                - code [ref=e924]: annotations
+              - cell "W3CAnnotation[]" [ref=e925]:
+                - code [ref=e926]: W3CAnnotation[]
+              - cell "yes" [ref=e927]
+              - cell "—" [ref=e928]
+              - cell "Existing annotations to render" [ref=e929]
+            - row "annotationDefinitions AnnotationDefinition[] yes — Available annotation type definitions" [ref=e930]:
+              - cell "annotationDefinitions" [ref=e931]:
+                - code [ref=e932]: annotationDefinitions
+              - cell "AnnotationDefinition[]" [ref=e933]:
+                - code [ref=e934]: AnnotationDefinition[]
+              - cell "yes" [ref=e935]
+              - cell "—" [ref=e936]
+              - cell "Available annotation type definitions" [ref=e937]
+            - row "cols number no 2 Number of source columns in the grid layout" [ref=e938]:
+              - cell "cols" [ref=e939]:
+                - code [ref=e940]: cols
+              - cell "number" [ref=e941]:
+                - code [ref=e942]: number
+              - cell "no" [ref=e943]
+              - cell "2" [ref=e944]:
+                - code [ref=e945]: "2"
+              - cell "Number of source columns in the grid layout" [ref=e946]
+            - row "selectedAnnotationId string no — ID of the currently selected annotation" [ref=e947]:
+              - cell "selectedAnnotationId" [ref=e948]:
+                - code [ref=e949]: selectedAnnotationId
+              - cell "string" [ref=e950]:
+                - code [ref=e951]: string
+              - cell "no" [ref=e952]
+              - cell "—" [ref=e953]
+              - cell "ID of the currently selected annotation" [ref=e954]
+            - row "selectedAnnotationAction string no — Action for selected annotation (show or edit)" [ref=e955]:
+              - cell "selectedAnnotationAction" [ref=e956]:
+                - code [ref=e957]: selectedAnnotationAction
+              - cell "string" [ref=e958]:
+                - code [ref=e959]: string
+              - cell "no" [ref=e960]
+              - cell "—" [ref=e961]
+              - cell "Action for selected annotation (show or edit)" [ref=e962]:
+                - text: Action for selected annotation (
+                - code [ref=e963]: show
+                - text: or
+                - code [ref=e964]: edit
+                - text: )
+        - heading "Events" [level=4] [ref=e965]:
+          - link "Events" [ref=e966] [cursor=pointer]:
+            - /url: "#events"
+        - table [ref=e967]:
+          - rowgroup [ref=e968]:
+            - row "Event Payload Description" [ref=e969]:
+              - columnheader "Event" [ref=e970]
+              - columnheader "Payload" [ref=e971]
+              - columnheader "Description" [ref=e972]
+          - rowgroup [ref=e973]:
+            - row "create:annotation W3CAnnotation User created an annotation. Should return the persisted annotation." [ref=e974]:
+              - cell "create:annotation" [ref=e975]:
+                - code [ref=e976]: create:annotation
+              - cell "W3CAnnotation" [ref=e977]:
+                - code [ref=e978]: W3CAnnotation
+              - cell "User created an annotation. Should return the persisted annotation." [ref=e979]
+            - row "update:annotation W3CAnnotation User updated an annotation. Should return the persisted annotation." [ref=e980]:
+              - cell "update:annotation" [ref=e981]:
+                - code [ref=e982]: update:annotation
+              - cell "W3CAnnotation" [ref=e983]:
+                - code [ref=e984]: W3CAnnotation
+              - cell "User updated an annotation. Should return the persisted annotation." [ref=e985]
+            - row "delete:annotation W3CAnnotation User deleted an annotation. Should return the deleted annotation." [ref=e986]:
+              - cell "delete:annotation" [ref=e987]:
+                - code [ref=e988]: delete:annotation
+              - cell "W3CAnnotation" [ref=e989]:
+                - code [ref=e990]: W3CAnnotation
+              - cell "User deleted an annotation. Should return the deleted annotation." [ref=e991]
+            - row "select:annotation (annotation | null, action | null) Selection changed. Use to sync with URL or external state." [ref=e992]:
+              - cell "select:annotation" [ref=e993]:
+                - code [ref=e994]: select:annotation
+              - cell "(annotation | null, action | null)" [ref=e995]:
+                - code [ref=e996]: (annotation | null, action | null)
+              - cell "Selection changed. Use to sync with URL or external state." [ref=e997]
+        - heading "SourceModel" [level=4] [ref=e998]:
+          - link "SourceModel" [ref=e999] [cursor=pointer]:
+            - /url: "#sourcemodel"
+        - generic [ref=e1000]:
+          - text: ts
+          - button "Copy code" [ref=e1001] [cursor=pointer]
+          - code [ref=e1003]:
+            - generic [ref=e1004]: "type SourceModel = {"
+            - generic [ref=e1005]: "id: string;"
+            - generic [ref=e1006]: "uri: string;"
+            - generic [ref=e1007]: "type: 'text';"
+            - generic [ref=e1008]: "content: {"
+            - generic [ref=e1009]: "text: string;"
+            - generic [ref=e1010]: "label?: string;"
+            - generic [ref=e1011]: "textDirection?: 'ltr' | 'rtl'; // default: 'ltr'"
+            - generic [ref=e1012]: "processingLanguage?: string; // default: 'en'"
+            - generic [ref=e1013]: "offset?: number; // default: 0"
+            - generic [ref=e1014]: "};"
+            - generic [ref=e1015]: "};"
+        - heading "Architecture" [level=2] [ref=e1029]:
+          - link "Architecture" [ref=e1030] [cursor=pointer]:
+            - /url: "#architecture"
+        - generic [ref=e1031]:
+          - button "Copy code" [ref=e1032] [cursor=pointer]
+          - code [ref=e1034]:
+            - generic [ref=e1035]: ┌─────────────────────┐
+            - generic [ref=e1036]: │ annotation-editor │ Vue 3 UI component
+            - generic [ref=e1037]: │ (frontend) │
+            - generic [ref=e1038]: └────────┬────────────┘
+            - generic [ref=e1039]: │ uses types from
+            - generic [ref=e1040]: ┌────────▼────────────┐
+            - generic [ref=e1041]: │ annotation-core │ Shared types, Zod schemas, config
+            - generic [ref=e1042]: └────────┬────────────┘
+            - generic [ref=e1043]: │ used by
+            - generic [ref=e1044]: ┌────────▼────────────┐
+            - generic [ref=e1045]: │ annotation-api │ NestJS module (serves definitions)
+            - generic [ref=e1046]: │ (backend) │
+            - generic [ref=e1047]: └─────────────────────┘
+        - list [ref=e1062]:
+          - listitem [ref=e1063]:
+            - strong [ref=e1064]: annotation-core
+            - text: is the shared dependency used by both frontend and backend
+          - listitem [ref=e1065]:
+            - strong [ref=e1066]: annotation-api
+            - text: loads annotation definitions from JSON files and serves them via REST
+          - listitem [ref=e1067]:
+            - strong [ref=e1068]: annotation-editor
+            - text: renders sources, annotations, and provides CRUD UI using W3C annotation standard via
+            - code [ref=e1069]: "@ghentcdh/w3c-utils"
+        - heading "Development" [level=2] [ref=e1070]:
+          - link "Development" [ref=e1071] [cursor=pointer]:
+            - /url: "#development"
+        - generic [ref=e1072]:
+          - text: bash
+          - button "Copy code" [ref=e1073] [cursor=pointer]
+          - code [ref=e1075]:
+            - generic [ref=e1076]: "# Lint"
+            - generic [ref=e1077]: pnpm nx affected -t lint --base=origin/main
+            - generic [ref=e1078]: "# Test"
+            - generic [ref=e1079]: pnpm nx affected -t test --base=origin/main
+            - generic [ref=e1080]: "# Type check"
+            - generic [ref=e1081]: pnpm nx affected -t typecheck --base=origin/main
+        - separator [ref=e1091]
+        - heading "License" [level=2] [ref=e1092]:
+          - link "License" [ref=e1093] [cursor=pointer]:
+            - /url: "#license"
+        - paragraph [ref=e1094]:
+          - text: This project is licensed under the
+          - strong [ref=e1095]: MIT License
+          - text: . See the
+          - link "LICENSE" [ref=e1096] [cursor=pointer]:
+            - /url: ./LICENSE
+          - text: file for details.
+        - heading "Credits" [level=2] [ref=e1097]:
+          - link "Credits" [ref=e1098] [cursor=pointer]:
+            - /url: "#credits"
+        - paragraph [ref=e1099]: Bo Vandersteene, Ghent University.
+        - paragraph [ref=e1100]:
+          - text: Development by
+          - link "Ghent Centre for Digital Humanities - Ghent University" [ref=e1101] [cursor=pointer]:
+            - /url: https://www.ghentcdh.ugent.be/
+          - text: . Funded by the
+          - link "GhentCDH research projects" [ref=e1102] [cursor=pointer]:
+            - /url: https://www.ghentcdh.ugent.be/projects
+          - text: .
+        - img "GhentCDH" [ref=e1103]
+      - generic [ref=e1104]:
+        - link "Edit this page" [ref=e1106] [cursor=pointer]:
+          - /url: https://github.com/GhentCDH/annotation-editor/edit/main/docs/README.md
+          - img "edit icon" [ref=e1107]
+          - text: Edit this page
+        - generic [ref=e1110]:
+          - generic [ref=e1111]:
+            - text: "Last Updated:"
+            - time [ref=e1112]: 6/30/26, 2:05 PM
+          - generic [ref=e1113]: "Contributors: Bo Vandersteene"
+      - navigation [ref=e1114]:
+        - link "Editor" [ref=e1115] [cursor=pointer]:
+          - /url: /annotation-editor/demo/editor.html
+          - generic [ref=e1116]: Next
+          - generic [ref=e1118]: Editor
