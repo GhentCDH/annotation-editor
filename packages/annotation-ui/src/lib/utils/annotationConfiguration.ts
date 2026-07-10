@@ -6,7 +6,7 @@ import {
   PlainTextAdapter,
   type TextAdapter,
   W3CAnnotationAdapter,
-  WordSnapper,
+  WordSnapper
 } from '@ghentcdh/annotated-text';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { defaultRender, styleFn } from './annotation.style';
@@ -14,7 +14,7 @@ import { type AnnotationUtils } from './annotation-utils';
 import {
   type AllowedChildrenPerType,
   type AnnotationConfiguration,
-  type AnnotationDefinition,
+  type AnnotationDefinition
 } from '../types/AnnotationConfiguration.model';
 import { type SourceModel } from '../types/source.model';
 
@@ -58,7 +58,6 @@ export const createAnnotationConfiguration = (
 
   if (!styles['default']) {
     styles['default'] = {
-      id: 'default',
       label: 'Annotation',
       isRoot: true,
       style: { default: createHighlightStyle('#dd7777') },
