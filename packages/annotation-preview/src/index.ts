@@ -5,5 +5,4 @@ import './lib/styles.css';
 export * from '@ghentcdh/annotation-core';
 
 export * from './lib/AnnotationPreview.properties';
-export * from './lib/types/preview-layout.types';
 export { AnnotationPreview };

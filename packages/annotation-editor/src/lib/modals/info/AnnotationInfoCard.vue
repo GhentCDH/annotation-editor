@@ -33,7 +33,7 @@ import Metadata from './Metadata.vue';
 import LinksDetail from './LinksDetail.vue';
 import { useEditorState } from '../../composables/useEditorState';
 import Navbar from '../../components/navbar.vue';
-import { type AnnotationDefinition } from '../../types/AnnotationConfiguration.model';
+import { type AnnotationDefinition, type FormValidationDef } from '../../types/AnnotationConfiguration.model';
 import { type NavbarAction } from '../../components/navbar.properties';
 
 const properties = defineProps(AnnotationInfoCardProperties);
@@ -53,7 +53,7 @@ const purposeLabel = computed(() => {
 });
 
 const validation = computed(() => {
-  return annotationDef.value!.schema;
+  return annotationDef.value!.schema as FormValidationDef;
 });
 
 const metadata = computed(() => {
