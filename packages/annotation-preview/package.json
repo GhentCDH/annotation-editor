@@ -11,7 +11,7 @@
     ".": {
       "types": "./index.d.ts",
       "import": "./index.mjs",
-      "require": "./index.js"
+      "require": "./index.umd.js"
     },
     "./index.css": "./index.css",
     "./package.json": "./package.json"

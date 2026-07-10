@@ -34,15 +34,15 @@ export const buildAnnotationDefinition = (
     context,
     json_ld: (context as any).toJsonLdContext(),
     json_schema: uiSchema ? (context as any).toJsonSchema() : null,
+    allowedChildren: json.allowedChildren ?? [],
+    allowedLinks: json.allowedLinks ?? [],
+    target: json.target ?? 'highlight',
   };
 
   if (uiSchema) definition.ui_schema = uiSchema;
   if (metadataSchema) definition.metadata_schema = metadataSchema;
   if (json.type) definition.type = json.type;
   if (json.icon) definition.icon = json.icon;
-  if (json.target) definition.target = json.target;
-  if (json.allowedChildren) definition.allowedChildren = json.allowedChildren;
-  if (json.allowedLinks) definition.allowedLinks = json.allowedLinks;
 
   return definition;
 };

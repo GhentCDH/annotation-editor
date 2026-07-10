@@ -1,11 +1,12 @@
 import {
   type AnnotationAdapter,
   createAnnotatedText,
+  createHighlightStyle,
   type CustomAnnotationStyle,
   PlainTextAdapter,
   type TextAdapter,
   W3CAnnotationAdapter,
-  WordSnapper,
+  WordSnapper
 } from '@ghentcdh/annotated-text';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { defaultRender, styleFn } from './annotation.style';
@@ -13,7 +14,7 @@ import { type AnnotationUtils } from './annotation-utils';
 import {
   type AllowedChildrenPerType,
   type AnnotationConfiguration,
-  type AnnotationDefinition,
+  type AnnotationDefinition
 } from '../types/AnnotationConfiguration.model';
 import { type SourceModel } from '../types/source.model';
 
@@ -56,8 +57,23 @@ export const createAnnotationConfiguration = (
   >;
 
   if (!styles['default']) {
-    styles['default'] = {};
+    styles['default'] = {
+      id: 'default',
+      label: 'Annotation',
+      isRoot: true,
+      style: { default: createHighlightStyle('#dd7777') },
+      allowedChildren: [],
+      allowedLinks: [],
+      schema: {
+        uiSchema: { type: 'VerticalLayout', elements: [] },
+        jsonSchema: { type: 'object', properties: {} },
+        metaDataSchema: { type: 'VerticalLayout', elements: [] },
+        validation: () => undefined,
+      },
+    };
   }
+
+  const listStyles = Object.keys(styles);
 
   const allowedChildrenPerType = groupById(
     definitions,
@@ -68,7 +84,7 @@ export const createAnnotationConfiguration = (
     W3CAnnotationAdapter(source ? { sourceUri: source.uri } : {});
 
   const renderParams = () => ({ renderFn: defaultRender(utils) });
-  const styleParams = () => ({ styleFn: styleFn(utils) });
+  const styleParams = () => ({ styleFn: styleFn(listStyles, utils) });
 
   const _createAnnotatedText = (id: string, sourceModel?: SourceModel) => {
     const annotatedText = createAnnotatedText<W3CAnnotation>(id);
