@@ -15,6 +15,8 @@ export * from './lib/modals/annotationModal.composable';
 
 // Info card
 export * from './lib/modals/info/AnnotationInfoCard.properties';
+export * from './lib/modals/info/AnnotationInfoCardBase.properties';
 export * from './lib/modals/info/useAnnotationInfo';
 export { default as MetadataTable } from './lib/modals/info/Metadata.vue';
+export { default as AnnotationInfoCardBase } from './lib/modals/info/AnnotationInfoCardBase.vue';
 export { default as AnnotationTextCell } from './lib/modals/info/AnnotationTextCell.vue';
