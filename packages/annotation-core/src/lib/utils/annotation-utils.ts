@@ -2,14 +2,11 @@ import {
   w3cAnnotation,
   type W3CAnnotation,
   type W3CAnnotationBuilder,
-  type W3CSpecificResource,
+  type W3CSpecificResource
 } from '@ghentcdh/w3c-utils';
-import { AnnotationMetadataType } from '../types/annotation.contex';
-import {
-  type AnnotationStyle,
-  AnnotationStyleContextBuilder,
-} from '../annotation.style';
 import { type AnnotationDefConfig } from './annotation.context-builder';
+import { AnnotationMetadataType } from '../types/annotation.contex';
+import { type AnnotationStyle, AnnotationStyleContextBuilder } from '../annotation.style';
 import { type AllowedChildrenPerType, type UIAnnotationDefinition } from '../types/ui-annotation-definition.type';
 import { type FormValidationDef } from '../types/form-validation.type';
 import { type KeyLabel } from '../types/key-label.type';
@@ -327,11 +324,11 @@ class AnnotationUtilsImpl {
 
   getMetadata = (
     annotation: W3CAnnotation,
-    validationDef: FormValidationDef,
+    validationDef?: FormValidationDef,
   ) => {
     const builder = this.getBuilder(annotation);
 
-    if (!validationDef) return null;
+    // if (!validationDef) return null;
 
     const metadataBody = builder.getBodiesByType(AnnotationMetadataType);
     return metadataBody?.[0] ?? null;

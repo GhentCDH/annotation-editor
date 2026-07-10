@@ -22,6 +22,8 @@ export type {
 export type FormValidationDef = {
   uiSchema: UISchemaElement;
   jsonSchema: JsonFormsLayout;
-  metaDataSchema: UISchemaElement;
+  metadataSchema?: UISchemaElement;
+  // @deprecated use metadataSchema
+  metaDataSchema?: UISchemaElement;
   validation: (value: any) => any;
 };

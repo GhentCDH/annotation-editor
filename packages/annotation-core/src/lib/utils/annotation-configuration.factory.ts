@@ -111,7 +111,10 @@ export const createAnnotationConfiguration = (
   return {
     allowedChildrenPerType,
     definitions,
-    getDefinition: (id) => definitionsMap[id] ?? undefined,
+    getDefinition: (id) => {
+      const def = definitionsMap[id] ?? undefined;
+      return def;
+    },
     rootTypes,
     createAnnotatedText: _createAnnotatedText,
   };

@@ -1,64 +1,49 @@
 <template>
-  <div
-    ref="cardRef"
-    class="card bg-base-100 shadow-xl absolute z-50"
-    :style="{
-      left: `${position.x}px`,
-      top: `${position.y}px`,
-    }"
+  <AnnotationInfoCardBase
+    ref="baseRef"
+    v-bind="$props"
+    :config="config.annotation"
+    :utils="utils"
+    :disable-close="editorState.disableEdits"
+    @close="close"
   >
-    <div class="card-body p-2">
-      <div><strong>Type:</strong> {{ purposeLabel }}</div>
-      <Metadata
-        v-if="metadata && validation.metaDataSchema"
-        :data="metadata"
-        :schema="validation.jsonSchema"
-        :ui-schema="validation.metaDataSchema"
-      />
-      <LinksDetail :annotation="annotation!" />
+    <template #links="{ annotation }">
+      <LinksDetail :annotation="annotation" />
+    </template>
+    <template #actions>
       <Alert
         v-if="editorState.info"
         type="info"
         :message="'Action: ' + editorState.info.short"
       />
       <Navbar :actions="actions" />
-    </div>
-  </div>
+    </template>
+  </AnnotationInfoCardBase>
 </template>
 <script lang="ts" setup>
 import { Alert, IconEnum } from '@ghentcdh/ui';
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { AnnotationInfoCardBase } from '@ghentcdh/annotation-ui';
+import { computed, ref } from 'vue';
 import { AnnotationInfoCardProperties } from './AnnotationInfoCard.properties';
-import Metadata from './Metadata.vue';
 import LinksDetail from './LinksDetail.vue';
 import { useEditorState } from '../../composables/useEditorState';
 import Navbar from '../../components/navbar.vue';
-import { type AnnotationDefinition, type FormValidationDef } from '../../types/AnnotationConfiguration.model';
+import { type AnnotationDefinition } from '../../types/AnnotationConfiguration.model';
 import { type NavbarAction } from '../../components/navbar.properties';
 
 const properties = defineProps(AnnotationInfoCardProperties);
 
+const baseRef = ref<InstanceType<typeof AnnotationInfoCardBase>>();
 const { config, editorState, sendAnnotationEvent, utils } = useEditorState();
 
 const purpose = computed(() => {
-  const annotation = properties.annotation;
-  if (!annotation) return 'default';
-  return utils.getAnnotationType(annotation);
-});
-const annotationDef = computed(() => {
-  return config.annotation.getDefinition(purpose.value);
-});
-const purposeLabel = computed(() => {
-  return annotationDef.value?.label || purpose.value;
+  if (!properties.annotation) return 'default';
+  return utils.getAnnotationType(properties.annotation);
 });
 
-const validation = computed(() => {
-  return annotationDef.value!.schema as FormValidationDef;
-});
-
-const metadata = computed(() => {
-  return utils.getMetadata(properties.annotation!, validation.value);
-});
+const annotationDef = computed(() =>
+  config.annotation.getDefinition(purpose.value),
+);
 
 const close = () => {
   sendAnnotationEvent('select', null);
@@ -66,7 +51,7 @@ const close = () => {
 };
 
 const createAnnotation = (annotationType: string) => {
-  closeNextClick.value = true;
+  baseRef.value?.skipNextClose();
   sendAnnotationEvent('create', {
     type: annotationType,
     source: properties.source,
@@ -120,7 +105,7 @@ const actions = computed(() => {
       label: 'Edit',
       disabled: editorState.disableEdits,
       action: () => {
-        closeNextClick.value = true;
+        baseRef.value?.skipNextClose();
         sendAnnotationEvent('edit', {
           annotation: properties.annotation!,
           source: properties.source!,
@@ -140,34 +125,4 @@ const actions = computed(() => {
     .filter((i) => !!i)
     .flat() as NavbarAction[];
 });
-
-const cardRef = ref<HTMLElement>();
-
-onMounted(() => {
-  document.addEventListener('click', handleOutsideClick);
-});
-onUnmounted(() => {
-  document.removeEventListener('click', handleOutsideClick);
-});
-
-const closeNextClick = ref(true);
-watch(
-  () => properties.annotation,
-  () => {
-    closeNextClick.value = true;
-  },
-);
-
-function handleOutsideClick(e: MouseEvent) {
-  if (editorState.disableEdits) return;
-
-  if (closeNextClick.value) {
-    closeNextClick.value = false;
-    return;
-  }
-
-  if (cardRef.value && !cardRef.value.contains(e.target as Node)) {
-    close();
-  }
-}
 </script>
