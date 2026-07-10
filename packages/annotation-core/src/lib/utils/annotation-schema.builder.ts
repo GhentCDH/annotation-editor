@@ -3,6 +3,7 @@ import { type AnnotationColumnConfig } from '../types/annotation-json-config.typ
 
 const buildControlBuilder = (column: AnnotationColumnConfig) => {
   const builder = ControlBuilder.properties<any>(column.id);
+  builder.customLabel(column.label);
 
   if (!column.fieldInput) return builder;
 

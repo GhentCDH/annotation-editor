@@ -13,15 +13,12 @@
         <slot name="header-actions" />
       </div>
       <MetadataTable
-        v-if="metadata && validation?.metaDataSchema"
+        v-if="metadata && metadataSchema && validation"
         :data="metadata"
         :schema="validation.jsonSchema"
-        :ui-schema="validation.metaDataSchema"
+        :ui-schema="metadataSchema"
       />
-      <slot
-        name="links"
-        :annotation="annotation!"
-      />
+      <slot name="links" :annotation="annotation!" />
       <slot name="actions" />
     </div>
   </div>
@@ -29,10 +26,7 @@
 <script lang="ts" setup>
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import MetadataTable from './Metadata.vue';
-import {
-  AnnotationInfoCardBaseEmits,
-  AnnotationInfoCardBaseProperties,
-} from './AnnotationInfoCardBase.properties';
+import { AnnotationInfoCardBaseEmits, AnnotationInfoCardBaseProperties } from './AnnotationInfoCardBase.properties';
 import { type FormValidationDef } from '../../types/AnnotationConfiguration.model';
 
 const properties = defineProps(AnnotationInfoCardBaseProperties);
@@ -57,7 +51,16 @@ const validation = computed(
 
 const metadata = computed(() => {
   if (!properties.annotation || !validation.value) return null;
-  return properties.utils.getMetadata(properties.annotation, validation.value);
+  return properties.utils.getMetadata(
+    properties.annotation,
+    validation.value as any,
+  );
+});
+const metadataSchema = computed(() => {
+  const v = validation.value;
+  if (!v) return null;
+
+  return v.metadataSchema ?? v.metaDataSchema;
 });
 
 const cardRef = ref<HTMLElement>();
