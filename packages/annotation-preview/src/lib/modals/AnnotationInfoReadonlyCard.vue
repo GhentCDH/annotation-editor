@@ -31,6 +31,7 @@
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import {
   AnnotationInfoCardProperties,
+  type FormValidationDef,
   MetadataTable,
 } from '@ghentcdh/annotation-ui';
 import LinksDetailReadonly from './LinksDetailReadonly.vue';
@@ -53,7 +54,7 @@ const purposeLabel = computed(
   () => annotationDef.value?.label || purpose.value,
 );
 
-const validation = computed(() => annotationDef.value?.schema);
+const validation = computed(() => annotationDef.value?.schema as FormValidationDef | undefined);
 
 const metadata = computed(() => {
   if (!properties.annotation || !validation.value) return null;

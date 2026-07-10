@@ -15,7 +15,9 @@ import {
   annotationUtils,
   type AnnotationUtils,
   createModalConfig,
-  getAnnotationElementCenter, type SourceModel 
+  getAnnotationElementCenter,
+  getMousePosition,
+  type SourceModel,
 } from '@ghentcdh/annotation-ui';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { type PreviewConfig, type PreviewState_ } from './previewState';
@@ -139,7 +141,7 @@ export const useProvidePreviewState = (
     const position = getAnnotationElementCenter(
       containerRef.value!,
       data.annotation.id,
-    ) ?? getMousePositionFromEvent(containerRef.value!, data.mouseEvent);
+    ) ?? getMousePosition(containerRef.value!, data.mouseEvent);
 
     config.modal.show('info-card', {
       annotation: data.annotation,
@@ -157,14 +159,6 @@ export const useProvidePreviewState = (
     utils,
     sendSelectEvent,
   });
-};
-
-const getMousePositionFromEvent = (container: HTMLElement, event: MouseEvent) => {
-  const rect = container.getBoundingClientRect();
-  return {
-    x: event.clientX - rect.left + container.scrollLeft,
-    y: event.clientY - rect.top + container.scrollTop,
-  };
 };
 
 export const usePreviewState = (): PreviewState => {

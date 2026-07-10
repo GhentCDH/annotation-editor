@@ -1,7 +1,7 @@
 import AnnotationEditor from './lib/AnnotationEditor.vue';
 import './lib/styles.css';
 
-// Re-export annotation-core (excluding AnnotationDefinition which conflicts with annotation-ui's version)
+// Re-export annotation-core (Zod-inferred AnnotationDefinition aliased to avoid conflict with UI version)
 export {
   type AnnotationContext,
   AnnotationMetadataType,

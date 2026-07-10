@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const annotationColumnDefinition = z.object({});
+export const annotationColumnDefinition = z.custom<any>();
 
 export const annotationDefinition = z.object({
   id: z.string(),
@@ -15,10 +15,10 @@ export const annotationDefinition = z.object({
   type: z.string().optional(),
   icon: z.string().optional(),
   isRoot: z.boolean().default(true),
-  allowedChildren: z.array(z.string()).optional(),
-  allowedLinks: z.array(z.string()).optional(),
+  allowedChildren: z.array(z.string()).default([]),
+  allowedLinks: z.array(z.string()).default([]),
   context: z.custom<unknown>(),
-  target: z.enum(['gutter', 'underline', 'highlight']).optional(),
+  target: z.enum(['gutter', 'underline', 'highlight']).default('highlight'),
 });
 
 export type AnnotationDefinition = z.infer<typeof annotationDefinition>;

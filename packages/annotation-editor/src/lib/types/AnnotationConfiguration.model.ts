@@ -1,2 +1,4 @@
-// Moved to @ghentcdh/annotation-ui — re-exported for backwards compatibility
+/**
+ * @deprecated Import from `@ghentcdh/annotation-core` or `@ghentcdh/annotation-ui` instead.
+ */
 export * from '@ghentcdh/annotation-ui';
