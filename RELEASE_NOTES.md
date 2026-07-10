@@ -1,3 +1,18 @@
+## 0.0.1-alpha.10 (2026-07-10)
+
+### 🩹 Fixes
+
+- some small things ([d502807](https://github.com/GhentCDH/annotation-editor/commit/d502807))
+- some small things ([6912277](https://github.com/GhentCDH/annotation-editor/commit/6912277))
+- some small things ([41333e9](https://github.com/GhentCDH/annotation-editor/commit/41333e9))
+- gneeration of metadata ([8e309d0](https://github.com/GhentCDH/annotation-editor/commit/8e309d0))
+- **annotation-vue:** remove annotation-core from peerDependencies ([f74084c](https://github.com/GhentCDH/annotation-editor/commit/f74084c))
+
+### ❤️ Thank You
+
+- Bo Vandersteene
+- Claude Opus 4.6
+
 ## 0.0.1-alpha.9 (2026-06-30)
 
 ### 🩹 Fixes
