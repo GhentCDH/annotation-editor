@@ -12,3 +12,26 @@
 @import '@ghentcdh/crouton-vue/styles.css';
 @import '@ghentcdh/annotation-preview/index.css';
 @import '@ghentcdh/annotation-editor/index.css';
+
+// At large viewports the theme grows --sidebar-space via clamp(), which
+// translates to a huge padding-inline-start on .vp-sidebar that pushes
+// all content off-screen. Pin the sidebar to a fixed width and zero padding.
+   .vp-sidebar {
+       width: 22rem !important;
+       padding-inline-start: 0 !important;
+   }
+
+@media (min-width: 1440px) {
+    .vp-sidebar {
+        --sidebar-space: 22rem;
+    }
+}
+
+.vp-sidebar-link,
+.vp-sidebar-title,
+.vp-sidebar-header {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+

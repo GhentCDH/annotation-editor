@@ -8,7 +8,7 @@
   />
 </template>
 <script setup lang="ts">
-import { JsonForm, type JsonFormsLayout } from '@ghentcdh/crouton-forms-vue';
+import { JsonForm, type JsonFormsLayout } from '@ghentcdh/crouton-vue';
 import { type UISchemaElement } from '@jsonforms/core';
 
 const properties = defineProps<{

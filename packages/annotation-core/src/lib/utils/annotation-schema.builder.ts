@@ -1,4 +1,4 @@
-import { ControlBuilder, LayoutBuilder } from '@ghentcdh/crouton-forms-vue';
+import { ControlBuilder, LayoutBuilder } from '@ghentcdh/crouton-core';
 import { type AnnotationColumnConfig } from '../types/annotation-json-config.types';
 
 const buildControlBuilder = (column: AnnotationColumnConfig) => {

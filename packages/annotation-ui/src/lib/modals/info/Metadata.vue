@@ -1,5 +1,5 @@
 <template>
-  <JsonForm
+  <FormComponent
     :id="`annotation-selection-modal`"
     :form-data="data"
     :readonly="true"
@@ -9,7 +9,8 @@
 </template>
 <script setup lang="ts">
 import { type UISchemaElement } from '@jsonforms/core';
-import { JsonForm, type JsonFormsLayout } from '@ghentcdh/crouton-forms-vue';
+import { type JsonFormsLayout } from '@ghentcdh/crouton-core';
+import { FormComponent } from '@ghentcdh/crouton-forms-vue';
 
 const properties = defineProps<{
   data: any;

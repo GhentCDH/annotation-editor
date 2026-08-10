@@ -1,5 +1,5 @@
 <template>
-  <JsonForm
+  <AutoSaveForm
     v-if="formValidation"
     :id="`annotation-selection-modal`"
     :form-data="formData"
@@ -14,7 +14,7 @@ import { computed, onMounted } from 'vue';
 
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 
-import { JsonForm } from '@ghentcdh/crouton-forms-vue';
+import { AutoSaveForm } from '@ghentcdh/crouton-forms-vue';
 import { useEditorState } from '../../composables/useEditorState';
 
 const formData = defineModel<any>();
