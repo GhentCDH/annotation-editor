@@ -1,8 +1,17 @@
 import { type AnnotationDefConfig } from './annotation.context-builder';
-import { buildUiSchema, buildMetadataSchema } from './annotation-schema.builder';
+import {
+  buildMetadataSchema,
+  buildUiSchema,
+} from './annotation-schema.builder';
 import { annotationContextBuilderFactory } from './context-builder.factory';
-import { type AnnotationDefinition } from '../types/annotation-definition.type';
-import { type AnnotationJsonConfig } from '../types/annotation-json-config.types';
+import {
+  annotationDefinition,
+  type AnnotationDefinition,
+} from '../types/annotation-definition.type';
+import {
+  type AnnotationJsonConfig,
+  AnnotationJsonResourceSchema,
+} from '../types/annotation-json-config.types';
 
 export type ContextBuilderFactory = (
   id: string,
@@ -11,10 +20,16 @@ export type ContextBuilderFactory = (
 ) => unknown;
 
 export const buildAnnotationDefinition = (
-  json: AnnotationJsonConfig,
+  jsonConfig: AnnotationJsonConfig,
   annotationDefConfig: AnnotationDefConfig,
   factory: ContextBuilderFactory = annotationContextBuilderFactory,
 ): AnnotationDefinition => {
+  const parsed = AnnotationJsonResourceSchema.safeParse(jsonConfig);
+
+  if (!parsed.success) {
+    throw new Error(parsed.error as any);
+  }
+  const json = parsed.data;
   const context = factory(json.id, json, annotationDefConfig);
   const columns = json.columns ?? [];
   const hasColumns = columns.length > 0;
@@ -25,19 +40,13 @@ export const buildAnnotationDefinition = (
     json.metadata_schema ??
     (hasColumns ? buildMetadataSchema(columns) : undefined);
 
-  const definition: AnnotationDefinition = {
-    id: json.id,
-    name: json.name,
-    color: json.color,
+  const definition: AnnotationDefinition = annotationDefinition.parse({
+    ...json,
     isRoot: json.isRoot ?? true,
-    columns: columns as unknown as AnnotationDefinition['columns'],
     context,
     json_ld: (context as any).toJsonLdContext(),
     json_schema: uiSchema ? (context as any).toJsonSchema() : null,
-    allowedChildren: json.allowedChildren ?? [],
-    allowedLinks: json.allowedLinks ?? [],
-    target: json.target ?? 'highlight',
-  };
+  });
 
   if (uiSchema) definition.ui_schema = uiSchema;
   if (metadataSchema) definition.metadata_schema = metadataSchema;

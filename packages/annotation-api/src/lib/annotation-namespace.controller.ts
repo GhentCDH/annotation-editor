@@ -1,8 +1,27 @@
 import { Controller, Get, Inject, Param } from '@nestjs/common';
-import { type AnnotationDefConfig, AnnotationStyleContextBuilder, AnnotationStyleType } from '@ghentcdh/annotation-core';
+import {
+  type AnnotationDefConfig,
+  AnnotationStyleContextBuilder,
+  AnnotationStyleType,
+  JsonColumnTypeSchema,
+} from '@ghentcdh/annotation-core';
 import { ApiTags } from '@nestjs/swagger';
 import { AnnotationDefinitionService } from './service/annotation-definition.service';
 import { ANNOTATION_DEF_CONFIG_TOKEN } from './utils/annotation.context-builder';
+import { JsonColumnSchema } from '@ghentcdh/crouton-core';
+import { buildViews } from '@ghentcdh/crouton-api';
+import { z } from 'zod';
+
+export const ColumnSchema = JsonColumnSchema.extend({
+  type: JsonColumnTypeSchema.optional(),
+});
+
+const parseColumns = (columns: any[]) => {
+  return columns.map((column) => {
+    return ColumnSchema.parse(column);
+    //{ ...ColumnSchema.safeParse(column), column };
+  });
+};
 
 @Controller('ns')
 @ApiTags('Annotations NS')
@@ -35,6 +54,8 @@ export class AnnotationNamespaceController {
     const definition = await this.service.findById(id);
 
     return {
+      foo: 2,
+      jsonColumns: parseColumns(definition.columns),
       id: definition.id,
       name: definition.name,
       json_schema: definition.json_schema,
@@ -47,6 +68,10 @@ export class AnnotationNamespaceController {
       type: definition.type,
       icon: definition.icon,
       target: definition.target,
+      views: buildViews(
+        z.fromJSONSchema(definition.json_schema),
+        parseColumns(definition.columns),
+      ),
     };
   }
 

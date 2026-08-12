@@ -1,6 +1,9 @@
 import { type ContextBuilder } from '@ghentcdh/w3c-utils';
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { type AnnotationDefinition, type AnnotationDefConfig } from '@ghentcdh/annotation-core';
+import {
+  type AnnotationDefConfig,
+  type AnnotationDefinition,
+} from '@ghentcdh/annotation-core';
 import { ANNOTATION_DEF_CONFIG_TOKEN } from '../utils/annotation.context-builder';
 
 @Injectable()
@@ -47,7 +50,7 @@ export abstract class AnnotationDefinitionService {
   }
 
   async findById(id: string): Promise<AnnotationDefinition> {
-    await this.setDefinitions();
+    await this.setDefinitions(true);
 
     let find = this.groupedDefinitions[id];
 

@@ -1,20 +1,19 @@
 <template>
-  <AutoSaveForm
-    v-if="formValidation"
-    :id="`annotation-selection-modal`"
-    :form-data="formData"
-    :schema="formValidation.jsonSchema"
-    :ui-schema="formValidation.uiSchema"
-    @change="onChange"
-    @errors="onErrors"
-  />
+  <!--  <AutoSaveForm-->
+  <!--    v-if="formValidation"-->
+  <!--    :id="`annotation-selection-modal`"-->
+  <!--    :form-data="formData"-->
+  <!--    :schema="formValidation.jsonSchema"-->
+  <!--    :ui-schema="formValidation.uiSchema"-->
+  <!--    @change="onChange"-->
+  <!--    @errors="onErrors"-->
+  <!--  />-->
+  Fix the form with autosave ...
 </template>
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
 
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-
-import { AutoSaveForm } from '@ghentcdh/crouton-forms-vue';
 import { useEditorState } from '../../composables/useEditorState';
 
 const formData = defineModel<any>();
