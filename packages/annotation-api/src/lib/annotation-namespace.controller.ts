@@ -6,11 +6,11 @@ import {
   JsonColumnTypeSchema,
 } from '@ghentcdh/annotation-core';
 import { ApiTags } from '@nestjs/swagger';
-import { AnnotationDefinitionService } from './service/annotation-definition.service';
-import { ANNOTATION_DEF_CONFIG_TOKEN } from './utils/annotation.context-builder';
 import { JsonColumnSchema } from '@ghentcdh/crouton-core';
 import { buildViews } from '@ghentcdh/crouton-api';
 import { z } from 'zod';
+import { ANNOTATION_DEF_CONFIG_TOKEN } from './utils/annotation.context-builder';
+import { AnnotationDefinitionService } from './service/annotation-definition.service';
 
 export const ColumnSchema = JsonColumnSchema.extend({
   type: JsonColumnTypeSchema.optional(),

@@ -22,8 +22,15 @@
 <script lang="ts" setup>
 import { computed, onMounted, useTemplateRef } from 'vue';
 import { Collapse } from '@ghentcdh/ui';
-import { type SourceModel, buildGridStyle, getPaneArea } from '@ghentcdh/annotation-ui';
-import { AnnotationEditorEmits, AnnotationEditorProperties } from './AnnotationEditor.properties';
+import {
+  buildGridStyle,
+  getPaneArea,
+  type SourceModel,
+} from '@ghentcdh/annotation-ui';
+import {
+  AnnotationEditorEmits,
+  AnnotationEditorProperties,
+} from './AnnotationEditor.properties';
 import SourceEdit from './components/SourceEdit.vue';
 import AnnotationModal from './modals/AnnotationModal.vue';
 import { useProvideEditorState } from './composables/useEditorState';

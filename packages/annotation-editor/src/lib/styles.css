@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
 @import '@ghentcdh/ui/index.css';
+@import '@ghentcdh/annotated-text/annotated-text.css';
 
 @source "../";
