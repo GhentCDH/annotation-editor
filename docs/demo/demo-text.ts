@@ -124,22 +124,7 @@ export const _definitions: AnnotationDefinition[] = [
       color: '#712793',
       target: 'highlight',
     },
-    schema: {
-      type: 'object',
-      properties: {
-        value: {
-          type: 'string',
-          label: 'Term',
-          required: true,
-        },
-        language: {
-          type: 'string',
-          label: 'Language',
-          enum: ['en', 'nl', 'ar'],
-          required: true,
-        },
-      },
-    },
+    views: {},
     allowedChildren: [],
     allowedLinks: [
       { key: 'animals', label: 'Animals' },
@@ -158,22 +143,7 @@ export const _definitions: AnnotationDefinition[] = [
       color: '#65a378',
       target: 'highlight',
     },
-    schema: {
-      type: 'object',
-      properties: {
-        value: {
-          type: 'string',
-          label: 'Term',
-          required: true,
-        },
-        language: {
-          type: 'string',
-          label: 'Language',
-          enum: ['en', 'nl', 'ar'],
-          required: true,
-        },
-      },
-    },
+    views: {},
     allowedChildren: [],
     allowedLinks: [{ key: 'keyconcepts', label: 'Key Concepts' }],
     isRoot: false,
@@ -189,22 +159,7 @@ export const _definitions: AnnotationDefinition[] = [
       color: '#f3ff4d',
       target: 'highlight',
     },
-    schema: {
-      type: 'object',
-      properties: {
-        value: {
-          type: 'string',
-          label: 'Term',
-          required: true,
-        },
-        language: {
-          type: 'string',
-          label: 'Language',
-          enum: ['en', 'nl', 'ar'],
-          required: true,
-        },
-      },
-    },
+    views: {},
     allowedChildren: [],
     allowedLinks: [{ key: 'keyconcepts', label: 'Key Concepts' }],
     isRoot: false,

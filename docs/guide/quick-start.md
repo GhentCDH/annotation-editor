@@ -31,7 +31,7 @@ const config: AnnotationDefConfig = {
 };
 ```
 
-**`AnnotationDefinition[]`** — the annotation types available in the editor (label, colour, JSON schema for the form, etc). Load these with `provideAnnotationDefinitions` from `@ghentcdh/annotation-vue`, or build them manually.
+**`AnnotationDefinition[]`** — the annotation types available in the editor (label, colour, views for table/form/detail display, etc). Load these with `provideAnnotationDefinitions` from `@ghentcdh/annotation-vue`, or build them manually.
 
 **`SourceModel[]`** — the text sources to annotate. Each source is a plain object:
 

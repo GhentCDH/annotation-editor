@@ -56,7 +56,7 @@ const onSelect = (annotation: W3CAnnotation | null, action: string | null) => {
 | `configuration` | `AnnotationDefConfig` | ✓ | — | Base URL, app name, and prefix for annotation URIs |
 | `sources` | `SourceModel[]` | ✓ | — | Text sources to display |
 | `annotations` | `W3CAnnotation[]` | ✓ | — | Annotations to highlight |
-| `annotationDefinitions` | `AnnotationDefinition[]` | ✓ | — | Available annotation types (used for labels and styles) |
+| `annotationDefinitions` | `AnnotationDefinition[]` | ✓ | — | Available annotation types (labels, styles, and views) |
 | `cols` | `number` | — | `2` | Number of grid columns (ignored when `layout` is set) |
 | `layout` | `GridLayout` | — | `undefined` | Custom CSS grid layout — see [Custom layout](#custom-layout). Also available as `PreviewLayout` (deprecated alias). |
 | `selectedAnnotationId` | `string` | — | `undefined` | Highlight a specific annotation on mount |

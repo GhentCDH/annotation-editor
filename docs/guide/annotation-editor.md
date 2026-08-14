@@ -62,7 +62,7 @@ const onSelect  = (a: W3CAnnotation | null, action: string | null) => { console.
 | `configuration` | `AnnotationDefConfig` | ✓ | — | Base URL, app name, and prefix for annotation URIs |
 | `sources` | `SourceModel[]` | ✓ | — | Text sources to render and annotate |
 | `annotations` | `W3CAnnotation[]` | ✓ | — | Current set of annotations (managed externally) |
-| `annotationDefinitions` | `AnnotationDefinition[]` | ✓ | — | Available annotation types (label, colour, form schema) |
+| `annotationDefinitions` | `AnnotationDefinition[]` | ✓ | — | Available annotation types (label, colour, views for table/form/detail) |
 | `cols` | `number` | — | `2` | Number of grid columns (ignored when `layout` is set) |
 | `layout` | `GridLayout` | — | `undefined` | Custom CSS grid layout — see [Custom layout](#custom-layout) |
 | `modalView` | `boolean` | — | `true` | Show annotation details in a modal (`true`) or inline (`false`) |
