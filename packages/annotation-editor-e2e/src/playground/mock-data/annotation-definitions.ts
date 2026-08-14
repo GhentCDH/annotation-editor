@@ -32,7 +32,7 @@ export const mockAnnotationDefinitions: AnnotationDefinition[] = [
     },
     allowedChildren: [{ key: 'note', label: 'Note' }],
     allowedLinks: [],
-    schema: noSchema,
+    views: {},
     context: ctx('entity', 'Entity', '#4f46e5'),
   },
   {
@@ -45,7 +45,7 @@ export const mockAnnotationDefinitions: AnnotationDefinition[] = [
     },
     allowedChildren: [],
     allowedLinks: [],
-    schema: noSchema,
+    views: {},
     context: ctx('note', 'Note', '#16a34a'),
   },
 ];

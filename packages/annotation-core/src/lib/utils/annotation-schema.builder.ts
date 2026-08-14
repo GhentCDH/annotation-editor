@@ -1,3 +1,4 @@
+import { type Layout } from '@jsonforms/core';
 import { ControlBuilder, LayoutBuilder } from '@ghentcdh/crouton-core';
 import { type AnnotationColumnConfig } from '../types/annotation-json-config.types';
 
@@ -49,7 +50,7 @@ export const buildControlElement = (column: AnnotationColumnConfig) =>
 export const buildMetadataElement = (column: AnnotationColumnConfig) =>
   buildControlBuilder(column).readonly().build();
 
-export const buildUiSchema = (columns: AnnotationColumnConfig[]) => {
+export const buildUiSchema = (columns: AnnotationColumnConfig[]): Layout => {
   const layout = LayoutBuilder.grid<any>();
 
   columns
@@ -59,7 +60,9 @@ export const buildUiSchema = (columns: AnnotationColumnConfig[]) => {
   return layout.build();
 };
 
-export const buildMetadataSchema = (columns: AnnotationColumnConfig[]) => {
+export const buildMetadataSchema = (
+  columns: AnnotationColumnConfig[],
+): Layout => {
   const layout = LayoutBuilder.grid<any>();
 
   columns

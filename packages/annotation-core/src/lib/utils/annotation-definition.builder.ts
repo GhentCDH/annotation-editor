@@ -1,8 +1,5 @@
 import { type AnnotationDefConfig } from './annotation.context-builder';
-import {
-  buildMetadataSchema,
-  buildUiSchema,
-} from './annotation-schema.builder';
+import { buildUiSchema } from './annotation-schema.builder';
 import { annotationContextBuilderFactory } from './context-builder.factory';
 import {
   annotationDefinition,
@@ -36,9 +33,6 @@ export const buildAnnotationDefinition = (
 
   const uiSchema =
     json.ui_schema ?? (hasColumns ? buildUiSchema(columns) : undefined);
-  const metadataSchema =
-    json.metadata_schema ??
-    (hasColumns ? buildMetadataSchema(columns) : undefined);
 
   const definition: AnnotationDefinition = annotationDefinition.parse({
     ...json,
@@ -48,8 +42,6 @@ export const buildAnnotationDefinition = (
     json_schema: uiSchema ? (context as any).toJsonSchema() : null,
   });
 
-  if (uiSchema) definition.ui_schema = uiSchema;
-  if (metadataSchema) definition.metadata_schema = metadataSchema;
   if (json.type) definition.type = json.type;
   if (json.icon) definition.icon = json.icon;
 

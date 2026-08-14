@@ -63,12 +63,7 @@ export const createAnnotationConfiguration = (
       style: { default: createHighlightStyle('#dd7777') },
       allowedChildren: [],
       allowedLinks: [],
-      schema: {
-        uiSchema: { type: 'VerticalLayout', elements: [] },
-        jsonSchema: { type: 'object', properties: {} },
-        metaDataSchema: { type: 'VerticalLayout', elements: [] },
-        validation: () => undefined,
-      },
+      views: {},
     } as unknown as CustomAnnotationStyle;
   }
 

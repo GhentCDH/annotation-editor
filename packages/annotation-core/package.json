@@ -13,6 +13,7 @@
     "@ghentcdh/annotated-text": "^1.0.9",
     "@ghentcdh/w3c-utils": "^1.0.10",
     "zod": "^4.3.6",
-    "@ghentcdh/crouton-core": "0.0.1-alpha.36"
+    "@ghentcdh/crouton-core": "0.0.1-alpha.38",
+    "@jsonforms/core": "^3.0.0"
   }
 }

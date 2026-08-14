@@ -5,19 +5,21 @@ import {
 } from '@ghentcdh/annotated-text';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { type AnnotationContext } from './annotation.contex';
-import { type FormValidationDef } from './form-validation.type';
 import { type KeyLabel } from './key-label.type';
 import { type SourceModel } from './source.model';
+import { ViewConfig } from '@ghentcdh/crouton-core';
+
+type ViewDef = 'table' | 'view' | 'form';
 
 export type UIAnnotationDefinition = {
   id: string;
-  schema: FormValidationDef;
   label: string;
   style: CustomAnnotationStyle;
   allowedChildren: Array<KeyLabel>;
   allowedLinks: Array<KeyLabel>;
   isRoot?: boolean;
   context: AnnotationContext;
+  views: Record<ViewDef, ViewConfig>;
 };
 
 export type AllowedChildrenPerType = Record<string, Array<KeyLabel>>;

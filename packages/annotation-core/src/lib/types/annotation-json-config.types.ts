@@ -66,7 +66,6 @@ export const AnnotationJsonResourceBaseSchema = z.object({
   allowedLinks: z.array(z.string()).optional().default([]),
   columns: z.array(AnnotationColumnConfigSchema).optional().default([]),
   ui_schema: z.any().optional(),
-  metadata_schema: z.any().optional(),
   target: AnnotationTargetEnum.optional().default('highlight'),
 });
 export const AnnotationJsonResourceSchema =

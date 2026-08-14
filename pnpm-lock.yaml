@@ -9,14 +9,14 @@ importers:
   .:
     dependencies:
       '@ghentcdh/crouton-api':
-        specifier: 0.0.1-alpha.37
-        version: 0.0.1-alpha.37(148bb1bc8a224332241522b66b0349d6)
+        specifier: 0.0.1-alpha.38
+        version: 0.0.1-alpha.38(148bb1bc8a224332241522b66b0349d6)
       '@ghentcdh/crouton-cli':
-        specifier: 0.0.1-alpha.37
-        version: 0.0.1-alpha.37(magicast@0.5.4)(typescript@6.0.3)
+        specifier: 0.0.1-alpha.38
+        version: 0.0.1-alpha.38(magicast@0.5.4)(typescript@6.0.3)
       '@ghentcdh/crouton-core':
-        specifier: 0.0.1-alpha.37
-        version: 0.0.1-alpha.37(@jsonforms/core@3.8.0)(zod@4.4.3)
+        specifier: 0.0.1-alpha.38
+        version: 0.0.1-alpha.38(@jsonforms/core@3.8.0)(zod@4.4.3)
       '@tiptap/markdown':
         specifier: ^3.27.1
         version: 3.30.0(@tiptap/core@3.30.0(@tiptap/pm@3.30.0))(@tiptap/pm@3.30.0)
@@ -26,6 +26,9 @@ importers:
       '@tiptap/vue-3':
         specifier: ^3.27.1
         version: 3.30.0(@floating-ui/dom@1.8.0)(@tiptap/core@3.30.0(@tiptap/pm@3.30.0))(@tiptap/pm@3.30.0)(vue@3.5.39(typescript@6.0.3))
+      axios:
+        specifier: ^1.19.0
+        version: 1.19.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1)
     devDependencies:
       '@eslint/js':
         specifier: ^10.0.1
@@ -40,11 +43,11 @@ importers:
         specifier: workspace:*
         version: link:packages/annotation-ui
       '@ghentcdh/crouton-forms-vue':
-        specifier: 0.0.1-alpha.37
-        version: 0.0.1-alpha.37(@ghentcdh/ui@3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.30.0)(@tiptap/starter-kit@3.30.0)(@tiptap/vue-3@3.30.0(@floating-ui/dom@1.8.0)(@tiptap/core@3.30.0(@tiptap/pm@3.30.0))(@tiptap/pm@3.30.0)(vue@3.5.39(typescript@6.0.3)))(vue-router@5.1.0(@vue/compiler-sfc@3.5.41)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.62.4)(vite@8.1.1(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3)))(@jsonforms/core@3.8.0)(@playwright/test@1.61.1)(vue-router@5.1.0(@vue/compiler-sfc@3.5.41)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.62.4)(vite@8.1.1(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3))(zod@4.4.3)
+        specifier: 0.0.1-alpha.38
+        version: 0.0.1-alpha.38(@ghentcdh/ui@3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.30.0)(@tiptap/starter-kit@3.30.0)(@tiptap/vue-3@3.30.0(@floating-ui/dom@1.8.0)(@tiptap/core@3.30.0(@tiptap/pm@3.30.0))(@tiptap/pm@3.30.0)(vue@3.5.39(typescript@6.0.3)))(vue-router@5.1.0(@vue/compiler-sfc@3.5.41)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.62.4)(vite@8.1.1(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3)))(@jsonforms/core@3.8.0)(@playwright/test@1.61.1)(vue-router@5.1.0(@vue/compiler-sfc@3.5.41)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.62.4)(vite@8.1.1(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3))(zod@4.4.3)
       '@ghentcdh/crouton-vue':
-        specifier: 0.0.1-alpha.37
-        version: 0.0.1-alpha.37(8a60f5f803dc855ef8b79458a554fd73)
+        specifier: 0.0.1-alpha.38
+        version: 0.0.1-alpha.38(de7b7b4a6e716637868c7a8193fccc43)
       '@ghentcdh/ui':
         specifier: ^3.0.6
         version: 3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.30.0)(@tiptap/starter-kit@3.30.0)(@tiptap/vue-3@3.30.0(@floating-ui/dom@1.8.0)(@tiptap/core@3.30.0(@tiptap/pm@3.30.0))(@tiptap/pm@3.30.0)(vue@3.5.39(typescript@6.0.3)))(vue-router@5.1.0(@vue/compiler-sfc@3.5.41)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.62.4)(vite@8.1.1(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3))
@@ -196,11 +199,14 @@ importers:
         specifier: ^1.0.9
         version: 1.0.10(@types/debug@4.1.13)(@types/node@26.2.0)(jiti@2.7.0)(jsdom@29.1.1)(lightningcss@1.33.0)(sass-embedded@1.100.0)(sass@1.100.0)(supports-color@8.1.1)(yaml@2.9.0)
       '@ghentcdh/crouton-core':
-        specifier: 0.0.1-alpha.36
-        version: 0.0.1-alpha.36(@jsonforms/core@3.8.0)(zod@4.4.3)
+        specifier: 0.0.1-alpha.38
+        version: 0.0.1-alpha.38(@jsonforms/core@3.8.0)(zod@4.4.3)
       '@ghentcdh/w3c-utils':
         specifier: ^1.0.10
         version: 1.0.10(@types/debug@4.1.13)(@types/node@26.2.0)(jiti@2.7.0)(jsdom@29.1.1)(lightningcss@1.33.0)(sass-embedded@1.100.0)(sass@1.100.0)(supports-color@8.1.1)(yaml@2.9.0)
+      '@jsonforms/core':
+        specifier: ^3.0.0
+        version: 3.8.0
       zod:
         specifier: ^4.3.6
         version: 4.4.3
@@ -1286,8 +1292,8 @@ packages:
   '@ghentcdh/annotated-text@1.0.10':
     resolution: {integrity: sha512-sLZIHym0rLDIc6cnulA5c9GgIQUfPDjzTZGVafNOW+SEjK1BcJcpyJx5y4a+n1EbVyNF7Bd/rdXQx+LXtHzA7g==}
 
-  '@ghentcdh/crouton-api@0.0.1-alpha.37':
-    resolution: {integrity: sha512-90xpkFqXpXmQClK3UOqZlZs49+PSyv1wUINnX1iligkWQfnpZs4pxNnS65HMzxkWU1X5qrEuSOfLuqWy6TmlAA==}
+  '@ghentcdh/crouton-api@0.0.1-alpha.38':
+    resolution: {integrity: sha512-sj3VQcdphFC8bYwKYlMe+NicD06qwa+HmJwN+Rf5iShlcE0xhElJkDbP+mvojQpeYXj93cScIgJgs+h/w5vhbw==}
     peerDependencies:
       '@anatine/zod-nestjs': '>=2.0.0'
       '@nestjs/common': '>=10.0.0'
@@ -1300,24 +1306,18 @@ packages:
       '@prisma/internals':
         optional: true
 
-  '@ghentcdh/crouton-cli@0.0.1-alpha.37':
-    resolution: {integrity: sha512-CmNqHcwkrSivkGzHaE/aBU0jSQvlejk+9g6Cv9+H9ReEVGBKf0v1H34C9Am/nReM9mLJ3QaJiHDoC2enyRX5lQ==}
+  '@ghentcdh/crouton-cli@0.0.1-alpha.38':
+    resolution: {integrity: sha512-mM8H37i/Proux2ZpOfwL24MD+gHDUFrhkipDGzTG9G8KY1v0+22UvIDoqCkFGCSWszoHcCERWFdFHfqwItiVCA==}
     hasBin: true
 
-  '@ghentcdh/crouton-core@0.0.1-alpha.36':
-    resolution: {integrity: sha512-Q9DFoQNw9PfOEscR+uqC2x9niZkJgx6F0xjqvIw2PBTmaPlFcU2onBOlb0deyWvmkdlvRb2AQ6i47VklxarZ4A==}
+  '@ghentcdh/crouton-core@0.0.1-alpha.38':
+    resolution: {integrity: sha512-5AFDlirJ3jCxcqGtpCkRv4VAkfFGBQZjJcpIBJxUtANVk2nvGS9SI88vqazll5sVF8U3BdyCFtJyjxlgn4CjCw==}
     peerDependencies:
       '@jsonforms/core': ^3.0.0
       zod: ^4.0.0
 
-  '@ghentcdh/crouton-core@0.0.1-alpha.37':
-    resolution: {integrity: sha512-riwrUP9hhn7tfNdTPVNqvOi1HjaBFxEjdHEf0OZ/+JSGHrbdEUlRoDHxP2NxFEQS5nEL9ZGLjYQN1/Cte60JYg==}
-    peerDependencies:
-      '@jsonforms/core': ^3.0.0
-      zod: ^4.0.0
-
-  '@ghentcdh/crouton-forms-vue@0.0.1-alpha.37':
-    resolution: {integrity: sha512-DGUj09/nqdKqhGJmueYCqu2gjYSH13ZTprVhE6oBVD74RfqCEpUpmFZoRRK961zRc/D5UrKMd5CqK5H0pYPRjQ==}
+  '@ghentcdh/crouton-forms-vue@0.0.1-alpha.38':
+    resolution: {integrity: sha512-IomFKGd/qffyF4bztBwFhaDMFo04fJZzPSBWNWdNvj/wBADRg62hIICU0bZdQuouOWa5BiqqJz6f4Jw4bCC5lw==}
     peerDependencies:
       '@ghentcdh/ui': '*'
       '@jsonforms/core': '>=3.0.0'
@@ -1329,8 +1329,8 @@ packages:
       '@playwright/test':
         optional: true
 
-  '@ghentcdh/crouton-vue@0.0.1-alpha.37':
-    resolution: {integrity: sha512-AsMYGiEXvPh8xgYWhohV/rWamg8eaXH5tzta3TrmKIE9dMXS2WOmn2KR1QP8oUC86XVM5Bs9w8lCuUDf4bMxSQ==}
+  '@ghentcdh/crouton-vue@0.0.1-alpha.38':
+    resolution: {integrity: sha512-QsDF9obAYCWCfH2qbLiILtEMrTNDxON1CT+Iu+RD252VFkeLgD7Zf5S1eu5dCWBe8T215C3MhhgI4sHWNzwnnQ==}
     peerDependencies:
       '@ghentcdh/crouton-editor-vue': workspace:^
       '@ghentcdh/crouton-forms-vue': workspace:^
@@ -3621,6 +3621,10 @@ packages:
     resolution: {integrity: sha512-XNAb/a6TCqou+TufU8/u11HCu9x1gYvOoxLwtlXgIqmkrYQADVv6ljyW2zwiPhHz9R1gItAWpuDrdJMmrOBFEA==}
     engines: {node: '>= 16.0.0'}
 
+  agent-base@6.0.2:
+    resolution: {integrity: sha512-RZNwNclF7+MS/8bDg70amg32dyeZGZxiDuQmZxKLAlQjr3jGyLx+4Kkk58UO7D2QdgFIQCovuSuZESne6RG6XQ==}
+    engines: {node: '>= 6.0.0'}
+
   ajv-formats@2.1.1:
     resolution: {integrity: sha512-Wx0Kx52hxE7C18hkMEggYlEifqWZtYaRgouJor+WMdPnQyEK13vgEWyVNup7SoeeoLMsr4kf5h6dOW11I15MUA==}
     peerDependencies:
@@ -3694,6 +3698,9 @@ packages:
 
   axios@1.16.0:
     resolution: {integrity: sha512-6hp5CwvTPlN2A31g5dxnwAX0orzM7pmCRDLnZSX772mv8WDqICwFjowHuPs04Mc8deIld1+ejhtaMn5vp6b+1w==}
+
+  axios@1.19.0:
+    resolution: {integrity: sha512-ht/iuYZXEjFxLH/Hkezgd7m6JKlHHXEUSneaDz8uZe1Gj5QZtCnpyDsckvAiEnT89OEbCLmnte4R4sn7P0EKFw==}
 
   babel-plugin-const-enum@1.2.0:
     resolution: {integrity: sha512-o1m/6iyyFnp9MRsK1dHF3bneqyf3AlM2q3A/YbgQr2pCat6B6XJVDv2TXqzfY2RYUi4mak6WAksSBPlyYGx9dg==}
@@ -4670,6 +4677,10 @@ packages:
 
   htmlparser2@10.1.0:
     resolution: {integrity: sha512-VTZkM9GWRAtEpveh7MSF6SjjrpNVNNVJfFup7xTY3UpFtm67foy9HDVXneLtFVt4pMz5kZtgNcvCniNFb1hlEQ==}
+
+  https-proxy-agent@5.0.1:
+    resolution: {integrity: sha512-dFcAjpTQFgoLMzC2VwU+C/CbS7uRL0lWmxDITmqm7C+7F0Odmj6s9l6alZc6AELXhrnggM2CeWSXHGOdX2YtwA==}
+    engines: {node: '>= 6'}
 
   husky@9.1.7:
     resolution: {integrity: sha512-5gs5ytaNjBrh5Ow3zrvdUUY+0VxIuWVL4i9irt6friV+BqdCfmV11CQTWMiBYWHbXhco+J1kHfTOUkePhCDvMA==}
@@ -7898,7 +7909,7 @@ snapshots:
       - tsx
       - yaml
 
-  '@ghentcdh/crouton-api@0.0.1-alpha.37(148bb1bc8a224332241522b66b0349d6)':
+  '@ghentcdh/crouton-api@0.0.1-alpha.38(148bb1bc8a224332241522b66b0349d6)':
     dependencies:
       '@anatine/zod-nestjs': 2.0.12(@anatine/zod-openapi@2.2.8(openapi3-ts@4.6.1)(zod@4.4.3))(@nestjs/common@11.1.29(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/swagger@11.4.6(@nestjs/common@11.1.29(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@11.1.29(@nestjs/common@11.1.29(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2))(openapi3-ts@4.6.1)(zod@4.4.3)
       '@nestjs/common': 11.1.29(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1)
@@ -7909,24 +7920,19 @@ snapshots:
     optionalDependencies:
       '@prisma/internals': 7.9.1(magicast@0.5.4)(typescript@6.0.3)
 
-  '@ghentcdh/crouton-cli@0.0.1-alpha.37(magicast@0.5.4)(typescript@6.0.3)':
+  '@ghentcdh/crouton-cli@0.0.1-alpha.38(magicast@0.5.4)(typescript@6.0.3)':
     dependencies:
       '@prisma/internals': 7.9.1(magicast@0.5.4)(typescript@6.0.3)
     transitivePeerDependencies:
       - magicast
       - typescript
 
-  '@ghentcdh/crouton-core@0.0.1-alpha.36(@jsonforms/core@3.8.0)(zod@4.4.3)':
+  '@ghentcdh/crouton-core@0.0.1-alpha.38(@jsonforms/core@3.8.0)(zod@4.4.3)':
     dependencies:
       '@jsonforms/core': 3.8.0
       zod: 4.4.3
 
-  '@ghentcdh/crouton-core@0.0.1-alpha.37(@jsonforms/core@3.8.0)(zod@4.4.3)':
-    dependencies:
-      '@jsonforms/core': 3.8.0
-      zod: 4.4.3
-
-  '@ghentcdh/crouton-forms-vue@0.0.1-alpha.37(@ghentcdh/ui@3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.30.0)(@tiptap/starter-kit@3.30.0)(@tiptap/vue-3@3.30.0(@floating-ui/dom@1.8.0)(@tiptap/core@3.30.0(@tiptap/pm@3.30.0))(@tiptap/pm@3.30.0)(vue@3.5.39(typescript@6.0.3)))(vue-router@5.1.0(@vue/compiler-sfc@3.5.41)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.62.4)(vite@8.1.1(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3)))(@jsonforms/core@3.8.0)(@playwright/test@1.61.1)(vue-router@5.1.0(@vue/compiler-sfc@3.5.41)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.62.4)(vite@8.1.1(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3))(zod@4.4.3)':
+  '@ghentcdh/crouton-forms-vue@0.0.1-alpha.38(@ghentcdh/ui@3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.30.0)(@tiptap/starter-kit@3.30.0)(@tiptap/vue-3@3.30.0(@floating-ui/dom@1.8.0)(@tiptap/core@3.30.0(@tiptap/pm@3.30.0))(@tiptap/pm@3.30.0)(vue@3.5.39(typescript@6.0.3)))(vue-router@5.1.0(@vue/compiler-sfc@3.5.41)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.62.4)(vite@8.1.1(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3)))(@jsonforms/core@3.8.0)(@playwright/test@1.61.1)(vue-router@5.1.0(@vue/compiler-sfc@3.5.41)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.62.4)(vite@8.1.1(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3))(zod@4.4.3)':
     dependencies:
       '@ghentcdh/ui': 3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.30.0)(@tiptap/starter-kit@3.30.0)(@tiptap/vue-3@3.30.0(@floating-ui/dom@1.8.0)(@tiptap/core@3.30.0(@tiptap/pm@3.30.0))(@tiptap/pm@3.30.0)(vue@3.5.39(typescript@6.0.3)))(vue-router@5.1.0(@vue/compiler-sfc@3.5.41)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.62.4)(vite@8.1.1(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3))
       '@jsonforms/core': 3.8.0
@@ -7937,12 +7943,12 @@ snapshots:
     optionalDependencies:
       '@playwright/test': 1.61.1
 
-  '@ghentcdh/crouton-vue@0.0.1-alpha.37(8a60f5f803dc855ef8b79458a554fd73)':
+  '@ghentcdh/crouton-vue@0.0.1-alpha.38(de7b7b4a6e716637868c7a8193fccc43)':
     dependencies:
-      '@ghentcdh/crouton-forms-vue': 0.0.1-alpha.37(@ghentcdh/ui@3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.30.0)(@tiptap/starter-kit@3.30.0)(@tiptap/vue-3@3.30.0(@floating-ui/dom@1.8.0)(@tiptap/core@3.30.0(@tiptap/pm@3.30.0))(@tiptap/pm@3.30.0)(vue@3.5.39(typescript@6.0.3)))(vue-router@5.1.0(@vue/compiler-sfc@3.5.41)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.62.4)(vite@8.1.1(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3)))(@jsonforms/core@3.8.0)(@playwright/test@1.61.1)(vue-router@5.1.0(@vue/compiler-sfc@3.5.41)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.62.4)(vite@8.1.1(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3))(zod@4.4.3)
+      '@ghentcdh/crouton-forms-vue': 0.0.1-alpha.38(@ghentcdh/ui@3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.30.0)(@tiptap/starter-kit@3.30.0)(@tiptap/vue-3@3.30.0(@floating-ui/dom@1.8.0)(@tiptap/core@3.30.0(@tiptap/pm@3.30.0))(@tiptap/pm@3.30.0)(vue@3.5.39(typescript@6.0.3)))(vue-router@5.1.0(@vue/compiler-sfc@3.5.41)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.62.4)(vite@8.1.1(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3)))(@jsonforms/core@3.8.0)(@playwright/test@1.61.1)(vue-router@5.1.0(@vue/compiler-sfc@3.5.41)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.62.4)(vite@8.1.1(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3))(zod@4.4.3)
       '@ghentcdh/ui': 3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.30.0)(@tiptap/starter-kit@3.30.0)(@tiptap/vue-3@3.30.0(@floating-ui/dom@1.8.0)(@tiptap/core@3.30.0(@tiptap/pm@3.30.0))(@tiptap/pm@3.30.0)(vue@3.5.39(typescript@6.0.3)))(vue-router@5.1.0(@vue/compiler-sfc@3.5.41)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.62.4)(vite@8.1.1(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3)))(vue@3.5.39(typescript@6.0.3))
       '@jsonforms/core': 3.8.0
-      axios: 1.16.0(debug@4.4.3(supports-color@8.1.1))
+      axios: 1.19.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1)
       lodash-es: 4.18.1
       vue: 3.5.39(typescript@6.0.3)
       vue-router: 5.1.0(@vue/compiler-sfc@3.5.41)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.62.4)(vite@8.1.1(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@6.0.3))
@@ -10434,6 +10440,12 @@ snapshots:
 
   address@2.0.3: {}
 
+  agent-base@6.0.2(supports-color@8.1.1):
+    dependencies:
+      debug: 4.4.3(supports-color@8.1.1)
+    transitivePeerDependencies:
+      - supports-color
+
   ajv-formats@2.1.1(ajv@8.20.0):
     optionalDependencies:
       ajv: 8.20.0
@@ -10511,6 +10523,16 @@ snapshots:
       proxy-from-env: 2.1.0
     transitivePeerDependencies:
       - debug
+
+  axios@1.19.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1):
+    dependencies:
+      follow-redirects: 1.16.0(debug@4.4.3(supports-color@8.1.1))
+      form-data: 4.0.6
+      https-proxy-agent: 5.0.1(supports-color@8.1.1)
+      proxy-from-env: 2.1.0
+    transitivePeerDependencies:
+      - debug
+      - supports-color
 
   babel-plugin-const-enum@1.2.0(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1):
     dependencies:
@@ -11610,6 +11632,13 @@ snapshots:
       domhandler: 5.0.3
       domutils: 3.2.2
       entities: 7.0.1
+
+  https-proxy-agent@5.0.1(supports-color@8.1.1):
+    dependencies:
+      agent-base: 6.0.2(supports-color@8.1.1)
+      debug: 4.4.3(supports-color@8.1.1)
+    transitivePeerDependencies:
+      - supports-color
 
   husky@9.1.7: {}
 

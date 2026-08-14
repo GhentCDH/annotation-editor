@@ -13,7 +13,6 @@ import {
 } from '@ghentcdh/annotation-core';
 import { createHighlightStyle } from '@ghentcdh/annotated-text';
 import {
-  type FormValidationDef,
   type KeyLabel,
   type VueAnnotationDefinition,
 } from '../types/annotation-vue.types';
@@ -25,6 +24,8 @@ import {
   loadAnnotationDefinitionsFromGlob,
   loadAnnotationDefinitionsFromUrl,
 } from '../loader/annotation-definition.loader';
+import { AxiosInstance } from 'axios';
+import { ViewConfig } from '@ghentcdh/crouton-core';
 
 export type AnnotationDefinitionsState = {
   configuration: AnnotationDefConfig;
@@ -41,6 +42,7 @@ export type AnnotationDefinitionsState = {
 };
 
 export type ProvideAnnotationDefinitionsOptions = {
+  api: AxiosInstance;
   config: AnnotationDefConfig;
   resourceFolder?: GlobModules;
   createHighlightStyle?: typeof createHighlightStyle;
@@ -75,13 +77,6 @@ const toVueDefinition = (
   createStyle: typeof createHighlightStyle,
   activeStyle: typeof createHighlightStyle,
 ): VueAnnotationDefinition => {
-  const schema: FormValidationDef = {
-    uiSchema: def.ui_schema ?? null,
-    jsonSchema: def.json_schema ?? null,
-    metaDataSchema: def.metadata_schema ?? null,
-    validation: (value: unknown) => value,
-  };
-
   return {
     id: def.id,
     name: def.name,
@@ -91,7 +86,7 @@ const toVueDefinition = (
       default: createStyle(def.color),
       active: activeStyle(def.color),
     },
-    schema,
+    views: def.views as Record<string, ViewConfig>,
     allowedChildren: resolveKeyLabels(def.allowedChildren, grouped),
     allowedLinks: resolveKeyLabels(def.allowedLinks, grouped),
     isRoot: def.isRoot ?? true,
@@ -116,13 +111,10 @@ const buildVueDefinitions = (
 const buildDefinitionsMap = (
   definitions: VueAnnotationDefinition[],
 ): Record<string, VueAnnotationDefinition> =>
-  definitions.reduce(
-    (acc: Record<string, VueAnnotationDefinition>, def) => {
-      acc[def.id] = def;
-      return acc;
-    },
-    {},
-  );
+  definitions.reduce((acc: Record<string, VueAnnotationDefinition>, def) => {
+    acc[def.id] = def;
+    return acc;
+  }, {});
 
 export const createAnnotationDefinitionsState = (
   options: ProvideAnnotationDefinitionsOptions,
