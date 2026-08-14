@@ -1,3 +1,5 @@
+import { buildViews } from '@ghentcdh/crouton-core';
+import { z, type ZodObject, type ZodRawShape } from 'zod';
 import { type AnnotationDefConfig } from './annotation.context-builder';
 import { annotationContextBuilderFactory } from './context-builder.factory';
 import {
@@ -9,8 +11,6 @@ import {
   type AnnotationJsonConfig,
   AnnotationJsonResourceSchema,
 } from '../types/annotation-json-config.types';
-import { buildViews } from '@ghentcdh/crouton-core';
-import { z, ZodObject, ZodRawShape } from 'zod';
 
 const parseColumns = (columns: any[]) => {
   return columns.map((column) => {
