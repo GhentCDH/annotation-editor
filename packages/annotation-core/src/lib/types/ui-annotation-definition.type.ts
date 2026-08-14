@@ -4,12 +4,11 @@ import {
   type CustomAnnotationStyle,
 } from '@ghentcdh/annotated-text';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
+import { type ViewConfig } from '@ghentcdh/crouton-core';
 import { type AnnotationContext } from './annotation.contex';
 import { type KeyLabel } from './key-label.type';
 import { type SourceModel } from './source.model';
-import { ViewConfig } from '@ghentcdh/crouton-core';
-
-type ViewDef = 'table' | 'view' | 'form';
+import { ViewDef } from './annotation-definition.type';
 
 export type UIAnnotationDefinition = {
   id: string;

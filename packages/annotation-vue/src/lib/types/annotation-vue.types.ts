@@ -1,7 +1,7 @@
 import {
   type AnnotationDefinition as CoreAnnotationDefinition,
   type KeyLabel,
-  UIAnnotationDefinition,
+  type UIAnnotationDefinition,
 } from '@ghentcdh/annotation-core';
 
 export type { KeyLabel } from '@ghentcdh/annotation-core';

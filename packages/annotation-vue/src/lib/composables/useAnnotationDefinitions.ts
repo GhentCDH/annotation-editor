@@ -12,6 +12,8 @@ import {
   type ContextBuilderFactory,
 } from '@ghentcdh/annotation-core';
 import { createHighlightStyle } from '@ghentcdh/annotated-text';
+import { type AxiosInstance } from 'axios';
+import { type ViewConfig } from '@ghentcdh/crouton-core';
 import {
   type KeyLabel,
   type VueAnnotationDefinition,
@@ -24,8 +26,6 @@ import {
   loadAnnotationDefinitionsFromGlob,
   loadAnnotationDefinitionsFromUrl,
 } from '../loader/annotation-definition.loader';
-import { AxiosInstance } from 'axios';
-import { ViewConfig } from '@ghentcdh/crouton-core';
 
 export type AnnotationDefinitionsState = {
   configuration: AnnotationDefConfig;

@@ -21,8 +21,6 @@ export {
   type AnnotationDefConfig,
   resolveConfig,
   baseContextBuilder,
-  buildUiSchema,
-  buildMetadataSchema,
   type ContextBuilderFactory,
   annotationContextBuilderFactory,
   buildAnnotationDefinition,

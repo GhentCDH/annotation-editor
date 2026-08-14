@@ -17,7 +17,10 @@
         :data="metadata"
         :view="viewDef"
       />
-      <slot name="links" :annotation="annotation!" />
+      <slot
+        name="links"
+        :annotation="annotation!"
+      />
       <slot name="actions" />
     </div>
   </div>

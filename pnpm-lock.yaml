@@ -231,9 +231,15 @@ importers:
       '@ghentcdh/annotated-text':
         specifier: ^1.0.9
         version: 1.0.10(@types/debug@4.1.13)(@types/node@26.2.0)(jiti@2.7.0)(jsdom@29.1.1)(lightningcss@1.33.0)(sass-embedded@1.100.0)(sass@1.100.0)(supports-color@8.1.1)(yaml@2.9.0)
+      '@ghentcdh/crouton-core':
+        specifier: 0.0.1-alpha.38
+        version: 0.0.1-alpha.38(@jsonforms/core@3.8.0)(zod@4.4.3)
       '@ghentcdh/w3c-utils':
         specifier: '*'
         version: 1.0.10(@types/debug@4.1.13)(@types/node@26.2.0)(jiti@2.7.0)(jsdom@29.1.1)(lightningcss@1.33.0)(sass-embedded@1.100.0)(sass@1.100.0)(supports-color@8.1.1)(yaml@2.9.0)
+      axios:
+        specifier: ^1.19.0
+        version: 1.19.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1)
       vue:
         specifier: ^3.5.0
         version: 3.5.39(typescript@6.0.3)

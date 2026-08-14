@@ -17,8 +17,8 @@
 import { computed, onMounted } from 'vue';
 import { FormComponent } from '@ghentcdh/crouton-forms-vue';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-import { useEditorState } from '../../composables/useEditorState';
 import { useApi } from '@ghentcdh/annotation-vue';
+import { useEditorState } from '../../composables/useEditorState';
 
 const formData = defineModel<any>();
 const onChange = (data: any) => {

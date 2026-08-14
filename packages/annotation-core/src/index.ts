@@ -14,10 +14,6 @@ export {
   createAnnotationStyleBodyUnsafe,
 } from './lib/annotation.style';
 export * from './lib/utils/annotation.context-builder';
-export {
-  buildUiSchema,
-  buildMetadataSchema,
-} from './lib/utils/annotation-schema.builder';
 export * from './lib/utils/context-builder.factory';
 export * from './lib/utils/annotation-definition.builder';
 export * from './lib/utils/annotation-utils';

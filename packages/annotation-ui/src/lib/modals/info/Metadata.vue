@@ -9,7 +9,7 @@
 </template>
 <script setup lang="ts">
 import { FormComponent } from '@ghentcdh/crouton-forms-vue';
-import { ViewConfig } from '@ghentcdh/crouton-core';
+import { type ViewConfig } from '@ghentcdh/crouton-core';
 
 const properties = defineProps<{
   data: any;
