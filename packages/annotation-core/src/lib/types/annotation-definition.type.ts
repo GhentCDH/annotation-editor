@@ -1,24 +1,24 @@
 import { z } from 'zod';
+import { JsonColumnSchema, ViewConfigSchema } from '@ghentcdh/crouton-core';
+import {
+  AnnotationJsonResourceBaseSchema,
+  JsonColumnTypeSchema,
+} from './annotation-json-config.types';
+
+const viewDefList = ['table', 'view', 'form'] as const;
+export const ViewDefEnum = z.enum(viewDefList);
+export type ViewDef = (typeof viewDefList)[number];
+
+export const AnnotationColumnSchema = JsonColumnSchema.extend({
+  type: JsonColumnTypeSchema.optional(),
+});
 
 export const annotationColumnDefinition = z.custom<any>();
 
-export const annotationDefinition = z.object({
-  id: z.string(),
-  name: z.string(),
-  // this will be used to determine the metadata schema
-  columns: z.array(annotationColumnDefinition),
-  json_schema: z.any().optional(),
+export const annotationDefinition = AnnotationJsonResourceBaseSchema.extend({
   json_ld: z.any().optional(),
-  ui_schema: z.any().optional(),
-  metadata_schema: z.any().optional(),
-  color: z.string(),
-  type: z.string().optional(),
-  icon: z.string().optional(),
-  isRoot: z.boolean().default(true),
-  allowedChildren: z.array(z.string()).default([]),
-  allowedLinks: z.array(z.string()).default([]),
   context: z.custom<unknown>(),
-  target: z.enum(['gutter', 'underline', 'highlight']).default('highlight'),
+  views: z.record(ViewDefEnum, ViewConfigSchema).optional(),
 });
 
 export type AnnotationDefinition = z.infer<typeof annotationDefinition>;

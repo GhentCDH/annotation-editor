@@ -1,9 +1,9 @@
 import {
-  type AnnotationJsonConfig,
-  type AnnotationDefinition,
   type AnnotationDefConfig,
-  type ContextBuilderFactory,
+  type AnnotationDefinition,
+  type AnnotationJsonConfig,
   buildAnnotationDefinition,
+  type ContextBuilderFactory,
 } from '@ghentcdh/annotation-core';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -27,10 +27,19 @@ export const loadAnnotationDefinitionsFromDir = (
     const json: AnnotationJsonConfig = JSON.parse(
       readFileSync(jsonFile, 'utf-8'),
     );
+    try {
+      definitions.push(
+        buildAnnotationDefinition(
+          json,
+          annotationDefConfig,
+          contextBuilderFactory,
+        ),
+      );
+    } catch (err) {
+      console.error(`invalid config ${dir}`);
 
-    definitions.push(
-      buildAnnotationDefinition(json, annotationDefConfig, contextBuilderFactory),
-    );
+      console.error(err);
+    }
   }
 
   return definitions;

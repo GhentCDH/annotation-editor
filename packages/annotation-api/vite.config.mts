@@ -38,9 +38,10 @@ export default defineConfig({
 
     rollupOptions: {
       external: [
-        'node:fs',
-        'node:path',
+        /^node:/,
         '@ghentcdh/annotated-text',
+        '@ghentcdh/crouton-api',
+        /^@ghentcdh\/crouton-.*/,
         '@ghentcdh/w3c-utils',
         '@nestjs/common',
         '@nestjs/common/decorators',

@@ -1,3 +1,5 @@
+export { useApi } from './lib/service/useApi';
+
 export * from './lib/types/annotation-vue.types';
 export { AnnotationDefinitionService } from './lib/service/annotation-definition.service';
 export {

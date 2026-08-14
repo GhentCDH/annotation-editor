@@ -7,8 +7,9 @@ import {
   ANNOTATION_DEFINITIONS_KEY,
   type AnnotationDefinitionsState,
   createAnnotationDefinitionsState,
-  type ProvideAnnotationDefinitionsOptions
+  type ProvideAnnotationDefinitionsOptions,
 } from '../composables/useAnnotationDefinitions';
+import { configureApi } from '../service/useApi';
 
 export type AnnotationNamespacePluginOptions = {
   router: Router;
@@ -53,6 +54,7 @@ export const AnnotationPlugin: Plugin<[AnnotationPluginOptions]> = {
   ): AnnotationDefinitionsState {
     const state = createAnnotationDefinitionsState(options);
 
+    configureApi(options.api);
     if (options.resourceFolder) {
       state.loadFromGlob(options.resourceFolder);
     }

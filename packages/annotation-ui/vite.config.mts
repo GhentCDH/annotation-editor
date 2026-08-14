@@ -34,6 +34,7 @@ export default defineConfig(() => ({
     rollupOptions: {
       external: [
         '@ghentcdh/annotated-text',
+        '@ghentcdh/annotation-vue',
         '@ghentcdh/ui',
         '@ghentcdh/w3c-utils',
         '@jsonforms/core',

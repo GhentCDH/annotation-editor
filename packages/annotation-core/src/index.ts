@@ -1,5 +1,4 @@
 export * from './lib/types/key-label.type';
-export * from './lib/types/form-validation.type';
 export * from './lib/types/source.model';
 export * from './lib/types/grid-layout.types';
 export * from './lib/types/ui-annotation-definition.type';
@@ -15,10 +14,6 @@ export {
   createAnnotationStyleBodyUnsafe,
 } from './lib/annotation.style';
 export * from './lib/utils/annotation.context-builder';
-export {
-  buildUiSchema,
-  buildMetadataSchema,
-} from './lib/utils/annotation-schema.builder';
 export * from './lib/utils/context-builder.factory';
 export * from './lib/utils/annotation-definition.builder';
 export * from './lib/utils/annotation-utils';

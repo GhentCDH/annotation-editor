@@ -5,9 +5,9 @@ import {
 } from '@ghentcdh/annotation-core';
 import { type DefinitionsFetchFn } from '../../loader/annotation-definition.loader';
 import {
+  type AnnotationDefinitionsState,
   provideAnnotationDefinitions,
   useAnnotationDefinitions,
-  type AnnotationDefinitionsState,
 } from '../useAnnotationDefinitions';
 
 const mockConfig: AnnotationDefConfig = {
@@ -204,23 +204,23 @@ describe('provideAnnotationDefinitions', () => {
     expect(state.getDefinitionById('unknown')).toBeUndefined();
   });
 
-  it('should build schema from core definition', async () => {
+  it('should pass views from core definition', async () => {
     const state = withProvide({ config: mockConfig });
+
+    const mockViews = {
+      form: { schema: {}, uiSchema: {} },
+      table: { schema: {}, uiSchema: {} },
+    };
 
     state.loadFromDefinitions([
       createCoreDef('a', 'Alpha', {
-        ui_schema: { type: 'Control' },
-        json_schema: { type: 'object' },
-        metadata_schema: { type: 'TextCell' },
+        views: mockViews as any,
       }),
     ]);
     await nextTick();
 
-    const schema = state.definitions[0].schema;
-    expect(schema.uiSchema).toEqual({ type: 'Control' });
-    expect(schema.jsonSchema).toEqual({ type: 'object' });
-    expect(schema.metaDataSchema).toEqual({ type: 'TextCell' });
-    expect(typeof schema.validation).toBe('function');
+    expect(state.definitions[0].views).toBeDefined();
+    expect(state.definitions[0].views).toEqual(mockViews);
   });
 
   it('should preserve _core reference', async () => {
@@ -311,9 +311,9 @@ describe('loadFromUrl', () => {
   });
 
   it('should auto-fetch when definitionsUrl provided', async () => {
-    const mockFetchFn: DefinitionsFetchFn = vi.fn().mockResolvedValue([
-      { id: 'auto', name: 'Auto', color: '#000' },
-    ]);
+    const mockFetchFn: DefinitionsFetchFn = vi
+      .fn()
+      .mockResolvedValue([{ id: 'auto', name: 'Auto', color: '#000' }]);
 
     const state = withProvide({
       config: mockConfig,

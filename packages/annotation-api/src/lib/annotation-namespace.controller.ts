@@ -1,8 +1,12 @@
 import { Controller, Get, Inject, Param } from '@nestjs/common';
-import { type AnnotationDefConfig, AnnotationStyleContextBuilder, AnnotationStyleType } from '@ghentcdh/annotation-core';
+import {
+  type AnnotationDefConfig,
+  AnnotationStyleContextBuilder,
+  AnnotationStyleType,
+} from '@ghentcdh/annotation-core';
 import { ApiTags } from '@nestjs/swagger';
-import { AnnotationDefinitionService } from './service/annotation-definition.service';
 import { ANNOTATION_DEF_CONFIG_TOKEN } from './utils/annotation.context-builder';
+import { AnnotationDefinitionService } from './service/annotation-definition.service';
 
 @Controller('ns')
 @ApiTags('Annotations NS')
@@ -37,9 +41,6 @@ export class AnnotationNamespaceController {
     return {
       id: definition.id,
       name: definition.name,
-      json_schema: definition.json_schema,
-      ui_schema: definition.ui_schema,
-      metadata_schema: definition.metadata_schema,
       columns: definition.columns,
       isRoot: definition.isRoot,
       allowedChildren: definition.allowedChildren,
@@ -47,6 +48,7 @@ export class AnnotationNamespaceController {
       type: definition.type,
       icon: definition.icon,
       target: definition.target,
+      views: definition.views,
     };
   }
 

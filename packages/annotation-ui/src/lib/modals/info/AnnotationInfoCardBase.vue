@@ -13,12 +13,14 @@
         <slot name="header-actions" />
       </div>
       <MetadataTable
-        v-if="metadata && metadataSchema && validation"
+        v-if="metadata && viewDef"
         :data="metadata"
-        :schema="validation.jsonSchema"
-        :ui-schema="metadataSchema"
+        :view="viewDef"
       />
-      <slot name="links" :annotation="annotation!" />
+      <slot
+        name="links"
+        :annotation="annotation!"
+      />
       <slot name="actions" />
     </div>
   </div>
@@ -26,8 +28,10 @@
 <script lang="ts" setup>
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import MetadataTable from './Metadata.vue';
-import { AnnotationInfoCardBaseEmits, AnnotationInfoCardBaseProperties } from './AnnotationInfoCardBase.properties';
-import { type FormValidationDef } from '../../types/AnnotationConfiguration.model';
+import {
+  AnnotationInfoCardBaseEmits,
+  AnnotationInfoCardBaseProperties,
+} from './AnnotationInfoCardBase.properties';
 
 const properties = defineProps(AnnotationInfoCardBaseProperties);
 const emit = defineEmits(AnnotationInfoCardBaseEmits);
@@ -36,7 +40,7 @@ const purpose = computed(() => {
   if (!properties.annotation) return 'default';
   return properties.utils.getAnnotationType(properties.annotation);
 });
-
+const viewDef = computed(() => annotationDef?.value?.views?.view);
 const annotationDef = computed(() =>
   properties.config.getDefinition(purpose.value),
 );
@@ -45,22 +49,9 @@ const purposeLabel = computed(
   () => annotationDef.value?.label || purpose.value,
 );
 
-const validation = computed(
-  () => annotationDef.value?.schema as FormValidationDef | undefined,
-);
-
 const metadata = computed(() => {
-  if (!properties.annotation || !validation.value) return null;
-  return properties.utils.getMetadata(
-    properties.annotation,
-    validation.value as any,
-  );
-});
-const metadataSchema = computed(() => {
-  const v = validation.value;
-  if (!v) return null;
-
-  return v.metadataSchema ?? v.metaDataSchema;
+  if (!properties.annotation || !viewDef.value) return null;
+  return properties.utils.getMetadata(properties.annotation);
 });
 
 const cardRef = ref<HTMLElement>();

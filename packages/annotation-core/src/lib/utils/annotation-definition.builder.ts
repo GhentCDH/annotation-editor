@@ -1,9 +1,23 @@
+import { buildViews } from '@ghentcdh/crouton-core';
+import { z, type ZodObject, type ZodRawShape } from 'zod';
 import { type AnnotationDefConfig } from './annotation.context-builder';
-import { buildUiSchema, buildMetadataSchema } from './annotation-schema.builder';
 import { annotationContextBuilderFactory } from './context-builder.factory';
-import { type AnnotationDefinition } from '../types/annotation-definition.type';
-import { type AnnotationJsonConfig } from '../types/annotation-json-config.types';
+import {
+  AnnotationColumnSchema,
+  annotationDefinition,
+  type AnnotationDefinition,
+} from '../types/annotation-definition.type';
+import {
+  type AnnotationJsonConfig,
+  AnnotationJsonResourceSchema,
+} from '../types/annotation-json-config.types';
 
+const parseColumns = (columns: any[]) => {
+  return columns.map((column) => {
+    return AnnotationColumnSchema.parse(column);
+    //{ ...ColumnSchema.safeParse(column), column };
+  });
+};
 export type ContextBuilderFactory = (
   id: string,
   config: AnnotationJsonConfig,
@@ -11,36 +25,36 @@ export type ContextBuilderFactory = (
 ) => unknown;
 
 export const buildAnnotationDefinition = (
-  json: AnnotationJsonConfig,
+  jsonConfig: AnnotationJsonConfig,
   annotationDefConfig: AnnotationDefConfig,
   factory: ContextBuilderFactory = annotationContextBuilderFactory,
 ): AnnotationDefinition => {
+  const parsed = AnnotationJsonResourceSchema.safeParse(jsonConfig);
+
+  if (!parsed.success) {
+    throw new Error(parsed.error as any);
+  }
+  const json = parsed.data;
   const context = factory(json.id, json, annotationDefConfig);
   const columns = json.columns ?? [];
   const hasColumns = columns.length > 0;
 
-  const uiSchema =
-    json.ui_schema ?? (hasColumns ? buildUiSchema(columns) : undefined);
-  const metadataSchema =
-    json.metadata_schema ??
-    (hasColumns ? buildMetadataSchema(columns) : undefined);
+  const json_schema = hasColumns ? (context as any).toJsonSchema() : undefined;
 
-  const definition: AnnotationDefinition = {
-    id: json.id,
-    name: json.name,
-    color: json.color,
+  const definition: AnnotationDefinition = annotationDefinition.parse({
+    ...json,
     isRoot: json.isRoot ?? true,
-    columns: columns as unknown as AnnotationDefinition['columns'],
     context,
     json_ld: (context as any).toJsonLdContext(),
-    json_schema: uiSchema ? (context as any).toJsonSchema() : null,
-    allowedChildren: json.allowedChildren ?? [],
-    allowedLinks: json.allowedLinks ?? [],
-    target: json.target ?? 'highlight',
-  };
+    json_schema,
+    views: json_schema
+      ? buildViews(
+          z.fromJSONSchema(json_schema) as ZodObject<ZodRawShape>,
+          parseColumns(columns),
+        )
+      : undefined,
+  });
 
-  if (uiSchema) definition.ui_schema = uiSchema;
-  if (metadataSchema) definition.metadata_schema = metadataSchema;
   if (json.type) definition.type = json.type;
   if (json.icon) definition.icon = json.icon;
 

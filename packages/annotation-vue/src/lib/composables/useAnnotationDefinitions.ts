@@ -1,19 +1,30 @@
-import { computed, inject, type InjectionKey, markRaw, provide, reactive, ref } from 'vue';
+import {
+  inject,
+  type InjectionKey,
+  markRaw,
+  provide,
+  shallowReactive,
+} from 'vue';
 import {
   type AnnotationDefConfig,
   type AnnotationDefinition as CoreAnnotationDefinition,
   type AnnotationJsonConfig,
-  type ContextBuilderFactory
+  type ContextBuilderFactory,
 } from '@ghentcdh/annotation-core';
 import { createHighlightStyle } from '@ghentcdh/annotated-text';
-import { type FormValidationDef, type KeyLabel, type VueAnnotationDefinition } from '../types/annotation-vue.types';
+import { type AxiosInstance } from 'axios';
+import { type ViewConfig } from '@ghentcdh/crouton-core';
+import {
+  type KeyLabel,
+  type VueAnnotationDefinition,
+} from '../types/annotation-vue.types';
 import { AnnotationDefinitionService } from '../service/annotation-definition.service';
 import {
   type DefinitionsFetchFn,
   type GlobModules,
   loadAnnotationDefinitionsFromConfigs,
   loadAnnotationDefinitionsFromGlob,
-  loadAnnotationDefinitionsFromUrl
+  loadAnnotationDefinitionsFromUrl,
 } from '../loader/annotation-definition.loader';
 
 export type AnnotationDefinitionsState = {
@@ -31,6 +42,7 @@ export type AnnotationDefinitionsState = {
 };
 
 export type ProvideAnnotationDefinitionsOptions = {
+  api: AxiosInstance;
   config: AnnotationDefConfig;
   resourceFolder?: GlobModules;
   createHighlightStyle?: typeof createHighlightStyle;
@@ -65,13 +77,6 @@ const toVueDefinition = (
   createStyle: typeof createHighlightStyle,
   activeStyle: typeof createHighlightStyle,
 ): VueAnnotationDefinition => {
-  const schema: FormValidationDef = {
-    uiSchema: def.ui_schema ?? null,
-    jsonSchema: def.json_schema ?? null,
-    metaDataSchema: def.metadata_schema ?? null,
-    validation: (value: unknown) => value,
-  };
-
   return {
     id: def.id,
     name: def.name,
@@ -81,7 +86,7 @@ const toVueDefinition = (
       default: createStyle(def.color),
       active: activeStyle(def.color),
     },
-    schema,
+    views: def.views as Record<string, ViewConfig>,
     allowedChildren: resolveKeyLabels(def.allowedChildren, grouped),
     allowedLinks: resolveKeyLabels(def.allowedLinks, grouped),
     isRoot: def.isRoot ?? true,
@@ -93,6 +98,24 @@ const toVueDefinition = (
   };
 };
 
+const buildVueDefinitions = (
+  coreDefs: CoreAnnotationDefinition[],
+  grouped: Record<string, CoreAnnotationDefinition>,
+  createStyle: typeof createHighlightStyle,
+  activeStyle: typeof createHighlightStyle,
+): VueAnnotationDefinition[] =>
+  coreDefs.map((def) =>
+    toVueDefinition(def, grouped, createStyle, activeStyle as any),
+  );
+
+const buildDefinitionsMap = (
+  definitions: VueAnnotationDefinition[],
+): Record<string, VueAnnotationDefinition> =>
+  definitions.reduce((acc: Record<string, VueAnnotationDefinition>, def) => {
+    acc[def.id] = def;
+    return acc;
+  }, {});
+
 export const createAnnotationDefinitionsState = (
   options: ProvideAnnotationDefinitionsOptions,
 ): AnnotationDefinitionsState => {
@@ -101,77 +124,69 @@ export const createAnnotationDefinitionsState = (
   const activeStyle = options.activeHighlightStyle ?? createStyle;
 
   const service = markRaw(new AnnotationDefinitionService());
-  const coreDefs = ref<CoreAnnotationDefinition[]>([]);
 
-  const definitions = computed(() => {
+  const updateDefinitions = (coreDefs: CoreAnnotationDefinition[]) => {
+    service.setDefinitions(coreDefs);
     const grouped = service.findAllGrouped();
-    return coreDefs.value.map((def) =>
-      toVueDefinition(def, grouped, createStyle, activeStyle as any),
+    state.definitions = buildVueDefinitions(
+      coreDefs,
+      grouped,
+      createStyle,
+      activeStyle,
     );
-  });
-
-  const definitionsMap = computed(() =>
-    definitions.value.reduce(
-      (acc: Record<string, VueAnnotationDefinition>, def) => {
-        acc[def.id] = def;
-        return acc;
-      },
-      {},
-    ),
-  );
-
-  const getDefinitionById = (id: string): VueAnnotationDefinition | undefined =>
-    definitionsMap.value[id];
-
-  const loadFromDefinitions = (defs: CoreAnnotationDefinition[]) => {
-    service.setDefinitions(defs);
-    coreDefs.value = defs;
+    state.definitionsMap = buildDefinitionsMap(state.definitions);
   };
 
-  const loadFromGlob = (modules: GlobModules) => {
-    const defs = loadAnnotationDefinitionsFromGlob(modules, config, factory);
-    loadFromDefinitions(defs);
-  };
+  const state: AnnotationDefinitionsState = shallowReactive({
+    configuration: config,
+    definitions: [] as VueAnnotationDefinition[],
+    definitionsMap: {} as Record<string, VueAnnotationDefinition>,
+    loading: false,
+    error: null as Error | null,
+    service,
 
-  const loadFromConfigs = (configs: AnnotationJsonConfig[]) => {
-    const defs = loadAnnotationDefinitionsFromConfigs(configs, config, factory);
-    loadFromDefinitions(defs);
-  };
+    getDefinitionById(id: string): VueAnnotationDefinition | undefined {
+      return state.definitionsMap[id];
+    },
 
-  const loading = ref(false);
-  const error = ref<Error | null>(null);
+    loadFromDefinitions(defs: CoreAnnotationDefinition[]) {
+      updateDefinitions(defs);
+    },
 
-  const loadFromUrl = async (url: string, fetchFn?: DefinitionsFetchFn) => {
-    loading.value = true;
-    error.value = null;
-    try {
-      const defs = await loadAnnotationDefinitionsFromUrl(
-        url,
+    loadFromGlob(modules: GlobModules) {
+      const defs = loadAnnotationDefinitionsFromGlob(modules, config, factory);
+      updateDefinitions(defs);
+    },
+
+    loadFromConfigs(configs: AnnotationJsonConfig[]) {
+      const defs = loadAnnotationDefinitionsFromConfigs(
+        configs,
         config,
         factory,
-        fetchFn,
       );
-      loadFromDefinitions(defs);
-    } catch (e) {
-      error.value = e instanceof Error ? e : new Error(String(e));
-    } finally {
-      loading.value = false;
-    }
-  };
+      updateDefinitions(defs);
+    },
 
-  return reactive({
-    configuration: config,
-    definitions,
-    definitionsMap,
-    getDefinitionById,
-    loadFromGlob,
-    loadFromConfigs,
-    loadFromDefinitions,
-    loadFromUrl,
-    loading,
-    error,
-    service,
+    async loadFromUrl(url: string, fetchFn?: DefinitionsFetchFn) {
+      state.loading = true;
+      state.error = null;
+      try {
+        const defs = await loadAnnotationDefinitionsFromUrl(
+          url,
+          config,
+          factory,
+          fetchFn,
+        );
+        updateDefinitions(defs);
+      } catch (e) {
+        state.error = e instanceof Error ? e : new Error(String(e));
+      } finally {
+        state.loading = false;
+      }
+    },
   });
+
+  return state;
 };
 
 /**
@@ -204,5 +219,6 @@ export const useAnnotationDefinitions = (): AnnotationDefinitionsState => {
     throw new Error(
       'useAnnotationDefinitions() must be called inside a component that called provideAnnotationDefinitions()',
     );
+
   return ctx;
 };

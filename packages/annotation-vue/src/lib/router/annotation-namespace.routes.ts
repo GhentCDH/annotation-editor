@@ -34,7 +34,10 @@ export const createAnnotationNamespacePaths = (
 const JsonView = defineComponent({
   name: 'JsonView',
   props: {
-    data: { type: [Object, Array, String, Number] as PropType<unknown>, default: null },
+    data: {
+      type: [Object, Array, String, Number] as PropType<unknown>,
+      default: null,
+    },
     title: { type: String, required: false, default: '' },
   },
   setup(props) {
@@ -146,7 +149,10 @@ const JsonView = defineComponent({
   },
 });
 
-export const NAMESPACE_ROUTE_META = { namespace: true, layout: 'blank' } as const;
+export const NAMESPACE_ROUTE_META = {
+  namespace: true,
+  layout: 'blank',
+} as const;
 
 export const createAnnotationNamespaceRoutes = (
   basePath: string,
@@ -194,8 +200,7 @@ export const createAnnotationNamespaceRoutes = (
       props: (route) => {
         const type = route.params['type'] as string;
         const context = service.getContextBuilder(type) as
-          | ContextBuilder
-          | undefined;
+          ContextBuilder | undefined;
         if (!context) return { title: type, data: null };
         return {
           title: `${type}/anno.jsonld`,
@@ -220,9 +225,7 @@ export const createAnnotationNamespaceRoutes = (
           data: {
             id: def.id,
             name: def.name,
-            json_schema: def.json_schema,
-            ui_schema: def.ui_schema,
-            metadata_schema: def.metadata_schema,
+            views: def.views,
             columns: def.columns,
             isRoot: def.isRoot,
             allowedChildren: def.allowedChildren,

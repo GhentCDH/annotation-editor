@@ -2,13 +2,18 @@ import {
   w3cAnnotation,
   type W3CAnnotation,
   type W3CAnnotationBuilder,
-  type W3CSpecificResource
+  type W3CSpecificResource,
 } from '@ghentcdh/w3c-utils';
 import { type AnnotationDefConfig } from './annotation.context-builder';
 import { AnnotationMetadataType } from '../types/annotation.contex';
-import { type AnnotationStyle, AnnotationStyleContextBuilder } from '../annotation.style';
-import { type AllowedChildrenPerType, type UIAnnotationDefinition } from '../types/ui-annotation-definition.type';
-import { type FormValidationDef } from '../types/form-validation.type';
+import {
+  type AnnotationStyle,
+  AnnotationStyleContextBuilder,
+} from '../annotation.style';
+import {
+  type AllowedChildrenPerType,
+  type UIAnnotationDefinition,
+} from '../types/ui-annotation-definition.type';
 import { type KeyLabel } from '../types/key-label.type';
 
 export type AnnotationLink = {
@@ -322,10 +327,7 @@ class AnnotationUtilsImpl {
     return { textPositionSelector, sourceUri };
   };
 
-  getMetadata = (
-    annotation: W3CAnnotation,
-    validationDef?: FormValidationDef,
-  ) => {
+  getMetadata = (annotation: W3CAnnotation) => {
     const builder = this.getBuilder(annotation);
 
     // if (!validationDef) return null;

@@ -1,20 +1,23 @@
 <template>
-  <AutoSaveForm
-    v-if="formValidation"
+  <FormComponent
+    v-if="formDef"
     :id="`annotation-selection-modal`"
+    ref="formRef"
     :form-data="formData"
-    :schema="formValidation.jsonSchema"
-    :ui-schema="formValidation.uiSchema"
-    @change="onChange"
+    :error-mode="errorMode"
+    :schema="formDef.json_schema"
+    :ui-schema="formDef.ui_schema"
+    :http="useApi()"
     @errors="onErrors"
+    @change="onChange"
+    @valid="onValid"
   />
 </template>
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
-
+import { FormComponent } from '@ghentcdh/crouton-forms-vue';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-
-import { AutoSaveForm } from '@ghentcdh/crouton-forms-vue';
+import { useApi } from '@ghentcdh/annotation-vue';
 import { useEditorState } from '../../composables/useEditorState';
 
 const formData = defineModel<any>();
@@ -37,23 +40,14 @@ const annotationDef = computed(() =>
   config.annotation.getDefinition(properties.annotationType),
 );
 
-const formValidation = computed(() => {
-  const validation = annotationDef.value!.schema;
-  if (!validation.uiSchema) {
-    emits('valid', true);
-    return null;
-  }
-  return validation;
-});
+const formDef = computed(() => annotationDef.value?.views?.form);
+const errorMode = 'onBlur';
 
 onMounted(() => {
   if (!properties.annotation) {
     formData.value = {};
     return;
   }
-  formData.value = utils.getMetadata(
-    properties.annotation,
-    annotationDef.value!.schema,
-  );
+  formData.value = utils.getMetadata(properties.annotation);
 });
 </script>
