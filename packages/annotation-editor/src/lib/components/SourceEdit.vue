@@ -1,7 +1,14 @@
 <template>
-  <SourceNavbar v-bind="properties" @create-annotation="createAnnotation" />
+  <SourceNavbar
+    v-bind="properties"
+    @create-annotation="createAnnotation"
+  />
   <div class="overflow-y-auto flex-1 min-h-0">
-    <div :id="textUuid" :dir="source.content.textDirection" ref="mainEl" />
+    <div
+      :id="textUuid"
+      ref="mainEl"
+      :dir="source.content.textDirection"
+    />
   </div>
 </template>
 <script lang="ts" setup>

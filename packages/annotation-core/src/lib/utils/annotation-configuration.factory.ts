@@ -40,7 +40,7 @@ const groupById = <KEY extends keyof UIAnnotationDefinition>(
 export const createAnnotationConfiguration = (
   annotationDefinitions: UIAnnotationDefinition[] | undefined,
   utils: AnnotationUtils,
-  textAdapter: TextAdapter | undefined,
+  textAdapter: (() => TextAdapter) | undefined,
   annotationAdapter: AnnotationAdapter<W3CAnnotation> | undefined,
 ): UIAnnotationConfiguration => {
   const definitions = annotationDefinitions ?? ([] as UIAnnotationDefinition[]);
@@ -81,14 +81,15 @@ export const createAnnotationConfiguration = (
   const styleParams = () => ({ styleFn: styleFn(listStyles, utils) });
 
   const _createAnnotatedText = (id: string, sourceModel?: SourceModel) => {
-    const annotatedText = createAnnotatedText<W3CAnnotation>(id);
+    const _textAdapter = textAdapter?.() ?? PlainTextAdapter();
 
+    const annotatedText = createAnnotatedText<W3CAnnotation>(id);
     annotatedText
       .setSnapper(new WordSnapper())
       .setAnnotationAdapter(
         annotationAdapter ?? defaultAnnotationAdapter(sourceModel),
       )
-      .setTextAdapter(textAdapter ?? PlainTextAdapter())
+      .setTextAdapter(_textAdapter)
       .setRenderParams(renderParams())
       .setStyleParams(styleParams())
       .registerStyles(styles);
