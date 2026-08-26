@@ -1,6 +1,5 @@
-import { AnnotationDefConfig } from '@ghentcdh/annotation-core';
+import { AnnotationDefConfig, GridLayout } from '@ghentcdh/annotation-core';
 import { AnnotationDefinition, SourceModel } from '@ghentcdh/annotation-ui';
-import { PreviewLayout } from '@ghentcdh/annotation-preview';
 import { collection } from './annotations';
 import { provideAnnotationDefinitions } from '@ghentcdh/annotation-vue';
 import { provideHttpClient } from '@ghentcdh/crouton-forms-vue';
@@ -169,7 +168,7 @@ export const _definitions: AnnotationDefinition[] = [
     },
   },
 ];
-export const layout: PreviewLayout = {
+export const layout: GridLayout = {
   areas: [
     ['original', 'translation'],
     ['commentary', 'commentary'],

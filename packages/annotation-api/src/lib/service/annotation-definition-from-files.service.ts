@@ -1,5 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { type AnnotationDefinition, type AnnotationDefConfig } from '@ghentcdh/annotation-core';
+import {
+  type AnnotationDefConfig,
+  type AnnotationDefinition,
+} from '@ghentcdh/annotation-core';
 import { AnnotationDefinitionService } from './annotation-definition.service';
 import { ANNOTATION_DEF_CONFIG_TOKEN } from '../utils/annotation.context-builder';
 
@@ -15,7 +18,9 @@ export class AnnotationDefinitionFromFilesService extends AnnotationDefinitionSe
     super(config);
   }
 
-  protected override reloadDefinitions = () => {
+  protected override reloadDefinitions = (): Promise<
+    AnnotationDefinition[]
+  > => {
     if (this.config.isDev && this._loaderFn) {
       return Promise.resolve(this._loaderFn());
     }

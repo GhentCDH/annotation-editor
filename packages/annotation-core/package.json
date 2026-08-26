@@ -10,9 +10,9 @@
   "main": "./index.js",
   "types": "./index.d.ts",
   "dependencies": {
-    "@ghentcdh/annotated-text": "^1.0.9",
-    "@ghentcdh/w3c-utils": "^1.0.10",
-    "zod": "^4.3.6",
-    "@ghentcdh/crouton-core": "0.0.1-alpha.38"
+    "@ghentcdh/annotated-text": "^1.0.11",
+    "@ghentcdh/crouton-core": "0.0.1-alpha.38",
+    "@ghentcdh/w3c-utils": "^1.0.11",
+    "zod": "^4.3.6"
   }
 }

@@ -10,7 +10,6 @@ export {
   type AnnotationJsonConfig,
   annotationColumnDefinition,
   annotationDefinition,
-  type AnnotationDefinition as CoreAnnotationDefinition,
   type AnnotationResourceColumnConfig,
   type AnnotationResourceJsonConfig,
   type AnnotationResourceDefinition,

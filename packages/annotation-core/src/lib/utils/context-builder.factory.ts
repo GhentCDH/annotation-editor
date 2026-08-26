@@ -4,14 +4,16 @@ import {
   type AnnotationDefConfig,
   baseContextBuilder,
 } from './annotation.context-builder';
-import { type AnnotationJsonConfig } from '../types/annotation-json-config.types';
+import { ViewConfig } from '@ghentcdh/crouton-core';
 
 type JsonSchemaProperty = {
   type: string;
   properties?: Record<string, JsonSchemaProperty>;
 };
 
-export const jsonSchemaPropertyToZod = (prop: JsonSchemaProperty): z.ZodTypeAny => {
+export const jsonSchemaPropertyToZod = (
+  prop: JsonSchemaProperty,
+): z.ZodTypeAny => {
   if (prop.type === 'object' && prop.properties) {
     const shape: Record<string, z.ZodTypeAny> = {};
     for (const [key, val] of Object.entries(prop.properties)) {
@@ -24,23 +26,14 @@ export const jsonSchemaPropertyToZod = (prop: JsonSchemaProperty): z.ZodTypeAny 
 
 export const annotationContextBuilderFactory = (
   id: string,
-  config: AnnotationJsonConfig,
+  formConfig: ViewConfig,
   annotationDefConfig: AnnotationDefConfig,
 ): ContextBuilder => {
   const builder = baseContextBuilder(id, annotationDefConfig);
-  const columns = config.columns ?? [];
-
-  if (!columns.length) return builder;
-
-  const schemaProps: Record<string, z.ZodTypeAny> = {};
-  for (const col of columns) {
-    const colType = col.type ?? { type: 'string' };
-    const schema = jsonSchemaPropertyToZod(colType as JsonSchemaProperty);
-    schemaProps[col.id] = col.required === false ? schema.optional() : schema;
-  }
-
-  if (Object.keys(schemaProps).length) {
-    return builder.parseZodSchema(z.object(schemaProps) as any);
+  if (formConfig.json_schema) {
+    return builder.parseZodSchema(
+      z.fromJSONSchema(formConfig.json_schema) as any,
+    );
   }
 
   return builder;

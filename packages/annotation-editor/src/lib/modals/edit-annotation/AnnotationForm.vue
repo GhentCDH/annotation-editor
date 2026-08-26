@@ -10,7 +10,6 @@
     :http="useApi()"
     @errors="onErrors"
     @change="onChange"
-    @valid="onValid"
   />
 </template>
 <script setup lang="ts">

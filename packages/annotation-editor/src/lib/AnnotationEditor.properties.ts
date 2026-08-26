@@ -17,11 +17,11 @@ export const AnnotationEditorProperties = {
     required: true as const,
   },
   textAdapter: {
-    type: Object as PropType<() => TextAdapter>,
+    type: Function as PropType<() => TextAdapter>,
     required: false as const,
   },
   annotationAdapter: {
-    type: Object as PropType<AnnotationAdapter<W3CAnnotation>>,
+    type: Function as PropType<() => AnnotationAdapter<W3CAnnotation>>,
     required: false as const,
   },
   sources: { type: Array as PropType<SourceModel[]>, required: true as const },

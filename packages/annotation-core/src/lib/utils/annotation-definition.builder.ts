@@ -1,9 +1,7 @@
-import { buildViews } from '@ghentcdh/crouton-core';
-import { z, type ZodObject, type ZodRawShape } from 'zod';
+import { buildViewsFromColumns, ViewConfig } from '@ghentcdh/crouton-core';
 import { type AnnotationDefConfig } from './annotation.context-builder';
 import { annotationContextBuilderFactory } from './context-builder.factory';
 import {
-  AnnotationColumnSchema,
   annotationDefinition,
   type AnnotationDefinition,
 } from '../types/annotation-definition.type';
@@ -12,17 +10,11 @@ import {
   AnnotationJsonResourceSchema,
 } from '../types/annotation-json-config.types';
 
-const parseColumns = (columns: any[]) => {
-  return columns.map((column) => {
-    return AnnotationColumnSchema.parse(column);
-    //{ ...ColumnSchema.safeParse(column), column };
-  });
-};
 export type ContextBuilderFactory = (
   id: string,
-  config: AnnotationJsonConfig,
+  config: ViewConfig,
   annotationDefConfig: AnnotationDefConfig,
-) => unknown;
+) => any;
 
 export const buildAnnotationDefinition = (
   jsonConfig: AnnotationJsonConfig,
@@ -35,24 +27,23 @@ export const buildAnnotationDefinition = (
     throw new Error(parsed.error as any);
   }
   const json = parsed.data;
-  const context = factory(json.id, json, annotationDefConfig);
   const columns = json.columns ?? [];
-  const hasColumns = columns.length > 0;
 
-  const json_schema = hasColumns ? (context as any).toJsonSchema() : undefined;
+  // const json_schema = hasColumns ? (context as any).toJsonSchema() : undefined;
+  const views = columns?.length ? buildViewsFromColumns(columns) : undefined;
+  const formConfig = views?.['form'];
+  const context = formConfig
+    ? factory(json.id, formConfig, annotationDefConfig)
+    : undefined;
+  const json_schema = formConfig?.json_schema;
 
   const definition: AnnotationDefinition = annotationDefinition.parse({
     ...json,
     isRoot: json.isRoot ?? true,
     context,
-    json_ld: (context as any).toJsonLdContext(),
+    json_ld: context?.toJsonLdContext(),
     json_schema,
-    views: json_schema
-      ? buildViews(
-          z.fromJSONSchema(json_schema) as ZodObject<ZodRawShape>,
-          parseColumns(columns),
-        )
-      : undefined,
+    views,
   });
 
   if (json.type) definition.type = json.type;

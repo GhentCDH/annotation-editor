@@ -1,12 +1,20 @@
 import type { EmitFn, ExtractPublicPropTypes, PropType } from 'vue';
 
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-import { type AnnotationDefConfig } from '@ghentcdh/annotation-core';
-import { type AnnotationAdapter, type TextAdapter } from '@ghentcdh/annotated-text';
-import type { AnnotationDefinition, SourceModel } from '@ghentcdh/annotation-ui';
-import type { PreviewLayout } from './types/preview-layout.types';
+import {
+  type AnnotationDefConfig,
+  GridLayout,
+} from '@ghentcdh/annotation-core';
+import {
+  type AnnotationAdapter,
+  type TextAdapter,
+} from '@ghentcdh/annotated-text';
+import type {
+  AnnotationDefinition,
+  SourceModel,
+} from '@ghentcdh/annotation-ui';
 
-export type { PreviewLayout, PaneConfig } from './types/preview-layout.types';
+export type { PaneConfig } from './types/preview-layout.types';
 
 export const AnnotationPreviewProperties = {
   configuration: {
@@ -14,11 +22,11 @@ export const AnnotationPreviewProperties = {
     required: true as const,
   },
   textAdapter: {
-    type: Object as PropType<TextAdapter>,
+    type: Function as PropType<() => TextAdapter>,
     required: false as const,
   },
   annotationAdapter: {
-    type: Object as PropType<AnnotationAdapter<W3CAnnotation>>,
+    type: Function as PropType<() => AnnotationAdapter<W3CAnnotation>>,
     required: false as const,
   },
   sources: { type: Array as PropType<SourceModel[]>, required: true as const },
@@ -27,7 +35,11 @@ export const AnnotationPreviewProperties = {
     required: true as const,
   },
   cols: { type: Number, required: false, default: 2 },
-  layout: { type: Object as PropType<PreviewLayout>, required: false, default: undefined },
+  layout: {
+    type: Object as PropType<GridLayout>,
+    required: false,
+    default: undefined,
+  },
   annotationDefinitions: {
     type: Array as PropType<AnnotationDefinition[]>,
     required: true as const,

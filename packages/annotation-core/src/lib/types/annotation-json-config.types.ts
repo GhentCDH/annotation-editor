@@ -1,5 +1,5 @@
-import { JsonColumnSchema } from '@ghentcdh/crouton-core';
 import { z } from 'zod';
+import { JsonColumnSchema } from '@ghentcdh/crouton-core';
 
 export type AnnotationColumnFieldInput = {
   type: 'autocomplete' | 'text' | 'select';
@@ -32,17 +32,8 @@ export type AnnotationColumnConfig = {
   fieldInput?: AnnotationColumnFieldInput;
 };
 
-export const JsonColumnTypeSchema = z.object({
-  type: z.string(),
-  properties: z.record(z.string(), z.object({ type: z.string() })).optional(),
-});
-export const AnnotationColumnConfigSchema = z.any();
-export const ColumnSchema = JsonColumnSchema.extend({
-  type: JsonColumnTypeSchema.optional(),
-});
-
 const AnnotationTargetEnum = z.enum(['gutter', 'underline', 'highlight']);
-export const AnnotationJsonResourceBaseSchema = z.object({
+export const AnnotationJsonResourceSchema = z.object({
   /**
    * URL of the generated JSON Schema, for editor autocomplete/validation. Declared so the
    * key is *allowed* (not stripped, and not flagged by the very schema it points at).
@@ -64,18 +55,9 @@ export const AnnotationJsonResourceBaseSchema = z.object({
   isRoot: z.boolean().optional().default(true),
   allowedChildren: z.array(z.string()).optional().default([]),
   allowedLinks: z.array(z.string()).optional().default([]),
-  columns: z.array(AnnotationColumnConfigSchema).optional().default([]),
+  columns: z.array(JsonColumnSchema).optional().default([]),
   ui_schema: z.any().optional(),
   target: AnnotationTargetEnum.optional().default('highlight'),
 });
-export const AnnotationJsonResourceSchema =
-  AnnotationJsonResourceBaseSchema.transform((data) => {
-    const jsonColumns = data.columns.map((d) => ColumnSchema.safeParse(d));
-
-    return {
-      ...data,
-      jsonColumns: [],
-    };
-  });
 
 export type AnnotationJsonConfig = z.infer<typeof AnnotationJsonResourceSchema>;

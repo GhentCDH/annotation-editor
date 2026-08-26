@@ -16,6 +16,7 @@ export const loadAnnotationDefinitionsFromDir = (
   if (!existsSync(dirPath)) return [];
 
   const entries = readdirSync(dirPath, { withFileTypes: true });
+
   const dirs = entries.filter((e) => e.isDirectory()).map((e) => e.name);
 
   const definitions: AnnotationDefinition[] = [];

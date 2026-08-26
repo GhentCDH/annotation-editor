@@ -41,7 +41,6 @@ export class AnnotationNamespaceController {
     return {
       id: definition.id,
       name: definition.name,
-      columns: definition.columns,
       isRoot: definition.isRoot,
       allowedChildren: definition.allowedChildren,
       allowedLinks: definition.allowedLinks,
