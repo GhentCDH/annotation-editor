@@ -1,10 +1,10 @@
 import { type ContextBuilder } from '@ghentcdh/w3c-utils';
 import { z } from 'zod';
+import { type ViewConfig } from '@ghentcdh/crouton-core';
 import {
   type AnnotationDefConfig,
   baseContextBuilder,
 } from './annotation.context-builder';
-import { ViewConfig } from '@ghentcdh/crouton-core';
 
 type JsonSchemaProperty = {
   type: string;

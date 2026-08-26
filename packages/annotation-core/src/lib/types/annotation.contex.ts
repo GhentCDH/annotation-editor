@@ -1,9 +1,9 @@
 import { ContextBuilder } from '@ghentcdh/w3c-utils';
+import { z } from 'zod';
 import {
   AnnotationJsonResourceSchema,
   type AnnotationJsonConfig,
 } from './annotation-json-config.types';
-import { z } from 'zod';
 
 export const AnnotationMetadataType = 'AnnotationMetadata';
 

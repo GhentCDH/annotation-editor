@@ -1,4 +1,4 @@
-import { buildViewsFromColumns, ViewConfig } from '@ghentcdh/crouton-core';
+import { buildViewsFromColumns, type ViewConfig } from '@ghentcdh/crouton-core';
 import { type AnnotationDefConfig } from './annotation.context-builder';
 import { annotationContextBuilderFactory } from './context-builder.factory';
 import {

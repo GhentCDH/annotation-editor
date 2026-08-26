@@ -1,10 +1,10 @@
 import { z } from 'zod';
 import { ViewConfigSchema } from '@ghentcdh/crouton-core';
+import { ContextBuilder } from '@ghentcdh/w3c-utils';
 import {
   AnnotationJsonResourceSchema,
   type AnnotationJsonConfig,
 } from './annotation-json-config.types';
-import { ContextBuilder } from '@ghentcdh/w3c-utils';
 
 const viewDefList = ['table', 'view', 'form'] as const;
 export const ViewDefEnum = z.enum(viewDefList);

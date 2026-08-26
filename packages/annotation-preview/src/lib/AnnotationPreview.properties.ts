@@ -3,7 +3,7 @@ import type { EmitFn, ExtractPublicPropTypes, PropType } from 'vue';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import {
   type AnnotationDefConfig,
-  GridLayout,
+  type GridLayout,
 } from '@ghentcdh/annotation-core';
 import {
   type AnnotationAdapter,
