@@ -11,35 +11,23 @@
       }
     },
     "build": {
-      "executor": "@nx/vite:build",
-      "outputs": ["{options.outputPath}"],
       "dependsOn": [
         {
           "projects": ["annotation-core", "annotation-ui"],
           "target": "build"
         }
-      ],
-      "options": {
-        "outputPath": "dist/packages/annotation-preview",
-        "configFile": "packages/annotation-preview/vite.config.mts"
-      },
-      "configurations": {
-        "production": {
-          "mode": "production"
-        },
-        "development": {
-          "mode": "development"
-        }
-      }
+      ]
     },
     "watch": {
-      "executor": "@nx/vite:build",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{projectRoot}/{options.outDir}",
+        "{workspaceRoot}/dist/packages/annotation-preview"
+      ],
       "options": {
-        "outputPath": "dist/packages/annotation-preview",
-        "configFile": "packages/annotation-preview/vite.config.mts",
         "watch": true,
-        "sourcemap": true
+        "sourcemap": true,
+        "config": "./vite.config.mts",
+        "outDir": "../../dist/packages/annotation-preview"
       },
       "configurations": {
         "development": {

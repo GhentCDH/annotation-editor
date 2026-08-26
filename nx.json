@@ -20,6 +20,22 @@
           "watchDepsName": "watch-deps"
         }
       }
+    },
+    {
+      "plugin": "@nx/vite/plugin",
+      "options": {
+        "buildTargetName": "watch",
+        "serveTargetName": "serve",
+        "previewTargetName": "preview",
+        "serveStaticTargetName": "serve-static",
+        "devTargetName": "dev",
+        "typecheckTargetName": "typecheck"
+      },
+      "include": [
+        "packages/annotation-ui/**/*",
+        "packages/annotation-preview/**/*",
+        "packages/annotation-editor/**/*"
+      ]
     }
   ],
   "release": {
@@ -40,5 +56,8 @@
         "file": "RELEASE_NOTES.md"
       }
     }
+  },
+  "migrate": {
+    "agentic": false
   }
 }

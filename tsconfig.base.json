@@ -26,7 +26,11 @@
         "./packages/annotation-preview/src/index.ts"
       ],
       "@ghentcdh/annotation-ui": ["./packages/annotation-ui/src/index.ts"]
-    }
+    },
+    "strict": false,
+    "noUncheckedSideEffectImports": false,
+    "types": ["*"],
+    "esModuleInterop": false
   },
   "exclude": [
     "node_modules",
