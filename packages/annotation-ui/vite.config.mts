@@ -17,7 +17,7 @@ export default defineConfig(() => ({
       entryRoot: 'src',
       tsconfigPath: path.join(__dirname, 'tsconfig.lib.json'),
       pathsToAliases: false,
-      bundledPackages: ['@ghentcdh/annotation-core'],
+      // bundledPackages: ['@ghentcdh/annotation-core'],
     }),
   ],
   build: {
@@ -29,9 +29,9 @@ export default defineConfig(() => ({
       entry: 'src/index.ts',
       name: 'AnnotationUi',
       fileName: 'index',
-      format: ['cjs', 'esm', 'es'],
+      formats: ['cjs', 'es'],
     },
-    rollupOptions: {
+    _rollupOptions: {
       external: [
         '@ghentcdh/annotated-text',
         '@ghentcdh/annotation-vue',
@@ -41,6 +41,7 @@ export default defineConfig(() => ({
         'uuid',
         'vue',
         'zod',
+        'vee-validate',
       ],
     },
   },
