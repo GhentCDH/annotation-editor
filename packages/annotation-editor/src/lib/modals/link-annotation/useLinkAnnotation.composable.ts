@@ -10,14 +10,14 @@ export class LinkAnnotation extends AnnotationModal<
   LinkAnnotationShow,
   LinkAnnotaitonCloseEvent
 > {
-  private type: string;
+  private _type: string = '';
 
   startLink(type: string) {
-    this.type = type;
+    this._type = type;
   }
 
   override show(data: LinkAnnotationShow) {
-    return super._show({ ...data, type: this.type });
+    return super._show({ ...data, type: this._type });
   }
 }
 

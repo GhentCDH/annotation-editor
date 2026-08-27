@@ -1,17 +1,13 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "module": "commonjs",
     "allowJs": true,
-    "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "importHelpers": true,
-    "noImplicitOverride": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "strictPropertyInitialization": false,
+    "jsx": "preserve",
+    "jsxImportSource": "vue",
+    "lib": ["es2022", "dom", "dom.iterable"],
+    "noEmit": true,
+    "resolveJsonModule": true,
     "ignoreDeprecations": "6.0"
   },
   "files": [],
@@ -19,9 +15,6 @@
   "references": [
     {
       "path": "./tsconfig.lib.json"
-    },
-    {
-      "path": "./tsconfig.spec.json"
     }
   ]
 }

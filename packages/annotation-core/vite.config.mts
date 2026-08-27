@@ -2,15 +2,14 @@
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import * as path from 'path';
-import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
-import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
 
 export default defineConfig(() => ({
   root: import.meta.dirname,
   cacheDir: '../../node_modules/.vite/annotation-core',
+  resolve: {
+    tsconfigPaths: true,
+  },
   plugins: [
-    nxViteTsPaths(),
-    nxCopyAssetsPlugin(['*.md']),
     dts({
       entryRoot: 'src',
       tsconfigPath: path.join(import.meta.dirname, 'tsconfig.lib.json'),
@@ -31,7 +30,12 @@ export default defineConfig(() => ({
       format: ['cjs', 'esm', 'es'],
     },
     rollupOptions: {
-      external: ['@ghentcdh/w3c-utils', '@ghentcdh/crouton-forms-vue', '@ghentcdh/annotated-text', 'zod'],
+      external: [
+        '@ghentcdh/w3c-utils',
+        '@ghentcdh/crouton-forms-vue',
+        '@ghentcdh/annotated-text',
+        'zod',
+      ],
     },
   },
   test: {

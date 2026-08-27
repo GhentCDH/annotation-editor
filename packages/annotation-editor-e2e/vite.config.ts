@@ -1,4 +1,3 @@
-import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import vue from '@vitejs/plugin-vue';
 import { defineConfig } from 'vite';
 import { dirname, resolve } from 'path';
@@ -11,8 +10,9 @@ const playgroundRoot = resolve(__dirname, 'src/playground');
 
 export default defineConfig({
   root: playgroundRoot,
-  plugins: [vue(), nxViteTsPaths()],
+  plugins: [vue()],
   resolve: {
+    tsconfigPaths: true,
     alias: [
       {
         find: '@ghentcdh/annotation-editor',

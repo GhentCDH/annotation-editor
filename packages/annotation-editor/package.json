@@ -14,7 +14,11 @@
       "import": "./index.mjs",
       "require": "./index.js"
     },
-    "./index.css": "./annotation-editor.css",
+    "./index.css": "./styles.css",
+    "./styles.css": "./styles.css",
     "./package.json": "./package.json"
+  },
+  "peerDependencies": {
+    "@ghentcdh/annotated-text": "^1.0.11"
   }
 }

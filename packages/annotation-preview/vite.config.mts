@@ -2,21 +2,8 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import dts from 'vite-plugin-dts';
-import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
-import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
 import { bundleDtsImports } from '../../tools/vite/bundle-dts-imports.mts';
 import * as path from 'path';
-
-// These options were migrated by @nx/vite:convert-to-inferred from the project.json file.
-const configValues = { default: {}, development: {} };
-
-// Determine the correct configValue to use based on the configuration
-const nxConfiguration = process.env.NX_TASK_TARGET_CONFIGURATION ?? 'default';
-
-const options = {
-  ...configValues.default,
-  ...(configValues[nxConfiguration] ?? {}),
-};
 
 const bundledPackages = [
   '@ghentcdh/annotation-core',
@@ -26,10 +13,11 @@ const bundledPackages = [
 export default defineConfig(() => ({
   root: __dirname,
   cacheDir: '../../node_modules/.vite/packages/annotation-preview',
+  resolve: {
+    tsconfigPaths: true,
+  },
   plugins: [
     vue(),
-    nxViteTsPaths(),
-    nxCopyAssetsPlugin(['*.md']),
     dts({
       entryRoot: 'src',
       tsconfigPath: path.join(__dirname, 'tsconfig.lib.json'),

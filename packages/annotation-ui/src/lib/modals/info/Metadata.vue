@@ -6,9 +6,18 @@
     :schema="view.json_schema"
     :ui-schema="view.ui_schema"
   />
+  metadata
+  <CroutonForm
+    :id="`annotation-selection-modal`"
+    :data="data"
+    :readonly="true"
+    :schema="view.json_schema"
+    :ui-schema="view.ui_schema"
+  />
 </template>
 <script setup lang="ts">
 import { FormComponent } from '@ghentcdh/crouton-forms-vue';
+import { CroutonForm } from '@ghentcdh/crouton-vue';
 import { type ViewConfig } from '@ghentcdh/crouton-core';
 
 const properties = defineProps<{

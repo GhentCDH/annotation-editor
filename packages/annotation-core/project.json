@@ -5,12 +5,14 @@
   "projectType": "library",
   "tags": ["scope:annotation", "type:util"],
   "targets": {
-"build": {
-      "executor": "@nx/vite:build",
-      "outputs": ["{options.outputPath}"],
+    "build": {
+      "outputs": [
+        "{projectRoot}/{options.outDir}",
+        "{workspaceRoot}/dist/packages/annotation-core"
+      ],
       "options": {
-        "outputPath": "dist/packages/annotation-core",
-        "configFile": "packages/annotation-core/vite.config.mts"
+        "config": "./vite.config.mts",
+        "outDir": "../../dist/packages/annotation-core"
       },
       "configurations": {
         "production": {
@@ -31,5 +33,3 @@
     }
   }
 }
-
-

@@ -25,7 +25,10 @@
       "@ghentcdh/annotation-preview": [
         "./packages/annotation-preview/src/index.ts"
       ],
-      "@ghentcdh/annotation-ui": ["./packages/annotation-ui/src/index.ts"]
+      "@ghentcdh/annotation-ui": ["./packages/annotation-ui/src/index.ts"],
+      "@ghentcdh/annotated-text": [
+        "./node_modules/@ghentcdh/annotated-text"
+      ]
     },
     "strict": false,
     "noUncheckedSideEffectImports": false,
