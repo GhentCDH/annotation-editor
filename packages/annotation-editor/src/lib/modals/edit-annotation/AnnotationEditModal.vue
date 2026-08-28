@@ -14,8 +14,6 @@
         :views="annotationDef.views"
         :format-before-save="formatBeforeSave"
         form-max-width="w-max max-w-lg"
-        @errors="onErrors"
-        @change="onChange"
         @click="onCancel"
         @save="save"
       >
