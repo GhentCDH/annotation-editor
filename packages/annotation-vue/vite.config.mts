@@ -1,6 +1,7 @@
 /// <reference types='vitest' />
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
+import { copyPackageJson } from '../../tools/vite/copy-package-json.mts';
 import * as path from 'path';
 
 export default defineConfig(() => ({
@@ -16,6 +17,7 @@ export default defineConfig(() => ({
       pathsToAliases: false,
       bundledPackages: ['@ghentcdh/annotation-core'],
     }),
+    copyPackageJson(),
   ],
   build: {
     outDir: '../../dist/packages/annotation-vue',

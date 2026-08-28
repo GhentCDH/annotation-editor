@@ -35,6 +35,9 @@ importers:
       axios:
         specifier: ^1.19.0
         version: 1.19.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+      tiptap-markdown:
+        specifier: ^0.9.0
+        version: 0.9.0(@tiptap/core@3.30.3(@tiptap/pm@3.30.3))
       vee-validate:
         specifier: ^4.15.1
         version: 4.15.1(vue@3.5.41(typescript@6.0.3))
@@ -59,7 +62,7 @@ importers:
         version: link:../crouton/packages/crouton-vue
       '@ghentcdh/ui':
         specifier: ^3.0.6
-        version: 3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.30.3)(@tiptap/starter-kit@3.30.3)(@tiptap/vue-3@3.30.3(@floating-ui/dom@1.8.0)(@tiptap/core@3.30.3(@tiptap/pm@3.30.3))(@tiptap/pm@3.30.3)(vue@3.5.41(typescript@6.0.3)))(vue-router@5.2.0(@vue/compiler-sfc@3.5.41)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.62.5)(vite@8.1.1(@types/node@26.3.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3))
+        version: 3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.30.3)(@tiptap/starter-kit@3.30.3)(@tiptap/vue-3@3.30.3(@floating-ui/dom@1.8.0)(@tiptap/core@3.30.3(@tiptap/pm@3.30.3))(@tiptap/pm@3.30.3)(vue@3.5.41(typescript@6.0.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.30.3(@tiptap/pm@3.30.3)))(vue-router@5.2.0(@vue/compiler-sfc@3.5.41)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.62.5)(vite@8.1.1(@types/node@26.3.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3))
       '@ghentcdh/w3c-utils':
         specifier: ^1.0.11
         version: 1.0.11(@types/debug@4.1.13)(@types/node@26.3.0)(jiti@2.7.0)(jsdom@29.1.1)(lightningcss@1.33.0)(sass-embedded@1.100.0)(sass@1.100.0)(supports-color@7.2.0)(yaml@2.9.0)
@@ -2864,17 +2867,26 @@ packages:
   '@types/jsonfile@6.1.4':
     resolution: {integrity: sha512-D5qGUYwjvnNNextdU59/+fI+spnwtTFmyQP0h+PfIOSkNfpU6AOICUOkm4i0OnSk+NyjdPJrxCDro0sJsWlRpQ==}
 
+  '@types/linkify-it@3.0.5':
+    resolution: {integrity: sha512-yg6E+u0/+Zjva+buc3EIb+29XEg4wltq7cSmd4Uc2EE/1nUVmxyzpX6gUXD0V8jIrG0r7YeOGVIbYRkxeooCtw==}
+
   '@types/linkify-it@5.0.0':
     resolution: {integrity: sha512-sVDA58zAw4eWAffKOaQH5/5j3XeayukzDk+ewSsnv3p4yJEZHCCzMDiZM8e0OUrRvmpGZ85jf4yDHkHsgBNr9Q==}
 
   '@types/markdown-it-emoji@3.0.1':
     resolution: {integrity: sha512-cz1j8R35XivBqq9mwnsrP2fsz2yicLhB8+PDtuVkKOExwEdsVBNI+ROL3sbhtR5occRZ66vT0QnwFZCqdjf3pA==}
 
+  '@types/markdown-it@13.0.9':
+    resolution: {integrity: sha512-1XPwR0+MgXLWfTn9gCsZ55AHOKW1WN+P9vr0PaQh5aerR9LLQXUbjfEAFhjmEmyoYFWAyuN2Mqkn40MZ4ukjBw==}
+
   '@types/markdown-it@14.2.0':
     resolution: {integrity: sha512-NoQ2yGlLWj4wpxMs+TYmRKk3thDrQ97agr7sFqfLsAlvoS8SNQuTrlObhFqG9iugdTtgOE9jpJ6FNM4ZGsa5xQ==}
 
   '@types/mdast@4.0.4':
     resolution: {integrity: sha512-kGaNbPh1k7AFzgpud/gMdvIm5xuECykRR+JnWKQno9TAXVa6WIVCGTPvYGekIDL4uwCZQSYbUxNBSb1aUo79oA==}
+
+  '@types/mdurl@1.0.5':
+    resolution: {integrity: sha512-6L6VymKTzYSrEf4Nev4Xa1LCHKrlTlYCBMTlQKFuddo1CvQcE52I0mwfOJayueUC7MJuXOeHTcIU683lzd0cUA==}
 
   '@types/mdurl@2.0.0':
     resolution: {integrity: sha512-RGdgjQUZba5p6QEFAVx2OGb8rQDL/cPRG7GiedRzMcJ1tYnUANBncjbSB1NRGwbvjcPeikRABz2nshyPk1bhWg==}
@@ -5125,6 +5137,9 @@ packages:
   markdown-it-emoji@3.1.0:
     resolution: {integrity: sha512-NhmMEH2ywduD4Nty1E8uB5NqfLhAT1VR0dyvoJyStKOqCzbZmVdn/+8wj7zpDsb/fLBikpCPsWwxqKlvMmbz4g==}
 
+  markdown-it-task-lists@2.1.1:
+    resolution: {integrity: sha512-TxFAc76Jnhb2OUu+n3yz9RMu4CwGfaT788br6HhEDlvWfdeJcLUsxk1Hgw2yJio0OXsxv7pyIPmvECY7bMbluA==}
+
   markdown-it@14.3.0:
     resolution: {integrity: sha512-RCEsPjR+sr0x+AuYp601tKTkgFG4YEPLCzHST3cQ/fhlJkqAkz1L2/Qbp1j9qw5SBwQHFBoW8+hoN5xssOF0Tw==}
     hasBin: true
@@ -5500,6 +5515,9 @@ packages:
 
   prosemirror-keymap@1.2.3:
     resolution: {integrity: sha512-4HucRlpiLd1IPQQXNqeo81BGtkY8Ai5smHhKW9jjPKRc2wQIxksg7Hl1tTI2IfT2B/LgX6bfYvXxEpJl7aKYKw==}
+
+  prosemirror-markdown@1.13.6:
+    resolution: {integrity: sha512-dY6g2BXRjkHW2ldNRDKfTF0x0R4ifk5rgPaABd/UhvrymtsGVxTbHn01goEsHAvO9nN0O34cttlW1qg/XUcaIg==}
 
   prosemirror-model@1.25.11:
     resolution: {integrity: sha512-QWg9RhnpLlogAmp3p96uEFrE5txQpFynd4vhBAELkwgOCWQs/X0yCzB3/hrHqiPwf91RG5KyWq6553zs9JqIOQ==}
@@ -5997,6 +6015,11 @@ packages:
   tinyrainbow@3.1.1:
     resolution: {integrity: sha512-yau8yJdTt989Mm0Bd/236QnzEiPf2xLLTqUZRUJOo/3CB078LSwzei343DgtJVmfJKJE3TMINY1u42SQsP6mXw==}
     engines: {node: '>=14.0.0'}
+
+  tiptap-markdown@0.9.0:
+    resolution: {integrity: sha512-dKLQ9iiuGNgrlGVjrNauF/UBzWu4LYOx5pkD0jNkmQt/GOwfCJsBuzZTsf1jZ204ANHOm572mZ9PYvGh1S7tpQ==}
+    peerDependencies:
+      '@tiptap/core': ^3.0.1
 
   tldts-core@7.4.11:
     resolution: {integrity: sha512-CW3WN2rIIE/Of21mulhgnGOwoDyEFNygyIBOONSdyAuSATgMMUCpLeUlB+E8sAwA5xRV9hYPl+kyZ9citHCaKg==}
@@ -7908,7 +7931,7 @@ snapshots:
       '@jsonforms/core': 3.8.0
       zod: 4.4.3
 
-  '@ghentcdh/ui@3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.30.3)(@tiptap/starter-kit@3.30.3)(@tiptap/vue-3@3.30.3(@floating-ui/dom@1.8.0)(@tiptap/core@3.30.3(@tiptap/pm@3.30.3))(@tiptap/pm@3.30.3)(vue@3.5.41(typescript@6.0.3)))(vue-router@5.2.0(@vue/compiler-sfc@3.5.41)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.62.5)(vite@8.1.1(@types/node@26.3.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3))':
+  '@ghentcdh/ui@3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.30.3)(@tiptap/starter-kit@3.30.3)(@tiptap/vue-3@3.30.3(@floating-ui/dom@1.8.0)(@tiptap/core@3.30.3(@tiptap/pm@3.30.3))(@tiptap/pm@3.30.3)(vue@3.5.41(typescript@6.0.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.30.3(@tiptap/pm@3.30.3)))(vue-router@5.2.0(@vue/compiler-sfc@3.5.41)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.62.5)(vite@8.1.1(@types/node@26.3.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3))':
     dependencies:
       vue: 3.5.41(typescript@6.0.3)
       vue-router: 5.2.0(@vue/compiler-sfc@3.5.41)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.62.5)(vite@8.1.1(@types/node@26.3.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.41(typescript@6.0.3))
@@ -7917,6 +7940,7 @@ snapshots:
       '@tiptap/pm': 3.30.3
       '@tiptap/starter-kit': 3.30.3
       '@tiptap/vue-3': 3.30.3(@floating-ui/dom@1.8.0)(@tiptap/core@3.30.3(@tiptap/pm@3.30.3))(@tiptap/pm@3.30.3)(vue@3.5.41(typescript@6.0.3))
+      tiptap-markdown: 0.9.0(@tiptap/core@3.30.3(@tiptap/pm@3.30.3))
 
   '@ghentcdh/w3c-utils@1.0.11(@types/debug@4.1.13)(@types/node@26.3.0)(jiti@2.7.0)(jsdom@29.1.1)(lightningcss@1.33.0)(sass-embedded@1.100.0)(sass@1.100.0)(supports-color@7.2.0)(yaml@2.9.0)':
     dependencies:
@@ -9320,11 +9344,18 @@ snapshots:
     dependencies:
       '@types/node': 26.3.0
 
+  '@types/linkify-it@3.0.5': {}
+
   '@types/linkify-it@5.0.0': {}
 
   '@types/markdown-it-emoji@3.0.1':
     dependencies:
       '@types/markdown-it': 14.2.0
+
+  '@types/markdown-it@13.0.9':
+    dependencies:
+      '@types/linkify-it': 3.0.5
+      '@types/mdurl': 1.0.5
 
   '@types/markdown-it@14.2.0':
     dependencies:
@@ -9334,6 +9365,8 @@ snapshots:
   '@types/mdast@4.0.4':
     dependencies:
       '@types/unist': 3.0.3
+
+  '@types/mdurl@1.0.5': {}
 
   '@types/mdurl@2.0.0': {}
 
@@ -12005,6 +12038,8 @@ snapshots:
 
   markdown-it-emoji@3.1.0: {}
 
+  markdown-it-task-lists@2.1.1: {}
+
   markdown-it@14.3.0:
     dependencies:
       argparse: 2.0.1
@@ -12527,6 +12562,12 @@ snapshots:
       prosemirror-state: 1.4.4
       w3c-keyname: 2.2.8
 
+  prosemirror-markdown@1.13.6:
+    dependencies:
+      '@types/markdown-it': 14.2.0
+      markdown-it: 14.3.0
+      prosemirror-model: 1.25.11
+
   prosemirror-model@1.25.11:
     dependencies:
       orderedmap: 2.1.1
@@ -13021,6 +13062,14 @@ snapshots:
       picomatch: 4.0.7
 
   tinyrainbow@3.1.1: {}
+
+  tiptap-markdown@0.9.0(@tiptap/core@3.30.3(@tiptap/pm@3.30.3)):
+    dependencies:
+      '@tiptap/core': 3.30.3(@tiptap/pm@3.30.3)
+      '@types/markdown-it': 13.0.9
+      markdown-it: 14.3.0
+      markdown-it-task-lists: 2.1.1
+      prosemirror-markdown: 1.13.6
 
   tldts-core@7.4.11: {}
 

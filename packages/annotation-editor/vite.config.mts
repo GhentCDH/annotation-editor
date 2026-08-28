@@ -3,6 +3,7 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import dts from 'vite-plugin-dts';
 import { bundleDtsImports } from '../../tools/vite/bundle-dts-imports.mts';
+import { copyPackageJson } from '../../tools/vite/copy-package-json.mts';
 import * as path from 'path';
 import tailwindcss from '@tailwindcss/vite';
 
@@ -30,6 +31,7 @@ export default defineConfig(() => ({
       bundledPackages,
       __dirname,
     ),
+    copyPackageJson(),
   ],
   build: {
     outDir: '../../dist/packages/annotation-editor',
@@ -49,6 +51,7 @@ export default defineConfig(() => ({
         '@ghentcdh/annotated-text',
         '@ghentcdh/annotation-vue',
         '@ghentcdh/crouton-forms-vue',
+        '@ghentcdh/crouton-vue',
         '@ghentcdh/ui',
         '@ghentcdh/w3c-utils',
         '@jsonforms/core',

@@ -1,6 +1,7 @@
 /// <reference types='vitest' />
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
+import { copyPackageJson } from '../../tools/vite/copy-package-json.mts';
 import * as path from 'path';
 
 export default defineConfig(() => ({
@@ -15,6 +16,7 @@ export default defineConfig(() => ({
       tsconfigPath: path.join(import.meta.dirname, 'tsconfig.lib.json'),
       pathsToAliases: false,
     }),
+    copyPackageJson(),
   ],
   build: {
     outDir: '../../dist/packages/annotation-core',

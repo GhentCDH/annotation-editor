@@ -1,6 +1,7 @@
 /// <reference types="vitest" />
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
+import { copyPackageJson } from '../../tools/vite/copy-package-json.mts';
 import path from 'node:path';
 
 export default defineConfig({
@@ -20,6 +21,7 @@ export default defineConfig({
       insertTypesEntry: true,
       bundledPackages: ['@ghentcdh/annotation-core'],
     }),
+    copyPackageJson(),
   ],
 
   build: {

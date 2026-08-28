@@ -8,56 +8,44 @@
     @close-modal="onCancel"
   >
     <template #content>
-      <div class="flex flex-row gap-2">
-        <Collapse :title="label.selectLabel">
-          <div :id="editId" />
-          <Btn
-            :outline="true"
-            class="mt-2"
-            @click="selectAll"
-          >
-            Select all text
-          </Btn>
-        </Collapse>
-        <div class="w-max max-w-lg">
-          <AnnotationForm
-            v-model="formData"
-            :annotation="annotation"
-            :annotation-type="type!"
-            @valid="onValid"
-          />
-        </div>
-      </div>
-    </template>
-    <template #actions>
-      <Btn
-        :color="'secondary' as any"
-        :outline="true"
+      <CroutonForm
+        layout="rows"
+        :data="metadata"
+        :views="annotationDef.views"
+        :format-before-save="formatBeforeSave"
+        form-max-width="w-max max-w-lg"
+        @errors="onErrors"
+        @change="onChange"
         @click="onCancel"
+        @save="save"
       >
-        Cancel
-      </Btn>
-      <Btn
-        :disabled="formDisabled"
-        @click="onSubmit"
-      >
-        Save
-      </Btn>
+        <template #content-before>
+          <div class="flex-grow">
+            <Collapse :title="label.selectLabel">
+              <div :id="editId" />
+              <Btn :outline="true" class="mt-2" @click="selectAll">
+                Select all text
+              </Btn>
+            </Collapse>
+          </div>
+        </template>
+      </CroutonForm>
     </template>
   </Modal>
 </template>
 <script lang="ts" setup>
+import { CroutonForm } from '@ghentcdh/crouton-vue';
 import { Btn, Collapse, Modal } from '@ghentcdh/ui';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { type AnnotatedText } from '@ghentcdh/annotated-text';
 import { w3cAnnotation, type W3CAnnotation } from '@ghentcdh/w3c-utils';
-import AnnotationForm from './AnnotationForm.vue';
 import {
   AnnotationEditEmits,
   AnnotationEditModalProperties,
 } from './AnnotationEditModal.properties';
 import { useEditorState } from '../../composables/useEditorState';
 import { type Selector } from '../../utils/annotation-utils';
+import { useMetadata } from '../../utils/useMetadata';
 
 let annotatedText: AnnotatedText<W3CAnnotation>;
 const props = defineProps(AnnotationEditModalProperties);
@@ -67,15 +55,11 @@ const { config, utils } = useEditorState();
 const emits = defineEmits(AnnotationEditEmits);
 
 const editId = `edit-select-annotation-${Date.now()}--`;
-const metadataValid = ref(true);
 
-const annotationDef = computed(() => {
-  return config.annotation.getDefinition(props.type!);
-});
+const { annotationDef, metadata } = useMetadata(props);
 
-const formData = ref(null);
 const label = computed(() => {
-  const _label = annotationDef.value?.label ?? props.type;
+  const _label = annotationDef.label ?? props.type;
 
   return {
     title: props.annotation ? `Edit ${_label}` : `Create ${_label}`,
@@ -85,9 +69,7 @@ const label = computed(() => {
   };
 });
 
-const onSubmit = () => {
-  if (formDisabled.value) return;
-
+const formatBeforeSave = (formData: any) => {
   let updatedAnnotation = annotationSelector.value;
 
   let extraTextPositionSelector: Selector | undefined;
@@ -110,26 +92,20 @@ const onSubmit = () => {
   }
   const result = utils.createAnnotation(
     updatedAnnotation,
-    annotationDef.value!,
-    formData.value,
+    annotationDef,
+    formData,
     extraTextPositionSelector,
   );
 
   // Submit it to the parent so if needed it can be saved to the server
   (result as any).id = props.annotation?.id ?? null;
-  emits('close', { annotation: result });
+
+  return result;
 };
 
-const onValid = (valid: boolean) => {
-  metadataValid.value = valid;
+const save = (annotation: any) => {
+  emits('close', { annotation });
 };
-
-const formDisabled = computed(() => {
-  if (!annotationSelector.value) return true;
-
-  // TODO add validate of form data
-  return !metadataValid.value;
-});
 
 const selectAll = () => {
   const source = props.source!;
@@ -143,13 +119,13 @@ const selectAll = () => {
   };
 
   annotationSelector.value = utils.createAnnotationFromSelector(
-    annotationDef.value!,
+    annotationDef,
     null,
     selector,
   );
 
   annotatedText
-    .setAnnotationAdapter({ create: false, edit: true })
+    .setAnnotationAdapterParams({ create: false, edit: true })
     .setAnnotations([annotationSelector.value]);
 };
 
@@ -177,7 +153,7 @@ onMounted(() => {
 
   if (props.annotation) {
     annotationSelector.value = utils.createAnnotationFromSelector(
-      annotationDef.value!,
+      annotationDef,
       props.annotation,
       null,
     );
@@ -193,12 +169,12 @@ onMounted(() => {
     .setAnnotations(annotations);
 
   annotatedText
-    .setAnnotationAdapter({ edit: true, create: !props.annotation })
+    .setAnnotationAdapterParams({ edit: true, create: !props.annotation })
     .on('annotation-create--end', ({ mouseEvent, event, data: _data }) => {
       annotationSelector.value = _data.annotation;
       annotatedText
         .setAnnotations([annotationSelector.value])
-        .setAnnotationAdapter({ create: false, edit: true });
+        .setAnnotationAdapterParams({ create: false, edit: true });
     })
     .on('annotation-edit--end', ({ mouseEvent, event, data }) => {
       annotationSelector.value = data.annotation;
@@ -206,7 +182,7 @@ onMounted(() => {
     });
 
   if (textPositionSelector.value) {
-    annotatedText.setTextAdapter({
+    annotatedText.setTextAdapterParams({
       limit: { ...textPositionSelector.value, ignoreLines: true },
     });
   }

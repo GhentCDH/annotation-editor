@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+# Unlink packages listed in link.config.json — revert to published versions.
+#
+# Reads link.config.json and for each entry:
+#   1. Removes pnpm override from pnpm-workspace.yaml
+#   2. Runs pnpm install to resolve from registry
+#
+# To re-enable: run tools/scripts/link
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+CONFIG_FILE="$SCRIPT_DIR/link.config.json"
+
+WORKSPACE_FILE="$PROJECT_ROOT/pnpm-workspace.yaml"
+
+if [ ! -f "$CONFIG_FILE" ]; then
+  echo "ERROR: $CONFIG_FILE not found"
+  exit 1
+fi
+
+# Parse config with node
+PACKAGES=$(node -e "
+  const cfg = require('$CONFIG_FILE');
+  cfg.forEach(p => console.log([p.name, p.path].join('|')));
+")
+
+NO_INSTALL=false
+for arg in "$@"; do
+  [ "$arg" = "--no-install" ] && NO_INSTALL=true
+done
+
+echo "=== Unlinking packages (revert to published) ==="
+
+# --- 1. Remove pnpm overrides ---
+if grep -q "^overrides:" "$WORKSPACE_FILE" 2>/dev/null; then
+  echo "[remove] pnpm overrides"
+  sed -i '' '/^overrides:/d' "$WORKSPACE_FILE"
+  while IFS='|' read -r name pkg_path; do
+    escaped=$(echo "$name" | sed 's/[/@]/\\&/g')
+    sed -i '' "/${escaped}.*link:/d" "$WORKSPACE_FILE"
+  done <<< "$PACKAGES"
+  # Clean trailing blank lines
+  sed -i '' -e :a -e '/^\n*$/{$d;N;ba' -e '}' "$WORKSPACE_FILE"
+else
+  echo "[skip] no overrides block found"
+fi
+
+# --- 1b. Restore patchedDependencies from patch files on disk ---
+PATCHES_DIR="$PROJECT_ROOT/patches"
+if [ -d "$PATCHES_DIR" ] && ls "$PATCHES_DIR"/*.patch &>/dev/null; then
+  if ! grep -q "^patchedDependencies:" "$WORKSPACE_FILE" 2>/dev/null; then
+    echo "[restore] patchedDependencies block"
+    PATCH_LINES="patchedDependencies:"$'\n'
+    for patch_file in "$PATCHES_DIR"/*.patch; do
+      patch_basename=$(basename "$patch_file")
+      # Convert filename format: @scope__name@version.patch -> @scope/name@version
+      pkg_ref=$(echo "$patch_basename" | sed 's/\.patch$//' | sed 's/__/\//')
+      PATCH_LINES+="  '${pkg_ref}': patches/${patch_basename}"$'\n'
+    done
+    printf "\n%s" "$PATCH_LINES" >> "$WORKSPACE_FILE"
+  fi
+fi
+
+# --- 2. Reinstall from registry ---
+if [ "$NO_INSTALL" = "false" ]; then
+  echo "[run] pnpm install"
+  cd "$PROJECT_ROOT" && pnpm install
+fi
+
+echo ""
+echo "=== Done! Using published packages ==="

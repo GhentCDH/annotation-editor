@@ -10,7 +10,7 @@ export class LinkAnnotation extends AnnotationModal<
   LinkAnnotationShow,
   LinkAnnotaitonCloseEvent
 > {
-  private _type: string = '';
+  private _type = '';
 
   startLink(type: string) {
     this._type = type;

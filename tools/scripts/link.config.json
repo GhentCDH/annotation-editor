@@ -1,0 +1,18 @@
+[
+  {
+    "name": "@ghentcdh/crouton-forms-vue",
+    "path": "../crouton/packages/crouton-forms-vue"
+  },
+  {
+    "name": "@ghentcdh/crouton-vue",
+    "path": "../crouton/packages/crouton-vue"
+  },
+  {
+    "name": "@ghentcdh/crouton-cli",
+    "path": "../crouton/packages/crouton-cli"
+  },
+  {
+    "name": "@ghentcdh/crouton-api",
+    "path": "../crouton/packages/crouton-api/dist"
+  }
+]
