@@ -21,7 +21,11 @@
           <div class="flex-grow">
             <Collapse :title="label.selectLabel">
               <div :id="editId" />
-              <Btn :outline="true" class="mt-2" @click="selectAll">
+              <Btn
+                :outline="true"
+                class="mt-2"
+                @click="selectAll"
+              >
                 Select all text
               </Btn>
             </Collapse>
