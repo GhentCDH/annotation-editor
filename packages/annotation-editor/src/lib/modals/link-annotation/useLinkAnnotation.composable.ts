@@ -3,7 +3,7 @@ import {
   type LinkAnnotationProps,
   type LinkAnnotationShow,
 } from './link-annotation.properties';
-import { AnnotationModal } from '../AnnotationModal.definition';
+import { AnnotationModal } from '@ghentcdh/annotation-ui';
 
 export class LinkAnnotation extends AnnotationModal<
   LinkAnnotationProps,

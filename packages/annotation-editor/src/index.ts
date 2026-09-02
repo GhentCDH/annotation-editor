@@ -29,7 +29,4 @@ export {
 // Re-export annotation-ui (includes UI-specific AnnotationDefinition)
 export * from '@ghentcdh/annotation-ui';
 
-// Editor-specific public API
-export * from './lib/types/AnnotationConfiguration.model';
-export * from './lib/types/source.model';
 export { AnnotationEditor };

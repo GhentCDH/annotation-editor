@@ -1,10 +1,10 @@
 import { nextTick, type TemplateRef } from 'vue';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import type { EditorConfig, EditorState_ } from '../composables/editorState';
-import type { AnnotationUtils } from '../utils/annotation-utils';
+import type { AnnotationUtils } from '@ghentcdh/annotation-ui';
 import type { AnnotationEditorEmitsFn } from '../AnnotationEditor.properties';
-import type { SourceModel } from '../types/source.model';
-import { getAnnotationElementCenter } from '../utils/mouse-events';
+import type { SourceModel } from '@ghentcdh/annotation-ui';
+import { getAnnotationElementCenter } from '@ghentcdh/annotation-ui';
 
 type AnnotationData = {
   annotation: W3CAnnotation;

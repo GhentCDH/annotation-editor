@@ -28,7 +28,7 @@ import { AnnotationInfoCardProperties } from './AnnotationInfoCard.properties';
 import LinksDetail from './LinksDetail.vue';
 import { useEditorState } from '../../composables/useEditorState';
 import Navbar from '../../components/navbar.vue';
-import { type AnnotationDefinition } from '../../types/AnnotationConfiguration.model';
+import { type AnnotationDefinition } from '@ghentcdh/annotation-ui';
 import { type NavbarAction } from '../../components/navbar.properties';
 
 const properties = defineProps(AnnotationInfoCardProperties);

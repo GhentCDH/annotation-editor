@@ -27,7 +27,7 @@ import { type W3CAnnotation } from '@ghentcdh/w3c-utils';;
 import AnnotationText from './Annotation-text.vue';
 import Navbar from '../../components/navbar.vue';
 import { useEditorState } from '../../composables/useEditorState';
-import { type AnnotationLink } from '../../utils/annotation-utils';
+import { type AnnotationLink } from '@ghentcdh/annotation-ui';
 
 const props = defineProps<{ annotation: W3CAnnotation }>();
 

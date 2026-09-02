@@ -9,7 +9,7 @@ import {
   type TemplateRef,
   watch,
 } from 'vue';
-import { createAnnotationConfiguration } from './annotationConfiguration';
+import { createAnnotationConfiguration } from '@ghentcdh/annotation-ui';
 import {
   type AnnotationEvents,
   sendAnnotationEvent,
@@ -19,13 +19,13 @@ import {
   type AnnotationEditorEmitsFn,
   type AnnotationEditorProps,
 } from '../AnnotationEditor.properties';
-import { createModalConfig } from '../modals/annotationModal.composable';
+import { createModalConfig } from '@ghentcdh/annotation-ui';
 import {
   type AnnotationUtils,
   annotationUtils,
-} from '../utils/annotation-utils';
+} from '@ghentcdh/annotation-ui';
 import { annotationModalDefaults } from '../modals/AnnotationModal.defaults';
-import { type SourceModel } from '../types/source.model';
+import { type SourceModel } from '@ghentcdh/annotation-ui';
 import { selectAnnotationById } from '../modals/open-modal';
 
 export type EditorState = {

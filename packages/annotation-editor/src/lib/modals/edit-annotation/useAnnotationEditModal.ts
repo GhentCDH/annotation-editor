@@ -3,7 +3,7 @@ import {
   type AnnotationEditModalEvent,
   type AnnotationEditModalShow,
 } from './AnnotationEditModal.properties';
-import { AnnotationModal } from '../AnnotationModal.definition';
+import { AnnotationModal } from '@ghentcdh/annotation-ui';
 
 export class AnnotationEdit extends AnnotationModal<
   AnnotationEditModal,

@@ -1,5 +1,5 @@
 import { type EditToast } from './toast.properties';
-import { AnnotationModal } from '../AnnotationModal.definition';
+import { AnnotationModal } from '@ghentcdh/annotation-ui';
 
 export class ToastCard extends AnnotationModal<EditToast, EditToast, void> {}
 

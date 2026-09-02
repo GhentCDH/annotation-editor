@@ -7,8 +7,8 @@ import {
   type TextAdapter,
 } from '@ghentcdh/annotated-text';
 import type { GridLayout } from '@ghentcdh/annotation-ui';
-import type { AnnotationDefinition } from './types/AnnotationConfiguration.model';
-import type { SourceModel } from './types/source.model';
+import type { AnnotationDefinition } from '@ghentcdh/annotation-ui';
+import type { SourceModel } from '@ghentcdh/annotation-ui';
 
 export const AnnotationEditorProperties = {
   modalView: { type: Boolean, required: false as const, default: true },

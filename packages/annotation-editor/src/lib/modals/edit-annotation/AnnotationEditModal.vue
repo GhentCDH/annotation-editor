@@ -46,7 +46,7 @@ import {
   AnnotationEditModalProperties,
 } from './AnnotationEditModal.properties';
 import { useEditorState } from '../../composables/useEditorState';
-import { type Selector } from '../../utils/annotation-utils';
+import { type Selector } from '@ghentcdh/annotation-ui';
 import { useMetadata } from '../../utils/useMetadata';
 
 let annotatedText: AnnotatedText<W3CAnnotation>;
