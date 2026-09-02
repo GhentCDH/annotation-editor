@@ -56,7 +56,6 @@ export default defineConfig(() => ({
         '@jsonforms/core',
         'uuid',
         'vue',
-        'vee-validate',
         'zod',
       ],
       output: {
