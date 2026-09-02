@@ -55,6 +55,7 @@ export const AnnotationPlugin: Plugin<[AnnotationPluginOptions]> = {
     const state = createAnnotationDefinitionsState(options);
 
     configureApi(options.api);
+
     if (options.resourceFolder) {
       state.loadFromGlob(options.resourceFolder);
     }

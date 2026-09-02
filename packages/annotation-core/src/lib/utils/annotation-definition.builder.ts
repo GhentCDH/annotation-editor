@@ -2,8 +2,8 @@ import { buildViewsFromColumns, type ViewConfig } from '@ghentcdh/crouton-core';
 import { type AnnotationDefConfig } from './annotation.context-builder';
 import { annotationContextBuilderFactory } from './context-builder.factory';
 import {
-  annotationDefinition,
-  type AnnotationDefinition,
+  annotationResource,
+  type AnnotationResource,
 } from '../types/annotation-definition.type';
 import {
   type AnnotationJsonConfig,
@@ -20,7 +20,7 @@ export const buildAnnotationDefinition = (
   jsonConfig: AnnotationJsonConfig,
   annotationDefConfig: AnnotationDefConfig,
   factory: ContextBuilderFactory = annotationContextBuilderFactory,
-): AnnotationDefinition => {
+): AnnotationResource => {
   const parsed = AnnotationJsonResourceSchema.safeParse(jsonConfig);
 
   if (!parsed.success) {
@@ -37,7 +37,15 @@ export const buildAnnotationDefinition = (
     : undefined;
   const json_schema = formConfig?.json_schema;
 
-  const definition: AnnotationDefinition = annotationDefinition.parse({
+  const baseUri = [
+    annotationDefConfig.baseUrl,
+    annotationDefConfig.crudController ?? 'annotations',
+  ].join('/');
+  // const operations: Record<string, unknown> = buildResourceOperations(
+  //   definition,
+  //   baseUri,
+  // );
+  const definition: AnnotationResource = annotationResource.parse({
     ...json,
     isRoot: json.isRoot ?? true,
     context,
@@ -46,9 +54,6 @@ export const buildAnnotationDefinition = (
     views,
   });
 
-  if (json.type) definition.type = json.type;
-  if (json.icon) definition.icon = json.icon;
-
   return definition;
 };
 
@@ -56,7 +61,11 @@ export const buildAnnotationDefinitions = (
   configs: AnnotationJsonConfig[],
   annotationDefConfig: AnnotationDefConfig,
   factory?: ContextBuilderFactory,
-): AnnotationDefinition[] =>
-  configs.map((config) =>
+): AnnotationResource[] => {
+  console.log('build annotation definitions');
+  console.table(configs);
+  console.log(annotationDefConfig);
+  return configs.map((config) =>
     buildAnnotationDefinition(config, annotationDefConfig, factory),
   );
+};

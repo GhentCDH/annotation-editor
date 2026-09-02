@@ -1,7 +1,8 @@
 import { createApp, defineComponent, h, nextTick } from 'vue';
 import {
+  annotationConfig,
   type AnnotationDefConfig,
-  type AnnotationDefinition as CoreAnnotationDefinition,
+  type AnnotationResource,
 } from '@ghentcdh/annotation-core';
 import { type DefinitionsFetchFn } from '../../loader/annotation-definition.loader';
 import {
@@ -21,16 +22,21 @@ const mockConfig: AnnotationDefConfig = {
 const createCoreDef = (
   id: string,
   name: string,
-  overrides?: Partial<CoreAnnotationDefinition>,
-): CoreAnnotationDefinition => ({
-  id,
-  name,
-  color: '#000',
-  columns: [],
-  isRoot: true,
-  context: { toJsonLdContext: () => ({}) },
-  ...overrides,
-});
+  overrides?: Partial<AnnotationResource>,
+): AnnotationResource => {
+  return {
+    id,
+    name,
+    columns: [],
+    context: { toJsonLdContext: () => ({}) },
+    ...overrides,
+    annotation: annotationConfig.parse({
+      color: '#000',
+      isRoot: true,
+      ...overrides,
+    }),
+  };
+};
 
 /**
  * Runs a callback inside a mounted component tree so provide/inject work.

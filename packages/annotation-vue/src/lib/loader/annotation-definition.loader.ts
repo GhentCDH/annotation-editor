@@ -1,14 +1,12 @@
 import {
-  type AnnotationJsonConfig,
   type AnnotationDefConfig,
-  type AnnotationDefinition,
-  type ContextBuilderFactory,
+  type AnnotationJsonConfig,
+  type AnnotationResource,
   buildAnnotationDefinitions,
+  type ContextBuilderFactory,
 } from '@ghentcdh/annotation-core';
 
-type GlobModule =
-  | { default: AnnotationJsonConfig }
-  | AnnotationJsonConfig;
+type GlobModule = { default: AnnotationJsonConfig } | AnnotationJsonConfig;
 
 export type GlobModules = Record<string, GlobModule>;
 
@@ -21,7 +19,7 @@ export const loadAnnotationDefinitionsFromGlob = (
   modules: GlobModules,
   config: AnnotationDefConfig,
   factory?: ContextBuilderFactory,
-): AnnotationDefinition[] => {
+): AnnotationResource[] => {
   const configs = Object.values(modules).map(extractConfig);
   return loadAnnotationDefinitionsFromConfigs(configs, config, factory);
 };
@@ -30,16 +28,20 @@ export const loadAnnotationDefinitionsFromConfigs = (
   configs: AnnotationJsonConfig[],
   config: AnnotationDefConfig,
   factory?: ContextBuilderFactory,
-): AnnotationDefinition[] => {
+): AnnotationResource[] => {
   return buildAnnotationDefinitions(configs, config, factory);
 };
 
-export type DefinitionsFetchFn = (url: string) => Promise<AnnotationJsonConfig[]>;
+export type DefinitionsFetchFn = (
+  url: string,
+) => Promise<AnnotationJsonConfig[]>;
 
 const defaultFetchFn: DefinitionsFetchFn = async (url: string) => {
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error(`Failed to fetch annotation definitions: ${response.status} ${response.statusText}`);
+    throw new Error(
+      `Failed to fetch annotation definitions: ${response.status} ${response.statusText}`,
+    );
   }
   return response.json();
 };
@@ -49,7 +51,8 @@ export const loadAnnotationDefinitionsFromUrl = async (
   config: AnnotationDefConfig,
   factory?: ContextBuilderFactory,
   fetchFn: DefinitionsFetchFn = defaultFetchFn,
-): Promise<AnnotationDefinition[]> => {
+): Promise<AnnotationResource[]> => {
   const configs = await fetchFn(url);
+  console.table(configs);
   return loadAnnotationDefinitionsFromConfigs(configs, config, factory);
 };

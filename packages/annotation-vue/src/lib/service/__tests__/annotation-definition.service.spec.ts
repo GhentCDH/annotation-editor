@@ -1,11 +1,11 @@
-import { type AnnotationDefinition } from '@ghentcdh/annotation-core';
+import { type AnnotationResource } from '@ghentcdh/annotation-core';
 import { AnnotationDefinitionService } from '../annotation-definition.service';
 
 const createMockDefinition = (
   id: string,
   name: string,
-  overrides?: Partial<AnnotationDefinition>,
-): AnnotationDefinition => ({
+  overrides?: Partial<AnnotationResource>,
+): AnnotationResource => ({
   id,
   name,
   color: '#000',

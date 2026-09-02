@@ -34,7 +34,7 @@ export default defineConfig(() => ({
     rollupOptions: {
       external: [
         '@ghentcdh/w3c-utils',
-        '@ghentcdh/crouton-forms-vue',
+        '@ghentcdh/crouton-vue',
         '@ghentcdh/annotated-text',
         'zod',
       ],

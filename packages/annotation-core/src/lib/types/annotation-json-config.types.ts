@@ -1,5 +1,11 @@
 import { z } from 'zod';
-import { JsonColumnSchema } from '@ghentcdh/crouton-core';
+import {
+  JsonColumnSchema,
+  JsonOperationsSchema,
+  labelFromId,
+  ResourceJsonShape,
+} from '@ghentcdh/crouton-core';
+import { BASELINE_RESOURCE_VERSION } from './version';
 
 export type AnnotationColumnFieldInput = {
   type: 'autocomplete' | 'text' | 'select';
@@ -31,33 +37,65 @@ export type AnnotationColumnConfig = {
   };
   fieldInput?: AnnotationColumnFieldInput;
 };
-
 const AnnotationTargetEnum = z.enum(['gutter', 'underline', 'highlight']);
-export const AnnotationJsonResourceSchema = z.object({
-  /**
-   * URL of the generated JSON Schema, for editor autocomplete/validation. Declared so the
-   * key is *allowed* (not stripped, and not flagged by the very schema it points at).
-   * Ignored at runtime.
-   */
-  $schema: z.string().optional(),
-  /**
-   * resource.json shape version. Missing ⇒ baseline (see `./version`). Auto-migrated
-   * toward `CURRENT_RESOURCE_VERSION` on load in the dev environment.
-   */
-  schemaVersion: z.number().int().positive().optional(),
-  /** When `true`, the resource lives in the repo but is NOT loaded/served (work in progress). */
-  draft: z.boolean().optional().default(false),
-  id: z.string(),
-  name: z.string(),
+
+export const annotationConfig = z.object({
   color: z.string(),
   type: z.string().optional(),
   icon: z.string().optional(),
   isRoot: z.boolean().optional().default(true),
   allowedChildren: z.array(z.string()).optional().default([]),
   allowedLinks: z.array(z.string()).optional().default([]),
-  columns: z.array(JsonColumnSchema).optional().default([]),
-  ui_schema: z.any().optional(),
   target: AnnotationTargetEnum.optional().default('highlight'),
 });
+
+export const AnnotationJsonResourceShape = ResourceJsonShape.pick({
+  $schema: true,
+  schemaVersion: true,
+  draft: true,
+  title: true,
+  name: true,
+}).extend({
+  operations: JsonOperationsSchema.optional().default(
+    JsonOperationsSchema.parse({}),
+  ),
+  id: z.string(),
+  // @deprecated
+  color: z.string().optional(),
+  // @deprecated
+  type: z.string().optional(),
+  // @deprecated
+  icon: z.string().optional(),
+  // @deprecated
+  isRoot: z.boolean().optional().default(true),
+  // @deprecated
+  allowedChildren: z.array(z.string()).optional().default([]),
+  // @deprecated
+  allowedLinks: z.array(z.string()).optional().default([]),
+  // @deprecated
+  target: AnnotationTargetEnum.optional().default('highlight'),
+
+  columns: z.array(JsonColumnSchema).optional().default([]),
+  annotation: annotationConfig.optional(),
+});
+
+export const AnnotationJsonResourceSchema = AnnotationJsonResourceShape
+  // .superRefine(refineByKind)
+  .transform((obj) => {
+    const title = labelFromId(obj.name);
+    const schemaVersion = obj.schemaVersion ?? BASELINE_RESOURCE_VERSION;
+
+    const config = {
+      ...(obj.annotation ?? {}),
+      ...obj,
+    };
+
+    return {
+      title,
+      ...obj,
+      schemaVersion,
+      annotation: annotationConfig.parse(config),
+    };
+  });
 
 export type AnnotationJsonConfig = z.infer<typeof AnnotationJsonResourceSchema>;

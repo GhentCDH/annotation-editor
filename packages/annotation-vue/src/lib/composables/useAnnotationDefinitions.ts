@@ -7,8 +7,9 @@ import {
 } from 'vue';
 import {
   type AnnotationDefConfig,
-  type AnnotationDefinition as CoreAnnotationDefinition,
   type AnnotationJsonConfig,
+  type AnnotationResource,
+  type AnnotationResource as CoreAnnotationDefinition,
   type ContextBuilderFactory,
 } from '@ghentcdh/annotation-core';
 import { createHighlightStyle } from '@ghentcdh/annotated-text';
@@ -57,14 +58,15 @@ export const ANNOTATION_DEFINITIONS_KEY: InjectionKey<AnnotationDefinitionsState
 
 const resolveKeyLabels = (
   ids: string[] | undefined,
-  grouped: Record<string, CoreAnnotationDefinition>,
+  grouped: Record<string, AnnotationResource>,
 ): KeyLabel[] => {
   if (!ids) return [];
   return ids.reduce<KeyLabel[]>((acc, id) => {
     const def = grouped[id];
     if (def) {
+      const style = def.annotation;
       const item: KeyLabel = { key: def.id, label: def.name };
-      if (def.icon) item.icon = def.icon;
+      if (style.icon) item.icon = style.icon;
       acc.push(item);
     }
     return acc;
@@ -72,27 +74,31 @@ const resolveKeyLabels = (
 };
 
 const toVueDefinition = (
-  def: CoreAnnotationDefinition,
-  grouped: Record<string, CoreAnnotationDefinition>,
+  def: AnnotationResource,
+  grouped: Record<string, AnnotationResource>,
   createStyle: typeof createHighlightStyle,
   activeStyle: typeof createHighlightStyle,
 ): VueAnnotationDefinition => {
+  console.log('to vue definition');
+  const style = def.annotation;
+  console.log(style);
+
   return {
     id: def.id,
     name: def.name,
     label: def.name,
-    color: def.color,
+    color: style.color,
     style: {
-      default: createStyle(def.color),
-      active: activeStyle(def.color),
+      default: createStyle(style.color),
+      active: activeStyle(style.color),
     },
     views: def.views as Record<string, ViewConfig>,
-    allowedChildren: resolveKeyLabels(def.allowedChildren, grouped),
-    allowedLinks: resolveKeyLabels(def.allowedLinks, grouped),
-    isRoot: def.isRoot ?? true,
-    icon: def.icon,
-    type: def.type,
-    target: def.target,
+    allowedChildren: resolveKeyLabels(style.allowedChildren, grouped),
+    allowedLinks: resolveKeyLabels(style.allowedLinks, grouped),
+    isRoot: style.isRoot ?? true,
+    icon: style.icon,
+    type: style.type,
+    target: style.target,
     context: def.context as VueAnnotationDefinition['context'],
     _core: def,
   };
@@ -125,7 +131,7 @@ export const createAnnotationDefinitionsState = (
 
   const service = markRaw(new AnnotationDefinitionService());
 
-  const updateDefinitions = (coreDefs: CoreAnnotationDefinition[]) => {
+  const updateDefinitions = (coreDefs: AnnotationResource[]) => {
     service.setDefinitions(coreDefs);
     const grouped = service.findAllGrouped();
     state.definitions = buildVueDefinitions(
@@ -168,6 +174,7 @@ export const createAnnotationDefinitionsState = (
     },
 
     async loadFromUrl(url: string, fetchFn?: DefinitionsFetchFn) {
+      console.log('loadFromUrl testje');
       state.loading = true;
       state.error = null;
       try {
@@ -177,10 +184,13 @@ export const createAnnotationDefinitionsState = (
           factory,
           fetchFn,
         );
+        console.table('update defs');
         updateDefinitions(defs);
       } catch (e) {
+        console.error(e);
         state.error = e instanceof Error ? e : new Error(String(e));
       } finally {
+        console.log(' done loadFromUrl');
         state.loading = false;
       }
     },

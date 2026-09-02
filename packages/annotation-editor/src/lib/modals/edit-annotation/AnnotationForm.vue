@@ -1,5 +1,5 @@
 <template>
-  <FormComponent
+  <CroutonForm
     v-if="formDef"
     :id="`annotation-selection-modal`"
     ref="formRef"
@@ -14,7 +14,7 @@
 </template>
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
-import { FormComponent } from '@ghentcdh/crouton-forms-vue';
+import { CroutonForm } from '@ghentcdh/crouton-vue';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { useApi } from '@ghentcdh/annotation-vue';
 import { useEditorState } from '../../composables/useEditorState';

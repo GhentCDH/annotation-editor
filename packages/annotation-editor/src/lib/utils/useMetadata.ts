@@ -1,4 +1,5 @@
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
+import { resourceApi } from '@ghentcdh/crouton-vue';
 import { useEditorState } from '../composables/useEditorState';
 
 type MetadataProperties = {
@@ -16,8 +17,11 @@ export const useMetadata = (properties: MetadataProperties) => {
 
   const annotationDef = config.annotation.getDefinition(properties.type);
 
+  const resource = annotationDef ? resourceApi(annotationDef, {}) : null;
+
   return {
     metadata,
     annotationDef,
+    resource,
   };
 };

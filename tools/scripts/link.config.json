@@ -1,9 +1,5 @@
 [
   {
-    "name": "@ghentcdh/crouton-forms-vue",
-    "path": "../crouton/packages/crouton-forms-vue"
-  },
-  {
     "name": "@ghentcdh/crouton-vue",
     "path": "../crouton/packages/crouton-vue"
   },

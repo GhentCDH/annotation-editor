@@ -10,8 +10,8 @@
   "types": "./index.d.ts",
   "dependencies": {
     "@ghentcdh/annotated-text": "^1.0.11",
-    "@ghentcdh/crouton-core": "0.0.1-alpha.38",
-    "axios": "^1.19.0"
+    "axios": "^1.19.0",
+    "@ghentcdh/crouton-core": "0.0.1-alpha.47"
   },
   "peerDependencies": {
     "@ghentcdh/w3c-utils": "^1.0.11",

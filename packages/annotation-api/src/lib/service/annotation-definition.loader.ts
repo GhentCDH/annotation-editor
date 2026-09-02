@@ -1,7 +1,7 @@
 import {
   type AnnotationDefConfig,
-  type AnnotationDefinition,
   type AnnotationJsonConfig,
+  type AnnotationResource,
   buildAnnotationDefinition,
   type ContextBuilderFactory,
 } from '@ghentcdh/annotation-core';
@@ -12,14 +12,14 @@ export const loadAnnotationDefinitionsFromDir = (
   dirPath: string,
   annotationDefConfig: AnnotationDefConfig,
   contextBuilderFactory: ContextBuilderFactory,
-): AnnotationDefinition[] => {
+): AnnotationResource[] => {
   if (!existsSync(dirPath)) return [];
 
   const entries = readdirSync(dirPath, { withFileTypes: true });
 
   const dirs = entries.filter((e) => e.isDirectory()).map((e) => e.name);
 
-  const definitions: AnnotationDefinition[] = [];
+  const definitions: AnnotationResource[] = [];
 
   for (const dir of dirs) {
     const jsonFile = join(dirPath, dir, 'resource.json');

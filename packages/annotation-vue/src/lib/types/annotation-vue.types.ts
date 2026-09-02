@@ -1,5 +1,5 @@
 import {
-  type AnnotationDefinition as CoreAnnotationDefinition,
+  type AnnotationResource as CoreAnnotationDefinition,
   type KeyLabel,
   type UIAnnotationDefinition,
 } from '@ghentcdh/annotation-core';

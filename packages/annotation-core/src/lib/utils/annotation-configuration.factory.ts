@@ -100,7 +100,7 @@ export const createAnnotationConfiguration = (
       const { content } = sourceModel;
       annotatedText
         .setText(content.text)
-        .setTextAdapter({ textDirection: content.textDirection });
+        .setTextAdapterParams({ textDirection: content.textDirection });
     }
 
     return annotatedText;

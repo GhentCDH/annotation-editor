@@ -111,14 +111,14 @@ state.loadFromDefinitions(coreDefinitions);
 
 ### VueAnnotationDefinition
 
-Enriched version of core `AnnotationDefinition`, with:
+Enriched version of core `AnnotationResource`, with:
 
 - `label` — mapped from core `name`
 - `style: AnnotationStyle` — built from `id`, `name`, `color`, `target`
 - `schema: FormValidationDef` — wraps `ui_schema`, `json_schema`, `metadata_schema`
 - `allowedChildren: KeyLabel[]` — string IDs resolved to `{ key, label, icon? }` objects
 - `allowedLinks: KeyLabel[]` — same resolution
-- `_core` — raw reference to the core `AnnotationDefinition`
+- `_core` — raw reference to the core `AnnotationResource`
 
 ### Custom highlight styles
 

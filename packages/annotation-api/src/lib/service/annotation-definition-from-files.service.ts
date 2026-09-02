@@ -1,26 +1,24 @@
 import { Inject, Injectable } from '@nestjs/common';
 import {
   type AnnotationDefConfig,
-  type AnnotationDefinition,
+  type AnnotationResource,
 } from '@ghentcdh/annotation-core';
 import { AnnotationDefinitionService } from './annotation-definition.service';
 import { ANNOTATION_DEF_CONFIG_TOKEN } from '../utils/annotation.context-builder';
 
-type AnnotationDefinitionLoaderFn = () => AnnotationDefinition[];
+type AnnotationDefinitionLoaderFn = () => AnnotationResource[];
 
 @Injectable()
 export class AnnotationDefinitionFromFilesService extends AnnotationDefinitionService {
   constructor(
     @Inject(ANNOTATION_DEF_CONFIG_TOKEN) config: AnnotationDefConfig,
-    private readonly _initialDefinitions: AnnotationDefinition[],
+    private readonly _initialDefinitions: AnnotationResource[],
     private readonly _loaderFn?: AnnotationDefinitionLoaderFn,
   ) {
     super(config);
   }
 
-  protected override reloadDefinitions = (): Promise<
-    AnnotationDefinition[]
-  > => {
+  protected override reloadDefinitions = (): Promise<AnnotationResource[]> => {
     if (this.config.isDev && this._loaderFn) {
       return Promise.resolve(this._loaderFn());
     }

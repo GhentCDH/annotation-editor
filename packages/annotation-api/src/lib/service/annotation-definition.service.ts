@@ -2,14 +2,14 @@ import { type ContextBuilder } from '@ghentcdh/w3c-utils';
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import {
   type AnnotationDefConfig,
-  type AnnotationDefinition,
+  type AnnotationResource,
 } from '@ghentcdh/annotation-core';
 import { ANNOTATION_DEF_CONFIG_TOKEN } from '../utils/annotation.context-builder';
 
 @Injectable()
 export abstract class AnnotationDefinitionService {
-  private definitions: AnnotationDefinition[] = [];
-  private groupedDefinitions: Record<string, AnnotationDefinition> = {};
+  private definitions: AnnotationResource[] = [];
+  private groupedDefinitions: Record<string, AnnotationResource> = {};
   private cachedAt = 0;
 
   constructor(
@@ -17,12 +17,12 @@ export abstract class AnnotationDefinitionService {
     protected readonly config: AnnotationDefConfig,
   ) {}
 
-  async findAllGrouped(): Promise<Record<string, AnnotationDefinition>> {
+  async findAllGrouped(): Promise<Record<string, AnnotationResource>> {
     await this.setDefinitions();
     return Promise.resolve(this.groupedDefinitions);
   }
 
-  protected abstract reloadDefinitions(): Promise<AnnotationDefinition[]>;
+  protected abstract reloadDefinitions(): Promise<AnnotationResource[]>;
 
   async setDefinitions(force = false): Promise<void> {
     const now = Date.now();
@@ -44,12 +44,12 @@ export abstract class AnnotationDefinitionService {
     this.cachedAt = now;
   }
 
-  async findAll(): Promise<AnnotationDefinition[]> {
+  async findAll(): Promise<AnnotationResource[]> {
     await this.setDefinitions();
     return Promise.resolve(this.definitions);
   }
 
-  async findById(id: string): Promise<AnnotationDefinition> {
+  async findById(id: string): Promise<AnnotationResource> {
     await this.setDefinitions(true);
 
     let find = this.groupedDefinitions[id];

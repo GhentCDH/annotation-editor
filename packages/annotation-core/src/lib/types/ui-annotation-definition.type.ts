@@ -3,7 +3,7 @@ import {
   type BaseAnnotation,
   type CustomAnnotationStyle,
 } from '@ghentcdh/annotated-text';
-import { type W3CAnnotation, type ContextBuilder  } from '@ghentcdh/w3c-utils';
+import { type ContextBuilder, type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { type ViewConfig } from '@ghentcdh/crouton-core';
 import { type KeyLabel } from './key-label.type';
 import { type SourceModel } from './source.model';

@@ -2,7 +2,7 @@ import { AnnotationDefConfig, GridLayout } from '@ghentcdh/annotation-core';
 import { AnnotationDefinition, SourceModel } from '@ghentcdh/annotation-ui';
 import { collection } from './annotations';
 import { provideAnnotationDefinitions } from '@ghentcdh/annotation-vue';
-import { provideHttpClient } from '@ghentcdh/crouton-forms-vue';
+import { provideHttpClient } from '@ghentcdh/crouton-vue';
 
 const text = `Feathers & Fur
 An unlikely friendship bloomed between a colorful parrot and a gentle dog. One spoke in squawks and mimicked laughter, the other communicated through tail wags and soft brown eyes. Yet somehow, without sharing a common language, they understood each other perfectly.

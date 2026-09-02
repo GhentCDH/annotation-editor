@@ -6,7 +6,7 @@ export * from './lib/types/grid-layout.types';
 // Utils
 export * from './lib/utils/annotation-utils';
 export * from './lib/utils/mouse-events';
-export * from './lib/utils/annotation.style';
+// export * from './lib/utils/annotation.style';
 export * from './lib/utils/annotationConfiguration';
 
 // Modal infrastructure
