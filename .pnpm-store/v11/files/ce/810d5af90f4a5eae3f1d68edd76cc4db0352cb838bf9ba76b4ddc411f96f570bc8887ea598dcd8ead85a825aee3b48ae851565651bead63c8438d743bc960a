@@ -1,0 +1,2421 @@
+// src/lib/request.model.ts
+import { z as z2 } from "zod";
+
+// src/lib/zod.types.ts
+import { z } from "zod";
+var PositiveRequestNumber = () => z.coerce.number().int().positive().nonnegative();
+var StringOrArray = () => z.string().or(z.array(z.string())).transform((val) => {
+  if (Array.isArray(val)) return val;
+  return [val];
+});
+
+// src/lib/request.model.ts
+var SortDirEnum = z2.enum(["asc", "desc"]);
+var RequestSchema = z2.object({
+  page: PositiveRequestNumber().optional().default(1),
+  pageSize: PositiveRequestNumber().optional().default(20),
+  sort: z2.string().optional().default("id"),
+  sortDir: SortDirEnum.optional().default("asc"),
+  // Filter is of the format key:value:operator (e.g. name:john:eq) operator is optional
+  filter: StringOrArray().optional().default([])
+});
+var RequestSchemaWithOffset = RequestSchema.transform((schema) => {
+  const { page, pageSize, sort } = schema;
+  return {
+    ...schema,
+    sort: sort || "id",
+    offset: (page - 1) * pageSize
+  };
+});
+var offsetOf = (params) => params.offset ?? (params.page - 1) * params.pageSize;
+
+// src/lib/filter.ts
+var Operator = [
+  "contains",
+  "not_contains",
+  "equals",
+  "not_equals",
+  "gt",
+  "lt",
+  "isnull",
+  "isnotnull"
+];
+var OperatorLabel = {
+  contains: "contains",
+  not_contains: "not contains",
+  equals: "equals",
+  not_equals: "not equals",
+  gt: ">",
+  lt: "<",
+  isnull: "is empty",
+  isnotnull: "is not empty"
+};
+var OperatorOptions = Operator.map((k) => ({
+  value: k,
+  label: OperatorLabel[k]
+}));
+var OperatorNoValue = /* @__PURE__ */ new Set(["isnull", "isnotnull"]);
+var OperatorsByType = {
+  string: ["contains", "not_contains", "equals", "not_equals", "isnull", "isnotnull"],
+  number: ["equals", "not_equals", "gt", "lt", "isnull", "isnotnull"],
+  date: ["equals", "not_equals", "gt", "lt", "isnull", "isnotnull"],
+  boolean: ["equals", "not_equals", "isnull", "isnotnull"],
+  enum: ["equals", "not_equals", "isnull", "isnotnull"]
+};
+var getFilterValues = (filter) => {
+  const parts = filter.split(":");
+  const key = parts[0] ?? "";
+  const lastPart = parts[parts.length - 1];
+  const hasOp = parts.length >= 3 && Operator.includes(lastPart);
+  const operator = hasOp ? lastPart : "contains";
+  const value = hasOp ? parts.slice(1, -1).join(":") : parts.slice(1).join(":");
+  return { key, value, operator };
+};
+var buildFilterKey = (keys, filterObj) => {
+  if (keys.length === 1) return { key: keys[0], filterObj };
+  const buildKey = keys.pop();
+  return buildFilterKey(keys, { [buildKey]: filterObj });
+};
+var buildSort = (key, sortDir) => buildSortKey(key.split("."), SortDirEnum.safeParse(sortDir).data ?? "asc");
+var buildSortKey = (keys, sortDir) => {
+  if (keys.length === 1) return { [keys[0]]: sortDir };
+  const buildKey = keys.pop();
+  return buildSortKey(keys, { [buildKey]: sortDir });
+};
+var buildFilter = (filters) => {
+  const filter = {};
+  filters?.forEach((f) => {
+    const { key, value, operator } = getFilterValues(f);
+    if (!key) return;
+    const op = operator || "contains";
+    const filterObj = { [operator || "contains"]: value.toLowerCase() };
+    if (op === "contains") filterObj["mode"] = "insensitive";
+    const build = buildFilterKey(key.split("."), filterObj);
+    filter[build.key] = build.filterObj;
+  });
+  return filter;
+};
+var extractFilters = (filters) => {
+  const result = [];
+  filters.forEach((f) => {
+    const { key, value, operator } = getFilterValues(f);
+    if (!key) return;
+    result.push({ label: key, key, value, operator });
+  });
+  return result;
+};
+var filterToString = (filter) => `${filter.key}:${filter.value}:${filter.operator}`;
+var stringToFilter = (s) => getFilterValues(s);
+
+// src/lib/response.model.ts
+import { z as z3 } from "zod";
+var ResponseRequestSchema = RequestSchema.extend({
+  count: PositiveRequestNumber(),
+  totalPages: PositiveRequestNumber()
+});
+var ResponseSchema = z3.object({
+  data: z3.array(z3.unknown()),
+  request: ResponseRequestSchema
+});
+
+// src/lib/create-schema.ts
+import { toJSONSchema } from "zod";
+var ModalSize = /* @__PURE__ */ ((ModalSize2) => {
+  ModalSize2["xs"] = "xs";
+  ModalSize2["sm"] = "sm";
+  ModalSize2["lg"] = "lg";
+  ModalSize2["xl"] = "xl";
+  return ModalSize2;
+})(ModalSize || {});
+var simplifyNullableAnyOf = (property) => {
+  const anyOf = property["anyOf"];
+  if (!Array.isArray(anyOf) || anyOf.length !== 2) return false;
+  const nonNull = anyOf.find((s) => s["type"] !== "null");
+  const hasNull = anyOf.some((s) => s["type"] === "null");
+  if (nonNull && hasNull) {
+    delete property["anyOf"];
+    Object.assign(property, nonNull);
+    return true;
+  }
+  return false;
+};
+var transformToJsonSchema = (schema) => {
+  const jsonSchema = toJSONSchema(schema, { unrepresentable: "any", target: "draft-07" });
+  jsonSchema.additionalProperties = true;
+  const properties = jsonSchema.properties;
+  if (properties) {
+    const nullableKeys = /* @__PURE__ */ new Set();
+    for (const key of Object.keys(properties)) {
+      if (simplifyNullableAnyOf(properties[key])) nullableKeys.add(key);
+    }
+    const required = jsonSchema.required;
+    if (Array.isArray(required)) {
+      jsonSchema.required = required.filter((key) => !nullableKeys.has(key));
+    }
+  }
+  return jsonSchema;
+};
+var createSchema = (props) => {
+  if (!props.schema) throw new Error("no schema provided");
+  const schema = props.schema;
+  const dtoSchema = props.dtoSchema;
+  const formSchema = transformToJsonSchema(dtoSchema);
+  const optionalSchema = transformToJsonSchema(schema.partial());
+  return {
+    dtoSchema,
+    responseSchema: props.responseSchema ?? dtoSchema,
+    schema: {
+      form: { uiSchema: props.uiSchema, schema: formSchema, modalSize: props.modalSize ?? "sm" },
+      table: props.tableSchema ? { uiSchema: props.tableSchema, schema: optionalSchema } : void 0,
+      filter: props.filterSchema ? { uiSchema: props.filterSchema, schema: optionalSchema } : void 0,
+      uri: props.uri,
+      searchUri: props.searchUri ?? `${props.uri}?filter=`
+    }
+  };
+};
+
+// src/lib/schema.utils.ts
+var dropNullableFromRequired = (schema) => {
+  if (!schema?.properties) return schema;
+  const required = schema.required;
+  if (!Array.isArray(required) || required.length === 0) return schema;
+  const filteredRequired = required.filter((key) => {
+    const prop = schema.properties[key];
+    if (!prop || typeof prop !== "object") return true;
+    const anyOf = prop["anyOf"];
+    return !(Array.isArray(anyOf) && anyOf.some((s) => s?.["type"] === "null"));
+  });
+  if (filteredRequired.length === required.length) return schema;
+  return { ...schema, required: filteredRequired };
+};
+var enforceRequiredStringMinLength = (schema) => {
+  if (!schema?.properties) return schema;
+  const patchedProperties = { ...schema.properties };
+  let changed = false;
+  for (const key of Object.keys(patchedProperties)) {
+    const prop = patchedProperties[key];
+    if (!prop || typeof prop !== "object") continue;
+    if (prop.type === "string" && prop.minLength === void 0) {
+      patchedProperties[key] = { ...prop, minLength: 1 };
+      changed = true;
+    } else if (prop.type === "object") {
+      const patched = enforceRequiredStringMinLength(prop);
+      if (patched !== prop) {
+        patchedProperties[key] = patched;
+        changed = true;
+      }
+    }
+  }
+  return changed ? { ...schema, properties: patchedProperties } : schema;
+};
+var findProperty = (column, schema) => {
+  if (!column.scope) return { id: null, property: null };
+  const id = column.scope.substring("#/properties/".length);
+  const segments = id.split("/properties/");
+  let property = schema?.properties?.[segments[0]] ?? {};
+  for (const segment of segments.slice(1)) {
+    property = property?.properties?.[segment] ?? {};
+  }
+  return { id, property };
+};
+
+// src/lib/layout/base.builder.ts
+var Builder = class {
+  constructor(type) {
+    this.type = type;
+  }
+  type;
+};
+var ElementBuilder = class extends Builder {
+  options = {};
+  _rule;
+  label(label) {
+    return this.opt({ label });
+  }
+  colspan(colspan) {
+    return this.opt({ colspan });
+  }
+  showWhen(scope, schema) {
+    return this.rule("SHOW", scope, schema);
+  }
+  hideWhen(scope, schema) {
+    return this.rule("HIDE", scope, schema);
+  }
+  disableWhen(scope, schema) {
+    return this.rule("DISABLE", scope, schema);
+  }
+  rule(effect, scope, schema) {
+    this._rule = {
+      effect,
+      condition: { scope, schema }
+    };
+    return this;
+  }
+  /** Merge a patch into the typed options bag. */
+  opt(patch) {
+    this.options = { ...this.options, ...patch };
+    return this;
+  }
+  /** `options` / `rule` fields, emitted only when non-empty. */
+  baseFields() {
+    return {
+      ...Object.keys(this.options).length ? { options: this.options } : {},
+      ...this._rule ? { rule: this._rule } : {}
+    };
+  }
+};
+var ContainerBuilder = class extends ElementBuilder {
+  children = [];
+  addControl(arg, options) {
+    this.children.push(
+      typeof arg === "string" ? this.resolveShortcut(arg, options) : arg
+    );
+    return this;
+  }
+  addControls(first, ...rest) {
+    if (first && typeof first === "object" && !("build" in first)) {
+      for (const [name, options] of Object.entries(first)) {
+        this.addControl(name, options);
+      }
+    } else if (first) {
+      for (const builder of [first, ...rest]) {
+        this.addControl(builder);
+      }
+    }
+    return this;
+  }
+  buildElements() {
+    return this.children.map((child) => child.build());
+  }
+};
+
+// src/lib/layout/control.builder.ts
+var ControlType = {
+  number: "number",
+  string: "string",
+  integer: "Integer",
+  autocomplete: "autocomplete",
+  textArea: "textarea",
+  markdown: "markdown",
+  array: "array",
+  object: "object",
+  custom: "custom",
+  select: "select",
+  mutliSelect: "mutliSelect",
+  boolean: "boolean",
+  link: "link",
+  relation: "relation",
+  date: "date",
+  dateTime: "dateTime",
+  dateRange: "date-range"
+};
+var ControlBuilder = class _ControlBuilder extends ElementBuilder {
+  constructor(scope, type = "Control") {
+    super(type);
+    this.scope = scope;
+    this.opt({ format: "Control", styles: {} });
+  }
+  scope;
+  _detail;
+  static asObject(property) {
+    return new _ControlBuilder(
+      `#/properties/${property}`,
+      "Object"
+    );
+  }
+  static properties(property) {
+    return new _ControlBuilder(`#/properties/${property}`);
+  }
+  static asCustom(property, type) {
+    const builder = new _ControlBuilder(
+      `#/properties/${property}`
+    );
+    builder.opt({
+      format: ControlType.custom,
+      type
+    });
+    return builder;
+  }
+  setCustomRender(customRender) {
+    this.opt({ customRender });
+    return this;
+  }
+  detail(layoutBuilder, label) {
+    this._detail = layoutBuilder;
+    this.opt({
+      format: ControlType.array,
+      elementLabelProp: label
+    });
+    return this;
+  }
+  addAction(action) {
+    const actions = this.options?.actions ?? [];
+    actions.push(action);
+    return this.opt({ actions });
+  }
+  detailFixed(layoutBuilder, options = {}) {
+    this._detail = layoutBuilder;
+    return this.opt({
+      hideActions: true,
+      format: ControlType.array,
+      layout: options.layout ?? "column",
+      elementLabelProp: options.label
+    });
+  }
+  labelKey(labelKey) {
+    return this.opt({ labelKey });
+  }
+  readonly() {
+    return this.opt({
+      format: ControlType.string,
+      readonly: true
+    });
+  }
+  link() {
+    return this.opt({
+      format: ControlType.link
+    });
+  }
+  markdown(options) {
+    return this.opt({
+      format: ControlType.markdown,
+      ...options ?? {}
+    });
+  }
+  /**
+   * Render a datepicker. Defaults to a day-only picker; pass
+   * `{ format: 'dateTime' }` (or `{ withTime: true }`) to include a time.
+   */
+  date(options) {
+    return this.opt({
+      format: ControlType.date,
+      ...options ?? {}
+    });
+  }
+  textArea(options) {
+    return this.opt({
+      format: ControlType.textArea,
+      ...options ?? {}
+    });
+  }
+  autocomplete(options) {
+    return this.opt({
+      format: ControlType.autocomplete,
+      dataField: "data",
+      ...options ?? {}
+    });
+  }
+  control(format, options) {
+    return this.opt({
+      format,
+      ...options
+    });
+  }
+  select(options) {
+    return this.opt({
+      format: ControlType.select,
+      ...options
+    });
+  }
+  mutliSelect(options) {
+    return this.opt({
+      format: ControlType.mutliSelect,
+      ...options
+    });
+  }
+  width(width) {
+    return this.opt({
+      styles: {
+        ...this.options?.styles,
+        width,
+        control: {
+          wrapper: `input-${width}`
+        }
+      }
+    });
+  }
+  customLabel(label) {
+    return this.opt({ label });
+  }
+  placeHolder(placeholder) {
+    return this.opt({ placeholder });
+  }
+  hideLabel() {
+    return this.opt({ hideLabel: true });
+  }
+  build() {
+    const detail = this._detail ? this._detail.build() : void 0;
+    const options = {
+      ...this.options,
+      ...detail ? { detail } : {}
+    };
+    return {
+      type: this.type,
+      scope: this.scope,
+      options,
+      ...this._rule ? { rule: this._rule } : {}
+    };
+  }
+};
+
+// src/lib/layout/layout.options.ts
+var LayoutType = {
+  Horizontal: "HorizontalLayout",
+  Vertical: "VerticalLayout",
+  Grid: "GridLayout",
+  Collapse: "CollapseLayout"
+};
+
+// src/lib/layout/layout.builder.ts
+var LayoutBuilder = class _LayoutBuilder extends ContainerBuilder {
+  constructor(type) {
+    super(type);
+  }
+  static horizontal() {
+    return new _LayoutBuilder(LayoutType.Horizontal);
+  }
+  static vertical() {
+    return new _LayoutBuilder(LayoutType.Vertical);
+  }
+  static grid(columns) {
+    const layout = new _LayoutBuilder(LayoutType.Grid);
+    return columns === void 0 ? layout : layout.opt({ columns });
+  }
+  static collapse() {
+    return new _LayoutBuilder(LayoutType.Collapse);
+  }
+  /** Collapse layout title. */
+  title(title) {
+    return this.opt({ title });
+  }
+  /** Collapse layout: resolve the title from a field value at render time. */
+  titleKey(titleKey) {
+    return this.opt({ titleKey });
+  }
+  addControl(arg, options) {
+    return super.addControl(arg, options);
+  }
+  resolveShortcut(name, options) {
+    const control = ControlBuilder.properties(name);
+    if (options) {
+      const { type, ...rest } = options;
+      if (type) control.control(type, rest);
+      else if (Object.keys(rest).length) control.opt(rest);
+    }
+    return control;
+  }
+  build() {
+    return {
+      type: this.type,
+      elements: this.buildElements(),
+      ...this.baseFields()
+    };
+  }
+};
+
+// src/lib/from-json.builder.ts
+var uiFromJsonSchema = (jsonSchema) => {
+  const properties = jsonSchema.properties ?? {};
+  const layout = LayoutBuilder.grid();
+  for (const key of Object.keys(properties)) {
+    layout.addControl(key);
+  }
+  return layout.build();
+};
+
+// src/lib/value-label.ts
+var wrapOne = (value, values) => {
+  const match = values.find((o) => o.value === value);
+  return { value, label: match ? match.label : String(value) };
+};
+var toValueLabel = (value, values) => {
+  if (value === null || value === void 0) return value;
+  if (Array.isArray(value)) return value.map((v) => wrapOne(v, values));
+  return wrapOne(value, values);
+};
+var fromValueLabel = (input) => {
+  if (Array.isArray(input)) return input.map(fromValueLabel);
+  if (input && typeof input === "object" && "value" in input) {
+    return input.value;
+  }
+  return input;
+};
+
+// src/lib/table/table.builder.ts
+var TextCellBuilder = class _TextCellBuilder extends Builder {
+  constructor(scope, type = "TextCell") {
+    super(type);
+    this.scope = scope;
+  }
+  scope;
+  options;
+  static properties(property) {
+    return new _TextCellBuilder(`#/properties/${property}`);
+  }
+  key(key) {
+    this.options = {
+      format: "keyValue",
+      key
+    };
+    return this;
+  }
+  setSortId(sortId) {
+    this.options = {
+      ...this.options ?? { format: this.type },
+      sortId
+    };
+    return this;
+  }
+  build() {
+    return {
+      type: this.type,
+      scope: this.scope,
+      options: this.options
+    };
+  }
+};
+var BooleanCellBuilder = class _BooleanCellBuilder extends TextCellBuilder {
+  constructor(scope) {
+    super(scope, "BooleanCell");
+  }
+  static properties(property) {
+    return new _BooleanCellBuilder(`#/properties/${property}`);
+  }
+};
+var TableBuilder = class _TableBuilder extends ContainerBuilder {
+  constructor() {
+    super(LayoutType.Horizontal);
+  }
+  static init() {
+    return new _TableBuilder();
+  }
+  resolveShortcut(name) {
+    return TextCellBuilder.properties(name);
+  }
+  build() {
+    return {
+      type: this.type,
+      elements: this.buildElements(),
+      ...this.baseFields()
+    };
+  }
+};
+
+// src/lib/table/table.utils.ts
+var findColumnDef = (column, schema) => {
+  const { id, property } = findProperty(column, schema);
+  return { ...column, id, ...property };
+};
+
+// src/lib/data-source/DataSourceSchema.ts
+import z4 from "zod";
+var DataSourceShape = z4.object({
+  /** Datasource name (folder + `name` in data-source.json). */
+  name: z4.string(),
+  /**
+   * Env var holding the connection URL. Required for Prisma adapters; optional
+   * for custom adapters whose connection config may differ (secrets file, SDK
+   * key, etc.).
+   */
+  urlEnv: z4.string().optional(),
+  /** Import path for this datasource's generated Zod types (for resource `schema.ts`). */
+  generatedTypesImport: z4.string().optional(),
+  /** Datasource type tag. Default `postgres`. */
+  type: z4.string().default("postgres"),
+  /** Mark this as the default datasource. Default `false`. */
+  default: z4.boolean().default(false),
+  /**
+   * Adapter kind. `"prisma"` (default) expects `index.ts` to default-export a
+   * `PrismaClient`; `"custom"` expects it to default-export a `DataSourceAdapter`.
+   */
+  adapter: z4.enum(["prisma", "custom"]).default("prisma"),
+  /** Prisma schema path, relative to project root. Default `prisma/<name>/schema.prisma`. */
+  prismaSchema: z4.string().optional(),
+  /** Prisma config path, relative to project root. Default `prisma/<name>/prisma.config.ts`. */
+  prismaConfig: z4.string().optional(),
+  /** zod-prisma-types output dir, relative to project root. Default `generated/<name>/src`. */
+  zodOutput: z4.string().optional(),
+  /** Prisma client output dir, relative to project root. Default `generated/<name>/client`. */
+  clientOutput: z4.string().optional()
+});
+var transformDataSource = (data) => {
+  const name = data.name ?? "name";
+  return {
+    ...data,
+    generatedTypesImport: data.generatedTypesImport ?? `@your-scope/generated/${name}`,
+    prismaSchema: data.prismaSchema ?? `prisma/${name}/schema.prisma`,
+    prismaConfig: data.prismaConfig ?? `prisma/${name}/prisma.config.ts`,
+    zodOutput: data.zodOutput ?? `generated/${name}/src`,
+    clientOutput: data.clientOutput ?? `generated/${name}/client`
+  };
+};
+var DataSourceSchema = DataSourceShape.transform(transformDataSource);
+
+// src/lib/data-source/Operations.schema.ts
+import { z as z6 } from "zod";
+
+// src/lib/data-source/Security.schema.ts
+import { z as z5 } from "zod";
+var SecuritySchema = z5.union([
+  z5.object({ public: z5.literal(true) }),
+  z5.object({ guard: z5.union([z5.string(), z5.array(z5.string()).min(1)]) })
+]);
+
+// src/lib/data-source/Operations.schema.ts
+var OpEntry = z6.union([
+  z6.boolean(),
+  z6.object({ security: SecuritySchema.optional() })
+]);
+var BoolOrUpsertSchema = z6.union([
+  z6.boolean(),
+  z6.object({
+    upsertOn: z6.union([z6.string(), z6.array(z6.string())]),
+    security: SecuritySchema.optional()
+  })
+]);
+var JsonOperationsSchema = z6.object({
+  findAll: OpEntry.default(true),
+  // default: true — only explicit `false` disables it
+  findOne: OpEntry.default(true),
+  // default: true
+  create: OpEntry.default(true),
+  // default: true
+  update: OpEntry.default(true),
+  // default: true
+  patch: OpEntry.default(true),
+  // default: true
+  upsert: BoolOrUpsertSchema.default(false),
+  // default: disabled; `true` throws at load time — must be `{ upsertOn }`
+  delete: OpEntry.default(true)
+  // default: true
+});
+var buildSubResourceOperations = (ops, baseUri, idField = "id") => {
+  if (!ops) return {};
+  const idPlaceholder = `{${idField}}`;
+  return {
+    ...ops.findAll && { findAll: { uri: baseUri, method: "get" } },
+    ...ops.findOne && {
+      findOne: { uri: `${baseUri}/${idPlaceholder}`, method: "get" }
+    },
+    ...ops.create && { create: { uri: baseUri, method: "post" } },
+    ...ops.update && {
+      update: { uri: `${baseUri}/${idPlaceholder}`, method: "put" }
+    },
+    ...ops.patch && {
+      patch: { uri: `${baseUri}/${idPlaceholder}`, method: "patch" }
+    },
+    ...ops.delete && {
+      delete: { uri: `${baseUri}/${idPlaceholder}`, method: "delete" }
+    }
+  };
+};
+
+// src/lib/resource/ResourceJson.schema.ts
+import { z as z16 } from "zod";
+
+// src/lib/resource/CalculatedColumn.schema.ts
+import { z as z8 } from "zod";
+
+// src/lib/resource/FieldInput.schema.ts
+import { z as z7 } from "zod";
+var RelationType = z7.enum([
+  "oneToOne",
+  "manyToOne",
+  "oneToMany",
+  "manyToMany"
+]);
+var DetailControlSchema = z7.object({
+  property: z7.string(),
+  // required
+  type: z7.string().optional(),
+  // default: 'text'
+  options: z7.record(z7.string(), z7.unknown()).optional(),
+  hideLabel: z7.boolean().optional(),
+  // default: false
+  width: z7.string().optional()
+});
+var DetailConfigSchema = z7.object({
+  layout: z7.enum(["collapse", "row"]),
+  // required
+  titleKey: z7.string().optional(),
+  controls: z7.array(DetailControlSchema)
+  // required
+});
+var RelationFieldInputOptionsSchema = z7.object({
+  colspan: z7.number().optional().default(12),
+  /** Field to sort related records by, e.g. `"title"` or `"author.name"`. */
+  sort: z7.string().optional(),
+  /** Sort direction. Defaults to `"asc"` when omitted. */
+  sortDir: z7.enum(["asc", "desc"]).optional(),
+  // default: 'asc'
+  /** CSS flex direction for the relation control button layout. */
+  direction: z7.string().optional(),
+  /** Key used as the display label in the relation control. */
+  displayKey: z7.string().optional(),
+  /** Path to the related resource (resolved to a URI at load time). */
+  resource: z7.string().optional()
+}).catchall(z7.unknown());
+var FieldInputSchema = z7.object({
+  type: z7.string().optional(),
+  customRender: z7.string().optional(),
+  /**
+   * Render format hint for the frontend (e.g. `"relation"` for sub-resource
+   * relations). When `format` is `"relation"`, `resource` must also be set.
+   */
+  format: z7.string().optional(),
+  // 'relation' triggers relation handling; requires `resource`
+  /**
+   * Relative path to the child resource definition, e.g. `"./author.resource"`.
+   * Only used when `format` is `"relation"`. Resolved at load time to inject
+   * sub-resource URIs into `options`.
+   */
+  resource: z7.string().optional(),
+  // required when format === 'relation'
+  /**
+   * Cardinality of the relation. Used by the frontend to determine the correct
+   * renderer and behaviour (e.g. single-select vs multi-select).
+   * - `manyToOne` / `oneToOne`   — single FK reference (autocomplete / relation control)
+   * - `oneToMany` / `manyToMany` — collection (sub-resource table / multi-select)
+   */
+  relationType: RelationType.optional(),
+  // auto-derived from the Zod model/sibling FK column if omitted
+  /** FK field on the child model pointing back to the parent, e.g. `"workId"`. Defaults to `${parentModel}Id`. */
+  foreignKey: z7.string().optional(),
+  /** Override the Prisma relation field name when it differs from the column id. */
+  relation: z7.string().optional(),
+  /** Override the display order in form views. Lower values come first. */
+  position: z7.number().optional(),
+  // default: source order
+  /**
+   * Value to pre-fill this field with on the create form. Injected into the
+   * generated form view's JSON Schema as `properties[id].default`, which
+   * `parseValue({})` (see `@ghentcdh/crouton-vue`'s `form-def.ts`) applies when
+   * opening a blank record. Not applicable to `format: "relation"` fields —
+   * relation columns are excluded from the picked data schema entirely.
+   */
+  defaultValue: z7.unknown().optional(),
+  options: z7.union([RelationFieldInputOptionsSchema, z7.unknown()]).optional(),
+  /** Nested array detail layout (renders via `detailFixed`). */
+  detail: DetailConfigSchema.optional()
+});
+var FieldVariantSchema = FieldInputSchema;
+var stripNull = (obj) => {
+  const out = {};
+  for (const [k, v] of Object.entries(obj)) if (v !== null) out[k] = v;
+  return out;
+};
+var mergeFieldVariant = (base, override) => {
+  if (!base) return override;
+  if (!override) return base;
+  const merged = stripNull({ ...base, ...override });
+  if (base.options || override.options) {
+    const mergedOptions = stripNull({
+      ...base.options,
+      ...override.options
+    });
+    merged.options = mergedOptions;
+  }
+  return merged;
+};
+
+// src/lib/schema/label.helper.ts
+var labelFromId = (id) => {
+  const words = id.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/[_-]+/g, " ").trim();
+  return words.charAt(0).toUpperCase() + words.slice(1).toLowerCase();
+};
+var normalizeLabel = (obj) => {
+  return { label: labelFromId(obj.id), ...obj };
+};
+
+// src/lib/resource/CalculatedColumn.schema.ts
+var CalculatedColumnSchema = z8.object({
+  /** Column identifier used in the response payload and UI schema. */
+  id: z8.string(),
+  // required
+  /** SQL alias — must match `id`. */
+  alias: z8.string(),
+  // required — must match `id`
+  /** Human-readable label shown in the table header. */
+  label: z8.string().optional(),
+  sqlExpression: z8.string(),
+  // required
+  /** JSON schema / cast type for the computed value. Defaults to `"number"`. `"string"` skips CAST. */
+  type: z8.enum(["number", "boolean", "string"]).optional(),
+  // default: 'number'
+  /**
+   * Insertion position relative to the other visible columns.
+   * Uses the same semantics as `fieldInput.position` on regular columns:
+   * `position: N` places this column before the element currently at index N.
+   * Can also be set via `fieldInput.position` (takes precedence).
+   */
+  position: z8.number().optional(),
+  hiddenInTable: z8.boolean().optional(),
+  // default: false
+  hiddenInView: z8.boolean().optional(),
+  // default: false
+  /**
+   * Field input options for rendering in form / view schemas.
+   * Supports `colspan`, `format`, and any other options passed to the Control renderer.
+   * `position` here takes precedence over the top-level `position`.
+   */
+  fieldInput: FieldInputSchema.optional()
+}).transform(normalizeLabel);
+
+// src/lib/resource/Column.ts
+import { z as z10 } from "zod";
+
+// src/lib/resource/ColumnType.schema.ts
+import { z as z9 } from "zod";
+var ColumnTypeShorthandSchema = z9.enum([
+  "string",
+  "number",
+  "integer",
+  "boolean",
+  "date",
+  "date-time",
+  "object",
+  "array"
+]);
+var JsonSchemaFragmentSchema = z9.lazy(
+  () => z9.object({
+    type: z9.union([z9.string(), z9.array(z9.string())]).optional(),
+    format: z9.string().optional(),
+    enum: z9.array(z9.unknown()).optional(),
+    const: z9.unknown().optional(),
+    nullable: z9.boolean().optional(),
+    properties: z9.record(z9.string(), JsonSchemaFragmentSchema).optional(),
+    required: z9.array(z9.string()).optional(),
+    items: JsonSchemaFragmentSchema.optional(),
+    additionalProperties: z9.union([z9.boolean(), JsonSchemaFragmentSchema]).optional(),
+    title: z9.string().optional(),
+    description: z9.string().optional(),
+    default: z9.unknown().optional(),
+    minimum: z9.number().optional(),
+    maximum: z9.number().optional(),
+    minLength: z9.number().optional(),
+    maxLength: z9.number().optional(),
+    pattern: z9.string().optional()
+  }).catchall(z9.unknown())
+);
+var ColumnTypeSchema = z9.union([
+  ColumnTypeShorthandSchema,
+  JsonSchemaFragmentSchema
+]);
+var SHORTHAND_FRAGMENTS = {
+  string: { type: "string" },
+  number: { type: "number" },
+  integer: { type: "integer" },
+  boolean: { type: "boolean" },
+  date: { type: "string", format: "date" },
+  "date-time": { type: "string", format: "date-time" },
+  object: { type: "object" },
+  array: { type: "array" }
+};
+var isShorthand = (type) => typeof type === "string";
+var NESTED_SHORTHANDS = {
+  date: SHORTHAND_FRAGMENTS.date,
+  "date-time": SHORTHAND_FRAGMENTS["date-time"]
+};
+var normalizeFragment = (fragment) => {
+  const out = { ...fragment };
+  if (typeof out.type === "string") {
+    const expanded = NESTED_SHORTHANDS[out.type];
+    if (expanded) {
+      out.type = expanded.type;
+      if (out.format === void 0) out.format = expanded.format;
+    }
+  }
+  if (out.properties) {
+    out.properties = Object.fromEntries(
+      Object.entries(out.properties).map(([key, value]) => [
+        key,
+        normalizeFragment(value)
+      ])
+    );
+  }
+  if (out.items) out.items = normalizeFragment(out.items);
+  if (out.additionalProperties && typeof out.additionalProperties === "object") {
+    out.additionalProperties = normalizeFragment(out.additionalProperties);
+  }
+  return out;
+};
+var columnTypeToJsonSchema = (type) => {
+  if (type === void 0) return { type: "string" };
+  if (isShorthand(type)) return { ...SHORTHAND_FRAGMENTS[type] };
+  return normalizeFragment(type);
+};
+var columnTypeName = (type) => {
+  const fragment = columnTypeToJsonSchema(type);
+  const raw = fragment.type;
+  if (Array.isArray(raw)) return raw.find((t) => t !== "null") ?? "string";
+  if (typeof raw === "string") return raw;
+  if (fragment.properties) return "object";
+  if (fragment.items) return "array";
+  return "string";
+};
+var isObjectColumnType = (type) => columnTypeName(type) === "object";
+var isArrayColumnType = (type) => columnTypeName(type) === "array";
+
+// src/lib/resource/Column.ts
+var WhenConditionSchema = z10.object({
+  field: z10.string(),
+  // required
+  eq: z10.unknown().optional(),
+  neq: z10.unknown().optional(),
+  exists: z10.boolean().optional(),
+  notExists: z10.boolean().optional()
+});
+var JsonColumnSchema = z10.object({
+  id: z10.string(),
+  // required in array form; implied by the map key in map form
+  column: z10.string().optional(),
+  // default: same as `id`
+  label: z10.string().optional(),
+  // default: title-cased version of `id`
+  hiddenInTable: z10.boolean().default(false),
+  // default: false
+  hiddenInForm: z10.boolean().default(false),
+  // default: false
+  hiddenInView: z10.boolean().default(false),
+  // default: false
+  sortable: z10.boolean().default(false),
+  // default: false
+  defaultSort: z10.boolean().default(false),
+  // default: false
+  searchable: z10.boolean().default(false),
+  // default: false
+  filterable: z10.boolean().default(false),
+  // default: false
+  createable: z10.boolean().default(true),
+  // default: true (only `false` excludes it)
+  updateable: z10.boolean().default(true),
+  // default: true (only `false` excludes it)
+  hideLabel: z10.boolean().default(false),
+  // default: false
+  showWhen: WhenConditionSchema.optional(),
+  hideWhen: WhenConditionSchema.optional(),
+  disabledWhen: WhenConditionSchema.optional(),
+  displayKey: z10.string().optional(),
+  // e.g. "author.name" for nested display
+  sortId: z10.string().optional(),
+  // overrides the sort
+  /**
+   * Name of a shared enum in the project enum registry (`crouton.enums.json`).
+   * At load time the loader injects that enum's `{ value, label }[]` into
+   * `fieldInput.options.values`, so columns don't duplicate the option list.
+   */
+  enum: z10.string().optional(),
+  // name of a shared enum in crouton.enums.json
+  idField: z10.boolean().default(false),
+  // default: false — exactly one column should set this
+  showInLookup: z10.boolean().default(false),
+  // default: false
+  /**
+   * Data type of the column, as a shorthand name (`"string"`, `"integer"`, …)
+   * or a full JSON Schema fragment:
+   *
+   * ```json
+   * "type": {
+   *   "type": "object",
+   *   "properties": { "id": { "type": "string" }, "name": { "type": "string" } }
+   * }
+   * ```
+   *
+   * Required on every column of a `kind: "custom"` resource, where it is the
+   * only source of the resource's json_schema. Optional on a `prisma`
+   * resource, whose schema is derived from the Zod model.
+   */
+  type: ColumnTypeSchema.optional(),
+  /**
+   * Whether the form requires a value.
+   *
+   * A prisma resource derives `required` from its Zod model, so this is an
+   * override in either direction: `true` adds the column to the form schema's
+   * `required` array, `false` removes it, and omitting it leaves the model's
+   * answer alone. A `kind: "custom"` resource has no model, so this is the only
+   * way to mark one of its fields required.
+   *
+   * Applies to the **form** view only — a required filter input would make the
+   * filter panel unsubmittable, and the table and view schemas are read-only.
+   * Ignored on the id column and on columns that are neither createable nor
+   * updateable, since the form cannot supply a value for those.
+   */
+  required: z10.boolean().optional(),
+  /**
+   * @deprecated Use `type` instead. Retained because it is still consumed by
+   * the boolean predicate and the schema-less sub-resource view builder.
+   */
+  columnType: z10.string().default("string"),
+  // default: 'string'
+  fieldInput: FieldInputSchema.optional(),
+  /**
+   * Optional per-context override for the read-only VIEW ui. Same shape as
+   * `fieldInput`; every key optional. Falls back to `fieldInput` (deep-merged
+   * one level into `options`). Resolved at read time by the transformer.
+   */
+  fieldView: FieldVariantSchema.optional(),
+  /**
+   * Optional per-context override for the TABLE ui. Same shape as `fieldInput`;
+   * every key optional. Falls back to `fieldView`, then `fieldInput`.
+   * Resolved at read time by the transformer.
+   */
+  fieldTable: FieldVariantSchema.optional(),
+  /**
+   * Path to another `resource.json` whose columns are expanded as nested sub-columns
+   * under this column's object key.
+   *
+   * Example: `"extend": "../internalAuthor/resource.json"` on a column `author`
+   * auto-generates virtual sub-columns like `author_name` (column: "author", displayKey: "name").
+   *
+   * Visibility (`hiddenInTable/Form/View`) on this column is inherited by all sub-columns as a
+   * default; the referenced resource's own column visibility further restricts it.
+   */
+  extend: z10.string().optional(),
+  // path to another resource.json expanded as virtual sub-columns
+  /**
+   * Per-sub-column overrides when using `extend`.
+   * Key: the virtual column id (`"{extendId}_{refColId}"`) or just the referenced column id.
+   * Value: any `JsonColumn` fields to merge over the generated virtual column.
+   */
+  columns: z10.record(z10.string(), z10.record(z10.string(), z10.unknown())).optional()
+  // per-sub-column overrides, only used with `extend`
+});
+
+// src/lib/resource/ParentRef.schema.ts
+import { z as z11 } from "zod";
+var ParentRefSchema = z11.object({
+  /** Route segment of the parent, e.g. `"group"`. */
+  route: z11.string(),
+  /**
+   * Name of the path parameter carrying the parent id, e.g. `"groupId"`.
+   * Avoid `"id"` — that is the child's own id in `/:id` routes.
+   */
+  param: z11.string().default("parentId"),
+  /** Type of the parent id, used to coerce the path param. Defaults to `'string'`. */
+  idType: z11.enum(["string", "number"]).optional()
+});
+var resourceControllerPath = (route, parent) => parent ? `${parent.route}/:${parent.param}/${route}` : route;
+
+// src/lib/resource/ResourceKind.ts
+import { z as z12 } from "zod";
+var ResourceKindSchema = z12.enum(["prisma", "custom"]).default("prisma");
+var isCustomKind = (kind) => kind === "custom";
+
+// src/lib/resource/Sidebar.schema.ts
+import z13 from "zod";
+var SidebarGroupSchema = z13.object({
+  /** Human-readable heading shown in the sidebar. Defaults to a title-cased version of the slug. */
+  label: z13.string().optional(),
+  /** Controls the order of this group among top-level sidebar items. */
+  position: z13.number().optional()
+});
+var SidebarSchema = z13.object({
+  hide: z13.boolean().default(false),
+  // default: false
+  position: z13.number().optional(),
+  // default: sorted alphabetically after positioned entries
+  label: z13.string().optional(),
+  // default: resource `title`
+  /**
+   * Slug of the group this resource belongs to.
+   * Must match a key in `sidebarGroups` in `crouton.json`.
+   * Resources with the same `group` are nested under a shared collapsible section.
+   */
+  group: z13.string().optional()
+  // must match a key in `sidebarGroups` (crouton.json)
+});
+
+// src/lib/resource/TableAction.schema.ts
+import { z as z14 } from "zod";
+var ActionConditionSchema = z14.object({
+  /** Row field to evaluate. */
+  field: z14.string(),
+  //
+  /**
+   * Comparison operator. Defaults to `"eq"`.
+   * - `eq` / `neq`         — strict equality
+   * - `gt` / `gte` / `lt` / `lte` — numeric or date comparison
+   * - `exists`             — field is not null / undefined / empty string
+   * - `notExists`          — field is null / undefined / empty string
+   */
+  op: z14.enum(["eq", "neq", "gt", "gte", "lt", "lte", "exists", "notExists"]).default("eq"),
+  // default: 'eq'
+  /** Comparison value. Not required for `exists` / `notExists`. */
+  value: z14.unknown().optional()
+  // not required for exists/notExists
+});
+var ActionSchema = z14.object({
+  type: z14.string(),
+  /** Unique identifier for the action. */
+  id: z14.string(),
+  // required
+  /** Human-readable button label. */
+  label: z14.string(),
+  /** MDI icon name, e.g. `"mdi:open-in-new"`. */
+  icon: z14.string().optional(),
+  /** Tooltip text. Falls back to `label` when omitted. */
+  tooltip: z14.string().optional(),
+  // default: falls back to `label`
+  condition: ActionConditionSchema.optional()
+});
+var JsonProcedureActionSchema = ActionSchema.extend({
+  type: z14.literal("procedure").default("procedure"),
+  // default: 'procedure'
+  /**
+   * Filename (without extension) inside the resource's `actions/` directory
+   * that exports the table-action procedure, e.g. `"syncZotero"`.
+   */
+  procedure: z14.string(),
+  // required
+  /** HTTP method for the frontend. Defaults to `"post"`. */
+  method: z14.string().optional().default("post"),
+  // default: 'post'
+  /** Static query / body params passed to the endpoint. */
+  data: z14.record(z14.string(), z14.unknown()).optional()
+});
+var JsonLinkActionSchema = ActionSchema.extend({
+  /** Optional condition evaluated per row. Button is hidden when the condition is false. */
+  type: z14.literal("link").default("link"),
+  // required
+  /** URL to open. May contain `{env.VAR}` placeholders. */
+  href: z14.string(),
+  // required,
+  blank: z14.boolean().optional().default(true)
+});
+var transformAction = (action) => {
+  const label = action.label;
+  return {
+    tooltip: label,
+    ...action
+  };
+};
+var JsonActionSchema = z14.union([JsonProcedureActionSchema, JsonLinkActionSchema]).transform(transformAction);
+
+// src/lib/resource/include.schema.ts
+import { z as z15 } from "zod";
+var JsonIncludeEntrySchema = z15.lazy(
+  () => z15.union([
+    z15.string(),
+    // plain relation name → `{ [name]: true }`
+    z15.object({
+      relation: z15.string(),
+      // required
+      include: z15.array(JsonIncludeEntrySchema).optional(),
+      // nested includes;
+      /** Prisma-format orderBy clause applied to the included records. */
+      orderBy: z15.record(z15.string(), z15.unknown()).optional()
+    })
+  ])
+);
+
+// src/lib/resource/version.ts
+var BASELINE_RESOURCE_VERSION = 1;
+var CURRENT_RESOURCE_VERSION = 1;
+
+// src/lib/resource/ResourceJson.schema.ts
+var JsonColumnsMapSchema = z16.record(
+  z16.string(),
+  JsonColumnSchema.omit({ id: true }).catchall(z16.unknown())
+);
+var ColumnsSchema = JsonColumnsMapSchema;
+var JsonDisplaySchema = z16.object({
+  mode: z16.enum(["page", "modal"]).default("modal"),
+  // default: 'modal'
+  customComponent: z16.string().nullable().optional().default(null)
+  // default: null
+});
+var normalizeColumns = (columns) => {
+  if (!columns) return void 0;
+  const raw = Array.isArray(columns) ? columns : Object.entries(columns).map(([id, col]) => ({ id, ...col }));
+  return raw.map((col) => ({
+    ...col,
+    label: col.label ?? labelFromId(col.id)
+  }));
+};
+var ResourceJsonShape = z16.object({
+  /**
+   * URL of the generated JSON Schema, for editor autocomplete/validation. Declared so the
+   * key is *allowed* (not stripped, and not flagged by the very schema it points at).
+   * Ignored at runtime.
+   */
+  $schema: z16.string().optional(),
+  /**
+   * resource.json shape version. Missing ⇒ baseline (see `./version`). Auto-migrated
+   * toward `CURRENT_RESOURCE_VERSION` on load in the dev environment.
+   */
+  schemaVersion: z16.number().int().positive().optional(),
+  /** When `true`, the resource lives in the repo but is NOT loaded/served (work in progress). */
+  draft: z16.boolean().optional().default(false),
+  /**
+   * Where the data comes from. `prisma` (the default) is backed by a Prisma
+   * model plus a `schema.ts`; `custom` is configuration only and the developer
+   * supplies a `repository.ts`. See `./ResourceKind`.
+   */
+  kind: ResourceKindSchema,
+  name: z16.string(),
+  // required — unique id, used as the frontend form id
+  route: z16.string(),
+  // required — URL segment for generated endpoints
+  /**
+   * Prisma model name. Required when `kind` is `prisma` (enforced by the
+   * refinement on `ResourceJsonSchema`), and must be absent when `kind` is
+   * `custom` — there is no Prisma delegate to address.
+   */
+  model: z16.string().optional(),
+  tag: z16.string(),
+  // required — OpenAPI tag
+  title: z16.string().optional(),
+  // no computed default — used as UI display title
+  table: z16.string().optional(),
+  // default: same as `model`
+  /**
+   * Type of the resource's primary key, used to coerce `:id` route params.
+   * Written by codegen from the Prisma model; defaults to `'string'`.
+   */
+  idType: z16.enum(["string", "number"]).optional(),
+  database: z16.string().optional(),
+  // default: project's default data source
+  /**
+   * Mount this resource under a parent route instead of at the top level —
+   * see `./ParentRef.schema`. Only valid on a `kind: "custom"` resource.
+   */
+  parent: ParentRefSchema.optional(),
+  sidebar: SidebarSchema.default(SidebarSchema.parse({})),
+  // default: shown, alphabetically ordered, ungrouped
+  display: JsonDisplaySchema.default(JsonDisplaySchema.parse({})),
+  // default: { mode: 'modal', customComponent: null }
+  /** Global security block — applies to every operation unless overridden per-operation. */
+  security: SecuritySchema.optional(),
+  operations: JsonOperationsSchema,
+  // required key — but every sub-field defaults to enabled
+  columns: ColumnsSchema.default(ColumnsSchema.parse({})),
+  //  id-keyed map; omit for a columnless resource
+  calculatedColumns: z16.array(CalculatedColumnSchema).default([]),
+  actions: z16.array(JsonActionSchema).default([]),
+  /** Global table-level actions (no record id). Shown as toolbar buttons. */
+  tableActions: z16.array(JsonActionSchema).default([]),
+  /** Modal width when opening a form for this resource. */
+  modalSize: z16.enum(["xs", "sm", "lg", "xl"]).default("sm"),
+  // default: 'sm' for create/edit modal
+  /**
+   * Relations to include when querying this resource.
+   * Each entry is either a plain relation name (`"author"` → `include: { author: true }`)
+   * or an object for nested includes:
+   * `{ "relation": "text_author", "include": ["author"] }` →
+   *   `include: { text_author: { include: { author: true } } }`
+   */
+  include: z16.array(JsonIncludeEntrySchema).default([])
+});
+var refineByKind = (obj, ctx) => {
+  if (obj.kind === "custom") {
+    if (obj.model !== void 0) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["model"],
+        message: 'A custom resource has no Prisma model. Remove "model" \u2014 data access comes from repository.ts.'
+      });
+    }
+    if (obj.calculatedColumns?.length) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["calculatedColumns"],
+        message: "calculatedColumns run raw SQL against a database table and are not supported on a custom resource. Compute the value in repository.ts instead."
+      });
+    }
+    for (const [id, col] of Object.entries(obj.columns ?? {})) {
+      if (col.fieldInput?.format === "relation" || col.fieldInput?.type === "autocomplete") {
+        continue;
+      }
+      if (col.type === void 0) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["columns", id, "type"],
+          message: `Column "${id}" needs a "type": a custom resource has no schema.ts, so its json_schema is built from the column types.`
+        });
+      }
+    }
+    if (obj.parent && obj.parent.param === "id") {
+      ctx.addIssue({
+        code: "custom",
+        path: ["parent", "param"],
+        message: `parent.param cannot be "id" \u2014 that is the child's own id in /:id routes. Use something like "groupId".`
+      });
+    }
+  } else if (obj.parent !== void 0) {
+    ctx.addIssue({
+      code: "custom",
+      path: ["parent"],
+      message: '"parent" is only supported on a custom resource. A prisma resource is nested by declaring a relation column on its parent.'
+    });
+  } else if (obj.model === void 0) {
+    ctx.addIssue({
+      code: "custom",
+      path: ["model"],
+      message: '"model" is required for a prisma-backed resource. Set "kind": "custom" for a resource with no Prisma model.'
+    });
+  }
+};
+var ResourceJsonSchema = ResourceJsonShape.superRefine(
+  refineByKind
+).transform((obj) => {
+  const title = obj.title ?? labelFromId(obj.name);
+  const schemaVersion = obj.schemaVersion ?? BASELINE_RESOURCE_VERSION;
+  return {
+    title,
+    ...obj,
+    schemaVersion,
+    columns: normalizeColumns(obj.columns)
+  };
+});
+
+// src/lib/resource/migrations/types.ts
+var MigrationPathError = class extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "MigrationPathError";
+  }
+};
+var MigrationStepError = class extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "MigrationStepError";
+  }
+};
+
+// src/lib/resource/migrations/index.ts
+var MIGRATIONS = [
+  // Example (add when the first real shape change lands and CURRENT_RESOURCE_VERSION becomes 2):
+  // migration_0001to0002,
+];
+var resourceVersionOf = (raw) => {
+  const v = raw["schemaVersion"];
+  return typeof v === "number" && Number.isInteger(v) ? v : BASELINE_RESOURCE_VERSION;
+};
+var runResourceMigrations = (raw, target = CURRENT_RESOURCE_VERSION, migrations = MIGRATIONS) => {
+  const from = resourceVersionOf(raw);
+  if (from === target) return { raw, from, to: target, applied: [] };
+  if (from > target) {
+    throw new MigrationPathError(
+      `resource.json is version ${from} but this crouton only understands up to ${target} \u2014 upgrade crouton`
+    );
+  }
+  let current = raw;
+  const applied = [];
+  for (let v = from; v < target; v++) {
+    const step = migrations.find((m) => m.from === v && m.to === v + 1);
+    if (!step) {
+      throw new MigrationPathError(`no migration path from version ${v} to ${v + 1}`);
+    }
+    try {
+      current = step.migrate(current);
+    } catch (err) {
+      throw new MigrationStepError(
+        `migration ${v}\u2192${v + 1} (${step.description}) failed: ${err.message}`
+      );
+    }
+    applied.push(step.description);
+  }
+  const { schemaVersion: _old, ...rest } = current;
+  return { raw: { schemaVersion: target, ...rest }, from, to: target, applied };
+};
+
+// src/lib/resource/fieldVariants.ts
+var resolveFormField = (c) => c.fieldInput;
+var resolveViewField = (c) => mergeFieldVariant(c.fieldInput, c.fieldView);
+var resolveTableField = (c) => mergeFieldVariant(resolveViewField(c), c.fieldTable);
+
+// src/lib/config/CroutonConfig.schema.ts
+import { z as z17 } from "zod";
+var RulesetSchema = z17.object({
+  hideIdInTable: z17.boolean().default(true),
+  hideIdInForm: z17.boolean().default(true),
+  hideIdInView: z17.boolean().default(true),
+  hideTimestamps: z17.boolean().default(true),
+  hideForeignKeys: z17.boolean().default(true),
+  includeRelations: z17.boolean().default(true),
+  hideRelationsInTable: z17.boolean().default(true),
+  showRelationsInForm: z17.boolean().default(true),
+  enumValueLabel: z17.boolean().default(true),
+  sharedEnums: z17.boolean().default(true),
+  defaultOperations: JsonOperationsSchema.default(
+    JsonOperationsSchema.parse({})
+  )
+});
+var I18nConfigSchema = z17.object({
+  /** Default / fallback language. */
+  defaultLanguage: z17.string().default("en"),
+  /** All supported language codes. */
+  languages: z17.array(z17.string()).min(1),
+  /** Directory containing `<lang>.json` bundles, relative to project root. */
+  translationsDir: z17.string().default("translations")
+});
+var CroutonConfigSchema = z17.object({
+  /**
+   * Application title served to the frontend via `GET /_app/layout`.
+   * Displayed in the admin sidebar header.
+   */
+  title: z17.string(),
+  /** Where resource directories live, relative to the project root. */
+  resourcesDir: z17.string(),
+  /** Where datasource folders live (each with a `data-source.json`). */
+  dataSourcesDir: z17.string(),
+  /**
+   * Template for a model's Zod export name. `{Model}` → Prisma model name.
+   * Defaults to `{Model}WithRelationsSchema` (the relations-aware schema
+   * emitted by zod-prisma-types when `createRelationValuesTypes` is on).
+   */
+  schemaExportName: z17.string().default("{Model}WithRelationsSchema"),
+  /** Path to the shared enum registry, relative to project root. Default `crouton.enums.json`. */
+  enumsFile: z17.string().default("crouton.enums.json"),
+  /** Optional overrides of the default visibility ruleset. */
+  rules: RulesetSchema.default(RulesetSchema.parse({})),
+  /**
+   * Sidebar group definitions, keyed by group slug (e.g. `"metadata"`).
+   * Resources reference a group via `sidebar.group` in their `resource.json`.
+   */
+  sidebarGroups: z17.record(z17.string(), SidebarGroupSchema).default({}),
+  /**
+   * Whether form fields are saved automatically as the user edits them.
+   * @default true
+   */
+  autoSave: z17.boolean().default(true),
+  /** Optional i18n / translation configuration. */
+  i18n: I18nConfigSchema.optional()
+});
+
+// src/lib/config/readConfig.ts
+var CONFIG_FILES = ["crouton.json", "crouton.mjs", "crouton.js"];
+
+// src/lib/view/column-predicates.ts
+var isBoolean = (col) => col.fieldInput?.type === "boolean" || col.columnType === "boolean";
+var isRelation = (col) => col.fieldInput?.format === "relation";
+var isAutocomplete = (col) => col.fieldInput?.type === "autocomplete";
+var isRecordCell = (col) => isRelation(col) || isAutocomplete(col);
+var isDateRange = (col) => col.fieldInput?.format === "date-range";
+var isObjectColumn = (col) => isObjectColumnType(col.type);
+var isArrayColumn = (col) => isArrayColumnType(col.type);
+var isObjectCell = (col) => isObjectColumn(col) && !!col.displayKey;
+
+// src/lib/view/column.utils.ts
+var colPosition = (col, i) => col.fieldInput?.position ?? i;
+var sortByPosition = (cols) => cols.map((col, i) => ({ col, i })).sort((a, b) => colPosition(a.col, a.i) - colPosition(b.col, b.i)).map(({ col }) => col);
+var columnForContext = (col, ctx) => {
+  if (ctx === "view") return { ...col, fieldInput: col.fieldView ?? col.fieldInput };
+  if (ctx === "table") return { ...col, fieldInput: col.fieldTable ?? col.fieldInput };
+  return col;
+};
+var toViewColumn = (col) => ({
+  id: col.id,
+  ...col.label && { label: col.label },
+  ...col.sortable != null && { sortable: col.sortable },
+  ...col.searchable != null && { searchable: col.searchable },
+  ...col.fieldInput && { fieldInput: col.fieldInput }
+});
+
+// src/lib/view/sort.helpers.ts
+var deriveSortId = (col) => {
+  if (col.sortable === false) return null;
+  if (col.sortId) return col.sortId;
+  const base = col.column ?? col.id;
+  const fi = col.fieldInput;
+  const opts = fi?.options ?? {};
+  const isRelation2 = fi?.format === "relation" || !!fi?.relationType || fi?.type === "autocomplete" || typeof opts.resource === "string";
+  if (isRelation2) {
+    const key = (typeof col.displayKey === "string" ? col.displayKey : void 0) ?? (typeof opts.displayKey === "string" ? opts.displayKey : void 0) ?? (typeof opts.labelKey === "string" ? opts.labelKey : void 0);
+    if (!key) return null;
+    const path2 = key.includes(".") ? key : `${base}.${key}`;
+    return path2.endsWith(".label") ? path2.slice(0, -".label".length) : path2;
+  }
+  if (!col.displayKey) return base;
+  const path = `${base}.${col.displayKey}`;
+  const isValueLabel = !!col.enum || opts.emitObject === true;
+  if (isValueLabel && path.endsWith(".label")) return path.slice(0, -".label".length);
+  return path;
+};
+var resolveDefaultSort = (tableCols, allColumns) => {
+  const isSortable = (c) => c.sortable !== false;
+  const sortCol = tableCols.find((c) => c.defaultSort && isSortable(c)) ?? tableCols.find(isSortable) ?? allColumns?.find((c) => c.idField);
+  return sortCol ? deriveSortId(sortCol) ?? sortCol.id : void 0;
+};
+
+// src/lib/view/schema-transforms.ts
+var allowAdditionalProperties = (schema) => {
+  if (schema["type"] === "object") {
+    schema["additionalProperties"] = true;
+    const props = schema["properties"];
+    if (props) {
+      for (const value of Object.values(props)) {
+        allowAdditionalProperties(value);
+      }
+    }
+  }
+  if (schema["type"] === "array" && schema["items"]) {
+    allowAdditionalProperties(schema["items"]);
+  }
+};
+var isNullableProperty = (prop) => {
+  const anyOf = prop?.["anyOf"];
+  return Array.isArray(anyOf) && anyOf.some((s) => s?.["type"] === "null");
+};
+var dropNullableFromRequired2 = (schema) => {
+  if (schema["type"] !== "object") return;
+  const props = schema["properties"];
+  if (!props) return;
+  const required = schema["required"];
+  if (Array.isArray(required)) {
+    schema["required"] = required.filter((key) => !isNullableProperty(props[key]));
+  }
+  for (const value of Object.values(props)) {
+    dropNullableFromRequired2(value);
+  }
+};
+var enforceRequiredMinLength = (schema) => {
+  if (schema["type"] !== "object") return;
+  const props = schema["properties"];
+  if (!props) return;
+  for (const prop of Object.values(props)) {
+    if (prop?.["type"] === "string" && !("minLength" in prop)) {
+      prop["minLength"] = 1;
+    } else if (prop?.["type"] === "object") {
+      enforceRequiredMinLength(prop);
+    }
+  }
+};
+var applySchemaTransforms = (schema) => {
+  allowAdditionalProperties(schema);
+  dropNullableFromRequired2(schema);
+  enforceRequiredMinLength(schema);
+};
+
+// src/lib/view/table-schema.builder.ts
+var SHARED_CELL_OPTION_KEYS = ["values", "storeValue", "uri", "resourceUri", "schemasUri", "customComponent"];
+var pickSharedCellOptions = (col) => {
+  const options = col.fieldInput?.options ?? {};
+  return Object.fromEntries(
+    SHARED_CELL_OPTION_KEYS.filter((key) => options[key] !== void 0).map((key) => [key, options[key]])
+  );
+};
+var buildTableUiSchema = (cols) => {
+  const layout = TableBuilder.init().addControls(
+    ...cols.map((col) => {
+      const cellBuilder = isBoolean(col) ? BooleanCellBuilder : TextCellBuilder;
+      let builder = cellBuilder.properties(col.id);
+      if (col.displayKey) builder = builder.key(col.displayKey);
+      if (col.sortId) builder = builder.setSortId(col.sortId);
+      return builder;
+    })
+  ).build();
+  const colMap = Object.fromEntries(cols.map((c) => [c.id, c]));
+  layout.elements = layout.elements.map((el) => {
+    const id = el.scope?.replace("#/properties/", "");
+    const col = id ? colMap[id] : void 0;
+    if (!col) return el;
+    const fieldInputOptions = isRecordCell(col) || isDateRange(col) || isObjectCell(col) ? col.fieldInput?.options ?? {} : pickSharedCellOptions(col);
+    const dataPathOption = col.column ? { dataPath: col.column } : {};
+    const derivedSortId = isRecordCell(col) || isDateRange(col) ? null : deriveSortId(col);
+    const sortOptions = derivedSortId ? { sortId: derivedSortId } : { sortable: false };
+    const relationTypeOption = col.fieldInput?.relationType ? { relationType: col.fieldInput.relationType } : {};
+    return {
+      ...el,
+      options: {
+        ...el.options ?? {},
+        ...fieldInputOptions,
+        ...dataPathOption,
+        ...sortOptions,
+        ...relationTypeOption,
+        ...isDateRange(col) && { format: "date-range" },
+        label: col.label
+      },
+      // An object column with a displayKey renders the same way as a relation:
+      // one nested key out of an object value.
+      ...(isRecordCell(col) || isObjectCell(col)) && { type: "RecordCell" },
+      ...isDateRange(col) && { type: "Control" }
+    };
+  });
+  return layout;
+};
+
+// src/lib/view/form-schema.builder.ts
+var buildConditionSchema = (when) => {
+  if (when.notExists) return { not: { minLength: 1 } };
+  if (when.exists) return { minLength: 1 };
+  if (when.neq !== void 0) return { not: { const: when.neq } };
+  return { const: when.eq };
+};
+var buildRule = (col) => {
+  if (col.disabledWhen) {
+    return {
+      effect: "DISABLE",
+      condition: {
+        scope: `#/properties/${col.disabledWhen.field}`,
+        schema: buildConditionSchema(col.disabledWhen)
+      }
+    };
+  }
+  const when = col.showWhen ?? col.hideWhen;
+  if (!when) return void 0;
+  const effect = col.showWhen ? "SHOW" : "HIDE";
+  return {
+    effect,
+    condition: {
+      scope: `#/properties/${when.field}`,
+      schema: buildConditionSchema(when)
+    }
+  };
+};
+var applyColumnRule = (control, col) => {
+  if (col.disabledWhen) {
+    control.disableWhen(
+      `#/properties/${col.disabledWhen.field}`,
+      buildConditionSchema(col.disabledWhen)
+    );
+    return;
+  }
+  const when = col.showWhen ?? col.hideWhen;
+  if (!when) return;
+  const scope = `#/properties/${when.field}`;
+  const schema = buildConditionSchema(when);
+  if (col.showWhen) control.showWhen(scope, schema);
+  else control.hideWhen(scope, schema);
+};
+var buildDetailLayout = (detail) => {
+  const inner = detail.layout === "collapse" ? LayoutBuilder.collapse() : LayoutBuilder.horizontal();
+  inner.addControls(
+    ...detail.controls.map((dc) => {
+      const ctrl = ControlBuilder.properties(dc.property);
+      if (dc.type === "markdown") {
+        ctrl.markdown(dc.options);
+      } else if (dc.type) {
+        ctrl.control(dc.type, dc.options ?? {});
+      }
+      if (dc.hideLabel) ctrl.hideLabel();
+      if (dc.width) ctrl.width(dc.width);
+      return ctrl;
+    })
+  );
+  if (detail.titleKey) inner.titleKey(detail.titleKey);
+  return inner;
+};
+var defaultControlFormat = (col) => {
+  if (isObjectColumn(col)) return "object";
+  if (isArrayColumn(col)) return "array";
+  return "text";
+};
+var buildFormControl = (col) => {
+  const control = ControlBuilder.properties(col.id);
+  const fieldInput = col.fieldInput;
+  if (fieldInput?.format === "relation") {
+    const options = { ...fieldInput.options };
+    if (!options.colspan) options.colspan = 12;
+    if (fieldInput.relationType) options.relationType = fieldInput.relationType;
+    control.control("relation", options).width("full");
+  } else if (fieldInput?.type === "autocomplete") {
+    const options = { ...fieldInput.options };
+    if (!options.colspan) options.colspan = 12;
+    if (fieldInput.relationType) options.relationType = fieldInput.relationType;
+    const format = fieldInput.format ?? fieldInput.type;
+    control.control(format, options).width("full");
+  } else if (fieldInput?.detail) {
+    const detailLayout = buildDetailLayout(fieldInput.detail);
+    control.detailFixed(detailLayout, {
+      layout: fieldInput.detail.layout === "collapse" ? "row" : void 0
+    });
+  } else if (fieldInput?.format !== "date-range" && (fieldInput?.type === "date" || fieldInput?.format === "dateTime")) {
+    const options = { ...fieldInput.options };
+    if (!options.colspan) options.colspan = 12;
+    const format = fieldInput.format === "dateTime" ? "dateTime" : "date";
+    control.control(format, options).width("full");
+  } else if (fieldInput?.format === "date-range") {
+    const options = { ...fieldInput.options };
+    if (!options.colspan) options.colspan = 12;
+    control.control("date-range", options).width("full");
+  } else {
+    const options = fieldInput?.options ?? {};
+    if (!options.colspan) options.colspan = 12;
+    const type = fieldInput?.type ?? defaultControlFormat(col);
+    control.control(type, options).width("full");
+  }
+  if (fieldInput?.customRender)
+    control.setCustomRender(fieldInput?.customRender);
+  if (col.hideLabel) control.hideLabel();
+  if (col.label) control.label(col.label);
+  applyColumnRule(control, col);
+  return control;
+};
+var buildFormUiSchema = (cols) => {
+  const layout = LayoutBuilder.grid();
+  for (const col of cols) layout.addControl(buildFormControl(col));
+  return layout.build();
+};
+
+// src/lib/view/calculated-columns.builder.ts
+var isVisibleInMode = (c, mode) => mode === "table" ? !c.hiddenInTable : !c.hiddenInView;
+var buildCalculatedElement = (c, mode) => mode === "table" ? {
+  type: c.type === "boolean" ? "BooleanCell" : "TextCell",
+  scope: `#/properties/${c.id}`,
+  options: {
+    label: c.label ?? c.id
+  }
+} : {
+  type: "Control",
+  scope: `#/properties/${c.id}`,
+  options: {
+    // Spread fieldInput.options first (e.g. colspan), then layer type-derived options on top.
+    ...c.fieldInput?.options ?? {},
+    label: c.label ?? c.id,
+    ...c.type === "boolean" && { format: "boolean" }
+  }
+};
+var calcPosition = (c) => c.fieldInput?.position ?? c.position;
+var injectCalculatedColumnsIntoView = (viewConfig, calculated, mode) => {
+  if (!calculated.length) return viewConfig;
+  const visible = calculated.filter((c) => isVisibleInMode(c, mode));
+  if (!visible.length) return viewConfig;
+  const jsonSchema = { ...viewConfig.json_schema };
+  jsonSchema.properties = { ...jsonSchema.properties };
+  for (const c of visible) {
+    jsonSchema.properties[c.id] = {
+      type: c.type === "boolean" ? "boolean" : "string",
+      title: c.label ?? c.id
+    };
+  }
+  const uiSchema = { ...viewConfig.ui_schema };
+  const existing = [...uiSchema.elements ?? []];
+  const tagged = [
+    ...existing.map((el, i) => ({ el, pos: i + 0.5 })),
+    ...visible.map((c) => ({
+      el: buildCalculatedElement(c, mode),
+      pos: calcPosition(c) ?? Infinity
+    }))
+  ];
+  tagged.sort((a, b) => a.pos - b.pos);
+  uiSchema.elements = tagged.map((t) => t.el);
+  const columns = [...viewConfig.columns];
+  for (const c of visible) {
+    const pos = calcPosition(c);
+    const entry = { id: c.id, label: c.label };
+    if (pos !== void 0) {
+      columns.splice(pos, 0, entry);
+    } else {
+      columns.push(entry);
+    }
+  }
+  return {
+    ...viewConfig,
+    json_schema: jsonSchema,
+    ui_schema: uiSchema,
+    columns
+  };
+};
+var injectCalculatedColumns = (tableView, calculated) => injectCalculatedColumnsIntoView(tableView, calculated, "table");
+var injectCalculatedColumnsToView = (viewConfig, calculated) => injectCalculatedColumnsIntoView(viewConfig, calculated, "view");
+
+// src/lib/view/view.builder.ts
+import { toJSONSchema as toJSONSchema2 } from "zod";
+
+// src/lib/view/column-type-schema.source.ts
+var optionValues = (col) => {
+  const values = col.fieldInput?.options?.["values"];
+  if (!Array.isArray(values)) return void 0;
+  const unwrapped = values.map(
+    (v) => v && typeof v === "object" && "value" in v ? v.value : v
+  );
+  return unwrapped.length ? unwrapped : void 0;
+};
+var columnToJsonSchemaProperty = (col) => {
+  const property = col.type === void 0 && isAutocomplete(col) ? {} : { ...columnTypeToJsonSchema(col.type) };
+  if (property.title === void 0) property.title = col.label ?? col.id;
+  if (col.fieldInput?.defaultValue !== void 0 && property.default === void 0) {
+    property.default = col.fieldInput.defaultValue;
+  }
+  if (property.enum === void 0) {
+    const values = optionValues(col);
+    if (values) property.enum = values;
+  }
+  return property;
+};
+var columnTypeSchemaSource = (schemaCols) => {
+  if (!schemaCols.length) return void 0;
+  const properties = {};
+  for (const col of schemaCols) {
+    properties[col.id] = columnToJsonSchemaProperty(col);
+  }
+  return { type: "object", properties };
+};
+
+// src/lib/view/json-schema.opts.ts
+import { z as z18 } from "zod";
+var isInstanceOf = (zodSchema, className) => {
+  if (!(zodSchema instanceof z18.ZodCustom)) return false;
+  const result = zodSchema.safeParse(null);
+  return !result.success && result.error.issues[0]?.expected === className;
+};
+var jsonSchemaOverride = ({ zodSchema, jsonSchema }) => {
+  if (zodSchema instanceof z18.ZodDate) {
+    jsonSchema.type = "string";
+    jsonSchema.format = "date-time";
+  }
+  if (zodSchema instanceof z18.ZodBigInt) {
+    jsonSchema.type = "integer";
+  }
+  if (isInstanceOf(zodSchema, "Decimal")) {
+    jsonSchema.type = "number";
+  }
+  if (isInstanceOf(zodSchema, "Buffer")) {
+    jsonSchema.type = "string";
+  }
+};
+var jsonSchemaOpts = {
+  unrepresentable: "any",
+  override: jsonSchemaOverride
+};
+
+// src/lib/view/view.builder.ts
+var patchFilterProperties = (jsonSchema, columns) => {
+  if (!columns?.length) return;
+  const properties = jsonSchema.properties;
+  if (!properties) return;
+  for (const col of columns) {
+    if (col.fieldInput?.format === "date-range") {
+      delete properties[col.id];
+      const opts = col.fieldInput?.options ?? {};
+      const base = col.label ?? col.id;
+      const fromField = opts["fromField"] ?? "from";
+      const toField = opts["toField"] ?? "to";
+      const dateProp = (title) => ({
+        type: "string",
+        format: "date",
+        title,
+        "x-field-type": "date"
+      });
+      properties[`${col.id}->${fromField}`] = dateProp(
+        opts["fromLabel"] ?? `${base} (from)`
+      );
+      properties[`${col.id}->${toField}`] = dateProp(
+        opts["toLabel"] ?? `${base} (to)`
+      );
+      continue;
+    }
+    const prop = properties[col.id];
+    if (!prop) continue;
+    prop.title = col.label ?? col.id;
+    const values = col.fieldInput?.options?.["values"];
+    if (values) {
+      prop["x-values"] = values;
+    }
+    const ft = col.fieldInput?.type;
+    if (ft === "select" || col.enum) {
+      prop["x-field-type"] = "enum";
+    } else if (ft === "number" || prop.type === "number" || prop.type === "integer") {
+      prop["x-field-type"] = "number";
+    } else if (prop.format === "date-time" || prop.format === "date") {
+      prop["x-field-type"] = "date";
+    } else if (prop.type === "boolean") {
+      prop["x-field-type"] = "boolean";
+    }
+  }
+};
+var injectFieldDefaults = (jsonSchema, columns) => {
+  const properties = jsonSchema.properties;
+  if (!properties) return;
+  for (const col of columns) {
+    if (col.fieldInput?.defaultValue === void 0) continue;
+    const prop = properties[col.id];
+    if (prop) prop.default = col.fieldInput.defaultValue;
+  }
+};
+var zodSchemaSource = (schema) => (schemaCols) => {
+  const schemaKeys = new Set(Object.keys(schema.shape));
+  const schemaIds = schemaCols.map((c) => c.id).filter((id) => schemaKeys.has(id));
+  if (!schemaIds.length) return void 0;
+  const mask = Object.fromEntries(schemaIds.map((id) => [id, true]));
+  const picked = schema.pick(mask);
+  return toJSONSchema2(picked, {
+    target: "draft-07",
+    ...jsonSchemaOpts
+  });
+};
+var NON_NULL_TYPES = ["object", "array", "string", "number", "boolean"];
+var SHAPE_KEYS = ["type", "enum", "const", "anyOf", "oneOf", "allOf", "$ref"];
+var applyRequiredColumns = (jsonSchema, columns) => {
+  if (!columns?.length) return;
+  const properties = jsonSchema["properties"];
+  if (!properties) return;
+  const required = new Set(
+    Array.isArray(jsonSchema["required"]) ? jsonSchema["required"] : []
+  );
+  for (const col of columns) {
+    if (col.required === void 0) continue;
+    if (!(col.id in properties)) continue;
+    if (!col.required) {
+      required.delete(col.id);
+      continue;
+    }
+    if (col.idField) continue;
+    if (col.createable === false && col.updateable === false) continue;
+    required.add(col.id);
+    const property = properties[col.id];
+    if (property && typeof property === "object" && !SHAPE_KEYS.some((key) => key in property)) {
+      property["type"] = [...NON_NULL_TYPES];
+    }
+  }
+  if (required.size) jsonSchema["required"] = [...required];
+  else delete jsonSchema["required"];
+};
+var buildView = (source, columns, visible, buildUiSchema, sort = false, schemaVisible) => {
+  if (!source || !columns?.length) return void 0;
+  const visibleCols = sort ? sortByPosition(columns.filter(visible)) : columns.filter(visible);
+  if (!visibleCols.length) return void 0;
+  const schemaCols = (schemaVisible ? columns.filter((c) => visible(c) || schemaVisible(c)) : visibleCols).filter((c) => !isRelation(c));
+  const jsonSchema = source(schemaCols);
+  if (!jsonSchema) return void 0;
+  applySchemaTransforms(jsonSchema);
+  injectFieldDefaults(jsonSchema, visibleCols);
+  if (schemaVisible) {
+    const nonEditableIds = new Set(
+      schemaCols.filter((c) => c.idField || c.createable === false && c.updateable === false).map((c) => c.id)
+    );
+    const required = jsonSchema["required"];
+    if (Array.isArray(required) && nonEditableIds.size) {
+      jsonSchema["required"] = required.filter((k) => !nonEditableIds.has(k));
+    }
+  }
+  return {
+    json_schema: jsonSchema,
+    ui_schema: buildUiSchema(visibleCols),
+    columns: visibleCols.map(toViewColumn)
+  };
+};
+var emptyTableView = () => ({
+  json_schema: { type: "object", additionalProperties: true, properties: {} },
+  ui_schema: buildTableUiSchema([]),
+  columns: []
+});
+var buildViewsWithSource = (source, columns) => {
+  const views = {};
+  const table = buildView(
+    source,
+    columns?.map((c) => columnForContext(c, "table")),
+    (c) => !c.hiddenInTable,
+    buildTableUiSchema,
+    true
+  );
+  if (table) {
+    table.defaultSort = resolveDefaultSort(
+      table.columns,
+      columns
+    );
+    views.table = table;
+  } else if (columns?.length) {
+    views.table = emptyTableView();
+  }
+  const form = buildView(
+    source,
+    columns,
+    (c) => !c.hiddenInForm,
+    buildFormUiSchema,
+    true,
+    (c) => !c.idField && (c.createable === true || c.updateable === true)
+  );
+  if (form) {
+    applyRequiredColumns(form.json_schema, columns);
+    views.form = form;
+  }
+  const filter = buildView(
+    source,
+    columns,
+    (c) => !!c.filterable,
+    buildFormUiSchema,
+    true
+  );
+  if (filter) {
+    patchFilterProperties(
+      filter.json_schema,
+      columns?.filter((c) => !!c.filterable)
+    );
+    views.filter = filter;
+  }
+  const view = buildView(
+    source,
+    columns?.map((c) => columnForContext(c, "view")),
+    (c) => !c.hiddenInView,
+    buildFormUiSchema,
+    true
+  );
+  if (view) views.view = view;
+  return Object.keys(views).length ? views : void 0;
+};
+var buildViews = (schema, columns) => buildViewsWithSource(schema ? zodSchemaSource(schema) : void 0, columns);
+var buildViewsFromColumnTypes = (columns) => buildViewsWithSource(columnTypeSchemaSource, columns);
+var buildViewsFromColumns = (columns) => {
+  if (!columns?.length) return void 0;
+  const buildJsonSchema = (cols) => {
+    const properties = {};
+    for (const c of cols) {
+      if (c.column && c.column !== c.id) {
+        if (!properties[c.column]) {
+          properties[c.column] = {
+            type: "object",
+            properties: {}
+          };
+        }
+        const keyPath = (c.displayKey ?? c.id).split(".");
+        let target = properties[c.column].properties;
+        for (let i = 0; i < keyPath.length - 1; i++) {
+          const segment = keyPath[i];
+          if (!target[segment]) {
+            target[segment] = {
+              type: "object",
+              properties: {}
+            };
+          }
+          target = target[segment].properties;
+        }
+        target[keyPath[keyPath.length - 1]] = {
+          type: "string",
+          title: c.label ?? c.id
+        };
+      } else if (c.type !== void 0) {
+        properties[c.id] = columnToJsonSchemaProperty(c);
+      } else {
+        const opts = c.fieldInput?.options;
+        const isObject = opts?.emitObject === true || c.fieldInput?.type === "autocomplete";
+        properties[c.id] = {
+          ...isObject ? {} : { type: c.columnType ?? "string" },
+          title: c.label ?? c.id,
+          ...c.fieldInput?.defaultValue !== void 0 ? { default: c.fieldInput.defaultValue } : {}
+        };
+      }
+    }
+    const schema = { type: "object", properties };
+    applySchemaTransforms(schema);
+    return schema;
+  };
+  const fixNestedScopes = (uiSchema, cols) => {
+    const colMap = Object.fromEntries(cols.map((c) => [c.id, c]));
+    const elements = uiSchema.elements;
+    if (!elements) return uiSchema;
+    return {
+      ...uiSchema,
+      elements: elements.map((el) => {
+        const id = el.scope?.replace(
+          "#/properties/",
+          ""
+        );
+        const col = id ? colMap[id] : void 0;
+        if (!col?.column || col.column === col.id) return el;
+        const keyPath = (col.displayKey ?? col.id).split(".");
+        const propPath = keyPath.map((k) => `properties/${k}`).join("/");
+        return {
+          ...el,
+          scope: `#/properties/${col.column}/${propPath}`
+        };
+      })
+    };
+  };
+  const makeView = (visible, buildUiSchema) => {
+    if (!visible.length) return void 0;
+    return {
+      json_schema: buildJsonSchema(visible),
+      ui_schema: fixNestedScopes(buildUiSchema(visible), visible),
+      columns: visible.map(toViewColumn)
+    };
+  };
+  const views = {};
+  const tableCols = sortByPosition(
+    columns.filter((c) => !c.hiddenInTable).map((c) => columnForContext(c, "table"))
+  );
+  const table = makeView(tableCols, buildTableUiSchema);
+  if (table) {
+    table.defaultSort = resolveDefaultSort(tableCols, columns);
+    views.table = table;
+  } else {
+    views.table = emptyTableView();
+  }
+  const formCols = sortByPosition(columns.filter((c) => !c.hiddenInForm));
+  const form = makeView(formCols, buildFormUiSchema);
+  if (form) {
+    applyRequiredColumns(form.json_schema, formCols);
+    views.form = form;
+  }
+  const viewCols = sortByPosition(
+    columns.filter((c) => !c.hiddenInView).map((c) => columnForContext(c, "view"))
+  );
+  const viewView = makeView(viewCols, buildFormUiSchema);
+  if (viewView) views.view = viewView;
+  return Object.keys(views).length ? views : void 0;
+};
+
+// src/lib/view/view.schema.ts
+import { z as z19 } from "zod";
+var ViewColumnConfigSchema = z19.object({
+  id: z19.string(),
+  label: z19.string().optional(),
+  sortable: z19.boolean().optional(),
+  searchable: z19.boolean().optional(),
+  fieldInput: FieldInputSchema.optional()
+});
+var ViewConfigSchema = z19.object({
+  // TODO why we have both?
+  json_schema: z19.record(z19.string(), z19.unknown()).optional(),
+  ui_schema: z19.record(z19.string(), z19.unknown()).optional(),
+  // TODO why we have both?
+  ui: z19.record(z19.string(), z19.unknown()).optional(),
+  data: z19.record(z19.string(), z19.unknown()).optional(),
+  columns: z19.array(ViewColumnConfigSchema),
+  defaultSort: z19.string().optional()
+});
+var viewDefList = ["table", "view", "form"];
+var ViewDefEnum = z19.enum(viewDefList);
+
+// src/lib/i18n/Translations.schema.ts
+import { z as z20 } from "zod";
+var NestedStringRecord = z20.lazy(
+  () => z20.record(z20.string(), z20.union([z20.string(), NestedStringRecord]))
+);
+var TranslationBundleSchema = z20.object({
+  app: z20.object({
+    title: z20.string().optional()
+  }).optional(),
+  sidebarGroups: z20.record(z20.string(), z20.string()).optional(),
+  resources: z20.record(
+    z20.string(),
+    z20.object({
+      title: z20.string().optional(),
+      sidebar: z20.string().optional(),
+      columns: z20.record(z20.string(), z20.string()).optional(),
+      actions: z20.record(z20.string(), z20.string()).optional(),
+      subResources: z20.record(
+        z20.string(),
+        z20.object({
+          title: z20.string().optional(),
+          columns: z20.record(z20.string(), z20.string()).optional()
+        }).optional()
+      ).optional()
+    }).optional()
+  ).optional(),
+  enums: z20.record(z20.string(), z20.record(z20.string(), z20.string())).optional(),
+  ui: NestedStringRecord.optional(),
+  validation: z20.record(z20.string(), z20.string()).optional()
+}).passthrough();
+
+// src/lib/i18n/translation-keys.ts
+var resourceTitleKey = (resource) => `resources.${resource}.title`;
+var resourceSidebarKey = (resource) => `resources.${resource}.sidebar`;
+var columnKey = (resource, column) => `resources.${resource}.columns.${column}`;
+var actionKey = (resource, action) => `resources.${resource}.actions.${action}`;
+var subResourceTitleKey = (resource, sub) => `resources.${resource}.subResources.${sub}.title`;
+var subResourceColumnKey = (resource, sub, column) => `resources.${resource}.subResources.${sub}.columns.${column}`;
+var enumKey = (enumName, value) => `enums.${enumName}.${value}`;
+var sidebarGroupKey = (group) => `sidebarGroups.${group}`;
+var uiKey = (path) => `ui.${path}`;
+var validationKey = (code) => `validation.${code}`;
+
+// src/lib/i18n/translator.ts
+var getNestedValue = (obj, path) => {
+  const keys = path.split(".");
+  let current = obj;
+  for (const key of keys) {
+    if (current == null || typeof current !== "object") return void 0;
+    current = current[key];
+  }
+  if (typeof current === "string" && current !== "") return current;
+  return void 0;
+};
+var createTranslator = (bundles, language, defaultLanguage = "en") => {
+  const langBundle = bundles[language];
+  const defaultBundle = language !== defaultLanguage ? bundles[defaultLanguage] : void 0;
+  return (path, fallback) => {
+    if (langBundle) {
+      const value = getNestedValue(
+        langBundle,
+        path
+      );
+      if (value !== void 0) return value;
+    }
+    if (defaultBundle) {
+      const value = getNestedValue(
+        defaultBundle,
+        path
+      );
+      if (value !== void 0) return value;
+    }
+    return fallback ?? path;
+  };
+};
+
+// src/lib/i18n/negotiate.ts
+var parseAcceptLanguage = (header) => {
+  const entries = [];
+  for (const part of header.split(",")) {
+    const trimmed = part.trim();
+    if (!trimmed) continue;
+    const [tag, ...params] = trimmed.split(";");
+    let q = 1;
+    for (const param of params) {
+      const match = param.trim().match(/^q\s*=\s*([0-9.]+)$/);
+      if (match) {
+        q = parseFloat(match[1]);
+        if (isNaN(q)) q = 0;
+      }
+    }
+    entries.push({ tag: tag.trim().toLowerCase(), q });
+  }
+  return entries.sort((a, b) => b.q - a.q);
+};
+var resolveLanguage = (acceptLanguage, supported, defaultLanguage) => {
+  if (!acceptLanguage) return defaultLanguage;
+  const supportedLower = supported.map((s) => s.toLowerCase());
+  const entries = parseAcceptLanguage(acceptLanguage);
+  for (const { tag, q } of entries) {
+    if (q <= 0) continue;
+    if (tag === "*") return defaultLanguage;
+    const exactIdx = supportedLower.indexOf(tag);
+    if (exactIdx !== -1) return supported[exactIdx];
+    const base = tag.split("-")[0];
+    const baseIdx = supportedLower.indexOf(base);
+    if (baseIdx !== -1) return supported[baseIdx];
+  }
+  return defaultLanguage;
+};
+export {
+  BASELINE_RESOURCE_VERSION,
+  BooleanCellBuilder,
+  Builder,
+  CONFIG_FILES,
+  CURRENT_RESOURCE_VERSION,
+  CalculatedColumnSchema,
+  ColumnTypeSchema,
+  ColumnTypeShorthandSchema,
+  ContainerBuilder,
+  ControlBuilder,
+  ControlType,
+  CroutonConfigSchema,
+  DataSourceSchema,
+  DataSourceShape,
+  DetailConfigSchema,
+  DetailControlSchema,
+  ElementBuilder,
+  FieldInputSchema,
+  FieldVariantSchema,
+  I18nConfigSchema,
+  JsonActionSchema,
+  JsonColumnSchema,
+  JsonIncludeEntrySchema,
+  JsonLinkActionSchema,
+  JsonOperationsSchema,
+  JsonProcedureActionSchema,
+  JsonSchemaFragmentSchema,
+  LayoutBuilder,
+  LayoutType,
+  MIGRATIONS,
+  MigrationPathError,
+  MigrationStepError,
+  ModalSize,
+  Operator,
+  OperatorLabel,
+  OperatorNoValue,
+  OperatorOptions,
+  OperatorsByType,
+  ParentRefSchema,
+  PositiveRequestNumber,
+  RelationFieldInputOptionsSchema,
+  RelationType,
+  RequestSchema,
+  RequestSchemaWithOffset,
+  ResourceJsonSchema,
+  ResourceJsonShape,
+  ResourceKindSchema,
+  ResponseRequestSchema,
+  ResponseSchema,
+  RulesetSchema,
+  SecuritySchema,
+  SidebarGroupSchema,
+  SidebarSchema,
+  ModalSize as Size,
+  SortDirEnum,
+  StringOrArray,
+  TableBuilder,
+  TextCellBuilder,
+  TranslationBundleSchema,
+  ViewColumnConfigSchema,
+  ViewConfigSchema,
+  WhenConditionSchema,
+  actionKey,
+  applySchemaTransforms,
+  buildConditionSchema,
+  buildFilter,
+  buildFormUiSchema,
+  buildRule,
+  buildSort,
+  buildSortKey,
+  buildSubResourceOperations,
+  buildTableUiSchema,
+  buildViews,
+  buildViewsFromColumnTypes,
+  buildViewsFromColumns,
+  buildViewsWithSource,
+  colPosition,
+  columnForContext,
+  columnKey,
+  columnToJsonSchemaProperty,
+  columnTypeName,
+  columnTypeSchemaSource,
+  columnTypeToJsonSchema,
+  createSchema,
+  createTranslator,
+  deriveSortId,
+  dropNullableFromRequired,
+  enforceRequiredStringMinLength,
+  enumKey,
+  extractFilters,
+  filterToString,
+  findColumnDef,
+  findProperty,
+  fromValueLabel,
+  injectCalculatedColumns,
+  injectCalculatedColumnsToView,
+  isArrayColumn,
+  isArrayColumnType,
+  isAutocomplete,
+  isBoolean,
+  isCustomKind,
+  isDateRange,
+  isObjectCell,
+  isObjectColumn,
+  isObjectColumnType,
+  isRecordCell,
+  isRelation,
+  jsonSchemaOpts,
+  labelFromId,
+  mergeFieldVariant,
+  normalizeColumns,
+  normalizeLabel,
+  offsetOf,
+  patchFilterProperties,
+  pickSharedCellOptions,
+  refineByKind,
+  resolveDefaultSort,
+  resolveFormField,
+  resolveLanguage,
+  resolveTableField,
+  resolveViewField,
+  resourceControllerPath,
+  resourceSidebarKey,
+  resourceTitleKey,
+  resourceVersionOf,
+  runResourceMigrations,
+  sidebarGroupKey,
+  sortByPosition,
+  stringToFilter,
+  subResourceColumnKey,
+  subResourceTitleKey,
+  toValueLabel,
+  toViewColumn,
+  transformDataSource,
+  uiFromJsonSchema,
+  uiKey,
+  validationKey,
+  zodSchemaSource
+};
+//# sourceMappingURL=index.js.map

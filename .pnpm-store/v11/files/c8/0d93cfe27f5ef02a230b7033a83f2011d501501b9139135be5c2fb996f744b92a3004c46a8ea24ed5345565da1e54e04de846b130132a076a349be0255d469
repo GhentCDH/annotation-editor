@@ -1,0 +1,11 @@
+/**
+ * Replaces `{placeholder}` tokens in a URI with values from `params`.
+ *
+ * Supports dot-notation for nested access:
+ * - `{id}`        → `params.id`
+ * - `{parent.id}` → `params.parent.id`
+ *
+ * Unresolved placeholders are left as-is.
+ */
+export declare const replaceUriParams: (uri: string, params: Record<string, any>) => string;
+//# sourceMappingURL=uri.utils.d.ts.map

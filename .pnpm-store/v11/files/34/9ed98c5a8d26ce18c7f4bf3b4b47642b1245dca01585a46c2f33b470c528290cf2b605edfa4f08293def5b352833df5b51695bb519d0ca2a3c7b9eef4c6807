@@ -1,0 +1,16 @@
+import { Locator, Page } from '@playwright/test';
+import { Harness } from './Harness';
+/**
+ * Drives the `@ghentcdh/ui` `MultiSelect` component.
+ * Combobox shape like `SelectHarness`, but the list stays open across picks.
+ */
+export declare class MultiSelectHarness extends Harness {
+    static byId(parent: Locator | Page, id: string): MultiSelectHarness;
+    static byLabel(parent: Locator | Page, label: string): MultiSelectHarness;
+    static for(locator: Locator): MultiSelectHarness;
+    open(): Promise<this>;
+    fill(labels: string[]): Promise<this>;
+    select(label: string): Promise<this>;
+    /** Remove a selected chip by its label. */
+    removeChip(label: string): Promise<this>;
+}

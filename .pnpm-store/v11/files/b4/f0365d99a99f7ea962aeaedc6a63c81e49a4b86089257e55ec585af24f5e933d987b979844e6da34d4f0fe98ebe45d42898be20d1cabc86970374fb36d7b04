@@ -1,0 +1,96 @@
+import { BaseAdapter } from '../BaseAdapter';
+import { TextLine } from '../../model';
+export type TextDirection = 'ltr' | 'rtl';
+export type Limit = {
+    /**
+     * The start position in the text from which to consider lines.
+     * This is inclusive.
+     **/
+    start: number;
+    /**
+     * The end position in the text up to which to consider lines.
+     * This is inclusive.
+     **/
+    end: number;
+    /**
+     * If true, characters that are outside the range will be ignored.
+     * If false, lines that intersect with the range will be included.
+     * Defaults to false.
+     */
+    ignoreLines?: boolean;
+} | null;
+export declare const DefaultTextAdapterStyle: {
+    padding: number;
+    lineOffset: number;
+    lineHeight: number;
+};
+export type TextAdapterStyle = typeof DefaultTextAdapterStyle;
+export declare abstract class TextAdapter<PARAMS extends TextAdapterParams = TextAdapterParams> extends BaseAdapter<PARAMS> {
+    readonly TYPE = "TextAdapter";
+    textDirection: TextDirection;
+    flatText: boolean;
+    fullFlatText: string;
+    limit: Limit | null;
+    style: TextAdapterStyle;
+    textLength: number;
+    lines: TextLine[];
+    /**
+     * Parses the given text into an array of TextLine objects.
+     * The parser is also responsible for handling text limits.
+     * @param text
+     * @param startOffset
+     */
+    abstract _parse(text: string, startOffset: number): {
+        lines: TextLine[];
+        flatText: string;
+    };
+    parse(text: string, startOffset: number): TextLine[];
+    getLimit(lines?: TextLine[]): Pick<{
+        /**
+         * The start position in the text from which to consider lines.
+         * This is inclusive.
+         **/
+        start: number;
+        /**
+         * The end position in the text up to which to consider lines.
+         * This is inclusive.
+         **/
+        end: number;
+        /**
+         * If true, characters that are outside the range will be ignored.
+         * If false, lines that intersect with the range will be included.
+         * Defaults to false.
+         */
+        ignoreLines?: boolean;
+    }, "start" | "end"> | null;
+    setLines(lines: TextLine[]): void;
+    setLineHeight(height: number): void;
+    setParams(params: PARAMS): void;
+    getLine(lineUid: string): TextLine | undefined;
+    clear(): void;
+}
+type CONFIG = InstanceType<typeof TextAdapter>;
+export type TEXT_CONFIG_KEYS = keyof CONFIG;
+export type TEXT_CONFIG_VALUES<K extends TEXT_CONFIG_KEYS> = CONFIG[K];
+export type TextAdapterParams = {
+    /**
+     * The text direction for the adapter.
+     * Can be either 'ltr' (left-to-right) or 'rtl' (right-to-left).
+     * Defaults to 'ltr'.
+     */
+    textDirection?: TextDirection;
+    /**
+     * If true, the adapter will return flat text instead of HTML.
+     * This is useful for plain text processing or when HTML formatting is not needed.
+     * Defaults to false.
+     */
+    flatText?: boolean;
+    /**
+     * Defines the range of positions in the text that the adapter should consider.
+     * Each lines that intersects with this range will be included in the output.
+     */
+    limit?: Limit | null;
+    style?: Partial<Omit<TextAdapterStyle, 'lineHeight'>>;
+};
+export {};
+//# sourceMappingURL=TextAdapter.d.ts.map

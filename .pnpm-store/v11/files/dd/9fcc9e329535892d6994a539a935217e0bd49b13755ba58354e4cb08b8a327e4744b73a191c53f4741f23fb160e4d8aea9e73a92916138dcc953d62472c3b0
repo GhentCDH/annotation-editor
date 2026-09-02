@@ -1,0 +1,25 @@
+import { AnnotationId, TextAnnotation } from '../../../model';
+import { Position, StartEnd } from '../types';
+import { BaseAnnotationDi } from '../../../di/BaseAnnotationDi';
+import { AnnotationModule } from '../../../di/annotation.module';
+import { Draw } from '../Draw';
+export declare abstract class AbstractAnnotationEventEdit extends BaseAnnotationDi {
+    protected readonly annotation: TextAnnotation | null;
+    protected dummyAnnotation: TextAnnotation;
+    protected readonly originalStartEnd: StartEnd;
+    protected readonly draw: Draw<import('../../../model').BaseAnnotation>;
+    constructor(annotationModule: AnnotationModule, props?: Partial<{
+        annotation: TextAnnotation;
+    }>);
+    start(position: Position, target: 'start' | 'end', event: MouseEvent): void;
+    protected abstract onStart(position: Position, target: 'start' | 'end'): void;
+    move(position: Position, target: 'start' | 'end', event: MouseEvent): void;
+    protected abstract onDrag(position: Position, target: 'start' | 'end'): {
+        startEnd: StartEnd;
+        prevPosition?: StartEnd;
+    } | null;
+    end(event: MouseEvent): void;
+    private drawDummyAnnotation;
+    protected sendExternalEvent(event: 'annotation-edit--move' | 'annotation-edit--start' | 'annotation-edit--end', moveId?: AnnotationId): void;
+}
+//# sourceMappingURL=abstract-annotation-event.edit.d.ts.map

@@ -1,0 +1,98 @@
+import { W3CAgent, W3CAnnotation, W3CBody, W3CBodyChoice, W3CCustomBody, W3CExternalResource, W3CMotivation, W3CSelector, W3CSpecificResource, W3CState, W3CTarget, W3CTextualBody } from './annotation.schema';
+export declare const isW3CTextualBody: (b: W3CBody) => b is W3CTextualBody;
+export declare const isW3CSpecificResource: (v: W3CBody | W3CTarget) => v is W3CSpecificResource;
+export declare const isW3CExternalResource: (v: W3CBody | W3CTarget) => v is W3CExternalResource;
+export declare const isW3CBodyChoice: (b: W3CBody) => b is W3CBodyChoice;
+export declare const isW3CIriTarget: (t: W3CTarget) => t is string;
+export declare const isW3CIriBody: (b: W3CBody) => b is string;
+/** True when the body is a plain object that does not match any known body type */
+export declare const isW3CCustomBody: (b: W3CBody) => b is W3CCustomBody;
+export declare const isW3CTextQuoteSelector: (s: W3CSelector) => boolean;
+export declare const isW3CTextPositionSelector: (s: W3CSelector) => boolean;
+export declare const isW3CFragmentSelector: (s: W3CSelector) => boolean;
+export declare const isW3CCssSelector: (s: W3CSelector) => boolean;
+export declare const isW3CXPathSelector: (s: W3CSelector) => boolean;
+export declare const isW3CSvgSelector: (s: W3CSelector) => boolean;
+export declare const isW3CRangeSelector: (s: W3CSelector) => boolean;
+export declare const isW3CDataPositionSelector: (s: W3CSelector) => boolean;
+export declare const isW3CTimeState: (s: W3CState) => boolean;
+export declare const isW3CHttpRequestState: (s: W3CState) => boolean;
+/** Returns all bodies as a flat array (expands Choice.items too) */
+export declare const getBodies: (ann: W3CAnnotation) => W3CBody[];
+/** Returns all targets as a flat array */
+export declare const getTargets: (ann: W3CAnnotation) => W3CTarget[];
+/** Get all TextualBody items, optionally filtered by purpose motivation */
+export declare const getTextualBodies: (purpose?: string) => (ann: W3CAnnotation) => W3CTextualBody[];
+/** Get all SpecificResource bodies, optionally filtered by purpose */
+export declare const getSpecificResourceBodies: (purpose?: string) => (ann: W3CAnnotation) => W3CSpecificResource[];
+/** Get all ExternalResource bodies */
+export declare const getExternalResourceBodies: () => (ann: W3CAnnotation) => W3CExternalResource[];
+/** Get plain IRI bodies */
+export declare const getIriBodies: () => (ann: W3CAnnotation) => string[];
+/** Get custom (application-specific) bodies */
+export declare const getCustomBodies: () => (ann: W3CAnnotation) => W3CCustomBody[];
+/** Get all SpecificResource targets */
+export declare const getSpecificResourceTargets: () => (ann: W3CAnnotation) => W3CSpecificResource[];
+/** Get all ExternalResource targets */
+export declare const getExternalResourceTargets: () => (ann: W3CAnnotation) => W3CExternalResource[];
+/** Get plain IRI targets */
+export declare const getIriTargets: () => (ann: W3CAnnotation) => string[];
+type TargetType = 'SpecificResource' | 'ExternalResource' | 'Iri';
+type BodyType = 'TextualBody' | 'SpecificResource' | 'ExternalResource' | 'Choice' | 'Custom' | 'Iri';
+/** Curried generic target accessor by type string */
+export declare const getTarget: (type: TargetType) => (ann: W3CAnnotation) => W3CTarget[];
+/** Curried generic body accessor by type string */
+export declare const getBody: (type: BodyType) => (ann: W3CAnnotation) => W3CBody[];
+/** Get all selectors from all SpecificResource targets as a flat array */
+export declare const getSelectors: (ann: W3CAnnotation) => W3CSelector[];
+/** Curried — get selectors of a specific type from all targets */
+export declare const getSelector: (type: string) => (ann: W3CAnnotation) => W3CSelector[];
+/** Shorthand helpers for the most common selector types */
+export declare const getTextQuoteSelectors: (ann: W3CAnnotation) => W3CSelector[];
+export declare const getTextPositionSelectors: (ann: W3CAnnotation) => W3CSelector[];
+export declare const getFragmentSelectors: (ann: W3CAnnotation) => W3CSelector[];
+export declare const getSvgSelectors: (ann: W3CAnnotation) => W3CSelector[];
+export declare const getMotivations: (ann: W3CAnnotation) => string[];
+export declare const hasMotivation: (motivation: W3CMotivation) => (ann: W3CAnnotation) => boolean;
+export declare const isTagging: (ann: W3CAnnotation) => boolean;
+export declare const isCommenting: (ann: W3CAnnotation) => boolean;
+export declare const isHighlighting: (ann: W3CAnnotation) => boolean;
+export declare const isDescribing: (ann: W3CAnnotation) => boolean;
+export declare const isClassifying: (ann: W3CAnnotation) => boolean;
+export declare const isLinking: (ann: W3CAnnotation) => boolean;
+/** Get all states from all SpecificResource targets */
+export declare const getStates: (ann: W3CAnnotation) => W3CState[];
+export declare const getTimeStates: (ann: W3CAnnotation) => ({
+    type: "TimeState";
+    sourceDate?: string | (string | null)[] | null | undefined;
+    sourceDateStart?: string | null | undefined;
+    sourceDateEnd?: string | null | undefined;
+    cachedSource?: string | undefined;
+} | {
+    type: "HttpRequestState";
+    value: string;
+})[];
+export declare const getHttpRequestStates: (ann: W3CAnnotation) => ({
+    type: "TimeState";
+    sourceDate?: string | (string | null)[] | null | undefined;
+    sourceDateStart?: string | null | undefined;
+    sourceDateEnd?: string | null | undefined;
+    cachedSource?: string | undefined;
+} | {
+    type: "HttpRequestState";
+    value: string;
+})[];
+export declare const getCreators: (ann: W3CAnnotation) => W3CAgent[];
+export declare const getGenerators: (ann: W3CAnnotation) => W3CAgent[];
+export declare const createdBy: (agentId: string) => (ann: W3CAnnotation) => boolean;
+export declare const firstTarget: (ann: W3CAnnotation) => W3CTarget | undefined;
+export declare const firstBody: (ann: W3CAnnotation) => W3CBody | undefined;
+export declare const firstTextualBody: (ann: W3CAnnotation) => W3CTextualBody | undefined;
+export declare const firstSpecificResourceTarget: (ann: W3CAnnotation) => W3CSpecificResource | undefined;
+/** Returns the plain text value of the first TextualBody, if any */
+export declare const getBodyValue: (ann: W3CAnnotation) => string | undefined;
+/** Returns the source IRI of the first SpecificResource target, if any */
+export declare const getTargetSource: (ann: W3CAnnotation) => string | undefined;
+/** Returns the exact quote from the first TextQuoteSelector, if any */
+export declare const getExactQuote: (ann: W3CAnnotation) => string | undefined;
+export {};

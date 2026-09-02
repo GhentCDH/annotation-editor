@@ -1,0 +1,443 @@
+import { a as e } from "./vuedraggable.umd-BTBrmSo9.js";
+import { _ as t, g as n, m as r, v as i } from "./dist-D4sgvxmt.js";
+import { C as a, D as o, E as s, O as c, S as l, T as u, _ as d, a as f, b as p, c as m, d as h, f as g, g as _, h as v, i as y, l as b, m as ee, o as x, p as S, r as C, s as w, t as T, u as E, v as D, w as O, x as k } from "./renderers-D20PBZBF.js";
+import { t as A } from "./LanguageSelect-PC5Di4BL.js";
+import { Btn as j, IconEnum as te, NotificationService as M, Table as N } from "@ghentcdh/ui";
+import { rankWith as P } from "@jsonforms/core";
+import { Fragment as F, computed as I, createBlock as L, createCommentVNode as R, createElementBlock as z, createElementVNode as B, createTextVNode as V, createVNode as H, defineComponent as ne, normalizeClass as U, openBlock as W, ref as G, renderList as K, toDisplayString as q, unref as J, withCtx as Y } from "vue";
+import { ZodObject as re } from "zod";
+//#region src/resource/resource-modal.ts
+var X = (e) => n({ uri: e.route }, c(), { notification: {
+	show: !0,
+	entityType: e.title,
+	notification: M
+} }), Z = async (e, t) => {
+	let n = await D().getFormDefById(e);
+	if (!n) throw Error(`Form "${e}" not found`);
+	let r = n.schemas.form;
+	i.openModal({
+		initialData: t.data ?? {},
+		schema: r.data,
+		uiSchema: r.ui,
+		modalSize: n.modalSize ?? "sm",
+		modalTitle: `Create ${n.title}`,
+		onClose: (e) => {
+			let i = X(n);
+			e && e.valid && i.create(e.data).then((e) => {
+				let n = r.zodSchema, i = n instanceof re ? n.strip().safeParse(e) : n.safeParse(e);
+				t.onSuccess({
+					id: e.id,
+					...i.data ?? {}
+				});
+			}).catch(() => {
+				t.onError?.(e);
+			});
+		}
+	});
+}, ie = (e) => {
+	switch (e.event) {
+		case "create":
+			Z(e.type, e);
+			break;
+	}
+}, ae = {}, oe = {
+	key: 0,
+	class: "alert alert-warning m-4 text-sm"
+}, se = {
+	key: 1,
+	class: "flex flex-col gap-6 p-4"
+}, ce = {
+	key: 0,
+	class: "alert alert-warning text-sm"
+}, le = { class: "flex items-center justify-between gap-4" }, ue = {
+	key: 1,
+	class: "alert alert-info text-sm"
+}, de = {
+	key: 2,
+	class: "alert alert-error text-sm"
+}, fe = {
+	key: 0,
+	class: "alert alert-error mb-2 text-sm"
+}, pe = {
+	key: 1,
+	class: "alert alert-warning mb-2 text-sm"
+}, me = { class: "flex gap-2 mt-2" }, he = {
+	key: 3,
+	class: "text-sm mt-2 flex flex-col gap-1"
+}, ge = {
+	key: 0,
+	class: "opacity-70"
+}, _e = {
+	key: 0,
+	class: "alert alert-error mb-2 text-sm"
+}, ve = {
+	key: 1,
+	class: "text-sm opacity-60"
+}, ye = {
+	key: 0,
+	class: "text-sm opacity-60"
+}, be = {
+	key: 1,
+	class: "flex flex-col gap-1"
+}, xe = { class: "opacity-50" }, Se = {
+	key: 0,
+	class: "badge badge-warning badge-sm ml-1",
+	title: "This model isn't on the running backend's Prisma client yet — generate works, but requests to it will fail until the backend restarts."
+}, Ce = {
+	key: 0,
+	class: "alert alert-error mb-2 text-sm"
+}, we = {
+	key: 0,
+	class: "text-sm opacity-60"
+}, Te = { class: "table w-full mb-2" }, Ee = ["checked", "onChange"], De = {
+	key: 0,
+	class: "badge badge-sm ml-1"
+}, Oe = { class: "text-sm" }, ke = { class: "flex gap-2" }, Ae = /*@__PURE__*/ ne({
+	__name: "DevResourcesPanel",
+	props: ae,
+	setup(e) {
+		let t = D(), n = (e) => {
+			let t = e.field ? `${e.kind}: ${e.field}` : e.kind, n = e.context ? ` (${e.context})` : "";
+			return `${t} → ${e.recommended}${n}`;
+		}, r = (e) => e?.response?.data?.message ?? e?.message ?? "Something went wrong.", i = G(!1), a = G(null), o = G(null), s = G(null), l = G(!1), u = async (e = !1) => {
+			i.value = !0, a.value = null, o.value = null, e && (s.value = null);
+			try {
+				let t = await c().post("/_app/resources/pull", { confirm: e });
+				if (t.data.requiresConfirmation) {
+					s.value = t.data.dirtyFile;
+					return;
+				}
+				o.value = t.data, t.data.restartRequired && (l.value = !0), await x();
+			} catch (e) {
+				a.value = r(e);
+			} finally {
+				i.value = !1;
+			}
+		}, d = () => {
+			s.value = null;
+		}, f = G("idle"), p = (e) => new Promise((t) => setTimeout(t, e)), m = async () => {
+			f.value = "waiting";
+			let e = Date.now() + 3e4;
+			for (; Date.now() < e;) {
+				await p(1e3);
+				try {
+					await c().get("/_app/resources/models"), f.value = "idle", l.value = !1, await Promise.all([x(), S()]);
+					return;
+				} catch {}
+			}
+			f.value = "timedOut";
+		}, h = async () => {
+			f.value = "requesting";
+			try {
+				await c().post("/_app/resources/restart", {});
+			} catch {}
+			await m();
+		}, g = G([]), _ = G(!1), v = G(null), y = G(null), b = I(() => g.value.filter((e) => !e.hasResource)), ee = I(() => g.value.some((e) => !e.availableOnClient)), x = async () => {
+			_.value = !0, v.value = null;
+			try {
+				g.value = (await c().get("/_app/resources/models")).data.models;
+			} catch (e) {
+				v.value = r(e);
+			} finally {
+				_.value = !1;
+			}
+		}, S = async () => {
+			t.invalidateAllFormDefs(), await t.refreshLayout();
+		}, C = async (e) => {
+			y.value = e.clientAccessor, v.value = null;
+			try {
+				await c().post("/_app/resources/sync", { model: e.clientAccessor }), await Promise.all([x(), S()]);
+			} catch (e) {
+				v.value = r(e);
+			} finally {
+				y.value = null;
+			}
+		}, w = G(!1), T = G(!1), E = G(null), O = G(null), k = G(/* @__PURE__ */ new Set()), A = async () => {
+			w.value = !0, E.value = null, O.value = null;
+			try {
+				let e = await c().post("/_app/resources/plan", {});
+				O.value = e.data.resources, k.value = new Set(e.data.resources.map((e) => e.resource));
+			} catch (e) {
+				E.value = r(e);
+			} finally {
+				w.value = !1;
+			}
+		}, M = (e) => {
+			let t = new Set(k.value);
+			t.has(e) ? t.delete(e) : t.add(e), k.value = t;
+		}, N = async () => {
+			if (k.value.size) {
+				T.value = !0, E.value = null;
+				try {
+					await c().post("/_app/resources/apply", { resources: [...k.value] }), O.value = null, await Promise.all([x(), S()]);
+				} catch (e) {
+					E.value = r(e);
+				} finally {
+					T.value = !1;
+				}
+			}
+		}, P = () => {
+			O.value = null;
+		};
+		return t.isDev.value && x(), (e, r) => J(t).isDev.value ? (W(), z("div", se, [
+			(l.value || ee.value) && f.value === "idle" ? (W(), z("div", ce, [B("div", le, [r[4] ||= B("p", { class: "font-semibold" }, " Restart the backend now. Its Prisma client was built at process start and won't see newly pulled/changed models until it restarts — using one before then throws \"Model ... not found on the provided PrismaClient\". ", -1), H(J(j), { onClick: h }, {
+				default: Y(() => [...r[3] ||= [V("Restart backend now", -1)]]),
+				_: 1
+			})]), r[5] ||= B("p", { class: "text-xs opacity-70 mt-1" }, [
+				V(" Only works if this process is supervised by something that restarts it on exit (nodemon, "),
+				B("code", null, "nest start --watch"),
+				V(", pm2, a Docker restart policy, ...) — otherwise it just stops the backend. ")
+			], -1)])) : R("", !0),
+			f.value === "requesting" || f.value === "waiting" ? (W(), z("div", ue, [...r[6] ||= [V(" Restarting… waiting for the backend to come back ", -1), B("span", { class: "loading loading-dots loading-xs ml-1" }, null, -1)]])) : R("", !0),
+			f.value === "timedOut" ? (W(), z("div", de, [r[8] ||= B("p", null, " The backend hasn't come back after 30s. Either it's still starting, or nothing is configured to restart it automatically — check your terminal, or restart it by hand. ", -1), H(J(j), {
+				class: "mt-2",
+				onClick: m
+			}, {
+				default: Y(() => [...r[7] ||= [V("Keep waiting", -1)]]),
+				_: 1
+			})])) : R("", !0),
+			B("section", null, [
+				r[15] ||= B("h3", { class: "text-lg font-bold mb-2" }, "Pull schema from database", -1),
+				r[16] ||= B("p", { class: "text-sm opacity-70 mb-2" }, [
+					V(" Runs "),
+					B("code", null, "prisma db pull"),
+					V(" + case-format + "),
+					B("code", null, "prisma generate"),
+					V(" against the live database, refreshing "),
+					B("code", null, "schema.prisma"),
+					V(" and the generated client/Zod types. Needs real DB credentials on this backend and overwrites "),
+					B("code", null, "schema.prisma"),
+					V(" (backed up to "),
+					B("code", null, ".bak"),
+					V(" first). Resource files aren't touched here — use the sections below for those, once the schema is up to date. ")
+				], -1),
+				a.value ? (W(), z("div", fe, q(a.value), 1)) : R("", !0),
+				s.value ? (W(), z("div", pe, [B("p", null, [
+					B("code", null, q(s.value), 1),
+					r[9] ||= V(" has uncommitted changes — ", -1),
+					r[10] ||= B("code", null, "db pull", -1),
+					r[11] ||= V(" will overwrite them (a ", -1),
+					r[12] ||= B("code", null, ".bak", -1),
+					r[13] ||= V(" copy is kept). Continue? ", -1)
+				]), B("div", me, [H(J(j), {
+					disabled: i.value,
+					onClick: r[0] ||= (e) => u(!0)
+				}, {
+					default: Y(() => [V(q(i.value ? "Pulling…" : "Overwrite and pull"), 1)]),
+					_: 1
+				}, 8, ["disabled"]), H(J(j), {
+					color: "secondary",
+					outline: !0,
+					disabled: i.value,
+					onClick: d
+				}, {
+					default: Y(() => [...r[14] ||= [V(" Cancel ", -1)]]),
+					_: 1
+				}, 8, ["disabled"])])])) : (W(), L(J(j), {
+					key: 2,
+					disabled: i.value,
+					onClick: r[1] ||= (e) => u()
+				}, {
+					default: Y(() => [V(q(i.value ? "Pulling…" : "Pull schema"), 1)]),
+					_: 1
+				}, 8, ["disabled"])),
+				o.value ? (W(), z("div", he, [
+					B("p", { class: U(o.value.dbPull.ok ? "text-success" : "text-error") }, " db pull: " + q(o.value.dbPull.ok ? "ok" : "failed"), 3),
+					B("p", { class: U(o.value.caseFormat.ok ? "text-success" : "text-warning") }, " case-format: " + q(o.value.caseFormat.ok ? "ok" : "failed"), 3),
+					B("p", { class: U(o.value.generate.ok ? "text-success" : "text-warning") }, " generate: " + q(o.value.generate.ok ? "ok" : "failed"), 3),
+					o.value.zodImportsFixed ? (W(), z("p", ge, " Patched " + q(o.value.zodImportsFixed) + " file(s) with a missing zod import. ", 1)) : R("", !0)
+				])) : R("", !0)
+			]),
+			B("section", null, [
+				r[17] ||= B("h3", { class: "text-lg font-bold mb-2" }, "Generate from database", -1),
+				r[18] ||= B("p", { class: "text-sm opacity-70 mb-2" }, " DB tables that don't have a resource.json yet. Generating uses recommended defaults — review the result in the schema editor afterwards. ", -1),
+				v.value ? (W(), z("div", _e, q(v.value), 1)) : R("", !0),
+				_.value ? (W(), z("div", ve, "Loading…")) : (W(), z(F, { key: 2 }, [b.value.length ? (W(), z("ul", be, [(W(!0), z(F, null, K(b.value, (e) => (W(), z("li", {
+					key: e.prismaName,
+					class: "flex items-center justify-between gap-2"
+				}, [B("span", null, [
+					V(q(e.prismaName) + " ", 1),
+					B("span", xe, "(" + q(e.clientAccessor) + ")", 1),
+					e.availableOnClient ? R("", !0) : (W(), z("span", Se, " needs restart "))
+				]), H(J(j), {
+					icon: J(te).Plus,
+					disabled: y.value === e.clientAccessor,
+					onClick: (t) => C(e)
+				}, {
+					default: Y(() => [V(q(y.value === e.clientAccessor ? "Generating…" : "Generate"), 1)]),
+					_: 2
+				}, 1032, [
+					"icon",
+					"disabled",
+					"onClick"
+				])]))), 128))])) : (W(), z("p", ye, " Every DB table already has a resource. "))], 64))
+			]),
+			B("section", null, [
+				r[21] ||= B("h3", { class: "text-lg font-bold mb-2" }, "Reload from database", -1),
+				r[22] ||= B("p", { class: "text-sm opacity-70 mb-2" }, [
+					V(" Introspects the current Prisma schema and diffs it against every existing resource — the same check "),
+					B("code", null, "crouton update resources"),
+					V(" runs from the CLI, using recommended defaults. Nothing is written until you review and confirm. ")
+				], -1),
+				E.value ? (W(), z("div", Ce, q(E.value), 1)) : R("", !0),
+				O.value ? (W(), z(F, { key: 2 }, [O.value.length ? (W(), z(F, { key: 1 }, [B("table", Te, [r[19] ||= B("thead", null, [B("tr", null, [
+					B("th"),
+					B("th", null, "Resource"),
+					B("th", null, "Changes")
+				])], -1), B("tbody", null, [(W(!0), z(F, null, K(O.value, (e) => (W(), z("tr", { key: e.resource }, [
+					B("td", null, [B("input", {
+						type: "checkbox",
+						class: "checkbox checkbox-sm",
+						checked: k.value.has(e.resource),
+						onChange: (t) => M(e.resource)
+					}, null, 40, Ee)]),
+					B("td", null, [V(q(e.resource) + " ", 1), e.isNew ? (W(), z("span", De, "new")) : R("", !0)]),
+					B("td", Oe, [
+						(W(!0), z(F, null, K(e.files, (e) => (W(), z("div", { key: e.path }, q(e.action) + " " + q(e.path), 1))), 128)),
+						(W(!0), z(F, null, K(e.decisions, (e) => (W(), z("div", {
+							key: e.id,
+							class: "opacity-70"
+						}, q(n(e)), 1))), 128)),
+						(W(!0), z(F, null, K(e.notes, (e, t) => (W(), z("div", {
+							key: t,
+							class: "opacity-70"
+						}, q(e), 1))), 128))
+					])
+				]))), 128))])]), B("div", ke, [H(J(j), {
+					disabled: T.value || !k.value.size,
+					onClick: N
+				}, {
+					default: Y(() => [V(q(T.value ? "Applying…" : `Apply ${k.value.size} selected`), 1)]),
+					_: 1
+				}, 8, ["disabled"]), H(J(j), {
+					color: "secondary",
+					outline: !0,
+					disabled: T.value,
+					onClick: P
+				}, {
+					default: Y(() => [...r[20] ||= [V(" Cancel ", -1)]]),
+					_: 1
+				}, 8, ["disabled"])])], 64)) : (W(), z("p", we, " No changes — every resource already matches the current schema. "))], 64)) : (W(), L(J(j), {
+					key: 1,
+					disabled: w.value,
+					onClick: A
+				}, {
+					default: Y(() => [V(q(w.value ? "Checking…" : "Check for changes"), 1)]),
+					_: 1
+				}, 8, ["disabled"]))
+			])
+		])) : (W(), z("div", oe, [...r[2] ||= [
+			V(" The database sync tools aren't enabled on the connected backend. Set ", -1),
+			B("code", null, "CROUTON_SCHEMA_EDITOR=true", -1),
+			V(" in its ", -1),
+			B("code", null, ".env", -1),
+			V(" file and restart it. ", -1)
+		]]));
+	}
+}), je = /* @__PURE__ */ e({ default: () => Q }), Q = Ae, Me = class {
+	onRequest;
+	requestData = G();
+	loading = G(!0);
+	abortController = null;
+	constructor(e, t) {
+		this.onRequest = t, this.requestData.value = g.parse({ ...e }), this.reload();
+	}
+	reload() {
+		return this.loadData();
+	}
+	pageData = G({
+		count: 0,
+		pageSize: 1,
+		page: 1,
+		totalPages: 1
+	});
+	sort = G({
+		sortColumn: "",
+		sortDirection: ""
+	});
+	crouton = D();
+	async loadData() {
+		this.abortController?.abort(), this.abortController = new AbortController();
+		let { signal: e } = this.abortController;
+		this.loading.value = !0, this.requestData.value.page < 1 && (this.requestData.value.page = 1);
+		try {
+			let t = await this.loadDataRequest(e);
+			if (e.aborted) return null;
+			let n = t?.request ?? {};
+			return this.pageData.value = {
+				count: n.count ?? 0,
+				pageSize: n.pageSize ?? 1,
+				page: n.page ?? 1,
+				totalPages: n.totalPages ?? 1
+			}, this.sort.value = {
+				sortColumn: n.sort,
+				sortDirection: n.sortDir
+			}, this.afterLoadData(t), t;
+		} catch (t) {
+			if (e.aborted) return null;
+			throw t;
+		} finally {
+			e.aborted || (this.loading.value = !1);
+		}
+	}
+	updateRequest = (e) => {
+		this.requestData.value = {
+			...this.requestData.value,
+			...e
+		}, this.onRequest(this.requestData.value), this.reload();
+	};
+	onSort = (e) => {
+		let t = this.requestData.value.sort === e && this.requestData.value.sortDir === "asc" ? "desc" : "asc";
+		this.updateRequest({
+			sort: e,
+			sortDir: t
+		});
+	};
+	updatePage = (e) => {
+		this.updateRequest({ page: e });
+	};
+	updatePageSize = (e) => {
+		this.updateRequest({
+			pageSize: e,
+			page: 1
+		});
+	};
+	getFormDef(e) {
+		return this.crouton.getFormDefById(e);
+	}
+	async apiCall(e, t, n, r) {
+		let i = await this.getFormDef(e);
+		if (!i) throw Error("no form def");
+		let a = {
+			...r?.data ?? {},
+			...r?.query ?? {}
+		};
+		return b(i, t, r?.defaultUriParams ?? {}, a, n);
+	}
+}, $ = null, Ne = async (e = {}) => {
+	if ($) return $;
+	try {
+		let t = await fetch("/config.json");
+		if (!t.ok) throw Error(`Failed to load config: ${t.status}`);
+		return $ = await t.json(), $.authToken = e.authToken || "GHENTCDH_DEFAULT_TOKEN", $;
+	} catch (e) {
+		throw console.error("Failed to load runtime config:", e), Error(e, { cause: e });
+	}
+}, Pe = () => {
+	if (!$) throw Error("Runtime config not loaded. Call loadRuntimeConfig() first.");
+	return $;
+}, Fe = [{
+	path: "crouton-status",
+	component: () => import("./StatusView-CdVT_KiS.js")
+}], Ie = {
+	uischema: {
+		type: Object,
+		required: !0
+	},
+	schema: {
+		type: Object,
+		required: !0
+	}
+};
+//#endregion
+export { _ as AppConfig, a as CROUTON_DEV_RESOURCES, O as CROUTON_FORM, u as CROUTON_PREFIX, h as CroutonForm, d as CroutonPlugin, s as CroutonRouter, Fe as CroutonStatusRoutes, Q as DevResourcesPanel, A as LanguageSelect, Me as PageService, y as RelationButton, C as RelationInline, Ie as RelationProps, N as Table, r as TableComponent, S as computedAsync, b as croutonApiCall, ee as customComponentIs, v as findCustomComponent, Pe as getRuntimeConfig, ie as handleFormEvents, T as isCustomFormat, p as isSidebarGroup, k as isSidebarLeaf, Ne as loadRuntimeConfig, l as menu, Z as openFormModal, P as rankWith, E as resourceApi, je as t, t as useControlBinding, D as useCrouton, X as useFormDefRepository, o as useLanguage, f as useRelationBinding, x as useResources, w as useResourcesById, m as useResourcesByUri };

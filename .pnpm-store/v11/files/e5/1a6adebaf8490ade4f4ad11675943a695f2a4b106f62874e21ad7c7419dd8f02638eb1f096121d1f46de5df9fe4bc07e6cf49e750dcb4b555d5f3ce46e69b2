@@ -1,0 +1,27 @@
+import { default as memoizee } from 'memoizee';
+export declare const getScale: ((width: number, offsetWidth: number) => number) & memoizee.Memoized<(width: number, offsetWidth: number) => number>;
+export type Dimensions = {
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+};
+export type DimensionsWithScale = {
+    original: Dimensions;
+    scaled: Dimensions;
+    scale: number;
+};
+export declare const getUnscaledRect: (element: HTMLElement) => DimensionsWithScale;
+export declare const getDimensions: (element: HTMLElement) => {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+};
+export declare const getScaledDimensions: (parentDimensions: DimensionsWithScale, element: Pick<DOMRect, "x" | "y" | "width" | "height">) => {
+    x: number;
+    y: number;
+    height: number;
+    width: number;
+};
+//# sourceMappingURL=unscaled.d.ts.map

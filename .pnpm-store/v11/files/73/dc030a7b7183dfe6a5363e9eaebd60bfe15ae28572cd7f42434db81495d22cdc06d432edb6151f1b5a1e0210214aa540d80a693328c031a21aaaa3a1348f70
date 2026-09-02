@@ -1,0 +1,27 @@
+import { PropType } from 'vue';
+import { ButtonType } from './const';
+import { Color } from '../const/colors';
+import { Size } from '../const/size';
+import { IconProp } from '../icons/icon-list';
+export declare const BtnBadgeProperties: {
+    icon: {
+        type: PropType<IconProp>;
+    };
+    type: {
+        type: PropType<ButtonType>;
+        default: ButtonType;
+    };
+    color: {
+        type: PropType<Color>;
+        default: Color;
+    };
+    disabled: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    size: {
+        type: PropType<Size>;
+        default: Size;
+    };
+};
+export declare const BtnBadgeEmits: string[];

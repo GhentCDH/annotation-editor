@@ -1,0 +1,20 @@
+import { TextAnnotation } from '../../model';
+import { AnnotationRender } from '../../adapter/annotation/renderer/annotation-render';
+export declare class AnnotationWeight {
+    private readonly annotations;
+    private readonly annotationRenders;
+    private readonly annotationOverlap;
+    private readonly renderWeights;
+    private readonly renderOrder;
+    private totalMaxWeight;
+    static calculate(annotations: TextAnnotation[], annotationRenders: AnnotationRender<any>[]): AnnotationWeight;
+    private constructor();
+    private assignWeights;
+    private calculateBasedOnRenderOrder;
+    private calculateAnnotationArray;
+    private setMaxWeightForLine;
+    private setTotalMaxWeight;
+    private resetLineMaxWeight;
+    get maxWeight(): number;
+}
+//# sourceMappingURL=annotation.weight.d.ts.map

@@ -1,0 +1,25 @@
+declare const __VLS_export: import('vue').DefineComponent<import('vue').ExtractPropTypes<{
+    column: {
+        type: import('vue').PropType<import('..').ColumnDef>;
+        required: true;
+    };
+    sortColumn: {
+        type: StringConstructor;
+    };
+    sortDirection: {
+        type: import('vue').PropType<"asc" | "desc">;
+    };
+}>, {}, {}, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, {}, string, import('vue').PublicProps, Readonly<import('vue').ExtractPropTypes<{
+    column: {
+        type: import('vue').PropType<import('..').ColumnDef>;
+        required: true;
+    };
+    sortColumn: {
+        type: StringConstructor;
+    };
+    sortDirection: {
+        type: import('vue').PropType<"asc" | "desc">;
+    };
+}>> & Readonly<{}>, {}, {}, {}, {}, string, import('vue').ComponentProvideOptions, true, {}, any>;
+declare const _default: typeof __VLS_export;
+export default _default;

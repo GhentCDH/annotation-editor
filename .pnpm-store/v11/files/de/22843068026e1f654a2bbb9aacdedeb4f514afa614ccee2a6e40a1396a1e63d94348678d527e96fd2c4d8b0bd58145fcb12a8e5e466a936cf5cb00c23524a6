@@ -1,0 +1,19 @@
+import { AnnotationModule } from '../../di/annotation.module';
+export declare class MainContainer {
+    private readonly annotationModule;
+    private mainElement;
+    private element;
+    private textElement;
+    private resizeObserver;
+    private prevSvgNode;
+    private readonly internalEventListener;
+    constructor(annotationModule: AnnotationModule);
+    setMainElement(mainElement: HTMLElement): void;
+    clear(): void;
+    setTextElement(textElement: HTMLDivElement): void;
+    setSvg(element: SVGElement | null): void;
+    private startObserving;
+    private stopObserving;
+    destroy(): void;
+}
+//# sourceMappingURL=maincontainer.d.ts.map

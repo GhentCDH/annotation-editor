@@ -1,0 +1,88 @@
+import { z } from 'zod/v4';
+export declare const annotationDrawPath: z.ZodObject<{
+    border: z.ZodOptional<z.ZodString>;
+    fill: z.ZodOptional<z.ZodString>;
+}, z.core.$strip>;
+export declare const dimensionsSchema: z.ZodObject<{
+    height: z.ZodNumber;
+    x: z.ZodNumber;
+    y: z.ZodNumber;
+}, z.core.$strip>;
+export declare const annotationDimensionSchema: z.ZodObject<{
+    x: z.ZodNumber;
+    y1: z.ZodNumber;
+    y2: z.ZodNumber;
+}, z.core.$strip>;
+export declare const annotationDrawSchema: z.ZodObject<{
+    uuid: z.ZodString;
+    annotationUuid: z.ZodUnion<readonly [z.ZodString, z.ZodNumber]>;
+    lineNumber: z.ZodNumber;
+    path: z.ZodObject<{
+        border: z.ZodOptional<z.ZodString>;
+        fill: z.ZodOptional<z.ZodString>;
+    }, z.core.$strip>;
+    draggable: z.ZodObject<{
+        start: z.ZodOptional<z.ZodObject<{
+            height: z.ZodNumber;
+            x: z.ZodNumber;
+            y: z.ZodNumber;
+        }, z.core.$strip>>;
+        end: z.ZodOptional<z.ZodObject<{
+            height: z.ZodNumber;
+            x: z.ZodNumber;
+            y: z.ZodNumber;
+        }, z.core.$strip>>;
+    }, z.core.$strip>;
+    height: z.ZodObject<{
+        height: z.ZodNumber;
+        x: z.ZodNumber;
+        y: z.ZodNumber;
+    }, z.core.$strip>;
+    weight: z.ZodNumber;
+}, z.core.$strip>;
+export declare const annotationDrawMetadataSchema: z.ZodObject<{
+    draws: z.ZodDefault<z.ZodArray<z.ZodObject<{
+        uuid: z.ZodString;
+        annotationUuid: z.ZodUnion<readonly [z.ZodString, z.ZodNumber]>;
+        lineNumber: z.ZodNumber;
+        path: z.ZodObject<{
+            border: z.ZodOptional<z.ZodString>;
+            fill: z.ZodOptional<z.ZodString>;
+        }, z.core.$strip>;
+        draggable: z.ZodObject<{
+            start: z.ZodOptional<z.ZodObject<{
+                height: z.ZodNumber;
+                x: z.ZodNumber;
+                y: z.ZodNumber;
+            }, z.core.$strip>>;
+            end: z.ZodOptional<z.ZodObject<{
+                height: z.ZodNumber;
+                x: z.ZodNumber;
+                y: z.ZodNumber;
+            }, z.core.$strip>>;
+        }, z.core.$strip>;
+        height: z.ZodObject<{
+            height: z.ZodNumber;
+            x: z.ZodNumber;
+            y: z.ZodNumber;
+        }, z.core.$strip>;
+        weight: z.ZodNumber;
+    }, z.core.$strip>>>;
+    dimensions: z.ZodOptional<z.ZodObject<{
+        x: z.ZodNumber;
+        y1: z.ZodNumber;
+        y2: z.ZodNumber;
+    }, z.core.$strip>>;
+}, z.core.$strip>;
+export declare const tagDrawMetadataSchema: z.ZodObject<{
+    label: z.ZodString;
+    padding: z.ZodNumber;
+    fontSize: z.ZodNumber;
+}, z.core.$strip>;
+export type TagDrawMetadata = z.infer<typeof tagDrawMetadataSchema>;
+export type AnnotationDraw = z.infer<typeof annotationDrawSchema>;
+export type AnnotationDrawPath = z.infer<typeof annotationDrawPath>;
+export type AnnotationDrawMetadata = z.infer<typeof annotationDrawMetadataSchema>;
+export type AnnotationDimension = z.infer<typeof annotationDimensionSchema>;
+export type Dimensions = z.infer<typeof dimensionsSchema>;
+//# sourceMappingURL=draw.model.d.ts.map

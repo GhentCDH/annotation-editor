@@ -1,0 +1,241 @@
+declare var __VLS_8: {}, __VLS_10: {}, __VLS_24: {};
+type __VLS_Slots = {} & {
+    title?: (props: typeof __VLS_8) => any;
+} & {
+    'content-before'?: (props: typeof __VLS_10) => any;
+} & {
+    'content-after'?: (props: typeof __VLS_24) => any;
+};
+declare const __VLS_base: import('vue').DefineComponent<import('vue').ExtractPropTypes<{
+    title: {
+        type: StringConstructor;
+        required: false;
+    };
+    saveLabel: {
+        type: StringConstructor;
+        default: string;
+    };
+    cancelLabel: {
+        type: StringConstructor;
+        default: string;
+    };
+    layout: {
+        type: StringConstructor;
+        default: string;
+    };
+    onEvents: {
+        type: import('vue').PropType<(payload: import('@ghentcdh/crouton-forms-vue').FormEventPayload) => void>;
+        required: boolean;
+    };
+    data: {
+        type: import('vue').PropType<any>;
+        required: true;
+    };
+    errorMode: {
+        type: import('vue').PropType<import('@ghentcdh/crouton-forms-vue').ErrorMode>;
+        default: "onBlur";
+        required: boolean;
+    };
+    http: {
+        type: import('vue').PropType<import('@ghentcdh/crouton-forms-vue').HttpClient>;
+        default: null;
+        required: boolean;
+    };
+    renderers: {
+        type: import('vue').PropType<any[]>;
+        default: null;
+        required: boolean;
+    };
+    autoSave: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    onAutoSave: {
+        type: import('vue').PropType<(data: any) => Promise<any>>;
+        default: null;
+    };
+    onRefreshData: {
+        type: import('vue').PropType<() => Promise<any>>;
+        default: null;
+    };
+    validateOnMount: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    showButtons: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    readonly: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    formMaxWidth: {
+        type: StringConstructor;
+        default: string;
+    };
+    views: {
+        type: import('vue').PropType<import('@ghentcdh/crouton-core').ViewDef>;
+        required: boolean;
+    };
+    formatBeforeSave: {
+        type: import('vue').PropType<(data: any) => Promise<any>>;
+        required: boolean;
+        default: null;
+    };
+    resourceApi: {
+        type: import('vue').PropType<import('../resource').ResourceApiInstance>;
+        required: boolean;
+    };
+    saveId: {
+        type: StringConstructor;
+        required: boolean;
+        default: null;
+    };
+    showErrors: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    modelValue: {
+        type: import('vue').PropType<any>;
+    };
+}>, {}, {}, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, {
+    errors: (errors: unknown) => any;
+    closeModal: (result: import('./CroutonForm.properties').CroutonFormData<any> | null) => any;
+    events: (payload: import('@ghentcdh/crouton-forms-vue').FormEventPayload) => any;
+    valid: (isValid: boolean) => any;
+    "update:modelValue": (value: any) => any;
+    cancel: (value: null) => any;
+    save: (data: unknown) => any;
+    onSaveSuccess: (response: unknown) => any;
+    onSaveError: (error: unknown) => any;
+}, string, import('vue').PublicProps, Readonly<import('vue').ExtractPropTypes<{
+    title: {
+        type: StringConstructor;
+        required: false;
+    };
+    saveLabel: {
+        type: StringConstructor;
+        default: string;
+    };
+    cancelLabel: {
+        type: StringConstructor;
+        default: string;
+    };
+    layout: {
+        type: StringConstructor;
+        default: string;
+    };
+    onEvents: {
+        type: import('vue').PropType<(payload: import('@ghentcdh/crouton-forms-vue').FormEventPayload) => void>;
+        required: boolean;
+    };
+    data: {
+        type: import('vue').PropType<any>;
+        required: true;
+    };
+    errorMode: {
+        type: import('vue').PropType<import('@ghentcdh/crouton-forms-vue').ErrorMode>;
+        default: "onBlur";
+        required: boolean;
+    };
+    http: {
+        type: import('vue').PropType<import('@ghentcdh/crouton-forms-vue').HttpClient>;
+        default: null;
+        required: boolean;
+    };
+    renderers: {
+        type: import('vue').PropType<any[]>;
+        default: null;
+        required: boolean;
+    };
+    autoSave: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    onAutoSave: {
+        type: import('vue').PropType<(data: any) => Promise<any>>;
+        default: null;
+    };
+    onRefreshData: {
+        type: import('vue').PropType<() => Promise<any>>;
+        default: null;
+    };
+    validateOnMount: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    showButtons: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    readonly: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    formMaxWidth: {
+        type: StringConstructor;
+        default: string;
+    };
+    views: {
+        type: import('vue').PropType<import('@ghentcdh/crouton-core').ViewDef>;
+        required: boolean;
+    };
+    formatBeforeSave: {
+        type: import('vue').PropType<(data: any) => Promise<any>>;
+        required: boolean;
+        default: null;
+    };
+    resourceApi: {
+        type: import('vue').PropType<import('../resource').ResourceApiInstance>;
+        required: boolean;
+    };
+    saveId: {
+        type: StringConstructor;
+        required: boolean;
+        default: null;
+    };
+    showErrors: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    modelValue: {
+        type: import('vue').PropType<any>;
+    };
+}>> & Readonly<{
+    onErrors?: ((errors: unknown) => any) | undefined;
+    onCloseModal?: ((result: import('./CroutonForm.properties').CroutonFormData<any> | null) => any) | undefined;
+    onEvents?: ((payload: import('@ghentcdh/crouton-forms-vue').FormEventPayload) => any) | undefined;
+    onValid?: ((isValid: boolean) => any) | undefined;
+    "onUpdate:modelValue"?: ((value: any) => any) | undefined;
+    onCancel?: ((value: null) => any) | undefined;
+    onSave?: ((data: unknown) => any) | undefined;
+    onOnSaveSuccess?: ((response: unknown) => any) | undefined;
+    onOnSaveError?: ((error: unknown) => any) | undefined;
+}>, {
+    readonly: boolean;
+    layout: string;
+    autoSave: boolean;
+    errorMode: import('@ghentcdh/crouton-forms-vue').ErrorMode;
+    saveLabel: string;
+    cancelLabel: string;
+    http: import('@ghentcdh/crouton-forms-vue').HttpClient;
+    renderers: any[];
+    onAutoSave: (data: any) => Promise<any>;
+    onRefreshData: () => Promise<any>;
+    validateOnMount: boolean;
+    showButtons: boolean;
+    formMaxWidth: string;
+    formatBeforeSave: (data: any) => Promise<any>;
+    saveId: string;
+    showErrors: boolean;
+}, {}, {}, {}, string, import('vue').ComponentProvideOptions, true, {}, any>;
+declare const __VLS_export: __VLS_WithSlots<typeof __VLS_base, __VLS_Slots>;
+declare const _default: typeof __VLS_export;
+export default _default;
+type __VLS_WithSlots<T, S> = T & {
+    new (): {
+        $slots: S;
+    };
+};
+//# sourceMappingURL=CroutonForm.vue.d.ts.map

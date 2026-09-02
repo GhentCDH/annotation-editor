@@ -1,0 +1,49 @@
+import { PropType } from 'vue';
+import { ButtonTag, ButtonType } from './const';
+import { Color } from '../const/colors';
+import { Size } from '../const/size';
+import { IconProp } from '../icons/icon-list';
+export declare const BtnProperties: {
+    href: {
+        type: StringConstructor;
+    };
+    disabled: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    tooltip: {
+        type: StringConstructor;
+    };
+    as: {
+        type: PropType<ButtonTag>;
+        default: ButtonTag;
+    };
+    icon: {
+        type: PropType<IconProp>;
+    };
+    type: {
+        type: PropType<ButtonType>;
+        default: ButtonType;
+    };
+    outline: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    color: {
+        type: PropType<`${Color}`>;
+        default: `${Color}`;
+    };
+    size: {
+        type: PropType<Size>;
+        default: Size;
+    };
+    square: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    noBorder: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+};
+export declare const BtnEmits: string[];

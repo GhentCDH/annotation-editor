@@ -1,0 +1,25 @@
+import { default as RBush } from 'rbush';
+import { TextAdapter } from '../../../adapter/text';
+/**
+ * Represents a character in the spatial index tree with its bounding box
+ * and position information
+ */
+export type TextRasterItem = {
+    minX: number;
+    minY: number;
+    maxX: number;
+    maxY: number;
+    textPosition: number;
+    text: string;
+    centerX: number;
+};
+/**
+ * Creates a spatial index (R-tree) of all text characters in an SVG document.
+ * This enables efficient spatial queries to find text at specific coordinates.
+ *
+ * @returns RBush tree with spatial index of all characters
+ * @param textElement
+ * @param textAdapter
+ */
+export declare const drawTextRaster: (textElement: HTMLElement, textAdapter: TextAdapter) => RBush<TextRasterItem>;
+//# sourceMappingURL=text-raster.d.ts.map

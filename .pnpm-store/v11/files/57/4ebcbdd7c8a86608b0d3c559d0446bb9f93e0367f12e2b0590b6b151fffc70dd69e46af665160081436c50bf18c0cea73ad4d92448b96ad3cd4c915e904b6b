@@ -1,0 +1,26 @@
+export declare const _DefaultAnnotationStyle: {
+    backgroundColor: string;
+    backgroundOpacity: number;
+    borderColor: string;
+    borderOpacity: number;
+    borderWidth: number;
+    borderRadius: number;
+    tagTextColor: string;
+    tagBackgroundColor: string;
+    tagBackgroundOpacity: number;
+    tagBorderColor: string;
+    tagBorderOpacity: number;
+    tagBorderWidth: number;
+    gutterGap: number;
+    gutterWidth: number;
+};
+export type DefaultAnnotationStyle = typeof _DefaultAnnotationStyle;
+export type DefaultOverrideStyle = Partial<Pick<DefaultAnnotationStyle, 'backgroundColor' | 'backgroundOpacity' | 'borderColor' | 'borderOpacity' | 'borderWidth'>>;
+export declare const AnnotationDefaultStyle: CustomAnnotationStyle;
+export type CustomAnnotationStyle = {
+    default?: Partial<DefaultAnnotationStyle>;
+    edit?: DefaultOverrideStyle;
+    active?: DefaultOverrideStyle;
+    hover?: DefaultOverrideStyle;
+};
+//# sourceMappingURL=annotation.style.default.d.ts.map

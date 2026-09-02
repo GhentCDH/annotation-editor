@@ -1,0 +1,670 @@
+import { z } from 'zod';
+export declare const MethodSchema: z.ZodPipe<z.ZodEnum<{
+    patch: "patch";
+    delete: "delete";
+    get: "get";
+    post: "post";
+    put: "put";
+    GET: "GET";
+    POST: "POST";
+    DELETE: "DELETE";
+    PUT: "PUT";
+    PATCH: "PATCH";
+}>, z.ZodTransform<"patch" | "delete" | "get" | "post" | "put", "patch" | "delete" | "get" | "post" | "put" | "GET" | "POST" | "DELETE" | "PUT" | "PATCH">>;
+export type Method = z.infer<typeof MethodSchema>;
+export declare const OperationSchema: z.ZodObject<{
+    uri: z.ZodString;
+    method: z.ZodPipe<z.ZodEnum<{
+        patch: "patch";
+        delete: "delete";
+        get: "get";
+        post: "post";
+        put: "put";
+        GET: "GET";
+        POST: "POST";
+        DELETE: "DELETE";
+        PUT: "PUT";
+        PATCH: "PATCH";
+    }>, z.ZodTransform<"patch" | "delete" | "get" | "post" | "put", "patch" | "delete" | "get" | "post" | "put" | "GET" | "POST" | "DELETE" | "PUT" | "PATCH">>;
+}, z.core.$strip>;
+export declare const BooleanOperationSchema: z.ZodDefault<z.ZodOptional<z.ZodUnion<[z.ZodBoolean, z.ZodObject<{
+    uri: z.ZodString;
+    method: z.ZodPipe<z.ZodEnum<{
+        patch: "patch";
+        delete: "delete";
+        get: "get";
+        post: "post";
+        put: "put";
+        GET: "GET";
+        POST: "POST";
+        DELETE: "DELETE";
+        PUT: "PUT";
+        PATCH: "PATCH";
+    }>, z.ZodTransform<"patch" | "delete" | "get" | "post" | "put", "patch" | "delete" | "get" | "post" | "put" | "GET" | "POST" | "DELETE" | "PUT" | "PATCH">>;
+}, z.core.$strip>]>>>;
+declare const Operations: z.ZodObject<{
+    create: z.ZodDefault<z.ZodOptional<z.ZodUnion<[z.ZodBoolean, z.ZodObject<{
+        uri: z.ZodString;
+        method: z.ZodPipe<z.ZodEnum<{
+            patch: "patch";
+            delete: "delete";
+            get: "get";
+            post: "post";
+            put: "put";
+            GET: "GET";
+            POST: "POST";
+            DELETE: "DELETE";
+            PUT: "PUT";
+            PATCH: "PATCH";
+        }>, z.ZodTransform<"patch" | "delete" | "get" | "post" | "put", "patch" | "delete" | "get" | "post" | "put" | "GET" | "POST" | "DELETE" | "PUT" | "PATCH">>;
+    }, z.core.$strip>]>>>;
+    delete: z.ZodDefault<z.ZodOptional<z.ZodUnion<[z.ZodBoolean, z.ZodObject<{
+        uri: z.ZodString;
+        method: z.ZodPipe<z.ZodEnum<{
+            patch: "patch";
+            delete: "delete";
+            get: "get";
+            post: "post";
+            put: "put";
+            GET: "GET";
+            POST: "POST";
+            DELETE: "DELETE";
+            PUT: "PUT";
+            PATCH: "PATCH";
+        }>, z.ZodTransform<"patch" | "delete" | "get" | "post" | "put", "patch" | "delete" | "get" | "post" | "put" | "GET" | "POST" | "DELETE" | "PUT" | "PATCH">>;
+    }, z.core.$strip>]>>>;
+    findAll: z.ZodDefault<z.ZodOptional<z.ZodUnion<[z.ZodBoolean, z.ZodObject<{
+        uri: z.ZodString;
+        method: z.ZodPipe<z.ZodEnum<{
+            patch: "patch";
+            delete: "delete";
+            get: "get";
+            post: "post";
+            put: "put";
+            GET: "GET";
+            POST: "POST";
+            DELETE: "DELETE";
+            PUT: "PUT";
+            PATCH: "PATCH";
+        }>, z.ZodTransform<"patch" | "delete" | "get" | "post" | "put", "patch" | "delete" | "get" | "post" | "put" | "GET" | "POST" | "DELETE" | "PUT" | "PATCH">>;
+    }, z.core.$strip>]>>>;
+    findOne: z.ZodDefault<z.ZodOptional<z.ZodUnion<[z.ZodBoolean, z.ZodObject<{
+        uri: z.ZodString;
+        method: z.ZodPipe<z.ZodEnum<{
+            patch: "patch";
+            delete: "delete";
+            get: "get";
+            post: "post";
+            put: "put";
+            GET: "GET";
+            POST: "POST";
+            DELETE: "DELETE";
+            PUT: "PUT";
+            PATCH: "PATCH";
+        }>, z.ZodTransform<"patch" | "delete" | "get" | "post" | "put", "patch" | "delete" | "get" | "post" | "put" | "GET" | "POST" | "DELETE" | "PUT" | "PATCH">>;
+    }, z.core.$strip>]>>>;
+    update: z.ZodDefault<z.ZodOptional<z.ZodUnion<[z.ZodBoolean, z.ZodObject<{
+        uri: z.ZodString;
+        method: z.ZodPipe<z.ZodEnum<{
+            patch: "patch";
+            delete: "delete";
+            get: "get";
+            post: "post";
+            put: "put";
+            GET: "GET";
+            POST: "POST";
+            DELETE: "DELETE";
+            PUT: "PUT";
+            PATCH: "PATCH";
+        }>, z.ZodTransform<"patch" | "delete" | "get" | "post" | "put", "patch" | "delete" | "get" | "post" | "put" | "GET" | "POST" | "DELETE" | "PUT" | "PATCH">>;
+    }, z.core.$strip>]>>>;
+    patch: z.ZodDefault<z.ZodOptional<z.ZodUnion<[z.ZodBoolean, z.ZodObject<{
+        uri: z.ZodString;
+        method: z.ZodPipe<z.ZodEnum<{
+            patch: "patch";
+            delete: "delete";
+            get: "get";
+            post: "post";
+            put: "put";
+            GET: "GET";
+            POST: "POST";
+            DELETE: "DELETE";
+            PUT: "PUT";
+            PATCH: "PATCH";
+        }>, z.ZodTransform<"patch" | "delete" | "get" | "post" | "put", "patch" | "delete" | "get" | "post" | "put" | "GET" | "POST" | "DELETE" | "PUT" | "PATCH">>;
+    }, z.core.$strip>]>>>;
+}, z.core.$strip>;
+export type Operation = z.infer<typeof OperationSchema>;
+export type OperationKey = keyof z.infer<typeof Operations>;
+export declare const ViewSchemaZ: z.ZodObject<{
+    data: z.ZodAny;
+    ui: z.ZodAny;
+    defaultSort: z.ZodOptional<z.ZodString>;
+}, z.core.$strip>;
+export declare const ActionSchema: z.ZodUnion<readonly [z.ZodObject<{
+    type: z.ZodLiteral<"link">;
+    id: z.ZodString;
+    label: z.ZodString;
+    href: z.ZodString;
+    blank: z.ZodBoolean;
+    icon: z.ZodString;
+    condition: z.ZodOptional<z.ZodObject<{
+        field: z.ZodString;
+        op: z.ZodDefault<z.ZodOptional<z.ZodEnum<{
+            gt: "gt";
+            lt: "lt";
+            eq: "eq";
+            neq: "neq";
+            exists: "exists";
+            notExists: "notExists";
+            gte: "gte";
+            lte: "lte";
+        }>>>;
+        value: z.ZodOptional<z.ZodUnknown>;
+    }, z.core.$strip>>;
+}, z.core.$strip>, z.ZodObject<{
+    type: z.ZodDefault<z.ZodOptional<z.ZodLiteral<"procedure">>>;
+    id: z.ZodString;
+    label: z.ZodString;
+    uri: z.ZodString;
+    method: z.ZodDefault<z.ZodOptional<z.ZodPipe<z.ZodEnum<{
+        patch: "patch";
+        delete: "delete";
+        get: "get";
+        post: "post";
+        put: "put";
+        GET: "GET";
+        POST: "POST";
+        DELETE: "DELETE";
+        PUT: "PUT";
+        PATCH: "PATCH";
+    }>, z.ZodTransform<"patch" | "delete" | "get" | "post" | "put", "patch" | "delete" | "get" | "post" | "put" | "GET" | "POST" | "DELETE" | "PUT" | "PATCH">>>>;
+    data: z.ZodOptional<z.ZodAny>;
+    icon: z.ZodString;
+    condition: z.ZodOptional<z.ZodObject<{
+        field: z.ZodString;
+        op: z.ZodDefault<z.ZodOptional<z.ZodEnum<{
+            gt: "gt";
+            lt: "lt";
+            eq: "eq";
+            neq: "neq";
+            exists: "exists";
+            notExists: "notExists";
+            gte: "gte";
+            lte: "lte";
+        }>>>;
+        value: z.ZodOptional<z.ZodUnknown>;
+    }, z.core.$strip>>;
+}, z.core.$strip>]>;
+export type Action = z.infer<typeof ActionSchema>;
+/** Schema for a single table-level (global) action — no record id, no condition. */
+export declare const TableActionSchema: z.ZodUnion<readonly [z.ZodObject<{
+    type: z.ZodLiteral<"link">;
+    id: z.ZodString;
+    label: z.ZodOptional<z.ZodString>;
+    icon: z.ZodOptional<z.ZodString>;
+    tooltip: z.ZodOptional<z.ZodString>;
+    href: z.ZodString;
+}, z.core.$strip>, z.ZodObject<{
+    type: z.ZodDefault<z.ZodOptional<z.ZodLiteral<"procedure">>>;
+    id: z.ZodString;
+    label: z.ZodOptional<z.ZodString>;
+    icon: z.ZodOptional<z.ZodString>;
+    tooltip: z.ZodOptional<z.ZodString>;
+    uri: z.ZodString;
+    method: z.ZodDefault<z.ZodOptional<z.ZodPipe<z.ZodEnum<{
+        patch: "patch";
+        delete: "delete";
+        get: "get";
+        post: "post";
+        put: "put";
+        GET: "GET";
+        POST: "POST";
+        DELETE: "DELETE";
+        PUT: "PUT";
+        PATCH: "PATCH";
+    }>, z.ZodTransform<"patch" | "delete" | "get" | "post" | "put", "patch" | "delete" | "get" | "post" | "put" | "GET" | "POST" | "DELETE" | "PUT" | "PATCH">>>>;
+    data: z.ZodOptional<z.ZodAny>;
+}, z.core.$strip>]>;
+export type TableAction = z.infer<typeof TableActionSchema>;
+export declare const FormDevSchemas: z.ZodObject<{
+    table: z.ZodObject<{
+        data: z.ZodAny;
+        ui: z.ZodAny;
+        defaultSort: z.ZodOptional<z.ZodString>;
+    }, z.core.$strip>;
+    form: z.ZodObject<{
+        data: z.ZodAny;
+        ui: z.ZodAny;
+        defaultSort: z.ZodOptional<z.ZodString>;
+    }, z.core.$strip>;
+    view: z.ZodOptional<z.ZodObject<{
+        data: z.ZodAny;
+        ui: z.ZodAny;
+        defaultSort: z.ZodOptional<z.ZodString>;
+    }, z.core.$strip>>;
+    filter: z.ZodOptional<z.ZodObject<{
+        data: z.ZodAny;
+        ui: z.ZodAny;
+        defaultSort: z.ZodOptional<z.ZodString>;
+    }, z.core.$strip>>;
+}, z.core.$strip>;
+export declare const Display: z.ZodObject<{
+    mode: z.ZodEnum<{
+        page: "page";
+        modal: "modal";
+    }>;
+    customComponent: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+}, z.core.$strip>;
+export type FormDevSchema = z.infer<typeof FormDevSchemas>;
+export declare const FormDefResponseZ: z.ZodPipe<z.ZodObject<{
+    id: z.ZodString;
+    name: z.ZodString;
+    route: z.ZodString;
+    title: z.ZodString;
+    uri: z.ZodString;
+    display: z.ZodOptional<z.ZodObject<{
+        mode: z.ZodEnum<{
+            page: "page";
+            modal: "modal";
+        }>;
+        customComponent: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, z.core.$strip>>;
+    idField: z.ZodDefault<z.ZodString>;
+    idType: z.ZodDefault<z.ZodEnum<{
+        string: "string";
+        number: "number";
+    }>>;
+    modalSize: z.ZodOptional<z.ZodEnum<{
+        xs: "xs";
+        sm: "sm";
+        lg: "lg";
+        xl: "xl";
+    }>>;
+    operations: z.ZodObject<{
+        create: z.ZodDefault<z.ZodOptional<z.ZodUnion<[z.ZodBoolean, z.ZodObject<{
+            uri: z.ZodString;
+            method: z.ZodPipe<z.ZodEnum<{
+                patch: "patch";
+                delete: "delete";
+                get: "get";
+                post: "post";
+                put: "put";
+                GET: "GET";
+                POST: "POST";
+                DELETE: "DELETE";
+                PUT: "PUT";
+                PATCH: "PATCH";
+            }>, z.ZodTransform<"patch" | "delete" | "get" | "post" | "put", "patch" | "delete" | "get" | "post" | "put" | "GET" | "POST" | "DELETE" | "PUT" | "PATCH">>;
+        }, z.core.$strip>]>>>;
+        delete: z.ZodDefault<z.ZodOptional<z.ZodUnion<[z.ZodBoolean, z.ZodObject<{
+            uri: z.ZodString;
+            method: z.ZodPipe<z.ZodEnum<{
+                patch: "patch";
+                delete: "delete";
+                get: "get";
+                post: "post";
+                put: "put";
+                GET: "GET";
+                POST: "POST";
+                DELETE: "DELETE";
+                PUT: "PUT";
+                PATCH: "PATCH";
+            }>, z.ZodTransform<"patch" | "delete" | "get" | "post" | "put", "patch" | "delete" | "get" | "post" | "put" | "GET" | "POST" | "DELETE" | "PUT" | "PATCH">>;
+        }, z.core.$strip>]>>>;
+        findAll: z.ZodDefault<z.ZodOptional<z.ZodUnion<[z.ZodBoolean, z.ZodObject<{
+            uri: z.ZodString;
+            method: z.ZodPipe<z.ZodEnum<{
+                patch: "patch";
+                delete: "delete";
+                get: "get";
+                post: "post";
+                put: "put";
+                GET: "GET";
+                POST: "POST";
+                DELETE: "DELETE";
+                PUT: "PUT";
+                PATCH: "PATCH";
+            }>, z.ZodTransform<"patch" | "delete" | "get" | "post" | "put", "patch" | "delete" | "get" | "post" | "put" | "GET" | "POST" | "DELETE" | "PUT" | "PATCH">>;
+        }, z.core.$strip>]>>>;
+        findOne: z.ZodDefault<z.ZodOptional<z.ZodUnion<[z.ZodBoolean, z.ZodObject<{
+            uri: z.ZodString;
+            method: z.ZodPipe<z.ZodEnum<{
+                patch: "patch";
+                delete: "delete";
+                get: "get";
+                post: "post";
+                put: "put";
+                GET: "GET";
+                POST: "POST";
+                DELETE: "DELETE";
+                PUT: "PUT";
+                PATCH: "PATCH";
+            }>, z.ZodTransform<"patch" | "delete" | "get" | "post" | "put", "patch" | "delete" | "get" | "post" | "put" | "GET" | "POST" | "DELETE" | "PUT" | "PATCH">>;
+        }, z.core.$strip>]>>>;
+        update: z.ZodDefault<z.ZodOptional<z.ZodUnion<[z.ZodBoolean, z.ZodObject<{
+            uri: z.ZodString;
+            method: z.ZodPipe<z.ZodEnum<{
+                patch: "patch";
+                delete: "delete";
+                get: "get";
+                post: "post";
+                put: "put";
+                GET: "GET";
+                POST: "POST";
+                DELETE: "DELETE";
+                PUT: "PUT";
+                PATCH: "PATCH";
+            }>, z.ZodTransform<"patch" | "delete" | "get" | "post" | "put", "patch" | "delete" | "get" | "post" | "put" | "GET" | "POST" | "DELETE" | "PUT" | "PATCH">>;
+        }, z.core.$strip>]>>>;
+        patch: z.ZodDefault<z.ZodOptional<z.ZodUnion<[z.ZodBoolean, z.ZodObject<{
+            uri: z.ZodString;
+            method: z.ZodPipe<z.ZodEnum<{
+                patch: "patch";
+                delete: "delete";
+                get: "get";
+                post: "post";
+                put: "put";
+                GET: "GET";
+                POST: "POST";
+                DELETE: "DELETE";
+                PUT: "PUT";
+                PATCH: "PATCH";
+            }>, z.ZodTransform<"patch" | "delete" | "get" | "post" | "put", "patch" | "delete" | "get" | "post" | "put" | "GET" | "POST" | "DELETE" | "PUT" | "PATCH">>;
+        }, z.core.$strip>]>>>;
+    }, z.core.$strip>;
+    actions: z.ZodDefault<z.ZodOptional<z.ZodArray<z.ZodUnion<readonly [z.ZodObject<{
+        type: z.ZodLiteral<"link">;
+        id: z.ZodString;
+        label: z.ZodString;
+        href: z.ZodString;
+        blank: z.ZodBoolean;
+        icon: z.ZodString;
+        condition: z.ZodOptional<z.ZodObject<{
+            field: z.ZodString;
+            op: z.ZodDefault<z.ZodOptional<z.ZodEnum<{
+                gt: "gt";
+                lt: "lt";
+                eq: "eq";
+                neq: "neq";
+                exists: "exists";
+                notExists: "notExists";
+                gte: "gte";
+                lte: "lte";
+            }>>>;
+            value: z.ZodOptional<z.ZodUnknown>;
+        }, z.core.$strip>>;
+    }, z.core.$strip>, z.ZodObject<{
+        type: z.ZodDefault<z.ZodOptional<z.ZodLiteral<"procedure">>>;
+        id: z.ZodString;
+        label: z.ZodString;
+        uri: z.ZodString;
+        method: z.ZodDefault<z.ZodOptional<z.ZodPipe<z.ZodEnum<{
+            patch: "patch";
+            delete: "delete";
+            get: "get";
+            post: "post";
+            put: "put";
+            GET: "GET";
+            POST: "POST";
+            DELETE: "DELETE";
+            PUT: "PUT";
+            PATCH: "PATCH";
+        }>, z.ZodTransform<"patch" | "delete" | "get" | "post" | "put", "patch" | "delete" | "get" | "post" | "put" | "GET" | "POST" | "DELETE" | "PUT" | "PATCH">>>>;
+        data: z.ZodOptional<z.ZodAny>;
+        icon: z.ZodString;
+        condition: z.ZodOptional<z.ZodObject<{
+            field: z.ZodString;
+            op: z.ZodDefault<z.ZodOptional<z.ZodEnum<{
+                gt: "gt";
+                lt: "lt";
+                eq: "eq";
+                neq: "neq";
+                exists: "exists";
+                notExists: "notExists";
+                gte: "gte";
+                lte: "lte";
+            }>>>;
+            value: z.ZodOptional<z.ZodUnknown>;
+        }, z.core.$strip>>;
+    }, z.core.$strip>]>>>>;
+    tableActions: z.ZodDefault<z.ZodOptional<z.ZodArray<z.ZodUnion<readonly [z.ZodObject<{
+        type: z.ZodLiteral<"link">;
+        id: z.ZodString;
+        label: z.ZodOptional<z.ZodString>;
+        icon: z.ZodOptional<z.ZodString>;
+        tooltip: z.ZodOptional<z.ZodString>;
+        href: z.ZodString;
+    }, z.core.$strip>, z.ZodObject<{
+        type: z.ZodDefault<z.ZodOptional<z.ZodLiteral<"procedure">>>;
+        id: z.ZodString;
+        label: z.ZodOptional<z.ZodString>;
+        icon: z.ZodOptional<z.ZodString>;
+        tooltip: z.ZodOptional<z.ZodString>;
+        uri: z.ZodString;
+        method: z.ZodDefault<z.ZodOptional<z.ZodPipe<z.ZodEnum<{
+            patch: "patch";
+            delete: "delete";
+            get: "get";
+            post: "post";
+            put: "put";
+            GET: "GET";
+            POST: "POST";
+            DELETE: "DELETE";
+            PUT: "PUT";
+            PATCH: "PATCH";
+        }>, z.ZodTransform<"patch" | "delete" | "get" | "post" | "put", "patch" | "delete" | "get" | "post" | "put" | "GET" | "POST" | "DELETE" | "PUT" | "PATCH">>>>;
+        data: z.ZodOptional<z.ZodAny>;
+    }, z.core.$strip>]>>>>;
+    schemas: z.ZodObject<{
+        table: z.ZodObject<{
+            data: z.ZodAny;
+            ui: z.ZodAny;
+            defaultSort: z.ZodOptional<z.ZodString>;
+        }, z.core.$strip>;
+        form: z.ZodObject<{
+            data: z.ZodAny;
+            ui: z.ZodAny;
+            defaultSort: z.ZodOptional<z.ZodString>;
+        }, z.core.$strip>;
+        view: z.ZodOptional<z.ZodObject<{
+            data: z.ZodAny;
+            ui: z.ZodAny;
+            defaultSort: z.ZodOptional<z.ZodString>;
+        }, z.core.$strip>>;
+        filter: z.ZodOptional<z.ZodObject<{
+            data: z.ZodAny;
+            ui: z.ZodAny;
+            defaultSort: z.ZodOptional<z.ZodString>;
+        }, z.core.$strip>>;
+    }, z.core.$strip>;
+}, z.core.$strip>, z.ZodTransform<{
+    display: {
+        mode: "page" | "modal";
+        customComponent?: string | null | undefined;
+    };
+    operations: Record<"create" | "findAll" | "findOne" | "update" | "patch" | "delete", {
+        uri: string;
+        method: "patch" | "delete" | "get" | "post" | "put";
+    } | null>;
+    id: string;
+    name: string;
+    route: string;
+    title: string;
+    uri: string;
+    idField: string;
+    idType: "string" | "number";
+    actions: ({
+        type: "link";
+        id: string;
+        label: string;
+        href: string;
+        blank: boolean;
+        icon: string;
+        condition?: {
+            field: string;
+            op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+            value?: unknown;
+        } | undefined;
+    } | {
+        type: "procedure";
+        id: string;
+        label: string;
+        uri: string;
+        method: "patch" | "delete" | "get" | "post" | "put";
+        icon: string;
+        data?: any;
+        condition?: {
+            field: string;
+            op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+            value?: unknown;
+        } | undefined;
+    })[];
+    tableActions: ({
+        type: "link";
+        id: string;
+        href: string;
+        label?: string | undefined;
+        icon?: string | undefined;
+        tooltip?: string | undefined;
+    } | {
+        type: "procedure";
+        id: string;
+        uri: string;
+        method: "patch" | "delete" | "get" | "post" | "put";
+        label?: string | undefined;
+        icon?: string | undefined;
+        tooltip?: string | undefined;
+        data?: any;
+    })[];
+    schemas: {
+        table: {
+            data: any;
+            ui: any;
+            defaultSort?: string | undefined;
+        };
+        form: {
+            data: any;
+            ui: any;
+            defaultSort?: string | undefined;
+        };
+        view?: {
+            data: any;
+            ui: any;
+            defaultSort?: string | undefined;
+        } | undefined;
+        filter?: {
+            data: any;
+            ui: any;
+            defaultSort?: string | undefined;
+        } | undefined;
+    };
+    modalSize?: "xs" | "sm" | "lg" | "xl" | undefined;
+}, {
+    id: string;
+    name: string;
+    route: string;
+    title: string;
+    uri: string;
+    idField: string;
+    idType: "string" | "number";
+    operations: {
+        create: boolean | {
+            uri: string;
+            method: "patch" | "delete" | "get" | "post" | "put";
+        };
+        delete: boolean | {
+            uri: string;
+            method: "patch" | "delete" | "get" | "post" | "put";
+        };
+        findAll: boolean | {
+            uri: string;
+            method: "patch" | "delete" | "get" | "post" | "put";
+        };
+        findOne: boolean | {
+            uri: string;
+            method: "patch" | "delete" | "get" | "post" | "put";
+        };
+        update: boolean | {
+            uri: string;
+            method: "patch" | "delete" | "get" | "post" | "put";
+        };
+        patch: boolean | {
+            uri: string;
+            method: "patch" | "delete" | "get" | "post" | "put";
+        };
+    };
+    actions: ({
+        type: "link";
+        id: string;
+        label: string;
+        href: string;
+        blank: boolean;
+        icon: string;
+        condition?: {
+            field: string;
+            op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+            value?: unknown;
+        } | undefined;
+    } | {
+        type: "procedure";
+        id: string;
+        label: string;
+        uri: string;
+        method: "patch" | "delete" | "get" | "post" | "put";
+        icon: string;
+        data?: any;
+        condition?: {
+            field: string;
+            op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+            value?: unknown;
+        } | undefined;
+    })[];
+    tableActions: ({
+        type: "link";
+        id: string;
+        href: string;
+        label?: string | undefined;
+        icon?: string | undefined;
+        tooltip?: string | undefined;
+    } | {
+        type: "procedure";
+        id: string;
+        uri: string;
+        method: "patch" | "delete" | "get" | "post" | "put";
+        label?: string | undefined;
+        icon?: string | undefined;
+        tooltip?: string | undefined;
+        data?: any;
+    })[];
+    schemas: {
+        table: {
+            data: any;
+            ui: any;
+            defaultSort?: string | undefined;
+        };
+        form: {
+            data: any;
+            ui: any;
+            defaultSort?: string | undefined;
+        };
+        view?: {
+            data: any;
+            ui: any;
+            defaultSort?: string | undefined;
+        } | undefined;
+        filter?: {
+            data: any;
+            ui: any;
+            defaultSort?: string | undefined;
+        } | undefined;
+    };
+    display?: {
+        mode: "page" | "modal";
+        customComponent?: string | null | undefined;
+    } | undefined;
+    modalSize?: "xs" | "sm" | "lg" | "xl" | undefined;
+}>>;
+export type FormDefResponse = z.infer<typeof FormDefResponseZ>;
+export {};
+//# sourceMappingURL=form-def.schema.d.ts.map

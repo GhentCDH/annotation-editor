@@ -1,0 +1,3262 @@
+import { Autocomplete as e, BooleanCell as t, Btn as n, Checkbox as r, Collapse as i, Color as a, ControlWrapper as o, ControlWrapperProperties as s, Icon as c, IconEnum as l, Input as u, InputNumber as d, Markdown as f, Modal as p, ModalService as m, MultiSelect as h, SelectComponent as g, Table as _, TextCell as v, Textarea as ee, mergeStyles as te, myStyles as ne, removeClickOutsideEventListener as re } from "@ghentcdh/ui";
+import { Fragment as y, computed as b, createBlock as x, createCommentVNode as S, createElementBlock as C, createElementVNode as w, createTextVNode as T, createVNode as E, defineComponent as D, guardReactiveProps as ie, inject as O, isRef as k, markRaw as ae, mergeModels as A, mergeProps as j, nextTick as oe, normalizeClass as M, normalizeProps as se, onBeforeUnmount as ce, onMounted as le, openBlock as N, provide as P, ref as F, renderList as I, renderSlot as L, resolveDynamicComponent as ue, toDisplayString as R, toRaw as de, toRef as fe, unref as z, useModel as pe, watch as B, withCtx as V, withKeys as me, withModifiers as he } from "vue";
+import { useField as ge, useFieldArray as _e, useFieldValue as ve, useForm as ye, useFormContext as be } from "vee-validate";
+import H, { fromJSONSchema as xe, z as U } from "zod";
+import "vue-router";
+//#region ../crouton-forms-vue/dist/index.js
+var Se = (e, t) => {
+	if (!t) return e;
+	let n = {}, r = !1;
+	for (let i of Object.keys(e)) JSON.stringify(e[i]) !== JSON.stringify(t[i]) && (n[i] = e[i], r = !0);
+	return r ? n : null;
+}, Ce = ({ onSave: e, isValid: t, debounceMs: n = 800, initialData: r }) => {
+	let i = F("idle"), a = null, o = r ? JSON.parse(JSON.stringify(r)) : null, s = () => {
+		a !== null && (clearTimeout(a), a = null);
+	}, c = async (n) => {
+		if (t && !t()) {
+			i.value = "pending";
+			return;
+		}
+		let r = Se(n, o);
+		if (!r) {
+			i.value = o ? "saved" : "idle";
+			return;
+		}
+		s(), i.value = "saving";
+		try {
+			await e(r), o = JSON.parse(JSON.stringify(n)), i.value = "saved";
+		} catch (e) {
+			console.error(e), i.value = "error";
+		}
+	};
+	return {
+		status: i,
+		trigger: (e, t) => {
+			if (s(), !t) {
+				i.value !== "error" && (i.value = "pending");
+				return;
+			}
+			a = setTimeout(() => {
+				c(e);
+			}, n);
+		},
+		saveNow: (e) => c(e),
+		cancel: () => {
+			s(), i.value = "saved";
+		},
+		resetBaseline: (e) => {
+			o = JSON.parse(JSON.stringify(e));
+		}
+	};
+}, we = Symbol("crouton-editable-renderers"), Te = Symbol("crouton-readonly-renderers"), Ee = (e, t) => {
+	let n = O(t ? Te : we, void 0);
+	return e ?? n;
+}, De = (e, t, n, r) => {
+	let i = `edit_${Math.floor(Math.random() * 1e3)}`, a = F(!1);
+	e.data && (n.value = e.data);
+	let o = Ee(e.renderers, e.readonly ?? !1), s = e.autoSave && e.onAutoSave ? Ce({
+		onSave: e.onAutoSave,
+		isValid: () => a.value,
+		initialData: e.data ?? void 0
+	}) : null, c = F(!1), l = !1, u = b(() => s?.status.value ?? "idle"), d = b(() => {
+		switch (u.value) {
+			case "saving": return "Saving…";
+			case "saved": return "Saved ✓";
+			case "pending": return "Fill required fields to save";
+			case "error": return "Save failed";
+			default: return "";
+		}
+	}), f = b(() => ({
+		"text-gray-400": u.value === "idle",
+		"text-blue-500": u.value === "saving",
+		"text-green-600": u.value === "saved",
+		"text-amber-500": u.value === "pending",
+		"text-red-500": u.value === "error"
+	})), p = () => {
+		n.value = {}, t("closeModal", null);
+	}, m = (e) => {
+		a.value = e;
+	}, h = () => r.value?.getCurrentValues?.() ?? n.value;
+	return B(a, (e, n) => {
+		e !== n && t("valid", e);
+	}), {
+		id: i,
+		valid: a,
+		renderers: o,
+		autoSaveStatus: u,
+		autoSaveStatusLabel: d,
+		autoSaveStatusClass: f,
+		onCancel: p,
+		onValid: m,
+		onChange: (e) => {
+			s && !l && (c.value = !0, s.trigger(e, a.value));
+		},
+		onSubmit: () => {
+			r.value?.markSubmitted?.(), a.value && t("closeModal", {
+				data: h(),
+				valid: a.value
+			});
+		},
+		onRetry: () => {
+			s && s.saveNow(h());
+		},
+		onFormEvents: (r) => {
+			r.event === "update-relation" && e.onRefreshData && (s?.cancel(), c.value = !1, l = !0, e.onRefreshData().then((e) => {
+				e && (s?.resetBaseline(e), oe(() => {
+					n.value = e;
+				}));
+			}).finally(() => {
+				oe(() => {
+					oe(() => {
+						l = !1, c.value = !1;
+					});
+				});
+			})), t("events", r);
+		},
+		onErrors: (e) => {
+			t("errors", e);
+			let n = !e || (Array.isArray(e) ? e.length === 0 : Object.keys(e).length === 0);
+			a.value = n, s && c.value && s.trigger(h(), n);
+		}
+	};
+}, Oe = () => U.coerce.number().int().positive().nonnegative(), ke = () => U.string().or(U.array(U.string())).transform((e) => Array.isArray(e) ? e : [e]), Ae = U.enum(["asc", "desc"]), je = U.object({
+	page: Oe().optional().default(1),
+	pageSize: Oe().optional().default(20),
+	sort: U.string().optional().default("id"),
+	sortDir: Ae.optional().default("asc"),
+	filter: ke().optional().default([])
+});
+je.transform((e) => {
+	let { page: t, pageSize: n, sort: r } = e;
+	return {
+		...e,
+		sort: r || "id",
+		offset: (t - 1) * n
+	};
+});
+var Me = [
+	"contains",
+	"not_contains",
+	"equals",
+	"not_equals",
+	"gt",
+	"lt",
+	"isnull",
+	"isnotnull"
+], Ne = {
+	contains: "contains",
+	not_contains: "not contains",
+	equals: "equals",
+	not_equals: "not equals",
+	gt: ">",
+	lt: "<",
+	isnull: "is empty",
+	isnotnull: "is not empty"
+}, Pe = Me.map((e) => ({
+	value: e,
+	label: Ne[e]
+})), Fe = /* @__PURE__ */ new Set(["isnull", "isnotnull"]), Ie = {
+	string: [
+		"contains",
+		"not_contains",
+		"equals",
+		"not_equals",
+		"isnull",
+		"isnotnull"
+	],
+	number: [
+		"equals",
+		"not_equals",
+		"gt",
+		"lt",
+		"isnull",
+		"isnotnull"
+	],
+	date: [
+		"equals",
+		"not_equals",
+		"gt",
+		"lt",
+		"isnull",
+		"isnotnull"
+	],
+	boolean: [
+		"equals",
+		"not_equals",
+		"isnull",
+		"isnotnull"
+	],
+	enum: [
+		"equals",
+		"not_equals",
+		"isnull",
+		"isnotnull"
+	]
+}, Le = (e) => {
+	let t = e.split(":"), n = t[0] ?? "", r = t[t.length - 1], i = t.length >= 3 && Me.includes(r), a = i ? r : "contains";
+	return {
+		key: n,
+		value: i ? t.slice(1, -1).join(":") : t.slice(1).join(":"),
+		operator: a
+	};
+}, Re = (e, t) => e.length === 1 ? {
+	key: e[0],
+	filterObj: t
+} : Re(e, { [e.pop()]: t }), ze = (e, t) => e.length === 1 ? { [e[0]]: t } : ze(e, { [e.pop()]: t }), Be = (e) => {
+	let t = [];
+	return e.forEach((e) => {
+		let { key: n, value: r, operator: i } = Le(e);
+		n && t.push({
+			label: n,
+			key: n,
+			value: r,
+			operator: i
+		});
+	}), t;
+}, Ve = (e) => `${e.key}:${e.value}:${e.operator}`, He = je.extend({
+	count: Oe(),
+	totalPages: Oe()
+});
+U.object({
+	data: U.array(U.unknown()),
+	request: He
+});
+var Ue = /* @__PURE__ */ ((e) => (e.xs = "xs", e.sm = "sm", e.lg = "lg", e.xl = "xl", e))(Ue || {}), We = (e) => {
+	if (!e?.properties) return e;
+	let t = e.required;
+	if (!Array.isArray(t) || t.length === 0) return e;
+	let n = t.filter((t) => {
+		let n = e.properties[t];
+		if (!n || typeof n != "object") return !0;
+		let r = n.anyOf;
+		return !(Array.isArray(r) && r.some((e) => e?.type === "null"));
+	});
+	return n.length === t.length ? e : {
+		...e,
+		required: n
+	};
+}, Ge = (e) => {
+	if (!e?.properties) return e;
+	let t = { ...e.properties }, n = !1;
+	for (let e of Object.keys(t)) {
+		let r = t[e];
+		if (!(!r || typeof r != "object")) {
+			if (r.type === "string" && r.minLength === void 0) t[e] = {
+				...r,
+				minLength: 1
+			}, n = !0;
+			else if (r.type === "object") {
+				let i = Ge(r);
+				i !== r && (t[e] = i, n = !0);
+			}
+		}
+	}
+	return n ? {
+		...e,
+		properties: t
+	} : e;
+}, Ke = (e, t) => {
+	if (!e.scope) return {
+		id: null,
+		property: null
+	};
+	let n = e.scope.substring(13), r = n.split("/properties/"), i = t?.properties?.[r[0]] ?? {};
+	for (let e of r.slice(1)) i = i?.properties?.[e] ?? {};
+	return {
+		id: n,
+		property: i
+	};
+}, qe = class {
+	constructor(e) {
+		this.type = e;
+	}
+	type;
+}, Je = class extends qe {
+	options = {};
+	_rule;
+	label(e) {
+		return this.opt({ label: e });
+	}
+	colspan(e) {
+		return this.opt({ colspan: e });
+	}
+	showWhen(e, t) {
+		return this.rule("SHOW", e, t);
+	}
+	hideWhen(e, t) {
+		return this.rule("HIDE", e, t);
+	}
+	disableWhen(e, t) {
+		return this.rule("DISABLE", e, t);
+	}
+	rule(e, t, n) {
+		return this._rule = {
+			effect: e,
+			condition: {
+				scope: t,
+				schema: n
+			}
+		}, this;
+	}
+	opt(e) {
+		return this.options = {
+			...this.options,
+			...e
+		}, this;
+	}
+	baseFields() {
+		return {
+			...Object.keys(this.options).length ? { options: this.options } : {},
+			...this._rule ? { rule: this._rule } : {}
+		};
+	}
+}, Ye = class extends Je {
+	children = [];
+	addControl(e, t) {
+		return this.children.push(typeof e == "string" ? this.resolveShortcut(e, t) : e), this;
+	}
+	addControls(e, ...t) {
+		if (e && typeof e == "object" && !("build" in e)) for (let [t, n] of Object.entries(e)) this.addControl(t, n);
+		else if (e) for (let n of [e, ...t]) this.addControl(n);
+		return this;
+	}
+	buildElements() {
+		return this.children.map((e) => e.build());
+	}
+}, W = {
+	number: "number",
+	string: "string",
+	integer: "Integer",
+	autocomplete: "autocomplete",
+	textArea: "textarea",
+	markdown: "markdown",
+	array: "array",
+	object: "object",
+	custom: "custom",
+	select: "select",
+	mutliSelect: "mutliSelect",
+	boolean: "boolean",
+	link: "link",
+	relation: "relation",
+	date: "date",
+	dateTime: "dateTime",
+	dateRange: "date-range"
+}, Xe = class e extends Je {
+	constructor(e, t = "Control") {
+		super(t), this.scope = e, this.opt({
+			format: "Control",
+			styles: {}
+		});
+	}
+	scope;
+	_detail;
+	static asObject(t) {
+		return new e(`#/properties/${t}`, "Object");
+	}
+	static properties(t) {
+		return new e(`#/properties/${t}`);
+	}
+	static asCustom(t, n) {
+		let r = new e(`#/properties/${t}`);
+		return r.opt({
+			format: W.custom,
+			type: n
+		}), r;
+	}
+	setCustomRender(e) {
+		return this.opt({ customRender: e }), this;
+	}
+	detail(e, t) {
+		return this._detail = e, this.opt({
+			format: W.array,
+			elementLabelProp: t
+		}), this;
+	}
+	addAction(e) {
+		let t = this.options?.actions ?? [];
+		return t.push(e), this.opt({ actions: t });
+	}
+	detailFixed(e, t = {}) {
+		return this._detail = e, this.opt({
+			hideActions: !0,
+			format: W.array,
+			layout: t.layout ?? "column",
+			elementLabelProp: t.label
+		});
+	}
+	labelKey(e) {
+		return this.opt({ labelKey: e });
+	}
+	readonly() {
+		return this.opt({
+			format: W.string,
+			readonly: !0
+		});
+	}
+	link() {
+		return this.opt({ format: W.link });
+	}
+	markdown(e) {
+		return this.opt({
+			format: W.markdown,
+			...e ?? {}
+		});
+	}
+	date(e) {
+		return this.opt({
+			format: W.date,
+			...e ?? {}
+		});
+	}
+	textArea(e) {
+		return this.opt({
+			format: W.textArea,
+			...e ?? {}
+		});
+	}
+	autocomplete(e) {
+		return this.opt({
+			format: W.autocomplete,
+			dataField: "data",
+			...e ?? {}
+		});
+	}
+	control(e, t) {
+		return this.opt({
+			format: e,
+			...t
+		});
+	}
+	select(e) {
+		return this.opt({
+			format: W.select,
+			...e
+		});
+	}
+	mutliSelect(e) {
+		return this.opt({
+			format: W.mutliSelect,
+			...e
+		});
+	}
+	width(e) {
+		return this.opt({ styles: {
+			...this.options?.styles,
+			width: e,
+			control: { wrapper: `input-${e}` }
+		} });
+	}
+	customLabel(e) {
+		return this.opt({ label: e });
+	}
+	placeHolder(e) {
+		return this.opt({ placeholder: e });
+	}
+	hideLabel() {
+		return this.opt({ hideLabel: !0 });
+	}
+	build() {
+		let e = this._detail ? this._detail.build() : void 0, t = {
+			...this.options,
+			...e ? { detail: e } : {}
+		};
+		return {
+			type: this.type,
+			scope: this.scope,
+			options: t,
+			...this._rule ? { rule: this._rule } : {}
+		};
+	}
+}, Ze = {
+	Horizontal: "HorizontalLayout",
+	Vertical: "VerticalLayout",
+	Grid: "GridLayout",
+	Collapse: "CollapseLayout"
+}, Qe = class e extends Ye {
+	constructor(e) {
+		super(e);
+	}
+	static horizontal() {
+		return new e(Ze.Horizontal);
+	}
+	static vertical() {
+		return new e(Ze.Vertical);
+	}
+	static grid(t) {
+		let n = new e(Ze.Grid);
+		return t === void 0 ? n : n.opt({ columns: t });
+	}
+	static collapse() {
+		return new e(Ze.Collapse);
+	}
+	title(e) {
+		return this.opt({ title: e });
+	}
+	titleKey(e) {
+		return this.opt({ titleKey: e });
+	}
+	addControl(e, t) {
+		return super.addControl(e, t);
+	}
+	resolveShortcut(e, t) {
+		let n = Xe.properties(e);
+		if (t) {
+			let { type: e, ...r } = t;
+			e ? n.control(e, r) : Object.keys(r).length && n.opt(r);
+		}
+		return n;
+	}
+	build() {
+		return {
+			type: this.type,
+			elements: this.buildElements(),
+			...this.baseFields()
+		};
+	}
+}, $e = (e) => {
+	let t = e.properties ?? {}, n = Qe.grid();
+	for (let e of Object.keys(t)) n.addControl(e);
+	return n.build();
+}, et = (e) => Array.isArray(e) ? e.map(et) : e && typeof e == "object" && "value" in e ? e.value : e, tt = (e, t) => {
+	let { id: n, property: r } = Ke(e, t);
+	return {
+		...e,
+		id: n,
+		...r
+	};
+};
+H.object({
+	name: H.string(),
+	urlEnv: H.string().optional(),
+	generatedTypesImport: H.string().optional(),
+	type: H.string().default("postgres"),
+	default: H.boolean().default(!1),
+	adapter: H.enum(["prisma", "custom"]).default("prisma"),
+	prismaSchema: H.string().optional(),
+	prismaConfig: H.string().optional(),
+	zodOutput: H.string().optional(),
+	clientOutput: H.string().optional()
+}).transform((e) => {
+	let t = e.name ?? "name";
+	return {
+		...e,
+		generatedTypesImport: e.generatedTypesImport ?? `@your-scope/generated/${t}`,
+		prismaSchema: e.prismaSchema ?? `prisma/${t}/schema.prisma`,
+		prismaConfig: e.prismaConfig ?? `prisma/${t}/prisma.config.ts`,
+		zodOutput: e.zodOutput ?? `generated/${t}/src`,
+		clientOutput: e.clientOutput ?? `generated/${t}/client`
+	};
+});
+var nt = U.union([U.object({ public: U.literal(!0) }), U.object({ guard: U.union([U.string(), U.array(U.string()).min(1)]) })]), G = U.union([U.boolean(), U.object({ security: nt.optional() })]), rt = U.union([U.boolean(), U.object({
+	upsertOn: U.union([U.string(), U.array(U.string())]),
+	security: nt.optional()
+})]), it = U.object({
+	findAll: G.default(!0),
+	findOne: G.default(!0),
+	create: G.default(!0),
+	update: G.default(!0),
+	patch: G.default(!0),
+	upsert: rt.default(!1),
+	delete: G.default(!0)
+}), at = U.enum([
+	"oneToOne",
+	"manyToOne",
+	"oneToMany",
+	"manyToMany"
+]), ot = U.object({
+	property: U.string(),
+	type: U.string().optional(),
+	options: U.record(U.string(), U.unknown()).optional(),
+	hideLabel: U.boolean().optional(),
+	width: U.string().optional()
+}), st = U.object({
+	layout: U.enum(["collapse", "row"]),
+	titleKey: U.string().optional(),
+	controls: U.array(ot)
+}), ct = U.object({
+	colspan: U.number().optional().default(12),
+	sort: U.string().optional(),
+	sortDir: U.enum(["asc", "desc"]).optional(),
+	direction: U.string().optional(),
+	displayKey: U.string().optional(),
+	resource: U.string().optional()
+}).catchall(U.unknown()), lt = U.object({
+	type: U.string().optional(),
+	customRender: U.string().optional(),
+	format: U.string().optional(),
+	resource: U.string().optional(),
+	relationType: at.optional(),
+	foreignKey: U.string().optional(),
+	relation: U.string().optional(),
+	position: U.number().optional(),
+	defaultValue: U.unknown().optional(),
+	options: U.union([ct, U.unknown()]).optional(),
+	detail: st.optional()
+}), ut = lt, dt = (e) => {
+	let t = e.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/[_-]+/g, " ").trim();
+	return t.charAt(0).toUpperCase() + t.slice(1).toLowerCase();
+}, ft = U.object({
+	id: U.string(),
+	alias: U.string(),
+	label: U.string().optional(),
+	sqlExpression: U.string(),
+	type: U.enum([
+		"number",
+		"boolean",
+		"string"
+	]).optional(),
+	position: U.number().optional(),
+	hiddenInTable: U.boolean().optional(),
+	hiddenInView: U.boolean().optional(),
+	fieldInput: lt.optional()
+}).transform((e) => ({
+	label: dt(e.id),
+	...e
+})), pt = U.enum([
+	"string",
+	"number",
+	"integer",
+	"boolean",
+	"date",
+	"date-time",
+	"object",
+	"array"
+]), mt = U.lazy(() => U.object({
+	type: U.union([U.string(), U.array(U.string())]).optional(),
+	format: U.string().optional(),
+	enum: U.array(U.unknown()).optional(),
+	const: U.unknown().optional(),
+	nullable: U.boolean().optional(),
+	properties: U.record(U.string(), mt).optional(),
+	required: U.array(U.string()).optional(),
+	items: mt.optional(),
+	additionalProperties: U.union([U.boolean(), mt]).optional(),
+	title: U.string().optional(),
+	description: U.string().optional(),
+	default: U.unknown().optional(),
+	minimum: U.number().optional(),
+	maximum: U.number().optional(),
+	minLength: U.number().optional(),
+	maxLength: U.number().optional(),
+	pattern: U.string().optional()
+}).catchall(U.unknown())), ht = U.union([pt, mt]), gt = {
+	string: { type: "string" },
+	number: { type: "number" },
+	integer: { type: "integer" },
+	boolean: { type: "boolean" },
+	date: {
+		type: "string",
+		format: "date"
+	},
+	"date-time": {
+		type: "string",
+		format: "date-time"
+	},
+	object: { type: "object" },
+	array: { type: "array" }
+};
+gt.date, gt["date-time"];
+var _t = U.object({
+	field: U.string(),
+	eq: U.unknown().optional(),
+	neq: U.unknown().optional(),
+	exists: U.boolean().optional(),
+	notExists: U.boolean().optional()
+}), vt = U.object({
+	id: U.string(),
+	column: U.string().optional(),
+	label: U.string().optional(),
+	hiddenInTable: U.boolean().default(!1),
+	hiddenInForm: U.boolean().default(!1),
+	hiddenInView: U.boolean().default(!1),
+	sortable: U.boolean().default(!1),
+	defaultSort: U.boolean().default(!1),
+	searchable: U.boolean().default(!1),
+	filterable: U.boolean().default(!1),
+	createable: U.boolean().default(!0),
+	updateable: U.boolean().default(!0),
+	hideLabel: U.boolean().default(!1),
+	showWhen: _t.optional(),
+	hideWhen: _t.optional(),
+	disabledWhen: _t.optional(),
+	displayKey: U.string().optional(),
+	sortId: U.string().optional(),
+	enum: U.string().optional(),
+	idField: U.boolean().default(!1),
+	showInLookup: U.boolean().default(!1),
+	type: ht.optional(),
+	required: U.boolean().optional(),
+	columnType: U.string().default("string"),
+	fieldInput: lt.optional(),
+	fieldView: ut.optional(),
+	fieldTable: ut.optional(),
+	extend: U.string().optional(),
+	columns: U.record(U.string(), U.record(U.string(), U.unknown())).optional()
+}), yt = U.object({
+	route: U.string(),
+	param: U.string().default("parentId"),
+	idType: U.enum(["string", "number"]).optional()
+}), bt = U.enum(["prisma", "custom"]).default("prisma"), xt = H.object({
+	label: H.string().optional(),
+	position: H.number().optional()
+}), St = H.object({
+	hide: H.boolean().default(!1),
+	position: H.number().optional(),
+	label: H.string().optional(),
+	group: H.string().optional()
+}), Ct = U.object({
+	field: U.string(),
+	op: U.enum([
+		"eq",
+		"neq",
+		"gt",
+		"gte",
+		"lt",
+		"lte",
+		"exists",
+		"notExists"
+	]).default("eq"),
+	value: U.unknown().optional()
+}), wt = U.object({
+	type: U.string(),
+	id: U.string(),
+	label: U.string(),
+	icon: U.string().optional(),
+	tooltip: U.string().optional(),
+	condition: Ct.optional()
+}), Tt = wt.extend({
+	type: U.literal("procedure").default("procedure"),
+	procedure: U.string(),
+	method: U.string().optional().default("post"),
+	data: U.record(U.string(), U.unknown()).optional()
+}), Et = wt.extend({
+	type: U.literal("link").default("link"),
+	href: U.string(),
+	blank: U.boolean().optional().default(!0)
+}), Dt = U.union([Tt, Et]).transform((e) => ({
+	tooltip: e.label,
+	...e
+})), Ot = U.lazy(() => U.union([U.string(), U.object({
+	relation: U.string(),
+	include: U.array(Ot).optional(),
+	orderBy: U.record(U.string(), U.unknown()).optional()
+})])), kt = U.record(U.string(), vt.omit({ id: !0 }).catchall(U.unknown())), At = U.object({
+	mode: U.enum(["page", "modal"]).default("modal"),
+	customComponent: U.string().nullable().optional().default(null)
+}), jt = (e) => {
+	if (e) return (Array.isArray(e) ? e : Object.entries(e).map(([e, t]) => ({
+		id: e,
+		...t
+	}))).map((e) => ({
+		...e,
+		label: e.label ?? dt(e.id)
+	}));
+};
+U.object({
+	$schema: U.string().optional(),
+	schemaVersion: U.number().int().positive().optional(),
+	draft: U.boolean().optional().default(!1),
+	kind: bt,
+	name: U.string(),
+	route: U.string(),
+	model: U.string().optional(),
+	tag: U.string(),
+	title: U.string().optional(),
+	table: U.string().optional(),
+	idType: U.enum(["string", "number"]).optional(),
+	database: U.string().optional(),
+	parent: yt.optional(),
+	sidebar: St.default(St.parse({})),
+	display: At.default(At.parse({})),
+	security: nt.optional(),
+	operations: it,
+	columns: kt.default(kt.parse({})),
+	calculatedColumns: U.array(ft).default([]),
+	actions: U.array(Dt).default([]),
+	tableActions: U.array(Dt).default([]),
+	modalSize: U.enum([
+		"xs",
+		"sm",
+		"lg",
+		"xl"
+	]).default("sm"),
+	include: U.array(Ot).default([])
+}).superRefine((e, t) => {
+	if (e.kind === "custom") {
+		e.model !== void 0 && t.addIssue({
+			code: "custom",
+			path: ["model"],
+			message: "A custom resource has no Prisma model. Remove \"model\" — data access comes from repository.ts."
+		}), e.calculatedColumns?.length && t.addIssue({
+			code: "custom",
+			path: ["calculatedColumns"],
+			message: "calculatedColumns run raw SQL against a database table and are not supported on a custom resource. Compute the value in repository.ts instead."
+		});
+		for (let [n, r] of Object.entries(e.columns ?? {})) r.fieldInput?.format === "relation" || r.fieldInput?.type === "autocomplete" || r.type === void 0 && t.addIssue({
+			code: "custom",
+			path: [
+				"columns",
+				n,
+				"type"
+			],
+			message: `Column "${n}" needs a "type": a custom resource has no schema.ts, so its json_schema is built from the column types.`
+		});
+		e.parent && e.parent.param === "id" && t.addIssue({
+			code: "custom",
+			path: ["parent", "param"],
+			message: "parent.param cannot be \"id\" — that is the child's own id in /:id routes. Use something like \"groupId\"."
+		});
+	} else e.parent === void 0 ? e.model === void 0 && t.addIssue({
+		code: "custom",
+		path: ["model"],
+		message: "\"model\" is required for a prisma-backed resource. Set \"kind\": \"custom\" for a resource with no Prisma model."
+	}) : t.addIssue({
+		code: "custom",
+		path: ["parent"],
+		message: "\"parent\" is only supported on a custom resource. A prisma resource is nested by declaring a relation column on its parent."
+	});
+}).transform((e) => {
+	let t = e.title ?? dt(e.name), n = e.schemaVersion ?? 1;
+	return {
+		title: t,
+		...e,
+		schemaVersion: n,
+		columns: jt(e.columns)
+	};
+});
+var Mt = U.object({
+	hideIdInTable: U.boolean().default(!0),
+	hideIdInForm: U.boolean().default(!0),
+	hideIdInView: U.boolean().default(!0),
+	hideTimestamps: U.boolean().default(!0),
+	hideForeignKeys: U.boolean().default(!0),
+	includeRelations: U.boolean().default(!0),
+	hideRelationsInTable: U.boolean().default(!0),
+	showRelationsInForm: U.boolean().default(!0),
+	enumValueLabel: U.boolean().default(!0),
+	sharedEnums: U.boolean().default(!0),
+	defaultOperations: it.default(it.parse({}))
+}), Nt = U.object({
+	defaultLanguage: U.string().default("en"),
+	languages: U.array(U.string()).min(1),
+	translationsDir: U.string().default("translations")
+});
+U.object({
+	title: U.string(),
+	resourcesDir: U.string(),
+	dataSourcesDir: U.string(),
+	schemaExportName: U.string().default("{Model}WithRelationsSchema"),
+	enumsFile: U.string().default("crouton.enums.json"),
+	rules: Mt.default(Mt.parse({})),
+	sidebarGroups: U.record(U.string(), xt).default({}),
+	autoSave: U.boolean().default(!0),
+	i18n: Nt.optional()
+});
+var Pt = U.object({
+	id: U.string(),
+	label: U.string().optional(),
+	sortable: U.boolean().optional(),
+	searchable: U.boolean().optional(),
+	fieldInput: lt.optional()
+});
+U.object({
+	json_schema: U.record(U.string(), U.unknown()).optional(),
+	ui_schema: U.record(U.string(), U.unknown()).optional(),
+	ui: U.record(U.string(), U.unknown()).optional(),
+	data: U.record(U.string(), U.unknown()).optional(),
+	columns: U.array(Pt),
+	defaultSort: U.string().optional()
+}), U.enum([
+	"table",
+	"view",
+	"form"
+]);
+var Ft = U.lazy(() => U.record(U.string(), U.union([U.string(), Ft])));
+U.object({
+	app: U.object({ title: U.string().optional() }).optional(),
+	sidebarGroups: U.record(U.string(), U.string()).optional(),
+	resources: U.record(U.string(), U.object({
+		title: U.string().optional(),
+		sidebar: U.string().optional(),
+		columns: U.record(U.string(), U.string()).optional(),
+		actions: U.record(U.string(), U.string()).optional(),
+		subResources: U.record(U.string(), U.object({
+			title: U.string().optional(),
+			columns: U.record(U.string(), U.string()).optional()
+		}).optional()).optional()
+	}).optional()).optional(),
+	enums: U.record(U.string(), U.record(U.string(), U.string())).optional(),
+	ui: Ft.optional(),
+	validation: U.record(U.string(), U.string()).optional()
+}).passthrough();
+var It = Symbol("errorMode"), Lt = Symbol("formSubmitted"), Rt = Symbol("formReadonly"), K = (e) => e ? e.replace(/^#\//, "").split("/").filter((e) => e !== "properties").join(".") : "", zt = (e, t) => t.replace(/^#\//, "").split("/").filter(Boolean).reduce((e, t) => e?.[t], e), Bt = { class: "flex-1" }, Vt = { key: 0 }, Ht = {
+	key: 0,
+	class: "text-sm text-base-content/50"
+}, Ut = { key: 1 }, Wt = /* @__PURE__ */ D({
+	__name: "ArrayRenderer",
+	props: {
+		uischema: {},
+		schema: {}
+	},
+	setup(e) {
+		let t = e, r = O("pathPrefix", ""), i = t.uischema.scope, a = K(i), o = r ? `${r}.${a}` : a, s = zt(O("rootSchema"), i)?.items ?? {}, { fields: c, push: u, remove: d } = _e(o);
+		c.value.length === 0 && u({});
+		let f = t.uischema.options ?? {}, p = f.layout ?? "column", m = b(() => !f.hideActions), h = b(() => t.uischema._detail ?? f.detail), g = b(() => {
+			if (!h.value) return t.uischema.elements ?? [];
+			let e = h.value.type;
+			return e && e !== "Control" ? [h.value] : h.value.elements ?? [h.value];
+		});
+		return (e, t) => (N(), C("div", null, [w("div", { class: M(["flex gap-2", z(p) === "row" ? "flex-row items-center" : "flex-col"]) }, [
+			(N(!0), C(y, null, I(z(c), (e, t) => (N(), C("div", {
+				key: e.key,
+				class: "flex-1"
+			}, [w("div", { class: M(["flex gap-2", z(p) === "row" ? "flex-col" : "flex-row items-center"]) }, [w("div", Bt, [(N(!0), C(y, null, I(g.value, (e, n) => (N(), x(_a, {
+				key: n,
+				uischema: e,
+				schema: z(s),
+				"path-prefix": `${z(o)}[${t}]`
+			}, null, 8, [
+				"uischema",
+				"schema",
+				"path-prefix"
+			]))), 128))]), m.value ? (N(), C("div", Vt, [z(c).length > 1 ? (N(), x(z(n), {
+				key: 0,
+				icon: z(l).Delete,
+				outline: !0,
+				onClick: (e) => z(d)(t)
+			}, null, 8, ["icon", "onClick"])) : S("", !0)])) : S("", !0)], 2)]))), 128)),
+			z(c).length === 0 ? (N(), C("div", Ht, " No data ")) : S("", !0),
+			m.value ? (N(), C("div", Ut, [E(z(n), {
+				icon: z(l).Plus,
+				outline: !0,
+				onClick: t[0] ||= (e) => z(u)({})
+			}, {
+				default: V(() => [...t[1] ||= [T(" Add ", -1)]]),
+				_: 1
+			}, 8, ["icon"])])) : S("", !0)
+		], 2)]));
+	}
+}), q = (e, t) => (n, r, i) => t(n, r, i) ? e : -1, J = (...e) => (t, n, r) => e.every((e) => e(t, n, r)), Y = (...e) => (t, n, r) => e.some((e) => e(t, n, r)), X = (e) => (t) => !!t && t.type === e, Gt = (e) => !!e && e.type === "Control", Kt = (e) => (t, n) => Gt(t) && !!n && n.type === e, Z = (e, t) => (n) => {
+	let r = n.options;
+	return r ? r[e]?.toLowerCase() === t?.toLowerCase() : !1;
+}, qt = (...e) => (t, n) => {
+	let r = n?.format;
+	return typeof r == "string" && e.includes(r);
+}, Jt = (e) => (t, n) => {
+	let r = n;
+	return Array.isArray(r?.anyOf) ? r.anyOf.some((t) => t?.type === e) : !1;
+}, Yt = J(Z("format", W.autocomplete)), Xt = J(X("Control"), Z("format", W.textArea)), Zt = J(X("Control"), Y(Z("format", W.string), Kt("string"), Jt("string"))), Qt = J(X("Control"), Z("format", W.markdown)), $t = J(X("Control"), Y(Z("format", W.object), (e, t) => !e.options?.format && t?.type === "object" && !!t?.properties)), en = J(Kt("array")), tn = J(X("Control"), Z("format", W.mutliSelect)), nn = J(X("Control"), Z("format", W.select)), rn = Y(J(X("Control"), Kt("boolean")), J(X("Control"), Z("format", W.boolean))), an = J(X("Control"), Y(Z("format", W.number), Kt("number"))), on = J(X("Control"), Y(Z("format", W.integer), Kt("integer"))), sn = J(X("Control"), Y(Z("format", W.date), Z("format", W.dateTime), qt("date", "date-time")));
+W.relation;
+var cn = J(Z("format", "date-range")), ln = [{
+	tester: q(12, en),
+	renderer: Wt
+}], un = (e) => ({ dispatch: e }), dn = Symbol("json-forms:events"), fn = (e) => {
+	let t = un(e);
+	return P(dn, t), t;
+}, pn = () => O(dn, un(() => {})), mn = Symbol("json-forms:http-client"), hn = (e) => {
+	P(mn, e);
+}, gn = () => {
+	let e = O(mn);
+	if (!e) throw Error("[json-forms] No HttpClient provided. Pass an `http` prop to <JsonForm> or call provideHttpClient() in a parent component.");
+	return e;
+}, _n = U.enum([
+	"get",
+	"post",
+	"delete",
+	"put",
+	"patch",
+	"GET",
+	"POST",
+	"DELETE",
+	"PUT",
+	"PATCH"
+]), vn = U.object({
+	uri: U.string(),
+	method: _n
+}), yn = U.string().or(vn), bn = U.boolean().or(vn).optional().default(!1), xn = U.object({
+	findAll: bn,
+	findOne: bn,
+	create: bn,
+	update: bn,
+	patch: bn,
+	delete: bn,
+	lookup: yn.optional()
+}), Sn = {
+	create: "post",
+	delete: "delete",
+	findAll: "get",
+	findOne: "get",
+	lookup: "get",
+	update: "put",
+	patch: "patch"
+}, Cn = U.object({
+	ui: U.any().optional(),
+	data: U.any()
+}), wn = U.object({
+	id: U.string(),
+	uri: U.string(),
+	operations: xn,
+	schema: Cn.optional(),
+	schemas: U.object({ form: Cn.optional() }).optional()
+}).transform((e) => {
+	let t = e.schema ?? e.schemas?.form ?? {
+		ui: void 0,
+		data: void 0
+	};
+	!t.ui && t.data && (t.ui = $e(t.data));
+	let n = {};
+	for (let t in Sn) {
+		let r = t, i = Sn[r], a = e.operations[r];
+		n[r] = a === void 0 || a === !1 ? null : a === !0 ? {
+			uri: e.uri,
+			method: i
+		} : typeof a == "string" ? {
+			uri: a,
+			method: "get"
+		} : {
+			uri: a.uri,
+			method: a.method?.toLowerCase() ?? i
+		};
+	}
+	return {
+		...e,
+		schema: t,
+		operations: n
+	};
+}), Tn = /* @__PURE__ */ new Map(), En = async (e, t) => {
+	let n = Tn.get(e);
+	if (n) return n;
+	let r = t.get(e).then((t) => {
+		let n = wn.safeParse(t.data);
+		if (!n.success) throw console.error(n.error), Error(`Invalid resource schema: ${e}`);
+		return n.data;
+	}).catch((t) => {
+		throw Tn.delete(e), t;
+	});
+	return Tn.set(e, r), r;
+}, Dn = (e, t, n) => {
+	let r = e.replace(/\{form\.([^}]+)\}/g, (e, n) => {
+		let r = n.split(".").reduce((e, t) => e?.[t], t);
+		return encodeURIComponent(r ?? "");
+	});
+	return r.includes("{q}") ? r.replace("{q}", encodeURIComponent(n)) : r.includes("{text}") ? r.replace("{text}", n) : `${r}${encodeURIComponent(n)}`;
+}, On = /* @__PURE__ */ new Map(), kn = /* @__PURE__ */ new Map(), An = (e, t) => `${e}|${String(t)}`, jn = (e, t) => {
+	if (On.has(e)) return Promise.resolve(On.get(e));
+	let n = kn.get(e);
+	if (n) return n;
+	let r = t().then((t) => {
+		let n = t ?? null;
+		return On.set(e, n), n;
+	}).catch((t) => (console.warn(`[useFetchOptions] could not resolve option ${e}`, t), null)).finally(() => {
+		kn.delete(e);
+	});
+	return kn.set(e, r), r;
+}, Mn = (e, t) => !e || typeof e != "object" || t && t in e ? e : e.data && typeof e.data == "object" ? e.data : e, Nn = (e, t, n) => ({ fetchOptions: (r, i) => {
+	let a = Dn(e.uri, n, r);
+	return t.get(a, { signal: i }).then((t) => {
+		let n = t.data;
+		return Array.isArray(n) ? n : n[e.dataField ?? "data"];
+	});
+} }), Pn = async (e, t, n) => {
+	let r = await En(e.resource, t), i = r.operations.lookup, { findOne: a, findAll: o } = r.operations, s = e.valueKey ?? "id", c = e.labelKey, l = async (n) => {
+		if (a?.uri && /\{[^}]+\}/.test(a.uri)) {
+			let e = a.uri.replace(/\{[^}]+\}/g, () => encodeURIComponent(String(n)));
+			return Mn((await t[a.method](e))?.data, c);
+		}
+		let i = o?.uri ?? r.uri, l = encodeURIComponent(`${s}:${String(n)}:eq`), u = `${i}${i.includes("?") ? "&" : "?"}filter=${l}`, d = (await t.get(u))?.data, f = Array.isArray(d) ? d : d?.[e.dataField ?? "data"];
+		return (Array.isArray(f) ? f[0] : f) ?? null;
+	};
+	return {
+		fetchOptions: (r, a) => {
+			let o = Dn(i.uri, n, r);
+			return t[i.method](o, { signal: a }).then((t) => t.data[e.dataField ?? "data"]);
+		},
+		fetchByValue: (t) => t == null || t === "" ? Promise.resolve(null) : jn(An(e.resource, t), () => l(t)),
+		peekByValue: (t) => On.get(An(e.resource, t)),
+		rememberValue: (t, n) => {
+			t == null || t === "" || On.set(An(e.resource, t), n);
+		},
+		enableCreate: !!(r.operations.create && r.schema.ui),
+		form: r.operations.create ? {
+			ui_schema: r.schema.ui,
+			json_schema: r.schema.data,
+			title: `Create new ${r.id}`,
+			create: async (e) => {
+				let n = r.operations.create;
+				return t[n.method](n.uri, e).then((e) => e.data);
+			}
+		} : null
+	};
+}, Fn = async (e, t, n = {}) => {
+	let r = {};
+	return "uri" in e && e.uri && (r = Nn(e, t, n)), "resource" in e && e.resource && (r = await Pn(e, t, n)), {
+		fetchOptions: null,
+		fetchByValue: null,
+		peekByValue: null,
+		rememberValue: null,
+		labelKey: e.labelKey,
+		valueKey: e.valueKey,
+		enableCreate: e.enableCreate ?? !1,
+		form: null,
+		...r
+	};
+}, In = [
+	[/^Invalid input: expected \w+, received undefined$/, "This field is required"],
+	[/^Invalid input: expected \w+, received null$/, "This field is required"],
+	[/^Expected string, received/, "Invalid value"],
+	[/^String must contain at least (\d+)/, "Must be at least $1 characters"],
+	[/^Number must be greater than or equal to (\d+)/, "Minimum value is $1"],
+	[/^Number must be less than or equal to (\d+)/, "Maximum value is $1"]
+], Ln = (e) => {
+	if (e) {
+		for (let [t, n] of In) if (t.test(e)) return e.replace(t, n);
+		return e;
+	}
+}, Rn = [
+	{
+		test: (e) => (e.code === "invalid_type" || e.code === "invalid_value") && (e.input === void 0 || e.input === null) || e.code === "too_small" && e.origin === "string" && e.minimum === 1,
+		message: "This field is required"
+	},
+	{
+		test: (e) => e.code === "too_small" && e.origin === "string",
+		message: (e) => `Must be at least ${e.minimum} characters`
+	},
+	{
+		test: (e) => e.code === "too_big" && e.origin === "string",
+		message: (e) => `Must be at most ${e.maximum} characters`
+	}
+], zn = () => {
+	U.config({ customError: (e) => {
+		if (e.message) return { message: e.message };
+		let t = Rn.find((t) => t.test(e));
+		return t ? { message: typeof t.message == "function" ? t.message(e) : t.message } : { message: e.message ?? e.code };
+	} });
+}, Bn = (e, t, n) => {
+	let r = t.replace(/^#\//, "").split("/").slice(0, -2);
+	if (r.length === 0) {
+		let t = e?.required;
+		return Array.isArray(t) && t.includes(n);
+	}
+	let i = zt(e, `#/${r.join("/")}`)?.required;
+	return Array.isArray(i) && i.includes(n);
+}, Vn = (e, t, n, r = {}) => {
+	let i = O("rootSchema"), a = K(e.scope), { errorMessage: o, meta: s } = n, c = e.options ?? {}, l = a.split(".").pop() ?? "", u = i ? Bn(i, e.scope, l) : !1, d = t ?? {}, f = c.format === "text" ? "text" : d.format === "email" ? "email" : d.format === "uri" ? "url" : d.type === "number" || d.type === "integer" ? "number" : r.defaultType ?? "text", p = te(c.styles), m = O(It, F("onBlur")), h = O(Lt, F(!1)), g = O(Rt, F(!1)), _ = b(() => {
+		if (!o.value) return !1;
+		switch (m.value) {
+			case "always": return !0;
+			case "onChange": return s.dirty;
+			case "onSubmit": return h.value;
+			default: return s.touched || s.dirty;
+		}
+	}), v = c.colspan || p?.width === "full" ? "w-full" : c.width ?? "min-w-input";
+	return b(() => ({
+		id: a,
+		placeholder: c.placeholder,
+		description: d.description,
+		errors: _.value ? c.errorMessage ?? Ln(o.value) : void 0,
+		label: c.label ?? l.charAt(0).toUpperCase() + l.slice(1),
+		visible: c.visible ?? !0,
+		required: u,
+		enabled: c.readonly !== !0 && !g.value,
+		isFocused: !1,
+		isTouched: _.value,
+		hideLabel: c.hideLabel ?? !1,
+		styles: p,
+		width: v,
+		type: f,
+		...r.overrides
+	}));
+}, Hn = (e) => {
+	try {
+		return ge(() => e);
+	} catch (t) {
+		return console.warn(`[useControlBinding] useField("${e}") failed – data/schema mismatch (parent path is a primitive). Field renders with undefined value.`, t), ge(`__broken__${e.replace(/[.[\]]/g, "_")}`);
+	}
+}, Un = ({ useProps: e, setDefaultValue: t } = {}) => (n, r, i = {}) => {
+	let { values: a } = be(), o = O("pathPrefix", ""), s = K(n.scope), c = Hn(o ? `${o}.${s}` : s);
+	t?.(c);
+	let l = Vn(n, r, c, i), u = e?.(n, r, c, i) ?? { value: {} };
+	return {
+		formValues: a,
+		uischema: n,
+		schema: r,
+		wrapper: b(() => ({
+			...l.value,
+			...u.value
+		})),
+		value: c.value,
+		field: c,
+		onBlur: () => c.handleBlur(new Event("blur")),
+		onChange: () => c.handleChange(c.value.value),
+		appliedOptions: b(() => n.options ?? {})
+	};
+}, Wn = (e, t, n = {}) => Un()(e, t, n), Gn = (e, t) => {
+	let n = e.values;
+	if (!n) return t;
+	let r = e.valueKey, i = t?.[r] ?? t;
+	return n.find((e) => e[r] === i);
+}, Kn = (...e) => (t, n, r) => {
+	let i = t.options ?? {};
+	return b(() => {
+		let t = Object.fromEntries(e.filter((e) => e in i).map((e) => [e, i[e]]));
+		return t.labelKey ||= "label", t.valueKey ||= "value", t.displayValue = Gn(t, r.value.value), t;
+	});
+}, qn = Un({ useProps: Kn("options", "values", "uri", "resource", "dataField", "labelKey", "valueKey", "clearable", "storeValue") }), Jn = Un({ useProps: Kn("options", "labelKey", "valueKey", "uri", "freeText", "enableCreate", "dataField", "skipAuth") }), Yn = {
+	modalTitle: {
+		type: String,
+		required: !0
+	},
+	saveLabel: {
+		type: String,
+		default: "Save"
+	},
+	cancelLabel: {
+		type: String,
+		default: "Cancel"
+	},
+	schema: {
+		type: Object,
+		required: !0
+	},
+	uiSchema: {
+		type: Object,
+		required: !0
+	},
+	modalSize: {
+		type: String,
+		default: "md"
+	},
+	onClose: {
+		type: Function,
+		required: !0
+	},
+	onEvents: { type: Function },
+	data: {
+		type: Object,
+		required: !0
+	},
+	errorMode: {
+		type: String,
+		default: "onBlur"
+	},
+	http: {
+		type: [Object, Function],
+		default: null
+	},
+	renderers: {
+		type: Array,
+		default: null
+	},
+	autoSave: {
+		type: Boolean,
+		default: !1
+	},
+	onAutoSave: {
+		type: Function,
+		default: null
+	},
+	onRefreshData: {
+		type: Function,
+		default: null
+	},
+	validateOnMount: {
+		type: Boolean,
+		default: !1
+	},
+	showButtons: {
+		type: Boolean,
+		default: !0
+	},
+	readonly: {
+		type: Boolean,
+		default: !1
+	}
+}, Xn = [
+	"closeModal",
+	"events",
+	"errors",
+	"valid"
+], Zn = { class: "overflow-auto" }, Qn = /* @__PURE__ */ D({
+	__name: "FormModal",
+	props: /*@__PURE__*/ A(Yn, {
+		modelValue: {},
+		modelModifiers: {}
+	}),
+	emits: /*@__PURE__*/ A(Xn, ["update:modelValue"]),
+	setup(e, { emit: t }) {
+		let r = e, i = t, o = F(), s = pe(e, "modelValue"), { id: c, valid: l, renderers: u, autoSaveStatus: d, autoSaveStatusLabel: f, autoSaveStatusClass: m, onCancel: h, onValid: g, onChange: _, onSubmit: v, onRetry: ee, onFormEvents: te, onErrors: ne } = De(r, i, s, o);
+		return (e, t) => (N(), x(z(p), j(r, {
+			open: !0,
+			"disable-close": !1,
+			width: e.modalSize,
+			onCloseModal: z(h)
+		}), {
+			content: V(() => [w("div", Zn, [
+				L(e.$slots, "content-before"),
+				E(xa, {
+					id: `modal-${z(c)}`,
+					ref_key: "formRef",
+					ref: o,
+					"form-data": s.value,
+					schema: e.schema,
+					"ui-schema": e.uiSchema,
+					"error-mode": e.errorMode,
+					http: r.http,
+					renderers: z(u),
+					onErrors: z(ne),
+					onChange: z(_),
+					onValid: z(g),
+					onEvents: z(te)
+				}, null, 8, [
+					"id",
+					"form-data",
+					"schema",
+					"ui-schema",
+					"error-mode",
+					"http",
+					"renderers",
+					"onErrors",
+					"onChange",
+					"onValid",
+					"onEvents"
+				]),
+				L(e.$slots, "content-after")
+			])]),
+			actions: V(() => [r.autoSave ? (N(), C(y, { key: 0 }, [
+				w("span", { class: M(["text-sm mr-3", z(m)]) }, R(z(f)), 3),
+				z(d) === "error" ? (N(), x(z(n), {
+					key: 0,
+					color: z(a).secondary,
+					outline: !0,
+					"aria-label": "Retry save",
+					onClick: z(ee)
+				}, {
+					default: V(() => [...t[0] ||= [T(" Retry ", -1)]]),
+					_: 1
+				}, 8, ["color", "onClick"])) : S("", !0),
+				E(z(n), {
+					color: z(a).secondary,
+					outline: !0,
+					"aria-label": "Close",
+					onClick: z(h)
+				}, {
+					default: V(() => [...t[1] ||= [T(" Close ", -1)]]),
+					_: 1
+				}, 8, ["color", "onClick"])
+			], 64)) : (N(), C(y, { key: 1 }, [E(z(n), {
+				color: z(a).secondary,
+				outline: !0,
+				"aria-label": e.cancelLabel,
+				onClick: z(h)
+			}, {
+				default: V(() => [T(R(e.cancelLabel), 1)]),
+				_: 1
+			}, 8, [
+				"color",
+				"aria-label",
+				"onClick"
+			]), E(z(n), {
+				disabled: !z(l),
+				"aria-label": e.saveLabel,
+				onClick: z(v)
+			}, {
+				default: V(() => [T(R(e.saveLabel), 1)]),
+				_: 1
+			}, 8, [
+				"disabled",
+				"aria-label",
+				"onClick"
+			])], 64))]),
+			_: 3
+		}, 16, ["width", "onCloseModal"]));
+	}
+}), $n = {
+	modalTitle: {
+		type: String,
+		required: !0
+	},
+	closeLabel: {
+		type: String,
+		default: "Close"
+	},
+	editLabel: {
+		type: String,
+		default: "Edit"
+	},
+	deleteLabel: {
+		type: String,
+		default: "Delete"
+	},
+	schema: {
+		type: Object,
+		required: !0
+	},
+	uiSchema: {
+		type: Object,
+		required: !0
+	},
+	modalSize: {
+		type: String,
+		default: "md"
+	},
+	onClose: {
+		type: Function,
+		default: () => {}
+	},
+	canEdit: {
+		type: Boolean,
+		default: !1
+	},
+	canDelete: {
+		type: Boolean,
+		default: !1
+	},
+	data: {
+		type: Object,
+		required: !0
+	},
+	renderers: {
+		type: Array,
+		default: null
+	}
+}, er = [
+	"closeModal",
+	"edit",
+	"delete",
+	"view"
+], tr = { class: "text-gray-500 text-xs mb-2" }, nr = { class: "overflow-y-auto" }, rr = /* @__PURE__ */ D({
+	__name: "ViewModal",
+	props: /*@__PURE__*/ A($n, {
+		modelValue: {},
+		modelModifiers: {}
+	}),
+	emits: /*@__PURE__*/ A(er, ["update:modelValue"]),
+	setup(e, { emit: t }) {
+		let r = e, i = `view_${Math.floor(Math.random() * 1e3)}`, o = F(!1), s = pe(e, "modelValue"), c = t;
+		r.data && (s.value = r.data);
+		let u = Ee(r.renderers, !0), d = () => {
+			s.value = {}, c("closeModal", null);
+		}, f = () => {
+			let e = s.value;
+			c("edit", e), c("closeModal", null);
+		}, m = () => {
+			let e = s.value;
+			c("delete", e), c("closeModal", null);
+		};
+		B(o, (e, t) => {
+			e !== t && c("valid", e);
+		});
+		let h = (e) => {
+			e.event === "view" && c("view", e);
+		};
+		return (e, t) => (N(), x(z(p), j(r, {
+			open: !0,
+			"disable-close": !1,
+			width: e.modalSize,
+			onCloseModal: d
+		}), {
+			title: V(() => [w("h3", null, R(e.modalTitle), 1), w("div", tr, R(s.value.id), 1)]),
+			content: V(() => [
+				L(e.$slots, "content-before"),
+				w("div", nr, [E(xa, {
+					id: `modal-${i}`,
+					ref: "formRef",
+					"form-data": s.value,
+					schema: e.schema,
+					readonly: !0,
+					"ui-schema": e.uiSchema,
+					renderers: z(u),
+					onEvents: h
+				}, null, 8, [
+					"id",
+					"form-data",
+					"schema",
+					"ui-schema",
+					"renderers"
+				])]),
+				L(e.$slots, "content-after")
+			]),
+			actions: V(() => [
+				e.canEdit ? (N(), x(z(n), {
+					key: 0,
+					"aria-label": e.editLabel,
+					onClick: f
+				}, {
+					default: V(() => [T(R(e.editLabel), 1)]),
+					_: 1
+				}, 8, ["aria-label"])) : S("", !0),
+				E(z(n), {
+					color: z(a).secondary,
+					outline: !0,
+					"aria-label": e.closeLabel,
+					onClick: d
+				}, {
+					default: V(() => [T(R(e.closeLabel), 1)]),
+					_: 1
+				}, 8, ["color", "aria-label"]),
+				e.canDelete ? (N(), x(z(n), {
+					key: 1,
+					color: z(a).error,
+					outline: !0,
+					"aria-label": e.deleteLabel,
+					icon: z(l).Delete,
+					onClick: m
+				}, {
+					default: V(() => [T(R(e.deleteLabel), 1)]),
+					_: 1
+				}, 8, [
+					"color",
+					"aria-label",
+					"icon"
+				])) : S("", !0)
+			]),
+			_: 3
+		}, 16, ["width"]));
+	}
+}), ir = class {
+	static openModal({ initialData: e, modalTitle: t, schema: n, uiSchema: r, modalSize: i, onClose: a, onEvents: o, http: s, renderers: c, autoSave: l, onAutoSave: u, onRefreshData: d, saveLabel: f }) {
+		m.openModal({
+			component: Qn,
+			props: {
+				schema: n,
+				uiSchema: r,
+				modalSize: i,
+				data: e ?? {},
+				modalTitle: t,
+				onClose: a,
+				onEvents: o,
+				http: s,
+				renderers: c,
+				autoSave: l ?? !1,
+				onAutoSave: u,
+				onRefreshData: d,
+				...f && { saveLabel: f }
+			}
+		});
+	}
+	static openViewModal({ data: e, modalTitle: t, schema: n, uiSchema: r, modalSize: i, onClose: a, onEdit: o, onDelete: s, renderers: c, onView: l }) {
+		m.openModal({
+			component: rr,
+			props: {
+				schema: n,
+				uiSchema: r,
+				modalSize: i,
+				data: e,
+				modalTitle: t,
+				onClose: a ?? (() => {}),
+				canEdit: !!o,
+				canDelete: !!s,
+				onEdit: o,
+				onDelete: s,
+				renderers: c,
+				onView: l
+			}
+		});
+	}
+}, ar = /* @__PURE__ */ D({
+	__name: "AutocompleteControlRenderer",
+	props: {
+		uischema: {},
+		schema: {}
+	},
+	setup(t) {
+		let n = t, { wrapper: r, value: i, field: a, onBlur: o, onChange: s, appliedOptions: c } = Jn(n.uischema, n.schema), l = gn(), { values: u } = be(), d = F(null);
+		B(c, async (e) => {
+			d.value = await Fn(e, l, u);
+		}, {
+			immediate: !0,
+			deep: !0
+		});
+		let f = F(i.value), p = async (e) => {
+			let t = d.value;
+			if (e == null || e === "" || typeof e == "object") {
+				f.value = e;
+				return;
+			}
+			let n = t?.labelKey, r = t?.valueKey;
+			if (!t?.fetchByValue || !n || n === r) {
+				f.value = e;
+				return;
+			}
+			let a = t.peekByValue?.(e);
+			if (a !== void 0) {
+				f.value = a ?? e;
+				return;
+			}
+			let o = f.value;
+			o && typeof o == "object" && r && o[r] === e || (f.value = e);
+			let s = await t.fetchByValue(e);
+			i.value === e && (f.value = s ?? e);
+		};
+		B([i, d], ([e]) => p(e), { immediate: !0 });
+		let m = (e) => {
+			_(e), s();
+		}, h = pn(), g = K(n.uischema.scope), _ = (e) => {
+			if (!e || !d.value) {
+				f.value = e, a.setValue(e);
+				return;
+			}
+			let { valueKey: t, labelKey: n } = d.value;
+			if (c.value.storeValue && t && t in e) {
+				d.value.rememberValue?.(e[t], e), f.value = e, a.setValue(e[t]);
+				return;
+			}
+			let r = [t, n].filter(Boolean);
+			if (r.length === 0) {
+				f.value = e, a.setValue(e);
+				return;
+			}
+			let i = Object.fromEntries(r.filter((t) => t in e).map((t) => [t, e[t]]));
+			f.value = i, a.setValue(i);
+		}, v = () => {
+			if (d.value?.enableCreate === !1) return;
+			let e = d.value.form;
+			if (e) {
+				ir.openModal({
+					schema: e.json_schema,
+					uiSchema: e.ui_schema,
+					modalTitle: `Create new ${r.value.label}`,
+					http: l,
+					onClose: (t) => {
+						!t || !t.valid || e.create(t.data).then((e) => {
+							_(e);
+						});
+					}
+				});
+				return;
+			}
+			h.dispatch({
+				event: "create",
+				type: g,
+				data: i.value,
+				onSuccess: _
+			});
+		};
+		return (t, n) => d.value ? (N(), x(z(e), j({ key: 0 }, z(r), {
+			"model-value": f.value,
+			"fetch-options": d.value.fetchOptions,
+			"label-key": d.value.labelKey,
+			"value-key": d.value.valueKey,
+			"enable-create": d.value.enableCreate,
+			onChange: m,
+			onBlur: z(o),
+			onCreate: v
+		}), null, 16, [
+			"model-value",
+			"fetch-options",
+			"label-key",
+			"value-key",
+			"enable-create",
+			"onBlur"
+		])) : S("", !0);
+	}
+}), or = /* @__PURE__ */ D({
+	__name: "BooleanControlRenderer",
+	props: {
+		uischema: {},
+		schema: {}
+	},
+	setup(e) {
+		let t = e, { wrapper: n, value: i, field: a, onBlur: o, onChange: s } = Un({ setDefaultValue: (e) => {
+			e.value.value === void 0 && e.setValue(!1);
+		} })(t.uischema, t.schema), c = (e) => {
+			a.setValue(!!e), s();
+		};
+		return (e, t) => (N(), x(z(r), j(z(n), {
+			"model-value": z(i),
+			onChange: c,
+			onBlur: z(o)
+		}), null, 16, ["model-value", "onBlur"]));
+	}
+}), sr = {
+	id: {
+		type: String,
+		default: void 0
+	},
+	placeholder: {
+		type: String,
+		default: void 0
+	},
+	description: {
+		type: String,
+		default: void 0
+	},
+	errors: {
+		type: String,
+		default: void 0
+	},
+	label: {
+		type: String,
+		default: void 0
+	},
+	size: {
+		type: String,
+		default: void 0
+	},
+	width: {
+		type: String,
+		default: void 0
+	},
+	styles: {
+		type: Object,
+		default: void 0
+	},
+	visible: {
+		type: Boolean,
+		default: !0
+	},
+	required: {
+		type: Boolean,
+		default: !1
+	},
+	enabled: {
+		type: Boolean,
+		default: !0
+	},
+	isFocused: {
+		type: Boolean,
+		default: !1
+	},
+	isTouched: {
+		type: Boolean,
+		default: !1
+	},
+	hideLabel: {
+		type: Boolean,
+		default: !1
+	},
+	hideErrors: {
+		type: Boolean,
+		default: !1
+	},
+	...s ?? {},
+	modelValue: {
+		type: String,
+		default: void 0
+	},
+	withTime: {
+		type: Boolean,
+		default: !1
+	},
+	min: {
+		type: String,
+		default: void 0
+	},
+	max: {
+		type: String,
+		default: void 0
+	},
+	locale: {
+		type: String,
+		default: "en-GB"
+	},
+	firstDayOfWeek: {
+		type: Number,
+		default: 1
+	},
+	clearable: {
+		type: Boolean,
+		default: !0
+	},
+	type: {
+		type: String,
+		default: void 0
+	}
+}, cr = [
+	"modelValue",
+	"withTime",
+	"min",
+	"max",
+	"locale",
+	"firstDayOfWeek",
+	"clearable",
+	"type"
+], lr = [
+	"update:modelValue",
+	"change",
+	"blur",
+	"clear"
+], ur = [
+	["year", 3600 * 24 * 365],
+	["month", 3600 * 24 * 30],
+	["day", 3600 * 24],
+	["hour", 3600],
+	["minute", 60],
+	["second", 1]
+], dr = (e, t, n) => {
+	let r = new Intl.RelativeTimeFormat(n, { numeric: "auto" }), i = Math.round((e.getTime() - t.getTime()) / 1e3), a = Math.abs(i);
+	for (let [e, t] of ur) if (a >= t || e === "second") return r.format(Math.round(i / t), e);
+	return r.format(0, "second");
+}, fr = (e, { withTime: t = !0, locale: n = "en-GB", timeZone: r = "UTC" } = {}) => {
+	let i = Q(e);
+	if (!i) return null;
+	let a = new Intl.DateTimeFormat(n, {
+		day: "numeric",
+		month: "short",
+		year: "numeric",
+		timeZone: r
+	}).format(i), o = a;
+	return t && (o = `${a}, ${new Intl.DateTimeFormat(n, {
+		hour: "2-digit",
+		minute: "2-digit",
+		timeZone: r
+	}).format(i)}`), o;
+}, pr = (e, { locale: t = "en-GB", now: n } = {}) => {
+	let r = Q(e);
+	if (r) return dr(r, n ?? /* @__PURE__ */ new Date(), t);
+}, Q = (e) => {
+	if (e == null || e === "") return null;
+	let t = e instanceof Date ? e : new Date(String(e));
+	return Number.isNaN(t.getTime()) ? null : t;
+}, mr = (e) => !!Q(e), hr = 864e5, gr = (e) => String(e).padStart(2, "0"), _r = (e, t) => typeof e?.withTime == "boolean" ? e.withTime : e?.format === "dateTime" ? !0 : e?.format === "date" ? !1 : t?.format === "date-time", vr = (e) => `${e.getUTCFullYear()}-${gr(e.getUTCMonth() + 1)}-${gr(e.getUTCDate())}`, yr = (e, t = !1) => {
+	let n = Q(e);
+	if (!n) return "";
+	let r = vr(n);
+	return t ? `${r}T${gr(n.getUTCHours())}:${gr(n.getUTCMinutes())}` : r;
+}, br = (e, t = !1) => {
+	if (!e) return;
+	let [n, r] = e.split("T"), [i, a, o] = (n ?? "").split("-").map(Number);
+	if (![
+		i,
+		a,
+		o
+	].every((e) => Number.isInteger(e)) || a < 1 || a > 12 || o < 1 || o > 31) return;
+	let s = 0, c = 0;
+	if (t && r) {
+		let [e, t] = r.split(":").map(Number);
+		Number.isInteger(e) && (s = e), Number.isInteger(t) && (c = t);
+	}
+	if (s < 0 || s > 23 || c < 0 || c > 59) return;
+	let l = new Date(Date.UTC(i, a - 1, o, s, c));
+	if (!(l.getUTCMonth() !== a - 1 || l.getUTCDate() !== o)) return l.toISOString();
+}, xr = (e, t, n = !1) => {
+	let r = n ? Q(t) : null;
+	return new Date(Date.UTC(e.getUTCFullYear(), e.getUTCMonth(), e.getUTCDate(), r?.getUTCHours() ?? 0, r?.getUTCMinutes() ?? 0)).toISOString();
+}, Sr = (e, t, n) => {
+	let r = e * 12 + t + n;
+	return {
+		year: Math.floor(r / 12),
+		month: (r % 12 + 12) % 12
+	};
+}, Cr = (e) => {
+	let t = Q(e);
+	return t ? Date.UTC(t.getUTCFullYear(), t.getUTCMonth(), t.getUTCDate()) : null;
+}, wr = (e, t, n) => {
+	let r = Date.UTC(e.getUTCFullYear(), e.getUTCMonth(), e.getUTCDate()), i = Cr(t), a = Cr(n);
+	return (i === null || r >= i) && (a === null || r <= a);
+}, Tr = ({ year: e, month: t, selected: n, min: r, max: i, firstDayOfWeek: a = 1, today: o }) => {
+	let s = (new Date(Date.UTC(e, t, 1)).getUTCDay() - a + 7) % 7, c = Date.UTC(e, t, 1 - s), l = vr(o ?? /* @__PURE__ */ new Date()), u = Q(n), d = u ? vr(u) : null;
+	return Array.from({ length: 42 }, (n, a) => {
+		let o = new Date(c + a * hr), s = vr(o);
+		return {
+			date: o,
+			key: s,
+			day: o.getUTCDate(),
+			inMonth: o.getUTCMonth() === t && o.getUTCFullYear() === e,
+			isToday: s === l,
+			isSelected: s === d,
+			disabled: !wr(o, r, i)
+		};
+	});
+}, Er = (e = "en-GB", t = 1) => {
+	let n = new Intl.DateTimeFormat(e, {
+		weekday: "short",
+		timeZone: "UTC"
+	});
+	return Array.from({ length: 7 }, (e, r) => n.format(new Date(Date.UTC(2024, 0, 7 + (t + r) % 7))));
+}, Dr = (e, t, n = "en-GB") => new Intl.DateTimeFormat(n, {
+	month: "long",
+	year: "numeric",
+	timeZone: "UTC"
+}).format(new Date(Date.UTC(e, t, 1))), Or = { class: "flex items-center gap-1" }, kr = [
+	"id",
+	"type",
+	"value",
+	"min",
+	"max",
+	"disabled",
+	"placeholder",
+	"aria-invalid"
+], Ar = ["aria-label"], jr = { class: "mb-2 flex items-center justify-between gap-1" }, Mr = {
+	class: "text-sm font-semibold",
+	"aria-live": "polite"
+}, Nr = ["aria-label"], Pr = [
+	"data-key",
+	"disabled",
+	"tabindex",
+	"aria-selected",
+	"aria-current",
+	"onClick"
+], Fr = { class: "mt-2 flex justify-between gap-2" }, Ir = ["disabled"], Lr = ["disabled"], Rr = /* @__PURE__ */ D({
+	__name: "DatePicker",
+	props: sr,
+	emits: lr,
+	setup(e, { emit: t }) {
+		let n = e, r = t, i = F(null), a = F(null), s = F(!1), c = F(null), l = b(() => Q(n.modelValue)), u = () => {
+			let e = Q(n.modelValue) ?? /* @__PURE__ */ new Date();
+			return {
+				year: e.getUTCFullYear(),
+				month: e.getUTCMonth()
+			};
+		}, d = F(u()), f = new Set(cr), p = b(() => Object.fromEntries(Object.entries(n).filter(([e]) => !f.has(e)))), m = b(() => n.styles?.control?.input ?? "input"), h = b(() => yr(n.modelValue, n.withTime)), g = b(() => yr(n.min, n.withTime) || void 0), _ = b(() => yr(n.max, n.withTime) || void 0), v = b(() => Tr({
+			year: d.value.year,
+			month: d.value.month,
+			selected: n.modelValue,
+			min: n.min,
+			max: n.max,
+			firstDayOfWeek: n.firstDayOfWeek
+		})), ee = b(() => Er(n.locale, n.firstDayOfWeek)), te = b(() => Dr(d.value.year, d.value.month, n.locale)), ne = b(() => wr(/* @__PURE__ */ new Date(), n.min, n.max)), T = (e) => e.isSelected ? "btn-primary" : e.isToday ? "btn-ghost btn-outline" : e.inMonth ? "btn-ghost" : "btn-ghost text-base-content/40", E = null, D = () => {
+			E &&= (re(E), null);
+		}, O = () => {
+			s.value && (s.value = !1, c.value = null, D());
+		}, k = (e) => {
+			r("update:modelValue", e), r("change", e);
+		}, ae = (e) => {
+			k(br(e, n.withTime));
+		}, A = (e) => {
+			e.disabled || (k(xr(e.date, n.modelValue, n.withTime)), O());
+		}, j = () => {
+			let e = /* @__PURE__ */ new Date();
+			wr(e, n.min, n.max) && (k(xr(e, n.modelValue, n.withTime)), O());
+		}, le = () => {
+			k(void 0), r("clear"), O();
+		}, P = (e) => {
+			d.value = Sr(d.value.year, d.value.month, e);
+		}, L = (e) => {
+			let t = c.value ? Q(c.value) ?? /* @__PURE__ */ new Date() : l.value ?? /* @__PURE__ */ new Date(), n = new Date(Date.UTC(t.getUTCFullYear(), t.getUTCMonth(), t.getUTCDate() + e));
+			c.value = vr(n), (n.getUTCMonth() !== d.value.month || n.getUTCFullYear() !== d.value.year) && (d.value = {
+				year: n.getUTCFullYear(),
+				month: n.getUTCMonth()
+			});
+		}, ue = {
+			ArrowLeft: -1,
+			ArrowRight: 1,
+			ArrowUp: -7,
+			ArrowDown: 7,
+			PageUp: -28,
+			PageDown: 28
+		}, de = (e) => {
+			if (e.key in ue) {
+				e.preventDefault(), L(ue[e.key]);
+				return;
+			}
+			if (e.key === "Enter" || e.key === " ") {
+				let t = v.value.find((e) => e.key === c.value);
+				if (!t) return;
+				e.preventDefault(), A(t);
+				return;
+			}
+			e.key === "Escape" && (e.preventDefault(), O(), a.value?.focus());
+		};
+		return B([c, v], async () => {
+			!s.value || !c.value || (await oe(), i.value?.querySelector(`[data-key="${c.value}"]`)?.focus());
+		}), B(() => n.modelValue, () => {
+			s.value || (d.value = u());
+		}), ce(D), (e, t) => (N(), x(z(o), se(ie(p.value)), {
+			default: V(() => [w("div", {
+				ref_key: "rootRef",
+				ref: i,
+				class: M(["dropdown", { "dropdown-open": s.value }])
+			}, [w("div", Or, [w("input", {
+				id: e.id,
+				ref_key: "inputRef",
+				ref: a,
+				class: M([m.value, e.width]),
+				type: e.withTime ? "datetime-local" : "date",
+				value: h.value,
+				min: g.value,
+				max: _.value,
+				disabled: !e.enabled,
+				placeholder: e.placeholder,
+				"aria-invalid": !!e.errors,
+				autocomplete: "off",
+				"data-lpignore": "true",
+				"data-bwignore": "true",
+				onInput: t[0] ||= (e) => ae(e.target.value),
+				onBlur: t[1] ||= (t) => e.$emit("blur", t),
+				onKeydown: me(O, ["esc"])
+			}, null, 42, kr)]), s.value ? (N(), C("div", {
+				key: 0,
+				class: "dropdown-content rounded-box bg-base-100 z-10 mt-1 w-72 p-3 shadow-lg",
+				role: "dialog",
+				"aria-modal": "false",
+				"aria-label": e.label ?? "Choose a date"
+			}, [
+				w("div", jr, [
+					w("button", {
+						type: "button",
+						class: "btn btn-ghost btn-xs btn-square",
+						"aria-label": "Previous month",
+						onClick: t[2] ||= (e) => P(-1)
+					}, [...t[4] ||= [w("svg", {
+						class: "size-4 fill-none stroke-current",
+						viewBox: "0 0 24 24",
+						"stroke-width": "2",
+						"aria-hidden": "true"
+					}, [w("path", {
+						"stroke-linecap": "round",
+						"stroke-linejoin": "round",
+						d: "M15.75 19.5 8.25 12l7.5-7.5"
+					})], -1)]]),
+					w("span", Mr, R(te.value), 1),
+					w("button", {
+						type: "button",
+						class: "btn btn-ghost btn-xs btn-square",
+						"aria-label": "Next month",
+						onClick: t[3] ||= (e) => P(1)
+					}, [...t[5] ||= [w("svg", {
+						class: "size-4 fill-none stroke-current",
+						viewBox: "0 0 24 24",
+						"stroke-width": "2",
+						"aria-hidden": "true"
+					}, [w("path", {
+						"stroke-linecap": "round",
+						"stroke-linejoin": "round",
+						d: "m8.25 4.5 7.5 7.5-7.5 7.5"
+					})], -1)]])
+				]),
+				w("div", {
+					class: "grid grid-cols-7 gap-0.5",
+					role: "grid",
+					onKeydown: de
+				}, [(N(!0), C(y, null, I(ee.value, (e) => (N(), C("span", {
+					key: e,
+					class: "text-base-content/60 py-1 text-center text-[0.65rem] font-semibold uppercase",
+					role: "columnheader",
+					"aria-label": e
+				}, R(e), 9, Nr))), 128)), (N(!0), C(y, null, I(v.value, (e) => (N(), C("button", {
+					key: e.key,
+					type: "button",
+					class: M(["btn btn-xs btn-square", T(e)]),
+					"data-key": e.key,
+					disabled: e.disabled,
+					tabindex: e.key === c.value ? 0 : -1,
+					"aria-selected": e.isSelected,
+					"aria-current": e.isToday ? "date" : void 0,
+					role: "gridcell",
+					onClick: (t) => A(e)
+				}, R(e.day), 11, Pr))), 128))], 32),
+				w("div", Fr, [w("button", {
+					type: "button",
+					class: "btn btn-ghost btn-xs",
+					disabled: !ne.value,
+					onClick: j
+				}, " Today ", 8, Ir), e.clearable ? (N(), C("button", {
+					key: 0,
+					type: "button",
+					class: "btn btn-ghost btn-xs",
+					disabled: !e.modelValue,
+					onClick: le
+				}, " Clear ", 8, Lr)) : S("", !0)])
+			], 8, Ar)) : S("", !0)], 2)]),
+			_: 1
+		}, 16));
+	}
+}), zr = /* @__PURE__ */ D({
+	__name: "DateControlRenderer",
+	props: {
+		uischema: {},
+		schema: {}
+	},
+	setup(e) {
+		let t = e, { wrapper: n, value: r, field: i, onBlur: a, onChange: o, appliedOptions: s } = Wn(t.uischema, t.schema), c = b(() => _r(s.value, t.schema)), l = (e) => {
+			i.setValue(e), o();
+		};
+		return (e, t) => (N(), x(Rr, j(z(n), {
+			"model-value": z(r),
+			"with-time": c.value,
+			min: z(s).min,
+			max: z(s).max,
+			locale: z(s).locale,
+			"onUpdate:modelValue": l,
+			onBlur: z(a)
+		}), null, 16, [
+			"model-value",
+			"with-time",
+			"min",
+			"max",
+			"locale",
+			"onBlur"
+		]));
+	}
+}), Br = { class: "flex flex-row h-full" }, Vr = {
+	class: "text-xs bg-base-200 p-2 h-full border-b border-gray-200 max-w-96 last-of-type:border-b-0 text-left font-semibold text-text-accent flex items-center",
+	style: { "min-width": "150px" }
+}, Hr = { class: "h-full p-2 whitespace-pre-wrap break-words overflow-hidden min-w-0 text-sm" }, Ur = /* @__PURE__ */ D({
+	__name: "ControlLabel",
+	props: s,
+	setup(e) {
+		return (e, t) => (N(), C("div", Br, [w("div", Vr, [w("span", null, R(e.label), 1)]), w("div", Hr, [L(e.$slots, "default")])]));
+	}
+}), Wr = { class: "flex items-end gap-2" }, Gr = { class: "flex flex-col gap-1" }, Kr = { class: "text-gray-500" }, qr = ["value", "max"], Jr = { class: "flex flex-col gap-1" }, Yr = { class: "text-gray-500" }, Xr = ["value", "min"], Zr = /* @__PURE__ */ D({
+	__name: "DateRangeControlRenderer",
+	props: {
+		uischema: {},
+		schema: {}
+	},
+	setup(e) {
+		let t = e, { value: n, wrapper: r, onBlur: i, appliedOptions: a } = Un()(t.uischema, t.schema), o = n, s = b(() => a.value?.fromLabel ?? "From"), c = b(() => a.value?.toLabel ?? "To"), l = b(() => a.value?.fromField ?? "from"), u = b(() => a.value?.toField ?? "to");
+		function d(e, t) {
+			let n = { ...o.value ?? {} };
+			t ? n[e] = t : delete n[e], o.value = n[l.value] || n[u.value] ? n : void 0;
+		}
+		return (e, t) => (N(), x(Ur, se(ie(z(r))), {
+			default: V(() => [w("div", Wr, [
+				w("label", Gr, [w("small", Kr, R(s.value), 1), w("input", {
+					type: "date",
+					class: "input w-36",
+					autocomplete: "off",
+					"data-lpignore": "true",
+					"data-bwignore": "true",
+					value: z(o)?.[l.value] ?? "",
+					max: z(o)?.[u.value] || void 0,
+					onInput: t[0] ||= (e) => d(l.value, e.target.value),
+					onBlur: t[1] ||= (...e) => z(i) && z(i)(...e)
+				}, null, 40, qr)]),
+				t[4] ||= w("span", { class: "text-secondary pb-2" }, "→", -1),
+				w("label", Jr, [w("small", Yr, R(c.value), 1), w("input", {
+					type: "date",
+					class: "input w-36",
+					autocomplete: "off",
+					"data-lpignore": "true",
+					"data-bwignore": "true",
+					value: z(o)?.[u.value] ?? "",
+					min: z(o)?.[l.value] || void 0,
+					onInput: t[2] ||= (e) => d(u.value, e.target.value),
+					onBlur: t[3] ||= (...e) => z(i) && z(i)(...e)
+				}, null, 40, Xr)])
+			])]),
+			_: 1
+		}, 16));
+	}
+}), Qr = /* @__PURE__ */ D({
+	__name: "MarkdownControlRenderer",
+	props: {
+		uischema: {},
+		schema: {}
+	},
+	setup(e) {
+		let t = e, { wrapper: n, value: r, field: i, onBlur: a, onChange: o } = Wn(t.uischema, t.schema), s = (e) => {
+			i.setValue(e), o();
+		};
+		return (e, t) => (N(), x(z(f), j(z(n), {
+			"model-value": z(r),
+			onChange: s,
+			onBlur: z(a)
+		}), null, 16, ["model-value", "onBlur"]));
+	}
+}), $r = /* @__PURE__ */ D({
+	__name: "MultiSelectControlRenderer",
+	props: {
+		uischema: {},
+		schema: {}
+	},
+	setup(e) {
+		let t = e, { wrapper: n, value: r, field: i, onBlur: a, onChange: o, appliedOptions: s } = qn(t.uischema, t.schema), c = (e) => {
+			let t = s.value, n = t.valueKey ?? "value", r = t.storeValue && Array.isArray(e) ? e.map((e) => e && typeof e == "object" ? e[n] : e) : e;
+			i.setValue(r), o();
+		};
+		return (e, t) => (N(), x(z(h), j(z(n), {
+			"model-value": z(r),
+			onChange: c,
+			onBlur: z(a)
+		}), null, 16, ["model-value", "onBlur"]));
+	}
+}), ei = /* @__PURE__ */ D({
+	__name: "NumberControlRenderer",
+	props: {
+		uischema: {},
+		schema: {}
+	},
+	setup(e) {
+		let t = e, { wrapper: n, value: r, onBlur: i, onChange: a } = Wn(t.uischema, t.schema, { defaultType: "number" });
+		return (e, t) => (N(), x(z(d), j(z(n), {
+			modelValue: z(r),
+			"onUpdate:modelValue": t[0] ||= (e) => k(r) ? r.value = e : null,
+			steps: .01,
+			onBlur: z(i),
+			onChange: z(a)
+		}), null, 16, [
+			"modelValue",
+			"onBlur",
+			"onChange"
+		]));
+	}
+}), ti = { class: "flex flex-col gap-1" }, ni = {
+	key: 0,
+	class: "text-sm font-medium"
+}, ri = {
+	key: 1,
+	class: "text-sm"
+}, ii = {
+	key: 2,
+	class: "grid grid-cols-12 gap-2 rounded-box border border-base-300 p-2"
+}, ai = {
+	key: 3,
+	class: "text-sm text-base-content/50"
+}, oi = /* @__PURE__ */ D({
+	__name: "ObjectControlRenderer",
+	props: {
+		uischema: {},
+		schema: {}
+	},
+	setup(e) {
+		let t = e, n = O("pathPrefix", ""), r = t.uischema.scope, i = K(r), a = n ? `${n}.${i}` : i, o = O("rootSchema", t.schema), s = b(() => zt(o, r) ?? zt(t.schema, r) ?? t.schema), c = b(() => t.uischema.options ?? {}), l = b(() => c.value.hideLabel === !0), u = b(() => c.value.label ?? i), { values: d } = be(), f = (e, t) => t.split(".").reduce((e, t) => e == null ? e : e[t], e), p = b(() => {
+			let e = c.value.displayKey;
+			if (typeof e != "string" || !e) return null;
+			let t = f(f(d, a), e);
+			return t == null ? "—" : String(t);
+		}), m = b(() => {
+			let e = t.uischema.elements;
+			if (e?.length) return e;
+			let n = s.value?.properties;
+			return n ? Object.keys(n).map((e) => ({
+				type: "Control",
+				scope: `#/properties/${e}`,
+				options: { label: n[e]?.title ?? e }
+			})) : [];
+		}), h = (e) => {
+			let t = (e.options ?? {}).colspan;
+			return typeof t == "number" ? `col-span-${t}` : "col-span-12";
+		};
+		return (e, t) => (N(), C("div", ti, [l.value ? S("", !0) : (N(), C("label", ni, R(u.value), 1)), p.value === null ? m.value.length ? (N(), C("div", ii, [(N(!0), C(y, null, I(m.value, (e, t) => (N(), C("div", {
+			key: t,
+			class: M(h(e))
+		}, [E(_a, {
+			uischema: e,
+			schema: s.value,
+			"path-prefix": z(a)
+		}, null, 8, [
+			"uischema",
+			"schema",
+			"path-prefix"
+		])], 2))), 128))])) : (N(), C("div", ai, " No properties declared for " + R(u.value), 1)) : (N(), C("span", ri, R(p.value), 1))]));
+	}
+}), si = /* @__PURE__ */ D({
+	__name: "SelectControlRenderer",
+	props: {
+		uischema: {},
+		schema: {}
+	},
+	setup(e) {
+		let t = e, { wrapper: n, value: r, field: i, onBlur: a, onChange: o, appliedOptions: s } = qn(t.uischema, t.schema), c = gn(), { values: l } = be(), u = b(() => s.value.valueKey ?? "value"), d = b(() => !!s.value.uri || !!s.value.resource), f = F([]);
+		B([s, l], async ([e]) => {
+			if (!d.value) return;
+			let t = await Fn(e, c, l);
+			if (t.fetchOptions) try {
+				let e = await t.fetchOptions("", new AbortController().signal);
+				f.value = Array.isArray(e) ? e : [];
+			} catch {
+				f.value = [];
+			}
+		}, {
+			immediate: !0,
+			deep: !0
+		});
+		let p = b(() => {
+			if (d.value) return f.value;
+			let e = s.value;
+			return e.options ?? e.values ?? [];
+		}), m = (e) => {
+			let t = s.value.storeValue && e && typeof e == "object" ? e[u.value] : e;
+			i.setValue(t), o();
+		};
+		return (e, t) => (N(), x(z(g), j(z(n), {
+			"model-value": z(r),
+			options: p.value,
+			clearable: z(s).clearable ?? !0,
+			onChange: m,
+			onBlur: z(a)
+		}), null, 16, [
+			"model-value",
+			"options",
+			"clearable",
+			"onBlur"
+		]));
+	}
+}), ci = /* @__PURE__ */ D({
+	__name: "StringControlRenderer",
+	props: {
+		uischema: {},
+		schema: {}
+	},
+	setup(e) {
+		let t = e, { wrapper: n, value: r, onBlur: i, onChange: a } = Wn(t.uischema, t.schema);
+		return (e, t) => (N(), x(z(u), j(z(n), {
+			modelValue: z(r),
+			"onUpdate:modelValue": t[0] ||= (e) => k(r) ? r.value = e : null,
+			onBlur: z(i),
+			onChange: z(a)
+		}), null, 16, [
+			"modelValue",
+			"onBlur",
+			"onChange"
+		]));
+	}
+}), li = /* @__PURE__ */ D({
+	__name: "TextAreaControlRenderer",
+	props: {
+		uischema: {},
+		schema: {}
+	},
+	setup(e) {
+		let t = e, { wrapper: n, value: r, onBlur: i, onChange: a, appliedOptions: o } = Wn(t.uischema, t.schema), s = O("pathPrefix", ""), c = t.uischema.options ?? {}, { values: l } = be(), u = b(() => c.directionField ? (s ? `${s}.${c.directionField}` : c.directionField).split(".").reduce((e, t) => e?.[t], l) ?? "ltr" : c.direction ?? "ltr");
+		return (e, t) => (N(), x(z(ee), j(z(n), {
+			modelValue: z(r),
+			"onUpdate:modelValue": t[0] ||= (e) => k(r) ? r.value = e : null,
+			dir: u.value,
+			height: z(o).height,
+			"min-height": z(o).minHeight,
+			onBlur: z(i),
+			onChange: z(a)
+		}), null, 16, [
+			"modelValue",
+			"dir",
+			"height",
+			"min-height",
+			"onBlur",
+			"onChange"
+		]));
+	}
+}), ui = [
+	{
+		tester: q(10, Zt),
+		renderer: ci
+	},
+	{
+		tester: q(11, Xt),
+		renderer: li
+	},
+	{
+		tester: q(11, Qt),
+		renderer: Qr
+	},
+	{
+		tester: q(11, rn),
+		renderer: or
+	},
+	{
+		tester: q(11, nn),
+		renderer: si
+	},
+	{
+		tester: q(11, tn),
+		renderer: $r
+	},
+	{
+		tester: q(12, Yt),
+		renderer: ar
+	},
+	{
+		tester: q(12, an),
+		renderer: ei
+	},
+	{
+		tester: q(12, on),
+		renderer: ei
+	},
+	{
+		tester: q(12, cn),
+		renderer: ae(Zr)
+	},
+	{
+		tester: q(12, sn),
+		renderer: ae(zr)
+	},
+	{
+		tester: q(11, $t),
+		renderer: ae(oi)
+	}
+], di = { class: "flex flex-row h-full" }, fi = {
+	class: "text-xs bg-base-200 p-2 h-full border-b border-gray-200 max-w-96 last-of-type:border-b-0 text-left font-semibold text-text-accent flex items-center",
+	style: { "min-width": "150px" }
+}, pi = { class: "h-full p-2 whitespace-pre-wrap break-words overflow-hidden min-w-0 text-sm" }, mi = /* @__PURE__ */ D({
+	__name: "ReadonlyLabel",
+	props: s,
+	setup(e) {
+		return (e, t) => (N(), C("div", di, [w("div", fi, [w("span", null, R(e.label), 1)]), w("div", pi, [L(e.$slots, "default")])]));
+	}
+}), hi = { class: "text-gray-500 text-sm" }, gi = /* @__PURE__ */ D({
+	__name: "NotSetValue",
+	setup(e) {
+		return (e, t) => (N(), C("p", hi, [T(R(z("—")) + " · ", 1), t[0] ||= w("small", null, "Not set", -1)]));
+	}
+}), $ = {
+	direction: {
+		type: String,
+		default: "ltr"
+	},
+	path: {
+		type: String,
+		required: !0
+	},
+	displayValue: {
+		required: !0,
+		default: null
+	},
+	value: {
+		required: !0,
+		default: null
+	},
+	options: {
+		type: Object,
+		required: !0
+	}
+}, _i = {
+	key: 0,
+	class: "inline-flex items-center gap-1 text-success"
+}, vi = {
+	key: 1,
+	class: "inline-flex items-center gap-1 text-base-content/50"
+}, yi = /* @__PURE__ */ D({
+	__name: "BooleanValue",
+	props: $,
+	setup(e) {
+		return (e, t) => e.displayValue === !0 ? (N(), C("span", _i, [E(z(c), {
+			icon: z(l).Check,
+			size: "sm"
+		}, null, 8, ["icon"]), t[0] ||= w("span", null, "Yes", -1)])) : e.displayValue === !1 ? (N(), C("span", vi, [E(z(c), {
+			icon: z(l).Close,
+			size: "sm"
+		}, null, 8, ["icon"]), t[1] ||= w("span", null, "No", -1)])) : (N(), x(gi, { key: 2 }));
+	}
+}), bi = {
+	options: {
+		type: Object,
+		required: !0
+	},
+	value: {
+		type: [Object, null],
+		required: !0
+	}
+}, xi = { class: "text-gray-500" }, Si = { class: "text-gray-500" }, Ci = /* @__PURE__ */ D({
+	__name: "DateRangeValue",
+	props: bi,
+	setup(e) {
+		let t = b(() => e.value?.[e.options.fromField ?? "from"]), n = b(() => e.value?.[e.options.toField ?? "to"]);
+		return (e, r) => (N(), C("p", null, [
+			w("small", xi, R(e.options.fromLabel ?? "From") + ": ", 1),
+			T(" " + R(t.value) + " ", 1),
+			r[0] ||= w("br", null, null, -1),
+			w("small", Si, R(e.options.toLabel ?? "To") + ": ", 1),
+			T(" " + R(n.value), 1)
+		]));
+	}
+}), wi = ["dir"], Ti = {
+	key: 0,
+	class: "text-gray-500"
+}, Ei = /* @__PURE__ */ D({
+	__name: "DateValue",
+	props: $,
+	setup(e) {
+		let t = e, n = b(() => t.options?.withTime !== !1), r = b(() => fr(t.displayValue, { withTime: n.value })), i = b(() => n.value ? pr(t.displayValue) : void 0);
+		return (e, t) => (N(), C("p", { dir: e.direction }, [T(R(r.value) + " ", 1), i.value ? (N(), C("small", Ti, "· " + R(i.value), 1)) : S("", !0)], 8, wi));
+	}
+}), Di = ["href"], Oi = /* @__PURE__ */ D({
+	__name: "LinkValue",
+	props: $,
+	setup(e) {
+		return (e, t) => (N(), C("a", {
+			href: String(e.displayValue),
+			target: "_blank",
+			rel: "noopener noreferrer"
+		}, R(e.displayValue), 9, Di));
+	}
+}), ki = ["innerHTML"], Ai = /* @__PURE__ */ D({
+	__name: "MarkdownValue",
+	props: $,
+	setup(e) {
+		let t = e, n = b(() => {
+			let e = t.value;
+			return e ? e.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br>") : "";
+		});
+		return (e, t) => (N(), C("div", {
+			class: "prose prose-sm max-w-none",
+			innerHTML: n.value
+		}, null, 8, ki));
+	}
+}), ji = { key: 0 }, Mi = /* @__PURE__ */ D({
+	__name: "NumberValue",
+	props: $,
+	setup(e) {
+		return (e, t) => e.displayValue ? (N(), C("p", ji, R(e.displayValue), 1)) : (N(), x(gi, { key: 1 }));
+	}
+}), Ni = { key: 0 }, Pi = {
+	key: 1,
+	class: "grid grid-cols-[auto_1fr] gap-x-3 text-sm"
+}, Fi = { class: "text-base-content/60" }, Ii = { class: "break-words" }, Li = {
+	key: 2,
+	class: "block overflow-auto text-sm",
+	style: { "max-height": "200px" }
+}, Ri = /* @__PURE__ */ D({
+	__name: "ObjectValue",
+	props: $,
+	setup(e) {
+		let t = e, n = (e) => e.replace(/[_-]+/g, " ").replace(/^./, (e) => e.toUpperCase()), r = b(() => {
+			let e = t.value;
+			return e && typeof e == "object" && !Array.isArray(e) ? e : null;
+		}), i = b(() => {
+			let e = t.options?.displayKey;
+			if (typeof e != "string" || !r.value) return null;
+			let n = e.split(".").reduce((e, t) => e == null ? e : e[t], r.value);
+			return n == null ? null : String(n);
+		}), a = b(() => {
+			if (!r.value) return [];
+			let e = Object.entries(r.value), t = e.filter(([, e]) => typeof e != "object" || !e);
+			return t.length === e.length ? t.map(([e, t]) => ({
+				key: e,
+				label: n(e),
+				value: t == null ? "—" : String(t)
+			})) : [];
+		});
+		return (e, t) => i.value === null ? a.value.length ? (N(), C("dl", Pi, [(N(!0), C(y, null, I(a.value, (e) => (N(), C(y, { key: e.key }, [w("dt", Fi, R(e.label), 1), w("dd", Ii, R(e.value), 1)], 64))), 128))])) : (N(), C("pre", Li, R(e.displayValue), 1)) : (N(), C("span", Ni, R(i.value), 1));
+	}
+}), zi = ["dir"], Bi = /* @__PURE__ */ D({
+	__name: "StringValue",
+	props: $,
+	setup(e) {
+		return (e, t) => e.displayValue ? (N(), C("p", {
+			key: 0,
+			dir: e.direction
+		}, R(e.displayValue), 9, zi)) : (N(), x(gi, { key: 1 }));
+	}
+}), Vi = { class: "px-2 flex gap-2 items-center" }, Hi = { class: "truncate" }, Ui = /* @__PURE__ */ D({
+	__name: "ViewDetailValue",
+	props: $,
+	setup(e) {
+		let t = e, r = pn(), i = () => {
+			r.dispatch({
+				event: "view",
+				type: t.path,
+				data: t.value,
+				options: t.options
+			});
+		};
+		return (e, t) => (N(), x(z(n), {
+			color: "ghost",
+			class: "border-gray-300 text-primary h-8",
+			tooltip: "View",
+			onClick: i
+		}, {
+			default: V(() => [w("span", Vi, [w("span", Hi, R(e.displayValue), 1), E(z(c), {
+				icon: z(l).View,
+				size: "sm"
+			}, null, 8, ["icon"])])]),
+			_: 1
+		}));
+	}
+}), Wi = (e) => e?.startsWith?.("http"), Gi = (e, t) => {
+	let n = O("pathPrefix", ""), r = e ?? {};
+	return r.directionField ? (n ? `${n}.${r.directionField}` : r.directionField).split(".").reduce((e, t) => e?.[t], t) ?? "ltr" : r.direction ?? "ltr";
+}, Ki = (e, t) => {
+	let n = t.labelKey ?? "label", r = t.valueKey ?? "value", i = e?.[r] ?? e;
+	return typeof i == "string" && t.values ? t.values?.find((e) => e[r] === i)?.[n] ?? i : (e && typeof e == "object" ? e?.[n] ?? e[r] : e) || null;
+}, qi = (e, t, n) => {
+	if (t.dataPath) {
+		let e = t.dataPath.split(".").reduce((e, t) => e?.[t], n);
+		return t.key && e && typeof e == "object" ? e[t.key] ?? null : e ?? null;
+	}
+	return typeof e == "object" && e && t.key ? e[t.key] ?? null : e ?? null;
+}, Ji = (e, t, n) => {
+	let r = n.format ?? "date";
+	return r === "select" || r === "autocomplete" ? Ki(e, n) : typeof e == "object" ? qi(e, n, t) : e ?? null;
+}, Yi = (e, t) => {
+	switch (t.format) {
+		case "date-range": return Ci;
+		case W.number:
+		case W.integer: return Mi;
+	}
+	return e == null ? gi : t.resource ? Ui : mr(e) ? Ei : Wi(e) ? Oi : typeof e == "boolean" ? yi : typeof e == "object" ? Ri : Bi;
+}, Xi = (e, t, n, r) => cn(r, n) ? Ci : e != null && sn(r, n) ? Ei : an(r, n) || on(r, n) ? Mi : Qt(r, n) ? Ai : Yi(e, t), Zi = (e, t, n, r, i) => b(() => {
+	let a = r.value?.value, o = t.options ?? {}, s = Ji(a, i, o);
+	return {
+		component: Xi(a, o, n, t),
+		value: {
+			value: a,
+			path: e,
+			displayValue: s,
+			options: {
+				...o,
+				withTime: _r(o, n)
+			},
+			direction: Gi(o, i)
+		}
+	};
+}), Qi = ({ useProps: e, setDefaultValue: t } = {}) => (t, n, r = {}) => {
+	let { values: i } = be(), a = O("pathPrefix", ""), o = K(t.scope), s = a ? `${a}.${o}` : o, c;
+	try {
+		c = ge(() => s);
+	} catch (e) {
+		console.warn(`[useReadonlyBinding] useField("${s}") failed – data/schema mismatch. Field renders with undefined value.`, e), c = ge(`__broken__${s.replace(/[.[\]]/g, "_")}`);
+	}
+	let l = Vn(t, n, c, r), u = e?.(t, n, c, r) ?? { value: {} };
+	return {
+		wrapper: b(() => ({
+			...l.value,
+			...u.value
+		})),
+		appliedOptions: b(() => t.options ?? {}),
+		displayWrapper: Zi(s, t, n, c, i)
+	};
+}, $i = (e, t, n = {}) => Qi()(e, t, n), ea = /* @__PURE__ */ D({
+	__name: "ControlReadonlyRenderer",
+	props: {
+		uischema: {},
+		schema: {}
+	},
+	setup(e) {
+		let t = e, { wrapper: n, displayWrapper: r } = $i(t.uischema, t.schema);
+		return (e, t) => (N(), x(mi, se(ie(z(n))), {
+			default: V(() => [(N(), x(ue(z(r).component), se(ie(z(r).value)), null, 16))]),
+			_: 1
+		}, 16));
+	}
+}), ta = [{
+	tester: q(10, X("Control")),
+	renderer: ea
+}], na = {
+	1: "col-span-2 md:col-span-1",
+	2: "col-span-4 md:col-span-2",
+	3: "col-span-6 md:col-span-3",
+	4: "col-span-8 md:col-span-4",
+	5: "col-span-full md:col-span-5",
+	6: "col-span-full md:col-span-6",
+	7: "col-span-full md:col-span-7",
+	8: "col-span-full md:col-span-8",
+	9: "col-span-full md:col-span-9",
+	10: "col-span-full md:col-span-10",
+	11: "col-span-full md:col-span-11",
+	12: "col-span-full"
+}, ra = {
+	1: "col-span-2",
+	2: "col-span-4",
+	3: "col-span-5",
+	4: "col-span-7",
+	5: "col-span-full",
+	6: "col-span-full",
+	7: "col-span-full",
+	8: "col-span-full",
+	9: "col-span-full",
+	10: "col-span-full",
+	11: "col-span-full",
+	12: "col-span-full"
+}, ia = { class: "flex flex-col gap-4" }, aa = /* @__PURE__ */ D({
+	__name: "CollapseLayoutRenderer",
+	props: {
+		uischema: {},
+		schema: {}
+	},
+	setup(e) {
+		let t = e, n = O("pathPrefix", ""), r = t.uischema.options ?? {}, a = r.titleKey ? ve(() => n ? `${n}.${r.titleKey}` : r.titleKey) : void 0, o = b(() => a?.value ? a.value : t.uischema.label ?? r.title ?? "Details");
+		return (t, n) => (N(), x(z(i), { title: o.value }, {
+			default: V(() => [w("div", ia, [(N(!0), C(y, null, I(e.uischema.elements, (t, n) => (N(), C("div", {
+				key: n,
+				class: M(z(na)[t.options?.colspan ?? 12])
+			}, [E(_a, {
+				uischema: t,
+				schema: e.schema
+			}, null, 8, ["uischema", "schema"])], 2))), 128))])]),
+			_: 1
+		}, 8, ["title"]));
+	}
+}), oa = {
+	key: 1,
+	class: "flex flex-col gap-3"
+}, sa = /* @__PURE__ */ D({
+	__name: "LayoutRenderer",
+	props: {
+		uischema: {},
+		schema: {}
+	},
+	setup(e) {
+		let t = e, n = {
+			GridLayout: "grid grid-cols-1 gap-x-3 md:grid-cols-12",
+			HorizontalLayout: "flex flex-col gap-y-3 md:flex-row",
+			VerticalLayout: "flex flex-col gap-3"
+		}, r = b(() => n[t.uischema.type]), i = b(() => t.uischema.type in n);
+		return (t, n) => i.value ? (N(), C("div", {
+			key: 0,
+			class: M(r.value)
+		}, [(N(!0), C(y, null, I(e.uischema.elements, (t, n) => (N(), C("div", {
+			key: n,
+			class: M(z(na)[t.options?.colspan ?? 12])
+		}, [E(_a, {
+			uischema: t,
+			schema: e.schema
+		}, null, 8, ["uischema", "schema"])], 2))), 128))], 2)) : (N(), C("div", oa, "No Applicable Layout found"));
+	}
+}), ca = {
+	key: 1,
+	class: "flex flex-col gap-3"
+}, la = /* @__PURE__ */ D({
+	__name: "ReadOnlyLayoutRenderer",
+	props: {
+		uischema: {},
+		schema: {}
+	},
+	setup(e) {
+		let t = e, n = {
+			GridLayout: "grid grid-cols-1 gap-x-3 grid-cols-10 lg:grid-cols-8",
+			HorizontalLayout: "flex flex-col gap-y-3 md:flex-row",
+			VerticalLayout: "flex flex-col gap-3"
+		}, r = b(() => n[t.uischema.type]), i = b(() => t.uischema.type in n);
+		return (t, n) => i.value ? (N(), C("div", {
+			key: 0,
+			class: M(r.value)
+		}, [(N(!0), C(y, null, I(e.uischema.elements, (t, n) => (N(), C("div", {
+			key: n,
+			class: M(z(ra)[t.options?.colspan ?? 12])
+		}, [E(_a, {
+			uischema: t,
+			schema: e.schema
+		}, null, 8, ["uischema", "schema"])], 2))), 128))], 2)) : (N(), C("div", ca, "No Applicable Layout found"));
+	}
+}), ua = Y(X("GridLayout"), X("HorizontalLayout"), X("VerticalLayout")), da = [{
+	tester: q(10, ua),
+	renderer: sa
+}, {
+	tester: q(10, X("CollapseLayout")),
+	renderer: aa
+}], fa = [{
+	tester: q(10, ua),
+	renderer: la
+}, {
+	tester: q(10, X("CollapseLayout")),
+	renderer: aa
+}], pa = [
+	da,
+	ui,
+	ln
+].flat(), ma = [
+	fa,
+	ta,
+	ln
+].flat();
+function ha(e, t, n) {
+	let r = null;
+	for (let i of e) {
+		let e = i.tester(t, n);
+		e > -1 && (!r || e > r.rank) && (r = {
+			rank: e,
+			renderer: i.renderer
+		});
+	}
+	return r?.renderer ?? null;
+}
+var ga = {
+	key: 1,
+	class: "text-error text-xs"
+}, _a = /* @__PURE__ */ D({
+	__name: "Dispatch",
+	props: {
+		uischema: {},
+		schema: {},
+		pathPrefix: { default: void 0 }
+	},
+	setup(e) {
+		let t = e, n = O("renderers"), r = O("readonlyRenderers", []), i = O(Rt, F(!1)), a = b(() => r.length ? [...ma, ...r] : ma), o = b(() => i.value ? a.value : n), s = O("rootSchema"), c = O("pathPrefix", ""), l = t.pathPrefix ?? c;
+		t.pathPrefix !== void 0 && P("pathPrefix", l);
+		let u = b(() => {
+			let e = t.uischema;
+			return e.scope ? zt(s, e.scope) || (zt(t.schema, e.scope) ?? t.schema) : t.schema;
+		}), d = b(() => ha(o.value, t.uischema, u.value));
+		return (t, n) => d.value ? (N(), x(ue(d.value), {
+			key: 0,
+			uischema: e.uischema,
+			schema: u.value,
+			"data-dispatch-renderer": d.value.__name ?? d.value.name ?? "anonymous",
+			"data-dispatch-scope": e.uischema.scope
+		}, null, 8, [
+			"uischema",
+			"schema",
+			"data-dispatch-renderer",
+			"data-dispatch-scope"
+		])) : (N(), C("div", ga, " No renderer for " + R(e.uischema.scope) + " type: " + R(e.uischema.type) + " format: " + R(e.uischema.options?.format), 1));
+	}
+}), va = {
+	id: {
+		type: String,
+		required: !0
+	},
+	name: {
+		type: String,
+		default: "form"
+	},
+	schema: {
+		type: Object,
+		required: !0
+	},
+	uiSchema: {
+		type: Object,
+		required: !0
+	},
+	disabled: {
+		type: Boolean,
+		default: !1
+	},
+	readonly: {
+		type: Boolean,
+		default: !1
+	},
+	formData: {
+		type: Object,
+		default: () => ({})
+	},
+	errorMode: {
+		type: String,
+		default: "onChanges"
+	},
+	http: {
+		type: [Object, Function],
+		default: null
+	},
+	renderers: {
+		type: Array,
+		default: null
+	},
+	validateOnMount: {
+		type: Boolean,
+		default: !1
+	}
+}, ya = [
+	"change",
+	"submit",
+	"errors",
+	"valid",
+	"events"
+], ba = ["id"], xa = /* @__PURE__ */ D({
+	__name: "FormComponent",
+	props: va,
+	emits: ya,
+	setup(e, { expose: t, emit: n }) {
+		zn();
+		let r = e, i = n, { values: a, errors: o, meta: s, setValues: c, validate: l, setFieldTouched: u } = ye({
+			validationSchema: xe(Ge(We(r.schema))),
+			initialValues: r.formData
+		});
+		P("renderers", r.renderers?.length ? [...pa, ...r.renderers] : pa), P("readonlyRenderers", r.renderers ?? []), P("rootSchema", r.schema), P("styles", ne);
+		let d = F(!1);
+		P(It, fe(r, "errorMode")), P(Lt, d), P(Rt, fe(r, "readonly")), le(async () => {
+			let e = await l();
+			if (!e.valid && r.validateOnMount) for (let t of Object.keys(e.errors)) u(t, !0);
+			i("valid", e.valid);
+		}), fn((e) => {
+			i("events", e);
+		}), r.http && hn(r.http);
+		let f = !1;
+		B(() => r.formData, () => {
+			let e = de(r.formData);
+			e && JSON.stringify(e) !== JSON.stringify(de(a)) && (f = !0, c(e), oe(() => {
+				f = !1;
+			}));
+		}), B(a, (e) => {
+			if (f) return;
+			let t = s.value.valid;
+			i("valid", t), i("change", de(e));
+		}, { deep: !0 }), B(o, (e) => {
+			i("errors", Object.entries(e).filter(([, e]) => !!e).map(([e, t]) => ({
+				path: e,
+				message: t
+			})));
+		}, { deep: !0 });
+		let p = () => {
+			d.value = !0, i("submit", {
+				data: de(a),
+				valid: s.value.valid
+			});
+		};
+		return t({
+			markSubmitted: () => {
+				d.value = !0;
+			},
+			getCurrentValues: () => de(a)
+		}), (e, t) => (N(), C("form", {
+			id: e.id,
+			onSubmit: he(p, ["prevent"]),
+			autocomplete: "off",
+			"data-1p-ignore": "",
+			"data-form-type": "other"
+		}, [E(_a, {
+			uischema: e.uiSchema,
+			schema: e.schema
+		}, null, 8, ["uischema", "schema"])], 40, ba));
+	}
+}), Sa = (e, t, n = {}) => {
+	let r = n.notification?.entityType || "entity", i = n.notification?.notification ?? null, a = (...t) => [e.uri, ...t].join("/"), o = (e) => {
+		i?.success(e);
+	}, s = (e, t) => {
+		throw console.error(e), i?.error(t), Error(e);
+	};
+	return {
+		create: (e, n) => t.post(a(), e, n).then((e) => (o(`Created ${r}`), e.data)).catch((e) => {
+			s(e, `Failed to create ${r}`);
+		}),
+		patch: (e, n, i) => t.patch(a(e), n, i).then((e) => (o(`Saved ${r}`), e.data)).catch((e) => {
+			s(e, `Failed to save ${r}`);
+		}),
+		createMulti: (e, n) => Promise.all(e.map((e) => t.post(a(), e, n))).then((e) => (o(`Created ${r}`), e.map((e) => e.data))).catch((e) => {
+			s(e, `Failed to save ${r}`);
+		}),
+		delete: (e, n) => t.delete(a(e), n).then((e) => (o(`${r} deleted`), e)).catch((e) => {
+			s(e, `Failed to delete ${r}`);
+		}),
+		get: (e, n) => t.get(a(e), n).then((e) => e.data).catch((e) => {
+			s(e, "Failed to load data");
+		})
+	};
+}, Ca = {
+	id: {
+		type: String,
+		required: !0
+	},
+	uiSchema: {
+		type: Object,
+		required: !0
+	},
+	schema: {
+		type: Object,
+		required: !0
+	},
+	loading: {
+		type: Boolean,
+		default: !1
+	},
+	multiselect: {
+		type: Boolean,
+		default: !1
+	},
+	actions: {
+		type: Array,
+		default: []
+	},
+	data: { type: Array },
+	page: { type: Object },
+	sort: { type: Object },
+	cellRenderers: {
+		type: Array,
+		default: []
+	},
+	hidePagination: {
+		type: Boolean,
+		default: !1
+	}
+}, wa = [
+	"updatePage",
+	"updatePageSize",
+	"sort",
+	"selectionChange",
+	"refresh"
+], Ta = { class: "truncate" }, Ea = /* @__PURE__ */ D({
+	__name: "TableCellRender",
+	props: {
+		data: {
+			type: Object,
+			required: !0
+		},
+		column: {
+			type: Object,
+			required: !0
+		},
+		options: { type: Object }
+	},
+	setup(e) {
+		let t = e, n = b(() => {
+			let e = t.column.options?.dataPath ?? t.column.id;
+			return t.data[e] ?? null;
+		}), r = b(() => Yi(n.value, t.options));
+		return (t, i) => (N(), C("div", Ta, [(N(), x(ue(r.value), {
+			value: n.value,
+			options: e.options
+		}, null, 8, ["value", "options"]))]));
+	}
+}), Da = (e, t) => (n) => n.type === e ? t : -1, Oa = (e, t) => {
+	let n;
+	for (let r of e) {
+		let e = r.tester(t);
+		e > -1 && (!n || e > n.rank) && (n = {
+			rank: e,
+			renderer: r.renderer
+		});
+	}
+	return n?.renderer ?? Ea;
+}, ka = [
+	{
+		tester: Da("TextCell", 10),
+		renderer: v
+	},
+	{
+		tester: Da("BooleanCell", 10),
+		renderer: t
+	},
+	{
+		tester: Da("control", 10),
+		renderer: Ea
+	}
+], Aa = /* @__PURE__ */ D({
+	__name: "TableComponent",
+	props: Ca,
+	emits: wa,
+	setup(e, { emit: t }) {
+		let n = e, r = t, i = b(() => [...n.cellRenderers ?? [], ...ka]), a = b(() => n.uiSchema.elements.map((e) => {
+			let t = e, a = tt(t, n.schema), o = Array.isArray(a.type) ? a.type[0] : a.type, s = Oa(i.value, t);
+			return s || console.warn("No cell renderer found for", t.type, t.options?.format), {
+				...a,
+				label: e.options?.label ?? a.id,
+				type: o,
+				component: s,
+				onRefresh: () => r("refresh")
+			};
+		}));
+		return (e, t) => (N(), x(z(_), j(n, {
+			"display-columns": a.value,
+			page: e.hidePagination ? void 0 : e.page,
+			onSort: t[0] ||= (e) => r("sort", e),
+			onUpdatePage: t[1] ||= (e) => r("updatePage", e),
+			onUpdatePageSize: t[2] ||= (e) => r("updatePageSize", e),
+			onSelectionChange: t[3] ||= (e) => r("selectionChange", e)
+		}), null, 16, ["display-columns", "page"]));
+	}
+}), ja = { class: "flex gap-2 items-center" }, Ma = {
+	key: 2,
+	class: "flex-1 min-w-0"
+}, Na = /* @__PURE__ */ D({
+	__name: "FilterRowInput",
+	props: {
+		modelValue: {},
+		fields: {}
+	},
+	emits: ["update:modelValue", "remove"],
+	setup(e, { emit: t }) {
+		let r = e, i = t, a = b(() => r.fields.find((e) => e.value === r.modelValue.key)), o = b(() => {
+			let e = Ie[a.value?.type ?? "string"];
+			return Pe.filter((t) => e.includes(t.value));
+		}), s = b(() => Fe.has(r.modelValue.operator)), c = (e, t) => {
+			i("update:modelValue", {
+				...r.modelValue,
+				[e]: t
+			});
+		}, d = (e) => {
+			let t = Ie[r.fields.find((t) => t.value === e)?.type ?? "string"], n = r.modelValue.operator, a = t.includes(n) ? n : t[0];
+			i("update:modelValue", {
+				...r.modelValue,
+				key: e,
+				operator: a,
+				value: ""
+			});
+		}, f = (e) => {
+			i("update:modelValue", {
+				...r.modelValue,
+				operator: e,
+				value: Fe.has(e) ? "" : r.modelValue.value
+			});
+		};
+		return (t, r) => (N(), C("div", ja, [
+			E(z(g), {
+				size: "sm",
+				value: e.modelValue.key,
+				options: e.fields,
+				clearable: !1,
+				onChange: r[0] ||= (e) => d(e.value)
+			}, null, 8, ["value", "options"]),
+			E(z(g), {
+				size: "sm",
+				value: e.modelValue.operator,
+				options: o.value,
+				clearable: !1,
+				onChange: r[1] ||= (e) => f(e.value)
+			}, null, 8, ["value", "options"]),
+			!s.value && a.value?.type === "enum" ? (N(), x(z(g), {
+				key: 0,
+				size: "sm",
+				value: e.modelValue.value,
+				options: a.value.values ?? [],
+				clearable: !1,
+				onChange: r[2] ||= (e) => c("value", e.value)
+			}, null, 8, ["value", "options"])) : s.value ? (N(), C("div", Ma)) : (N(), x(z(u), {
+				key: 1,
+				size: "sm",
+				placeholder: "Enter a value",
+				value: e.modelValue.value,
+				clearable: !0,
+				onInput: r[3] ||= (e) => c("value", e.target.value)
+			}, null, 8, ["value"])),
+			E(z(n), {
+				icon: z(l).Delete,
+				size: "xs",
+				outline: !0,
+				color: "error",
+				"no-border": !0,
+				tooltip: "Remove filter",
+				onClick: r[4] ||= (e) => t.$emit("remove")
+			}, null, 8, ["icon"])
+		]));
+	}
+}), Pa = { class: "px-2 flex gap-2 items-center" }, Fa = {
+	key: 0,
+	class: "badge badge-sm bg-base-300 text-base-700"
+}, Ia = {
+	key: 0,
+	class: "absolute left-1/2 -translate-x-1/2 top-full mt-1 z-50 min-w-[560px] border border-base-200 rounded-xl bg-base-100 shadow-lg p-4"
+}, La = { class: "flex flex-col gap-2" }, Ra = { class: "flex items-center justify-between" }, za = { class: "flex gap-2" }, Ba = /* @__PURE__ */ D({
+	__name: "TableFilter",
+	props: {
+		filters: {},
+		filterSchema: {}
+	},
+	emits: ["changeFilters", "close"],
+	setup(e, { emit: t }) {
+		let r = F(!1), i = F(0), a = F(null), o = (e) => {
+			let t = e.target;
+			a.value?.contains(t) || t.closest?.("[data-select-listbox]") || (r.value = !1);
+		};
+		le(() => document.addEventListener("mousedown", o)), ce(() => document.removeEventListener("mousedown", o));
+		let s = e, u = t, d = (e) => {
+			let t = e["x-field-type"];
+			return t === "enum" || t === "number" || t === "date" || t === "boolean" ? t : e.type === "number" || e.type === "integer" ? "number" : e.format === "date-time" || e.format === "date" ? "date" : e.type === "boolean" ? "boolean" : "string";
+		}, f = b(() => {
+			let e = s.filterSchema?.properties;
+			return e ? Object.entries(e).map(([e, t]) => ({
+				value: e,
+				label: t.title ?? e,
+				type: d(t),
+				values: t["x-values"]
+			})) : [];
+		}), p = b(() => f.value[0]?.value ?? ""), m = F([]), h = () => ({
+			key: p.value,
+			value: "",
+			operator: "contains"
+		});
+		B(() => s.filters, (e) => {
+			let t = Be(e ?? []);
+			m.value = t.length > 0 ? t : [h()], i.value = t.length;
+		}, { immediate: !0 });
+		let g = () => {
+			m.value = [...m.value, {
+				key: p.value,
+				value: "",
+				operator: "contains"
+			}];
+		}, _ = (e) => {
+			let t = m.value.filter((t, n) => n !== e);
+			m.value = t.length > 0 ? t : [h()];
+		}, v = () => {
+			let e = m.value.filter((e) => e.key && (e.value || Fe.has(e.operator))).map(Ve);
+			i.value = e.length, u("changeFilters", e), r.value = !1;
+		}, ee = () => {
+			m.value = [h()], i.value = 0, u("changeFilters", []), r.value = !1;
+		};
+		return (e, t) => (N(), C("div", {
+			ref_key: "containerRef",
+			ref: a,
+			class: "relative inline-flex"
+		}, [E(z(n), {
+			size: "xs",
+			color: "ghost",
+			class: "border-gray-300 text-base-content/50 h-8",
+			onClick: t[0] ||= (e) => r.value = !r.value
+		}, {
+			default: V(() => [w("span", Pa, [
+				E(z(c), {
+					icon: z(l).Filter,
+					size: "sm",
+					class: "text-base-500"
+				}, null, 8, ["icon"]),
+				t[1] ||= T(" Filters ", -1),
+				i.value ? (N(), C("span", Fa, R(i.value), 1)) : S("", !0)
+			])]),
+			_: 1
+		}), r.value ? (N(), C("div", Ia, [
+			w("div", La, [(N(!0), C(y, null, I(m.value, (e, t) => (N(), x(Na, {
+				key: t,
+				modelValue: m.value[t],
+				"onUpdate:modelValue": (e) => m.value[t] = e,
+				fields: f.value,
+				onRemove: (e) => _(t)
+			}, null, 8, [
+				"modelValue",
+				"onUpdate:modelValue",
+				"fields",
+				"onRemove"
+			]))), 128))]),
+			t[5] ||= w("div", { class: "divider my-3" }, null, -1),
+			w("div", Ra, [E(z(n), {
+				icon: z(l).Plus,
+				color: "ghost",
+				onClick: g
+			}, {
+				default: V(() => [...t[2] ||= [T(" Add filter ", -1)]]),
+				_: 1
+			}, 8, ["icon"]), w("div", za, [E(z(n), {
+				color: "ghost",
+				onClick: ee
+			}, {
+				default: V(() => [...t[3] ||= [T(" Reset ", -1)]]),
+				_: 1
+			}), E(z(n), { onClick: v }, {
+				default: V(() => [...t[4] ||= [T(" Apply ", -1)]]),
+				_: 1
+			})])])
+		])) : S("", !0)], 512));
+	}
+}), Va = { class: "navbar bg-base-100" }, Ha = { class: "navbar-start" }, Ua = { key: 0 }, Wa = { class: "navbar-center flex gap-2 items-center" }, Ga = {
+	key: 1,
+	class: "flex gap-2"
+}, Ka = { key: 0 }, qa = { class: "navbar-end" }, Ja = { key: 0 }, Ya = /* @__PURE__ */ D({
+	__name: "TableToolbar",
+	props: {
+		filterSchema: {},
+		filters: {},
+		search: {},
+		actions: {}
+	},
+	emits: [
+		"updateSearch",
+		"updateFilters",
+		"action"
+	],
+	setup(e, { emit: t }) {
+		let r = e, i = t, a = F(r.search ?? ""), o = null, s = (e) => {
+			a.value = e, o && clearTimeout(o), o = setTimeout(() => i("updateSearch", e), 300);
+		}, c = (e) => {
+			i("updateFilters", e);
+		};
+		return (t, r) => (N(), C("div", Va, [
+			w("div", Ha, [t.$slots.left ? (N(), C("div", Ua, [L(t.$slots, "left")])) : S("", !0)]),
+			w("div", Wa, [
+				E(z(u), {
+					placeholder: "Search...",
+					value: a.value,
+					size: "sm",
+					width: "w-48",
+					clearable: !0,
+					onInput: r[0] ||= (e) => s(e.target.value)
+				}, null, 8, ["value"]),
+				e.filterSchema ? (N(), x(Ba, {
+					key: 0,
+					filters: e.filters ?? [],
+					"filter-schema": e.filterSchema,
+					onChangeFilters: c
+				}, null, 8, ["filters", "filter-schema"])) : S("", !0),
+				e.actions ? (N(), C("div", Ga, [(N(!0), C(y, null, I(e.actions, (e) => (N(), x(z(n), {
+					key: e.label ?? e.tooltip,
+					size: "xs",
+					color: "ghost",
+					class: "border-gray-300 text-base-content/50 h-8",
+					icon: e.icon,
+					tooltip: e.tooltip,
+					onClick: e.action
+				}, {
+					default: V(() => [e.label ? (N(), C("span", Ka, R(e.label), 1)) : S("", !0)]),
+					_: 2
+				}, 1032, [
+					"icon",
+					"tooltip",
+					"onClick"
+				]))), 128))])) : S("", !0)
+			]),
+			w("div", qa, [t.$slots.right ? (N(), C("div", Ja, [L(t.$slots, "right")])) : S("", !0)])
+		]));
+	}
+});
+//#endregion
+export { Wn as _, Ee as a, Ya as c, Te as d, mi as f, Sa as g, Ur as h, pn as i, Z as l, Aa as m, we as n, Da as o, Ce as p, gn as r, xa as s, Fn as t, Qn as u, ir as v, na as y };

@@ -5,10 +5,16 @@ _Analysis: `knip` + manual verification. Updated: 2026-09-02._
 
 > **Method note:** `knip` ran with its ESLint/Vite/Vitest plugins disabled (native-binding
 > issue under `pnpm dlx`). Everything marked **verified** was checked by hand; items marked
-> **verify first** are raw knip output that could be a config artifact. Phase 9 wires a
+> **verify first** are raw knip output that could be a config artifact. Phase 10 wires a
 > properly-configured knip into CI as the durable check.
 >
-> Each phase is independent and ends green. Do them in order; commit after each.
+> Each phase is independent and ends green. Work on the current branch (`feat/use-crouton-resource`);
+> commit after each phase.
+
+> **Publishing scope (project decision):** only **`annotation-api`**, **`annotation-editor`**,
+> and **`annotation-preview`** are published to npm. `annotation-core`, `annotation-ui`, and
+> **`annotation-vue`** are internal-only and get **bundled** into the published packages
+> (see Phase 6). `annotation-editor-e2e` is never published.
 
 ---
 
@@ -57,30 +63,58 @@ src/lib/utils/mouse-events.ts
 | `@ghentcdh/crouton-api` | dep |
 | `@ghentcdh/create-crouton` | dep |
 - `pnpm remove <pkg>` for each, then `pnpm install`.
+- ⚠️ `vee-validate` is also in `annotation-editor`'s vite `external[]` — remove it there too (Phase 6 touches the same file).
 - **Verify:** `pnpm nx run-many -t build test lint`.
 
 ---
 
 ## Phase 5 — Fix missing dependency declarations _(risk: low, correctness)_
-**Goal:** declare what's imported but undeclared.
-- `@ghentcdh/annotation-vue` — imported in `annotation-editor/.../AnnotationForm.vue`, missing from `annotation-editor/package.json`. Add it.
-- `@ghentcdh/annotation-editor` — used across `annotation-editor-e2e`, missing from its `package.json`. Add it.
+**Goal:** declare what's imported but undeclared — **for published packages only**.
+- `@ghentcdh/annotation-editor` — used across `annotation-editor-e2e`, missing from its `package.json`. Add it (dev/e2e only).
+- `@ghentcdh/annotation-vue` — imported in `annotation-editor/.../AnnotationForm.vue`. **Do NOT add as a runtime dependency** — it is internal-only and gets bundled in Phase 6. (Adding it as a dep would force consumers to install an unpublished package.)
 - ✅ `@ghentcdh/crouton-forms-vue` — **already handled** (you removed it; no imports remain).
 - **Verify:** `pnpm install` && `pnpm nx run-many -t build`.
 
 ---
 
-## Phase 6 — Fix fragile cross-repo e2e imports _(risk: medium, correctness)_
+## Phase 6 — Restrict published packages to api / editor / preview _(risk: medium, release-config)_
+**Goal:** publish only `annotation-api`, `annotation-editor`, `annotation-preview`; make
+`annotation-vue` internal and bundle it into the editor.
+
+Current state: `annotation-vue` is `private:false`, listed in `nx.json` release, and
+`annotation-editor` **externalizes** `@ghentcdh/annotation-vue` (so it must currently be
+published). `annotation-core` + `annotation-ui` are already bundled + `private:true`.
+
+Steps:
+1. **`nx.json`** → `release.projects`: remove `"annotation-vue"` (leave `annotation-api`,
+   `annotation-editor`, `annotation-preview`).
+2. **`packages/annotation-vue/package.json`** → set `"private": true`.
+3. **`packages/annotation-vue/project.json`** → remove/disable its `nx-release-publish` target.
+4. **`packages/annotation-editor/vite.config.mts`** → remove `'@ghentcdh/annotation-vue'` from
+   `rolldownOptions.external[]` so it gets bundled into the editor output.
+5. **Bundle its types:** add `annotation-vue` to the `bundleDtsImports(...)` packages list in the
+   same vite config (it already inlines `annotation-core`/`annotation-ui` `.d.ts` into `_bundled/`),
+   and ensure `project.json` `build.dependsOn` builds `annotation-vue` first.
+6. Confirm no other published package externalizes an internal-only package. (`annotation-preview`
+   already bundles `annotation-core`; it externalizes only truly-external libs — OK.)
+- **Verify:** `pnpm nx run-many -t build` for the 3 published pkgs; inspect
+  `dist/packages/annotation-editor` — the bundle must contain the annotation-vue code and its
+  `.d.ts` under `_bundled/`, and `package.json`/exports must not reference `@ghentcdh/annotation-vue`.
+  Optionally `npm pack --dry-run` each published package and check the dependency tree.
+
+---
+
+## Phase 7 — Fix fragile cross-repo e2e imports _(risk: medium, correctness)_
 **Goal:** stop reaching into a sibling checkout that isn't in the repo.
 - `annotation-editor-e2e/src/testing/index.ts` imports
   `../../../../../ghentcdh/libs/ui/src/testing/{Harness,CollapseHarness,ModalHarness}` —
   breaks on any clean clone.
 - Replace with an import from the published `@ghentcdh/ui` package (already a devDependency), or vendor the harness into the e2e package.
-- **Verify:** `pnpm nx e2e annotation-editor-e2e` (or at least `nx build`/typecheck) resolves without the relative path.
+- **Verify:** `pnpm nx e2e annotation-editor-e2e` (or at least build/typecheck) resolves without the relative path.
 
 ---
 
-## Phase 7 — Trim unused export surface _(risk: low, review each)_
+## Phase 8 — Trim unused export surface _(risk: low, review each)_
 **Goal:** shrink public API + generated `.d.ts`. For each, decide **public API → keep** vs **internal → drop `export`**.
 - **Values (7):** `CURRENT_RESOURCE_VERSION` (annotation-core version.ts), `SourceEditEmits`, `Confirm`, `AnnotationEdit`, `LinkAnnotation`, `ToastCard`, `byRole` (e2e).
 - **Types (16):** `NavbarProps`, `SourceEditProps`, `SourceEditEmitsType`, `SourceNavbarProps`, `SourceNavbarEmitsType`, `EditorState`, `AnnotationModalActionMap`, `AnnotationModalAction`, `AnnotationModalDefaults`, `AnnotationModalPropsType`, `ConfirmAction`, `ToastAction`, `EditToastEmitsType`, `PreviewSelectEvent`, `PreviewState`, `GridLayout`.
@@ -89,7 +123,7 @@ src/lib/utils/mouse-events.ts
 
 ---
 
-## Phase 8 — Verify-then-remove ambiguous deps _(risk: medium)_
+## Phase 9 — Verify-then-remove ambiguous deps _(risk: medium)_
 **Goal:** remove only after confirming each is truly unused.
 - `@tiptap/markdown` **vs** `tiptap-markdown` — neither imported directly; keep whichever the tiptap editor config loads, drop the other.
 - `@types/uuid` — `uuid@14` ships its own types; likely removable.
@@ -99,15 +133,15 @@ src/lib/utils/mouse-events.ts
 
 ---
 
-## Phase 9 — Wire knip into CI _(risk: none, locks in the cleanup)_
-**Goal:** make §1–§8 self-maintaining.
+## Phase 10 — Wire knip into CI _(risk: none, locks in the cleanup)_
+**Goal:** make Phases 1–9 self-maintaining.
 - Add a checked-in `knip.json` (adjust the ESLint & Vite plugins so it loads inside the workspace where native bindings resolve).
 - Add a root script `"knip": "knip"` and an `nx` target / CI step that fails PRs on new unused code, exports, or deps.
-- **Verify:** `pnpm knip` runs clean after Phases 1–8.
+- **Verify:** `pnpm knip` runs clean after Phases 1–9.
 
 ---
 
-## Phase 10 — Housekeeping _(risk: none)_
+## Phase 11 — Housekeeping _(risk: none)_
 **Goal:** developer ergonomics.
 - Root `package.json` only has `prepare`; add `build`/`test`/`lint`/`knip` scripts delegating to nx.
 - Final: `pnpm nx run-many -t build test lint e2e` green, then open PR.
@@ -115,5 +149,6 @@ src/lib/utils/mouse-events.ts
 ---
 
 ### Quick-win path
-Phases 1 → 2 → 3 → 4 → 5 are all low-risk and deliver most of the cleanup; Phases 6–8 are
-per-item review; Phase 9 prevents regressions.
+Phases 1 → 2 → 3 → 4 → 5 are all low-risk and deliver most of the cleanup. Phase 6 is the
+release-scope change (test the bundle carefully). Phases 7–9 are per-item review; Phase 10
+prevents regressions.

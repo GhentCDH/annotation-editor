@@ -1,0 +1,18 @@
+export declare class Debugger {
+    private _verboseEnabled;
+    private _debugEnabled;
+    private static _instance;
+    private constructor();
+    private static get instance();
+    static setDebug(debug: boolean): void;
+    static setVerbose(verbose: boolean): void;
+    private static get verboseEnabled();
+    private static get debugEnabled();
+    static time(startTime: number, message: string): void;
+    static warn(...message: any): void;
+    static error(...message: any): void;
+    static debug(subject: string, mainMessage: string, ...message: any): void;
+    static verbose(subject: string, mainMessage: string, ...message: any): void;
+    private static formatMessage;
+}
+//# sourceMappingURL=debugger.d.ts.map

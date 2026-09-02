@@ -1,0 +1,8 @@
+export declare const ResourceSchemaEditorProperties: {
+    /** The resource's form id / route segment — same value `ResourceTable` uses for `getFormDef`. */
+    formId: {
+        type: StringConstructor;
+        required: true;
+    };
+};
+//# sourceMappingURL=ResourceSchemaEditor.properties.d.ts.map

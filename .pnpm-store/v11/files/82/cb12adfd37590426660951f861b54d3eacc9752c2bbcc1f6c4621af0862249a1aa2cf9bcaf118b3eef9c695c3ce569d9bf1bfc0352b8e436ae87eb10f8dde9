@@ -1,0 +1,7 @@
+import { TextAnnotation as _TextAnnotation } from '../../../model';
+type TextAnnotation = Pick<_TextAnnotation, 'start' | 'end'>;
+export declare const sortAnnotations: (a: TextAnnotation, b: TextAnnotation, endDesc?: boolean) => number;
+export declare const sortByStart: (a: TextAnnotation, b: TextAnnotation, endDesc?: boolean) => number;
+export declare const sortByEnd: (a: TextAnnotation, b: TextAnnotation, endDesc?: boolean) => number;
+export {};
+//# sourceMappingURL=sort.d.ts.map

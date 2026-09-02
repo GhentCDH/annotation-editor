@@ -1,0 +1,24 @@
+import { z } from 'zod/v4';
+export declare const lineSchema: z.ZodObject<{
+    start: z.ZodNumber;
+    end: z.ZodNumber;
+    text: z.ZodString;
+    gutter: z.ZodOptional<z.ZodString>;
+}, z.core.$strip>;
+export type Line = z.infer<typeof lineSchema>;
+export declare const textLineSchema: z.ZodObject<{
+    start: z.ZodNumber;
+    end: z.ZodNumber;
+    text: z.ZodString;
+    gutter: z.ZodOptional<z.ZodString>;
+    lineNumber: z.ZodNumber;
+    uuid: z.ZodDefault<z.ZodString>;
+    maxLineWeight: z.ZodDefault<z.ZodNumber>;
+    flatText: z.ZodString;
+    html: z.ZodString;
+    element: z.ZodOptional<z.ZodAny>;
+}, z.core.$strip>;
+export type TextLine = z.infer<typeof textLineSchema> & {
+    element?: HTMLElement;
+};
+//# sourceMappingURL=line.model.d.ts.map

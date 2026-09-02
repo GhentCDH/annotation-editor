@@ -1,0 +1,16 @@
+import { Locator, Page } from '@playwright/test';
+import { Harness } from './Harness';
+/**
+ * Drives the `@ghentcdh/ui` `Btn` component.
+ *
+ * Renders `<button>` (or `<a>`) with optional icon, tooltip, disabled state,
+ * and emits `click`.
+ */
+export declare class ButtonHarness extends Harness {
+    /** Resolve by accessible name (button text / aria-label). */
+    static byName(parent: Locator | Page, name: string): ButtonHarness;
+    static for(locator: Locator): ButtonHarness;
+    click(): Promise<this>;
+    isDisabled(): Promise<boolean>;
+    text(): Promise<string>;
+}

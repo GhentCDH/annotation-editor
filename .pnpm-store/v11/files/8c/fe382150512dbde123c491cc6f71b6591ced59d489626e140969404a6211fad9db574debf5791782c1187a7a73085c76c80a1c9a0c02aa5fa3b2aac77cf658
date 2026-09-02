@@ -1,0 +1,11 @@
+import { default as memoizee } from 'memoizee';
+export declare const selectText: ((text: string, start: number, end: number, offset: number, prefixOffset?: any) => {
+    prefix: string;
+    exact: string;
+    suffix: string;
+}) & memoizee.Memoized<(text: string, start: number, end: number, offset: number, prefixOffset?: any) => {
+    prefix: string;
+    exact: string;
+    suffix: string;
+}>;
+//# sourceMappingURL=select-text.d.ts.map

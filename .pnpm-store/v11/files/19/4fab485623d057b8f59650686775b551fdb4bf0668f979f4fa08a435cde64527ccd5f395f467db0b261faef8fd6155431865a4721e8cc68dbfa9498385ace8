@@ -1,0 +1,109 @@
+/**
+ * Token type for dependency injection.
+ * Can be a class constructor, string, or symbol used to identify a service.
+ */
+export type Token<T> = (new (...args: any[]) => T) | string | symbol;
+/**
+ * A lightweight dependency injection container with lazy instantiation and hierarchical scoping.
+ *
+ * Features:
+ * - Lazy instantiation: Services are created only when first requested
+ * - Singleton per scope: Each service is instantiated once per container scope
+ * - Hierarchical scoping: Child containers can access parent services
+ * - Factory-based registration: Services are registered with factory functions
+ *
+ * @example
+ * ```ts
+ * const container = new Container();
+ * container.register(MyService, () => new MyService());
+ * const service = container.get(MyService);
+ * ```
+ */
+export declare class Container {
+    private parent?;
+    /** Factory functions for creating service instances */
+    private factories;
+    /** Cached singleton instances (lazily created on first get) */
+    private instances;
+    /**
+     * @param parent - Optional parent container for hierarchical lookup
+     */
+    constructor(parent?: Container | undefined);
+    /**
+     * Register a service with the container.
+     *
+     * @param classRef - Class constructor to use as both token and default factory
+     * @param factory - Optional custom factory function
+     * @returns this for method chaining
+     */
+    register<T>(classRef: new (...args: any[]) => T, factory?: () => T): this;
+    /**
+     * Register a service with a string or symbol token.
+     *
+     * @param token - String or symbol identifier for the service
+     * @param factory - Factory function to create the service instance
+     * @returns this for method chaining
+     */
+    register<T>(token: string | symbol, factory: () => T): this;
+    /**
+     * Update the factory for an existing service. This allows changing how a service is created without modifying the registration logic.
+     *
+     * @throws Error if the service is not already registered
+     * @param token
+     * @param factory
+     */
+    update<T>(token: any, factory: () => T): this;
+    /**
+     * Retrieve a service instance from the container.
+     * Creates the instance on first access (lazy instantiation) and caches it.
+     * Falls back to parent container if service not found locally.
+     *
+     * @param token - The token identifying the service
+     * @returns The service instance
+     * @throws Error if service is not registered in this container or any parent
+     */
+    get<T>(token: Token<T>): T;
+    /**
+     * Check if a service is registered in this container or any parent.
+     */
+    has(token: any): boolean;
+    /**
+     * Get all registered tokens in this container.
+     * Does not include tokens from parent containers.
+     */
+    getTokens(): any[];
+    /**
+     * Get all registered tokens including those from parent containers.
+     */
+    getAllTokens(): any[];
+    /**
+     * Retrieve multiple service instances at once.
+     *
+     * @param tokens - Array of tokens identifying the services
+     * @returns Array of service instances in the same order as the tokens
+     */
+    getMany<T extends any[]>(tokens: {
+        [K in keyof T]: Token<T[K]>;
+    }): T;
+    /**
+     * Create a child container with this container as its parent.
+     * Child containers inherit access to parent services but can override them.
+     */
+    createScope(): Container;
+    /**
+     * Clear cached instances but keep factories.
+     * Useful for testing to reset service state between tests.
+     */
+    reset(): void;
+    /**
+     * Completely destroy the container, clearing both factories and instances.
+     * Use when disposing of a scoped container.
+     */
+    destroy(): void;
+}
+/**
+ * Global root container for application-wide services.
+ * Scoped containers (like AnnotationModule) should be created from this.
+ */
+export declare const rootContainer: Container;
+//# sourceMappingURL=container.d.ts.map

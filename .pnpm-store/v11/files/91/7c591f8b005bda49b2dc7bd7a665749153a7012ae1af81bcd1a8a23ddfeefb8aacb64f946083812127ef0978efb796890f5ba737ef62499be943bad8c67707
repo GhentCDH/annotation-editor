@@ -1,0 +1,11 @@
+import { Selection } from 'd3-selection';
+import { SvgModel } from '../model/svg.types';
+import { AnnotationDraw, AnnotationStyle, TextAnnotation } from '../../model';
+import { AnnotationModule } from '../../di/annotation.module';
+export declare const colorAnnotationContent: (style: AnnotationStyle, styleKey: keyof AnnotationStyle, borderElement: Selection<any, any, any, any> | null, fillElement: Selection<any, any, any, any> | null) => void;
+export declare const drawAnnotationContent: (draw: AnnotationDraw, svgModel: SvgModel, style: AnnotationStyle, styleKey?: keyof AnnotationStyle) => {
+    rect: Selection<SVGPathElement, unknown, null, undefined> | null;
+    border: Selection<SVGPathElement, unknown, null, undefined> | null;
+};
+export declare const drawAnnotation: (annotationModule: AnnotationModule, annotation: TextAnnotation) => void;
+//# sourceMappingURL=annotations.d.ts.map

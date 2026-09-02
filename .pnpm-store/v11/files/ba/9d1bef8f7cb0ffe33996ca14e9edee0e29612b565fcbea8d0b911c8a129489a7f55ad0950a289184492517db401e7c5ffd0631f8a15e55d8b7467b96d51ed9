@@ -1,0 +1,15 @@
+import { TextAdapter, TextAdapterParams } from './TextAdapter';
+import { TextLine } from '../../model';
+/***
+ * PlainTextAdapterImpl is a simple implementation of TextAdapter that parses plain text into TextLine objects.
+ * It does not handle any special formatting or annotations, just plain text lines.
+ */
+export declare class PlainTextAdapterImpl extends TextAdapter {
+    name: string;
+    _parse(text: string): {
+        lines: TextLine[];
+        flatText: string;
+    };
+}
+export declare const PlainTextAdapter: (params?: TextAdapterParams) => PlainTextAdapterImpl;
+//# sourceMappingURL=PlainTextAdapter.d.ts.map

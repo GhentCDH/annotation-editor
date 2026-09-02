@@ -1,0 +1,54 @@
+import { OptionValue } from './ListResults.properties';
+export declare function highlight(isActive: boolean, text: string, query: string): string;
+declare const _default: typeof __VLS_export;
+export default _default;
+declare const __VLS_export: import('vue').DefineComponent<import('vue').ExtractPropTypes<{
+    options: {
+        type: import('vue').PropType<Array<OptionValue>>;
+        required: false;
+    };
+    isLoading: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    query: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    isActive: {
+        type: FunctionConstructor;
+        default: (item: any) => boolean;
+    };
+    teleported: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+}>, {
+    handleKeydown: (e: KeyboardEvent) => void;
+}, {}, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, {}, string, import('vue').PublicProps, Readonly<import('vue').ExtractPropTypes<{
+    options: {
+        type: import('vue').PropType<Array<OptionValue>>;
+        required: false;
+    };
+    isLoading: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    query: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    isActive: {
+        type: FunctionConstructor;
+        default: (item: any) => boolean;
+    };
+    teleported: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+}>> & Readonly<{}>, {
+    isActive: Function;
+    query: string;
+    isLoading: boolean;
+    teleported: boolean;
+}, {}, {}, {}, string, import('vue').ComponentProvideOptions, true, {}, any>;

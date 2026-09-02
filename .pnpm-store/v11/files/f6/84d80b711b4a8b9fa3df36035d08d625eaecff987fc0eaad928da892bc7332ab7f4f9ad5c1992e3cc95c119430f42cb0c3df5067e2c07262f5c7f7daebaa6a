@@ -1,0 +1,12 @@
+export interface RuntimeConfig {
+    APP_VERSION: string;
+    BUILD_SHA: string;
+    API_URL: string;
+    env: 'DEV' | 'TST' | 'QAS' | 'PRD';
+    authToken: string;
+}
+export declare const loadRuntimeConfig: <RUNTIME_CONFIG extends RuntimeConfig>(config?: {
+    authToken?: string;
+}) => Promise<RUNTIME_CONFIG>;
+export declare const getRuntimeConfig: <RUNTIME_CONFIG extends RuntimeConfig>() => RUNTIME_CONFIG;
+//# sourceMappingURL=runtime.config.d.ts.map

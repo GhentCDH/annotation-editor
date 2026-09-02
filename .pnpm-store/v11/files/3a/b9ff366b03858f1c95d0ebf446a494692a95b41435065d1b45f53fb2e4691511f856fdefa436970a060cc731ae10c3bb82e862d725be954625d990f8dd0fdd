@@ -1,0 +1,39 @@
+import { PropType } from 'vue';
+declare const __VLS_export: import('vue').DefineComponent<import('vue').ExtractPropTypes<{
+    showIcon: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    options: {
+        type: PropType<{
+            descriptionKey?: string;
+            displayKey?: string;
+        }>;
+        required: true;
+    };
+    value: {
+        type: PropType<unknown>;
+        required: true;
+    };
+}>, {}, {}, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, {}, string, import('vue').PublicProps, Readonly<import('vue').ExtractPropTypes<{
+    showIcon: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    options: {
+        type: PropType<{
+            descriptionKey?: string;
+            displayKey?: string;
+        }>;
+        required: true;
+    };
+    value: {
+        type: PropType<unknown>;
+        required: true;
+    };
+}>> & Readonly<{}>, {
+    showIcon: boolean;
+}, {}, {}, {}, string, import('vue').ComponentProvideOptions, true, {}, any>;
+declare const _default: typeof __VLS_export;
+export default _default;
+//# sourceMappingURL=RelationButton.vue.d.ts.map

@@ -1,0 +1,20 @@
+import { Position } from '../types';
+import { CharacterPositionResult } from '../../position';
+import { AnnotationModule } from '../../../di/annotation.module';
+import { BaseAnnotationDi } from '../../../di/BaseAnnotationDi';
+export declare class CreateAnnotation extends BaseAnnotationDi {
+    private readonly getCharacterFromTextNodesAtPoint;
+    private startIndex;
+    private drawing;
+    private drawingAndMove;
+    private dummyAnnotation;
+    private prevEndIndex;
+    private readonly draw;
+    constructor(annotationModule: AnnotationModule, getCharacterFromTextNodesAtPoint: (position: Position) => CharacterPositionResult | null);
+    startCreate(position: Position, event: any): void;
+    moveCreate(position: Position, event: any): void;
+    endCreate(position: Position, event: any): boolean;
+    private createInitialDummyAnnotation;
+    private createDummyAnnotation;
+}
+//# sourceMappingURL=create.annotation.d.ts.map

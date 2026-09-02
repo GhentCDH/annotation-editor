@@ -1,0 +1,24 @@
+import { z } from 'zod/v4';
+export declare const annotationColorSchema: z.ZodObject<{
+    border: z.ZodOptional<z.ZodString>;
+    background: z.ZodOptional<z.ZodString>;
+    borderActive: z.ZodOptional<z.ZodString>;
+    backgroundActive: z.ZodOptional<z.ZodString>;
+    gutterColor: z.ZodOptional<z.ZodString>;
+    color: z.ZodOptional<z.ZodString>;
+    tagBackground: z.ZodOptional<z.ZodString>;
+    tagColor: z.ZodOptional<z.ZodString>;
+}, z.core.$strip>;
+/**
+ * Represents the color properties for an annotation.
+ *
+ * @interface AnnotationColor
+ *
+ * @property {string} text - The color of the text.
+ * @property {string} border - The color of the border.
+ * @property {string} background - The color of the background.
+ * @property {string} borderActive - The color of the border when active.
+ * @property {string} backgroundActive - The color of the background when active.
+ */
+export type AnnotationColor = z.infer<typeof annotationColorSchema>;
+//# sourceMappingURL=annotation.color.d.ts.map

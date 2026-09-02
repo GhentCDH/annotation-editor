@@ -1,0 +1,6 @@
+export declare const addClickOutsideEventListener: (targetElement: any, callback: () => void) => ((event: Event) => void) | null;
+export declare const removeClickOutsideEventListener: (eventListener: any) => void;
+export declare const ClickOutside: {
+    beforeMount(el: any, binding: any): void;
+    unmounted(el: any): void;
+};

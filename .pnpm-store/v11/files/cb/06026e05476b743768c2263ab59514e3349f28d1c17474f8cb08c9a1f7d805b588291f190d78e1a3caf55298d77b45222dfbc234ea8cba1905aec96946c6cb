@@ -1,0 +1,168 @@
+import { Btn as e, Input as t, InputNumber as n, SelectComponent as r, Textarea as i } from "@ghentcdh/ui";
+import { Fragment as a, computed as o, createBlock as s, createCommentVNode as c, createElementBlock as l, createElementVNode as u, createTextVNode as d, createVNode as f, defineComponent as p, normalizeClass as m, openBlock as h, renderList as g, toDisplayString as _, unref as v, withCtx as y } from "vue";
+//#region ../crouton-editor-vue/dist/ResourceFieldVariantEditor-BxWcavty.js
+var b = {
+	col: {
+		type: Object,
+		required: !0
+	},
+	drafts: {
+		type: Object,
+		required: !0
+	},
+	activeTab: {
+		type: String,
+		required: !0
+	}
+}, x = [
+	{
+		key: "form",
+		label: "Form"
+	},
+	{
+		key: "view",
+		label: "View"
+	},
+	{
+		key: "table",
+		label: "Table"
+	}
+], S = {
+	form: "hiddenInForm",
+	view: "hiddenInView",
+	table: "hiddenInTable"
+}, C = (e) => x.filter((t) => !e[S[t.key]]), w = Array.from({ length: 13 }, (e, t) => t), T = (e) => e === 12 ? "Full" : String(e), E = ["displayKey", "colspan"], D = (e) => {
+	let t = e?.options ?? {}, n = Object.fromEntries(Object.entries(t).filter(([e]) => !E.includes(e)));
+	return {
+		position: e?.position,
+		displayKey: t.displayKey ?? "",
+		colspan: t.colspan,
+		type: e?.type,
+		rawOptionsJson: Object.keys(n).length ? JSON.stringify(n, null, 2) : "",
+		rawOptionsError: null
+	};
+}, O = { class: "p-4 flex flex-col gap-3" }, k = {
+	key: 0,
+	class: "text-sm opacity-60"
+}, A = {
+	role: "tablist",
+	class: "flex gap-1 rounded-lg bg-base-200 p-1 text-sm w-fit"
+}, j = ["onClick"], M = {
+	key: 0,
+	class: "ml-1.5 inline-block h-2 w-2 rounded-full bg-primary"
+}, N = {
+	key: 1,
+	class: "ml-1.5 inline-block h-2 w-2 rounded-full bg-primary"
+}, P = { class: "text-sm opacity-70" }, F = { class: "grid grid-cols-3 gap-3 max-w-2xl" }, I = { class: "form-control" }, L = { class: "flex gap-1 items-center" }, R = { class: "form-control" }, z = { class: "flex gap-1 items-center" }, B = {
+	key: 0,
+	class: "form-control"
+}, V = { class: "flex gap-1 items-center" }, H = { class: "form-control max-w-2xl" }, U = {
+	key: 0,
+	class: "text-error text-xs mt-1"
+}, W = /* @__PURE__ */ p({
+	__name: "ResourceFieldVariantEditor",
+	props: b,
+	emits: ["update:activeTab"],
+	setup(p, { emit: b }) {
+		let x = p, S = b, E = o(() => C(x.col)), D = o(() => x.drafts[x.activeTab]), W = w.map((e) => ({
+			label: T(e),
+			value: e
+		})), G = (e) => {
+			e === "displayKey" ? D.value.displayKey = "" : D.value[e] = void 0;
+		}, K = () => {
+			try {
+				D.value.rawOptionsJson.trim() && JSON.parse(D.value.rawOptionsJson), D.value.rawOptionsError = null;
+			} catch {
+				D.value.rawOptionsError = "Invalid JSON — fix or clear this before saving.";
+			}
+		};
+		return (o, p) => (h(), l("div", O, [E.value.length ? (h(), l(a, { key: 1 }, [
+			u("div", A, [(h(!0), l(a, null, g(E.value, (e) => (h(), l("button", {
+				key: e.key,
+				role: "tab",
+				class: m(["rounded-md px-3 py-1.5 font-medium transition-colors", o.activeTab === e.key ? "bg-base-100 shadow-sm" : "hover:bg-base-300/50"]),
+				onClick: (t) => S("update:activeTab", e.key)
+			}, [
+				d(_(e.label) + " ", 1),
+				e.key === "view" && o.col.view.hasOverride ? (h(), l("span", M)) : c("", !0),
+				e.key === "table" && o.col.table.hasOverride ? (h(), l("span", N)) : c("", !0)
+			], 10, j))), 128))]),
+			u("p", P, [o.activeTab === "form" ? (h(), l(a, { key: 0 }, [d(" Base config used to render the create/edit form. View and Table fall back to this unless they override it. ")], 64)) : o.activeTab === "view" ? (h(), l(a, { key: 1 }, [d(" Read-only detail view. " + _(o.col.view.hasOverride ? "This column has its own view override." : "Currently inherited from Form — values shown below are the resolved (effective) ones."), 1)], 64)) : (h(), l(a, { key: 2 }, [d(" Table cell rendering. " + _(o.col.table.hasOverride ? "This column has its own table override." : "Currently inherited from View/Form — values shown below are the resolved (effective) ones."), 1)], 64))]),
+			u("div", F, [
+				u("label", I, [p[8] ||= u("span", { class: "label-text text-xs" }, "Display key", -1), u("div", L, [f(v(t), {
+					modelValue: D.value.displayKey,
+					"onUpdate:modelValue": p[0] ||= (e) => D.value.displayKey = e,
+					size: "sm",
+					placeholder: "e.g. name"
+				}, null, 8, ["modelValue"]), o.activeTab === "form" ? c("", !0) : (h(), s(v(e), {
+					key: 0,
+					color: "secondary",
+					outline: !0,
+					size: "sm",
+					title: "Reset to inherited",
+					onClick: p[1] ||= (e) => G("displayKey")
+				}, {
+					default: y(() => [...p[7] ||= [d(" × ", -1)]]),
+					_: 1
+				}))])]),
+				u("label", R, [p[10] ||= u("span", { class: "label-text text-xs" }, "Position", -1), u("div", z, [f(v(n), {
+					width: "w-4",
+					modelValue: D.value.position,
+					"onUpdate:modelValue": p[2] ||= (e) => D.value.position = e,
+					size: "sm"
+				}, null, 8, ["modelValue"]), o.activeTab === "form" ? c("", !0) : (h(), s(v(e), {
+					key: 0,
+					color: "secondary",
+					outline: !0,
+					size: "sm",
+					title: "Reset to inherited",
+					onClick: p[3] ||= (e) => G("position")
+				}, {
+					default: y(() => [...p[9] ||= [d(" × ", -1)]]),
+					_: 1
+				}))])]),
+				o.activeTab === "table" ? c("", !0) : (h(), l("label", B, [p[12] ||= u("span", { class: "label-text text-xs" }, "Colspan", -1), u("div", V, [f(v(r), {
+					size: "sm",
+					width: "!w-4",
+					value: D.value.colspan ?? 12,
+					options: v(W),
+					clearable: !1,
+					onChange: p[4] ||= (e) => D.value.colspan = e.value
+				}, null, 8, ["value", "options"]), o.activeTab === "form" ? c("", !0) : (h(), s(v(e), {
+					key: 0,
+					color: "secondary",
+					outline: !0,
+					size: "sm",
+					title: "Reset to inherited",
+					onClick: p[5] ||= (e) => G("colspan")
+				}, {
+					default: y(() => [...p[11] ||= [d(" × ", -1)]]),
+					_: 1
+				}))])]))
+			]),
+			u("label", H, [
+				p[13] ||= u("span", { class: "label-text text-xs" }, [
+					d(" Other options (raw JSON — e.g. "),
+					u("code", null, "display"),
+					d(", "),
+					u("code", null, "sort"),
+					d("). Set a key to "),
+					u("code", null, "null"),
+					d(" to reset it back to the inherited value. ")
+				], -1),
+				f(v(i), {
+					modelValue: D.value.rawOptionsJson,
+					"onUpdate:modelValue": p[6] ||= (e) => D.value.rawOptionsJson = e,
+					size: "sm",
+					rows: 4,
+					width: "!full",
+					class: "font-mono w-full text-xs",
+					onBlur: K
+				}, null, 8, ["modelValue"]),
+				D.value.rawOptionsError ? (h(), l("span", U, _(D.value.rawOptionsError), 1)) : c("", !0)
+			])
+		], 64)) : (h(), l("p", k, " This column is hidden in every context (table, form, and view) — nothing to edit here. "))]));
+	}
+});
+//#endregion
+export { x as a, W as i, D as n, S as r, C as t };

@@ -1,0 +1,10 @@
+import { BaseAnnotationDi } from '../../../di/BaseAnnotationDi';
+export declare class DrawText extends BaseAnnotationDi {
+    private readonly svgModel;
+    private textTree;
+    createTree(): void;
+    getCharacterFromTextNodesAtPoint(x: number, y: number): import('../../position').CharacterPositionResult | null;
+    draw(): this;
+    compute(): this;
+}
+//# sourceMappingURL=DrawText.d.ts.map

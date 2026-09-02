@@ -1,0 +1,72 @@
+import { Tokenizer } from './tokenizer';
+import { DefaultSnapper, SnapperResult } from '../snapper';
+import { TextAnnotation } from '../../../model';
+export interface WordPosition {
+    start: number;
+    end: number;
+    word: string;
+}
+export declare class WordSnapper extends DefaultSnapper {
+    private tokenizer;
+    private words;
+    private tree;
+    constructor(tokenizer?: Tokenizer);
+    setText(text: string, offsetStart: number): void;
+    /**
+     * Parse the text into words using the tokenizer.
+     * Each word has a start (inclusive) and end (inclusive) position.
+     */
+    private parseWords;
+    /**
+     * Build the R-tree spatial index from words.
+     */
+    private buildTree;
+    fixOffset(annotation: TextAnnotation): SnapperResult;
+    /**
+     * Snap start position using halfway rule.
+     * - If in first half of word: snap to word start (include word)
+     * - If in second half of word: snap to next word start (exclude word)
+     * - If not in a word: snap to closest word start
+     */
+    protected snapStart(position: number): number;
+    /**
+     * Snap end position using halfway rule.
+     * - If in first half of word: snap to previous word end (exclude word)
+     * - If in second half of word: snap to word end (include word)
+     * - If not in a word (whitespace): keep position as-is
+     */
+    protected snapEnd(position: number): number;
+    /**
+     * Find the word containing the given position (inclusive bounds).
+     */
+    protected findWordContaining(position: number): WordPosition | null;
+    /**
+     * Find the word after the given word.
+     */
+    protected findNextWord(currentWord: WordPosition): WordPosition | null;
+    /**
+     * Find the word before the given word.
+     */
+    protected findPreviousWord(currentWord: WordPosition): WordPosition | null;
+    /**
+     * Find the closest word start to the given position.
+     */
+    protected findClosestWordStart(position: number): number;
+    /**
+     * Find the closest word end to the given position.
+     */
+    protected findClosestWordEnd(position: number): number;
+    /**
+     * Find the closest word to the given position.
+     */
+    protected findClosestWord(position: number): WordPosition | null;
+    /**
+     * Check if there's at least one word in the given range.
+     */
+    protected hasWordInRange(start: number, end: number): boolean;
+    /**
+     * Get the parsed words (useful for debugging/testing)
+     */
+    getWords(): ReadonlyArray<WordPosition>;
+}
+//# sourceMappingURL=WordSnapper.d.ts.map

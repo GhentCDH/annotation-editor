@@ -1,0 +1,18 @@
+import { z } from 'zod';
+export declare const SortDirEnum: z.ZodEnum<{
+    asc: "asc";
+    desc: "desc";
+}>;
+export type SortDir = z.infer<typeof SortDirEnum>;
+export declare const RequestSchema: z.ZodObject<{
+    page: z.ZodDefault<z.ZodOptional<z.ZodCoercedNumber<unknown>>>;
+    pageSize: z.ZodDefault<z.ZodOptional<z.ZodCoercedNumber<unknown>>>;
+    sort: z.ZodDefault<z.ZodOptional<z.ZodString>>;
+    sortDir: z.ZodDefault<z.ZodOptional<z.ZodEnum<{
+        asc: "asc";
+        desc: "desc";
+    }>>>;
+    filter: z.ZodDefault<z.ZodOptional<z.ZodPipe<z.ZodUnion<[z.ZodString, z.ZodArray<z.ZodString>]>, z.ZodTransform<string[], string | string[]>>>>;
+}, z.core.$strip>;
+export type Request = z.infer<typeof RequestSchema>;
+//# sourceMappingURL=request.d.ts.map

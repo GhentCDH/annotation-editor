@@ -1,0 +1,20 @@
+import { v as e, w as t, y as n } from "./renderers-D20PBZBF.js";
+import { createElementBlock as r, defineComponent as i, openBlock as a, watchEffect as o } from "vue";
+import { useRouter as s } from "vue-router";
+//#endregion
+//#region src/admin/RedirectView.vue
+var c = /* @__PURE__ */ i({
+	__name: "RedirectView",
+	setup(i) {
+		let c = s(), l = e();
+		return o(() => {
+			let e = n(l.sidebar);
+			e && c.replace({
+				name: t,
+				params: { formId: e }
+			});
+		}), (e, t) => (a(), r("div"));
+	}
+});
+//#endregion
+export { c as default };

@@ -1,0 +1,277 @@
+import { i as e, n as t, o as n, r, t as i } from "./vuedraggable.umd-BTBrmSo9.js";
+import { y as a } from "./dist-D4sgvxmt.js";
+import { Checkbox as o, Input as s, InputNumber as c, MultiSelect as l, SelectComponent as u, Textarea as d } from "@ghentcdh/ui";
+import { computed as f, createBlock as p, createElementBlock as m, createElementVNode as h, createVNode as g, defineComponent as _, isRef as v, normalizeClass as y, openBlock as b, ref as x, toDisplayString as S, unref as C, withCtx as w, withModifiers as T } from "vue";
+//#region ../crouton-editor-vue/dist/FormCanvasEditor-8B3K-OZn.js
+var E = /* @__PURE__ */ n(i(), 1), D = {
+	columns: {
+		type: Array,
+		required: !0
+	},
+	drafts: {
+		type: Object,
+		required: !0
+	},
+	context: {
+		type: String,
+		default: "form"
+	}
+}, O = {
+	field: {
+		type: Object,
+		required: !0
+	},
+	typeOptions: {
+		type: Array,
+		required: !0
+	},
+	selectOptions: {
+		type: Array,
+		default: () => []
+	},
+	gridEl: {
+		type: Object,
+		default: null
+	},
+	removeLabel: {
+		type: String,
+		default: "Remove from form"
+	},
+	selected: {
+		type: Boolean,
+		default: !1
+	}
+}, k = {
+	type: {
+		type: String,
+		required: !0
+	},
+	value: {
+		type: [
+			String,
+			Number,
+			Boolean,
+			Object
+		],
+		required: !1
+	},
+	selectOptions: {
+		type: Array,
+		default: () => []
+	}
+}, A = {
+	key: 6,
+	class: "text-xs opacity-40 italic py-1"
+}, j = /* @__PURE__ */ _({
+	__name: "FieldPreview",
+	props: k,
+	setup(e) {
+		let t = e, n = x((() => {
+			switch (t.type) {
+				case "number":
+				case "Integer": return 0;
+				case "boolean": return !1;
+				case "mutliSelect": return [];
+				case "select": return t.selectOptions[0]?.value ?? "";
+				default: return t.value;
+			}
+		})());
+		return (e, t) => e.type === "string" ? (b(), p(C(s), {
+			key: 0,
+			modelValue: n.value,
+			"onUpdate:modelValue": t[0] ||= (e) => n.value = e,
+			size: "sm",
+			enabled: !1
+		}, null, 8, ["modelValue"])) : e.type === "textarea" || e.type === "markdown" ? (b(), p(C(d), {
+			key: 1,
+			modelValue: n.value,
+			"onUpdate:modelValue": t[1] ||= (e) => n.value = e,
+			size: "sm",
+			rows: e.type === "markdown" ? 4 : 3,
+			enabled: !1
+		}, null, 8, ["modelValue", "rows"])) : e.type === "number" || e.type === "Integer" ? (b(), p(C(c), {
+			key: 2,
+			modelValue: n.value,
+			"onUpdate:modelValue": t[2] ||= (e) => n.value = e,
+			size: "sm",
+			enabled: !1
+		}, null, 8, ["modelValue"])) : e.type === "boolean" ? (b(), p(C(o), {
+			key: 3,
+			modelValue: n.value,
+			"onUpdate:modelValue": t[3] ||= (e) => n.value = e,
+			enabled: !1
+		}, null, 8, ["modelValue"])) : e.type === "select" ? (b(), p(C(u), {
+			key: 4,
+			size: "sm",
+			value: n.value,
+			options: e.selectOptions.length ? e.selectOptions : [{
+				label: "Option A",
+				value: "a"
+			}, {
+				label: "Option B",
+				value: "b"
+			}],
+			clearable: !1,
+			enabled: !1
+		}, null, 8, ["value", "options"])) : e.type === "mutliSelect" ? (b(), p(C(l), {
+			key: 5,
+			modelValue: n.value,
+			"onUpdate:modelValue": t[4] ||= (e) => n.value = e,
+			size: "sm",
+			options: e.selectOptions.length ? e.selectOptions : [{
+				label: "Option A",
+				value: "a"
+			}, {
+				label: "Option B",
+				value: "b"
+			}],
+			enabled: !1
+		}, null, 8, ["modelValue", "options"])) : (b(), m("div", A, " No preview for \"" + S(e.type) + "\" ", 1));
+	}
+}), M = (e, t) => {
+	let n = x(!1), r = 0, i = 12, a = 1, o = null, s = null, c = (e) => {
+		if (!n.value) return;
+		let o = Math.round((e.clientX - r) / a);
+		t(Math.min(12, Math.max(1, i + o)));
+	}, l = () => {
+		if (n.value) {
+			if (n.value = !1, s && o !== null) try {
+				s.releasePointerCapture(o);
+			} catch {}
+			window.removeEventListener("pointermove", c), window.removeEventListener("pointerup", l), s = null, o = null;
+		}
+	};
+	return {
+		resizing: n,
+		start: (t, u) => {
+			if (!(!u || u.clientWidth === 0)) {
+				t.preventDefault(), n.value = !0, r = t.clientX, i = e(), a = u.clientWidth / 12, s = t.currentTarget, o = t.pointerId;
+				try {
+					s.setPointerCapture(o);
+				} catch {}
+				window.addEventListener("pointermove", c), window.addEventListener("pointerup", l);
+			}
+		}
+	};
+}, N = { class: "flex items-start gap-1 p-2 pb-0 relative" }, P = { class: "flex-1 min-w-0" }, F = { class: "text-xs font-medium truncate" }, I = { class: "text-[10px] uppercase tracking-wide opacity-50" }, L = { class: "p-2 pt-1" }, R = /* @__PURE__ */ _({
+	__name: "FormFieldCard",
+	props: O,
+	emits: [
+		"update:colspan",
+		"change-type",
+		"remove",
+		"select"
+	],
+	setup(e, { emit: t }) {
+		let n = e, i = t, { resizing: a, start: o } = M(() => n.field.colspan, (e) => i("update:colspan", e)), s = f(() => n.typeOptions.find((e) => e.value === n.field.type)?.label ?? n.field.type);
+		return (e, t) => (b(), m("div", {
+			class: y(["card bg-base-100 border border-base-300 shadow-sm relative group cursor-pointer", { "ring-2 ring-primary": C(a) || e.selected }]),
+			onClick: t[6] ||= (e) => i("select")
+		}, [
+			h("div", N, [
+				h("span", {
+					class: "drag-handle cursor-grab active:cursor-grabbing select-none px-1 text-base-content/40 hover:text-base-content/70",
+					title: "Drag to reorder",
+					onClick: t[0] ||= T(() => {}, ["stop"])
+				}, " ⠿ "),
+				h("div", P, [h("div", F, S(e.field.label), 1), h("div", I, S(s.value), 1)]),
+				h("div", { onClick: t[3] ||= T(() => {}, ["stop"]) }, [g(r, {
+					"type-options": e.typeOptions,
+					"current-type": e.field.type,
+					"remove-label": e.removeLabel,
+					onChangeType: t[1] ||= (e) => i("change-type", e),
+					onRemove: t[2] ||= (e) => i("remove")
+				}, null, 8, [
+					"type-options",
+					"current-type",
+					"remove-label"
+				])])
+			]),
+			h("div", L, [g(j, {
+				type: e.field.type,
+				value: e.field.label,
+				"select-options": e.selectOptions
+			}, null, 8, [
+				"type",
+				"value",
+				"select-options"
+			])]),
+			h("div", {
+				class: "absolute top-0 right-0 h-full w-2 cursor-ew-resize opacity-0 group-hover:opacity-100 hover:bg-primary/30",
+				title: "Drag to resize",
+				onClick: t[4] ||= T(() => {}, ["stop"]),
+				onPointerdown: t[5] ||= (t) => C(o)(t, e.gridEl)
+			}, null, 32)
+		], 2));
+	}
+}), z = /* @__PURE__ */ _({
+	__name: "FormCanvasEditor",
+	props: D,
+	setup(n) {
+		let r = n, { layout: i, orderedFields: o, onDragEnd: s, onColspanUpdate: c, onChangeType: l, onRemove: u, lastRemoved: d, undoRemove: m, onAddField: _, selectOptionsFor: S, typeOptionsFor: T } = t(r, r.context), D = x(null), O = f(() => D.value?.$el ?? null), k = f(() => r.context === "view" ? "Remove from view" : "Remove from form"), A = x(null), j = (e) => {
+			A.value = A.value === e ? null : e;
+		};
+		return (t, n) => (b(), p(e, {
+			"last-removed": C(d),
+			"hidden-fields": C(i).hiddenFields,
+			"has-fields": !!C(o).length,
+			columns: t.columns,
+			drafts: t.drafts,
+			context: t.context,
+			"selected-field-id": A.value,
+			"onUpdate:selectedFieldId": n[1] ||= (e) => A.value = e,
+			onUndo: C(m),
+			onAdd: C(_)
+		}, {
+			default: w(() => [g(C(E.default), {
+				ref_key: "gridRoot",
+				ref: D,
+				modelValue: C(o),
+				"onUpdate:modelValue": n[0] ||= (e) => v(o) ? o.value = e : null,
+				"item-key": "id",
+				handle: ".drag-handle",
+				tag: "div",
+				class: "grid grid-cols-1 gap-3 md:grid-cols-12",
+				onEnd: C(s)
+			}, {
+				item: w(({ element: e }) => [h("div", { class: y(C(a)[e.colspan] ?? C(a)[12]) }, [g(R, {
+					field: e,
+					"type-options": C(T)(e.type),
+					"select-options": C(S)(e.id),
+					"grid-el": O.value,
+					"remove-label": k.value,
+					selected: A.value === e.id,
+					"onUpdate:colspan": (t) => C(c)(e.id, t),
+					onChangeType: (t) => C(l)(e.id, t),
+					onRemove: (t) => C(u)(e.id),
+					onSelect: (t) => j(e.id)
+				}, null, 8, [
+					"field",
+					"type-options",
+					"select-options",
+					"grid-el",
+					"remove-label",
+					"selected",
+					"onUpdate:colspan",
+					"onChangeType",
+					"onRemove",
+					"onSelect"
+				])], 2)]),
+				_: 1
+			}, 8, ["modelValue", "onEnd"])]),
+			_: 1
+		}, 8, [
+			"last-removed",
+			"hidden-fields",
+			"has-fields",
+			"columns",
+			"drafts",
+			"context",
+			"selected-field-id",
+			"onUndo",
+			"onAdd"
+		]));
+	}
+});
+//#endregion
+export { z as default };

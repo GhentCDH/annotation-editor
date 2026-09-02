@@ -1,0 +1,37 @@
+import { TextAnnotation as _TextAnnotation } from '../../model';
+export type OverlapTextAnnotation = Pick<_TextAnnotation, 'id' | 'start' | 'end'>;
+export declare class AnnotationOverlap<TEXT_ANNOTATION extends OverlapTextAnnotation> {
+    private readonly tree;
+    private readonly annotationById;
+    static init<TEXT_ANNOTATION extends OverlapTextAnnotation = OverlapTextAnnotation>(annotations: TEXT_ANNOTATION[]): AnnotationOverlap<TEXT_ANNOTATION>;
+    private constructor();
+    /**
+     * Convert annotation to RBush item.
+     * We use a 1D approach: minX=start, maxX=end, minY=0, maxY=0
+     *
+     * Important: RBush uses inclusive bounds, but our overlap logic is:
+     * a.start < b.end && b.start < a.end (exclusive at boundaries)
+     *
+     * To handle this, we shrink the search box slightly to exclude exact boundary matches.
+     */
+    private toRBushItem;
+    /**
+     * Check if two annotations truly overlap (exclusive boundaries).
+     * a.start < b.end && b.start < a.end
+     */
+    private overlaps;
+    private findCandidates;
+    private isMatchingCandidate;
+    /**
+     * Get all annotations that overlap with the given annotation.
+     * Excludes the annotation itself (by id).
+     * Time complexity: O(log n + k) where k is the number of results
+     */
+    getOverlaps(query: TEXT_ANNOTATION): TEXT_ANNOTATION[];
+    /**
+     * Check if a query annotation overlaps with any stored annotation.
+     * Excludes the annotation itself (by id).
+     */
+    hasOverlap(query: TEXT_ANNOTATION): boolean;
+}
+//# sourceMappingURL=annotation.overlap.d.ts.map

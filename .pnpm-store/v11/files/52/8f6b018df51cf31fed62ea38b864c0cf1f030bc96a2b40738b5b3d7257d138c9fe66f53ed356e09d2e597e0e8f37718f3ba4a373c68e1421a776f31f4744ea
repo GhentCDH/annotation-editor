@@ -1,0 +1,14 @@
+import { ControlElement, JsonSchema } from '@jsonforms/core';
+import { PropType } from 'vue';
+export { useRelationBinding } from './useRelationBinding';
+export declare const RelationProps: {
+    uischema: {
+        type: PropType<ControlElement>;
+        required: true;
+    };
+    schema: {
+        type: PropType<JsonSchema>;
+        required: true;
+    };
+};
+//# sourceMappingURL=index.d.ts.map

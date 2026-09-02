@@ -1,0 +1,46 @@
+import { PropType } from 'vue';
+export type FilterItem = {
+    id: string;
+    label: string;
+    count: number;
+    color?: string;
+};
+export declare const FilterProperties: {
+    title: {
+        type: StringConstructor;
+        required: true;
+    };
+    items: {
+        type: PropType<Array<Record<string, any>>>;
+        required: true;
+    };
+    modelValue: {
+        type: PropType<Array<FilterItem | any>>;
+        default: () => never[];
+    };
+    labelKey: {
+        type: StringConstructor;
+        default: string;
+    };
+    valueKey: {
+        type: StringConstructor;
+        default: string;
+    };
+    colorKey: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    countKey: {
+        type: StringConstructor;
+        default: string;
+    };
+    counts: {
+        type: PropType<Record<string, number>>;
+        default: undefined;
+    };
+    opened: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+};
+export declare const FilterEmits: string[];

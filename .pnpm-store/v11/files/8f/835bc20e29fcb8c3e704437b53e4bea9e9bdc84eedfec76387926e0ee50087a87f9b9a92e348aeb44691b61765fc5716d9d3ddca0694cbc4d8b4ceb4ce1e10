@@ -1,0 +1,259 @@
+declare const __VLS_export: import('vue').DefineComponent<import('vue').ExtractPropTypes<{
+    steps: {
+        type: NumberConstructor;
+        default: number;
+    };
+    id: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    placeholder: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    description: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    errors: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    label: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    visible: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    required: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    enabled: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    isFocused: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    isTouched: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    hideLabel: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    styles: {
+        type: import('vue').PropType<import('.').MyStyles>;
+        default: () => {
+            readonly group: {
+                readonly root: "group";
+                readonly label: "text-primary text-lg font-bold";
+                readonly item: "group-item";
+            };
+            readonly verticalLayout: {
+                readonly root: "flex flex-col gap-x-2";
+                readonly item: "w-full";
+            };
+            readonly horizontalLayout: {
+                readonly root: "flex flex-row gap-x-2";
+                readonly item: "w-full";
+            };
+            readonly arrayList: {
+                readonly root: "fieldset";
+                readonly legend: "fieldset-legend text-xl capitalize";
+            };
+            readonly control: {
+                readonly root: "fieldset";
+                readonly wrapper: "fieldset";
+                readonly label: "fieldset-legend";
+                readonly error: "";
+                readonly input: "input";
+                readonly textarea: "textarea h-32";
+                readonly checkbox: "checkbox";
+                readonly select: "input pr-14";
+                readonly description: "form-control--description label text-xs text-gray-500";
+            };
+            readonly fixedArrayList: {
+                readonly root: "flex flex-row gap-x-2";
+                readonly item: "w-full";
+            };
+        };
+    };
+    width: {
+        type: StringConstructor;
+        default: string;
+    };
+    size: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    hideErrors: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    modelValue: {
+        type: import('vue').PropType<any>;
+    };
+}>, {}, {}, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, {
+    "update:modelValue": (value: any) => any;
+}, string, import('vue').PublicProps, Readonly<import('vue').ExtractPropTypes<{
+    steps: {
+        type: NumberConstructor;
+        default: number;
+    };
+    id: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    placeholder: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    description: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    errors: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    label: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    visible: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    required: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    enabled: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    isFocused: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    isTouched: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    hideLabel: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    styles: {
+        type: import('vue').PropType<import('.').MyStyles>;
+        default: () => {
+            readonly group: {
+                readonly root: "group";
+                readonly label: "text-primary text-lg font-bold";
+                readonly item: "group-item";
+            };
+            readonly verticalLayout: {
+                readonly root: "flex flex-col gap-x-2";
+                readonly item: "w-full";
+            };
+            readonly horizontalLayout: {
+                readonly root: "flex flex-row gap-x-2";
+                readonly item: "w-full";
+            };
+            readonly arrayList: {
+                readonly root: "fieldset";
+                readonly legend: "fieldset-legend text-xl capitalize";
+            };
+            readonly control: {
+                readonly root: "fieldset";
+                readonly wrapper: "fieldset";
+                readonly label: "fieldset-legend";
+                readonly error: "";
+                readonly input: "input";
+                readonly textarea: "textarea h-32";
+                readonly checkbox: "checkbox";
+                readonly select: "input pr-14";
+                readonly description: "form-control--description label text-xs text-gray-500";
+            };
+            readonly fixedArrayList: {
+                readonly root: "flex flex-row gap-x-2";
+                readonly item: "w-full";
+            };
+        };
+    };
+    width: {
+        type: StringConstructor;
+        default: string;
+    };
+    size: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    hideErrors: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    modelValue: {
+        type: import('vue').PropType<any>;
+    };
+}>> & Readonly<{
+    "onUpdate:modelValue"?: ((value: any) => any) | undefined;
+}>, {
+    size: string;
+    label: string;
+    required: boolean;
+    id: string;
+    placeholder: string;
+    width: string;
+    errors: string;
+    isTouched: boolean;
+    description: string;
+    visible: boolean;
+    enabled: boolean;
+    isFocused: boolean;
+    hideLabel: boolean;
+    styles: {
+        readonly group: {
+            readonly root: "group";
+            readonly label: "text-primary text-lg font-bold";
+            readonly item: "group-item";
+        };
+        readonly verticalLayout: {
+            readonly root: "flex flex-col gap-x-2";
+            readonly item: "w-full";
+        };
+        readonly horizontalLayout: {
+            readonly root: "flex flex-row gap-x-2";
+            readonly item: "w-full";
+        };
+        readonly arrayList: {
+            readonly root: "fieldset";
+            readonly legend: "fieldset-legend text-xl capitalize";
+        };
+        readonly control: {
+            readonly root: "fieldset";
+            readonly wrapper: "fieldset";
+            readonly label: "fieldset-legend";
+            readonly error: "";
+            readonly input: "input";
+            readonly textarea: "textarea h-32";
+            readonly checkbox: "checkbox";
+            readonly select: "input pr-14";
+            readonly description: "form-control--description label text-xs text-gray-500";
+        };
+        readonly fixedArrayList: {
+            readonly root: "flex flex-row gap-x-2";
+            readonly item: "w-full";
+        };
+    };
+    hideErrors: boolean;
+    steps: number;
+}, {}, {}, {}, string, import('vue').ComponentProvideOptions, true, {}, any>;
+declare const _default: typeof __VLS_export;
+export default _default;

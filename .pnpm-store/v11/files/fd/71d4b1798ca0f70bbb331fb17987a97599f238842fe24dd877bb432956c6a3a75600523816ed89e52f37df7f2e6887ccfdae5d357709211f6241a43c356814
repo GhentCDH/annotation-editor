@@ -1,0 +1,17 @@
+import { PropType } from 'vue';
+import { UseResource } from '../resource';
+export declare const RelationTableProperties: {
+    label: {
+        type: StringConstructor;
+        required: true;
+    };
+    resource: {
+        type: PropType<UseResource>;
+        required: true;
+    };
+    values: {
+        type: PropType<any[]>;
+        required: true;
+    };
+};
+//# sourceMappingURL=RelationTable.properties.d.ts.map

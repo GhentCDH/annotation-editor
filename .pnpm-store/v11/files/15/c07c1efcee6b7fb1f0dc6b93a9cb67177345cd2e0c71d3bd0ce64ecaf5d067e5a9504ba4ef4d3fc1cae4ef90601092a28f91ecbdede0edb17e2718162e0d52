@@ -1,0 +1,107 @@
+import { Color } from '../const/colors';
+declare var __VLS_15: {};
+type __VLS_Slots = {} & {
+    default?: (props: typeof __VLS_15) => any;
+};
+declare const __VLS_base: import('vue').DefineComponent<import('vue').ExtractPropTypes<{
+    href: {
+        type: StringConstructor;
+    };
+    disabled: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    tooltip: {
+        type: StringConstructor;
+    };
+    as: {
+        type: import('vue').PropType<import('./const').ButtonTag>;
+        default: import('./const').ButtonTag;
+    };
+    icon: {
+        type: import('vue').PropType<import('../icons').IconProp>;
+    };
+    type: {
+        type: import('vue').PropType<import('./const').ButtonType>;
+        default: import('./const').ButtonType;
+    };
+    outline: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    color: {
+        type: import('vue').PropType<`${Color}`>;
+        default: `${Color}`;
+    };
+    size: {
+        type: import('vue').PropType<import('../const/size').Size>;
+        default: import('../const/size').Size;
+    };
+    square: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    noBorder: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+}>, {}, {}, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, {}, string, import('vue').PublicProps, Readonly<import('vue').ExtractPropTypes<{
+    href: {
+        type: StringConstructor;
+    };
+    disabled: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    tooltip: {
+        type: StringConstructor;
+    };
+    as: {
+        type: import('vue').PropType<import('./const').ButtonTag>;
+        default: import('./const').ButtonTag;
+    };
+    icon: {
+        type: import('vue').PropType<import('../icons').IconProp>;
+    };
+    type: {
+        type: import('vue').PropType<import('./const').ButtonType>;
+        default: import('./const').ButtonType;
+    };
+    outline: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    color: {
+        type: import('vue').PropType<`${Color}`>;
+        default: `${Color}`;
+    };
+    size: {
+        type: import('vue').PropType<import('../const/size').Size>;
+        default: import('../const/size').Size;
+    };
+    square: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    noBorder: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+}>> & Readonly<{}>, {
+    size: import('../const/size').Size;
+    type: import('./const').ButtonType;
+    disabled: boolean;
+    color: "error" | "blank" | "primary" | "secondary" | "ghost";
+    as: import('./const').ButtonTag;
+    outline: boolean;
+    square: boolean;
+    noBorder: boolean;
+}, {}, {}, {}, string, import('vue').ComponentProvideOptions, true, {}, any>;
+declare const __VLS_export: __VLS_WithSlots<typeof __VLS_base, __VLS_Slots>;
+declare const _default: typeof __VLS_export;
+export default _default;
+type __VLS_WithSlots<T, S> = T & {
+    new (): {
+        $slots: S;
+    };
+};

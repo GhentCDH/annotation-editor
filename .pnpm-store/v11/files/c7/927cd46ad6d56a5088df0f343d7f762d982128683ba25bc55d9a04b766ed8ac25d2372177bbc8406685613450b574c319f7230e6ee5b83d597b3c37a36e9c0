@@ -1,0 +1,36 @@
+import { PropType } from 'vue';
+export declare const RelationAutocompleteProperties: {
+    options: {
+        type: PropType<any>;
+        required: true;
+    };
+    labelKey: {
+        type: StringConstructor;
+        required: false;
+        default: string;
+    };
+    label: {
+        type: StringConstructor;
+        required: true;
+    };
+    valueKey: {
+        type: StringConstructor;
+        required: false;
+        default: string;
+    };
+    value: {
+        type: PropType<string | number | Record<string, unknown> | null>;
+        default: null;
+    };
+    enableCreate: {
+        type: BooleanConstructor;
+        required: false;
+        default: boolean;
+    };
+    formValues: {
+        type: PropType<Record<string, unknown> | null>;
+        required: false;
+        default: null;
+    };
+};
+//# sourceMappingURL=RelationAutocomplete.properties.d.ts.map

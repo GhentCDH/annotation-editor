@@ -1,0 +1,5 @@
+import { TextAnnotation } from '../../../model';
+import { AnnotationSvg } from '../../model/svg.types';
+export declare const shouldDrawTag: (annotation: TextAnnotation) => boolean;
+export declare const drawTagSvg: (tagSvg: AnnotationSvg, annotation: TextAnnotation) => void;
+//# sourceMappingURL=draw.d.ts.map

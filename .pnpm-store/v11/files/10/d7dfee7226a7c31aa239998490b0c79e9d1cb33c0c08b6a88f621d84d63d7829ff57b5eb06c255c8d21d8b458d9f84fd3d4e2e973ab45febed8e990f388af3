@@ -1,0 +1,48 @@
+declare const __VLS_export: import('vue').DefineComponent<import('vue').ExtractPropTypes<{
+    currentPage: {
+        type: NumberConstructor;
+        required: true;
+    };
+    page: {
+        type: NumberConstructor;
+        required: true;
+    };
+    label: {
+        type: StringConstructor;
+        required: true;
+    };
+    neverActive: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    disabled: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+}>, {}, {}, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, {}, string, import('vue').PublicProps, Readonly<import('vue').ExtractPropTypes<{
+    currentPage: {
+        type: NumberConstructor;
+        required: true;
+    };
+    page: {
+        type: NumberConstructor;
+        required: true;
+    };
+    label: {
+        type: StringConstructor;
+        required: true;
+    };
+    neverActive: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    disabled: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+}>> & Readonly<{}>, {
+    disabled: boolean;
+    neverActive: boolean;
+}, {}, {}, {}, string, import('vue').ComponentProvideOptions, true, {}, any>;
+declare const _default: typeof __VLS_export;
+export default _default;

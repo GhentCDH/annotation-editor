@@ -1,0 +1,31 @@
+import { PropType } from 'vue';
+export declare const RelationInlineProperties: {
+    options: {
+        type: PropType<any>;
+        required: true;
+    };
+    labelKey: {
+        type: StringConstructor;
+        required: false;
+        default: string;
+    };
+    label: {
+        type: StringConstructor;
+        required: true;
+    };
+    valueKey: {
+        type: StringConstructor;
+        required: false;
+        default: string;
+    };
+    values: {
+        type: PropType<any[]>;
+        required: true;
+    };
+    enableCreate: {
+        type: BooleanConstructor;
+        required: false;
+        default: boolean;
+    };
+};
+//# sourceMappingURL=RelationInline.properties.d.ts.map

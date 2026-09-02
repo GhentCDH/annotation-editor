@@ -1,0 +1,19 @@
+import { AnnotationId, TextAnnotation } from '../../../model';
+import { BaseAnnotationDi } from '../../../di/BaseAnnotationDi';
+export declare class DrawAnnotation extends BaseAnnotationDi {
+    private readonly annotationColors;
+    private readonly svgModel;
+    private readonly renderInstances;
+    drawAll(): this;
+    color(): void;
+    highlight(ids: AnnotationId[]): void;
+    select(ids: AnnotationId[]): void;
+    draw(annotation: TextAnnotation): void;
+    dummy(dummyAnnotation: TextAnnotation): void;
+    private createDraws;
+    compute(): void;
+    private computeOne;
+    removeDraw(annotationUuid: AnnotationId, selector?: string): void;
+    setClass(annotationUuid: AnnotationId, cssClass: string): void;
+}
+//# sourceMappingURL=DrawAnnotation.d.ts.map

@@ -1,0 +1,16 @@
+import { AnnotationId, AnnotationStyle, TextAnnotation } from '../../model';
+import { BaseAnnotationDi } from '../../di/BaseAnnotationDi';
+export declare class AnnotationColors extends BaseAnnotationDi {
+    private readonly svgModel;
+    private readonly activeIds;
+    private readonly highlightedIds;
+    private readonly renderInstances;
+    highlightAnnotations(ids: AnnotationId[]): this;
+    selectAnnotations(ids: AnnotationId[]): this;
+    resetColors(ids: Set<AnnotationId> | AnnotationId[]): this;
+    color(): this;
+    getAnnotationColor(annotation: TextAnnotation): "default" | "hover" | "active";
+    resetAnnotationColor(annotationUuid: AnnotationId): void;
+    colorAnnotation(annotationUuid: AnnotationId, styleKey: keyof AnnotationStyle): void;
+}
+//# sourceMappingURL=annotation.colors.d.ts.map

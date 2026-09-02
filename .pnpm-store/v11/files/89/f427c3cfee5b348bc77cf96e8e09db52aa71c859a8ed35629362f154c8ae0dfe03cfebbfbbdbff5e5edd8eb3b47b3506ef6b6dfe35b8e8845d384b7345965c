@@ -1,0 +1,4 @@
+import { TextAnnotation } from '../../../model';
+import { AnnotationModule } from '../../../di/annotation.module';
+export declare const addDraggableAnnotation: (annotationModule: AnnotationModule, annotation: TextAnnotation) => any;
+//# sourceMappingURL=drag-annotation.d.ts.map

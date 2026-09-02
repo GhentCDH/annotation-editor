@@ -1,0 +1,14 @@
+import { TextAdapter, TextAdapterParams } from './text/TextAdapter';
+import { AnnotationModule } from '../di/annotation.module';
+import { AnnotationAdapter, AnnotationAdapterParams } from '../adapter/annotation';
+import { Snapper } from '../adapter/snapper';
+export declare const setTextAdapter: (annotationModule: AnnotationModule, adapterOrParams: TextAdapter | TextAdapterParams) => TextAdapterParams;
+export declare const setAnnotationAdapter: (annotationModule: AnnotationModule, adapterOrParams: AnnotationAdapter<any> | AnnotationAdapterParams) => AnnotationAdapter<{
+    id: string | number;
+    start: number;
+    end: number;
+    label?: string | undefined;
+    textSelection?: string | undefined;
+}, AnnotationAdapterParams> | AnnotationAdapter<any, AnnotationAdapterParams>;
+export declare const setSnapperAdapter: (annotationModule: AnnotationModule, snapper: Snapper) => Snapper;
+//# sourceMappingURL=SetAdapter.d.ts.map

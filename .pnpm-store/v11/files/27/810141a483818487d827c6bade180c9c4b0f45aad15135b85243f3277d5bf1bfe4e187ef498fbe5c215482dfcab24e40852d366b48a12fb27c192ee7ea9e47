@@ -1,0 +1,26 @@
+import { CustomAnnotationStyle } from './annotation.style.default';
+import { AnnotationStyle } from '../../../model';
+export declare const getAnnotationStyle: (defaultStyle: CustomAnnotationStyle, style: CustomAnnotationStyle) => AnnotationStyle;
+export type StyleFn<ANNOTATION> = (annotation: ANNOTATION) => string | CustomAnnotationStyle | null;
+export declare const DEFAULT_STYLE_NAME = "DEFAULT";
+export declare const DefaultAnnotationStyleParams: {
+    styleFn: (annotation: any) => string | CustomAnnotationStyle | null;
+    defaultStyle: string;
+};
+/**
+ * Configuration parameters for the {@link StyleInstances} class.
+ *
+ * @typeParam ANNOTATION - The type of annotation objects this configuration handles
+ *
+ * @property styleFn - A function that determines the style for a given annotation.
+ *   Can return:
+ *   - `string` - A named style key to look up in the style registry
+ *   - `AnnotationStyle` - A direct style object to use
+ *   - `null` - Use the default style
+ * @property defaultStyle - The fallback style used when `styleFn` returns `null`
+ *   or when a named style is not found in the registry
+ */
+export type AnnotationStyleParams<ANNOTATION> = typeof DefaultAnnotationStyleParams & {
+    styleFn: StyleFn<ANNOTATION>;
+};
+//# sourceMappingURL=annotation.style.d.ts.map

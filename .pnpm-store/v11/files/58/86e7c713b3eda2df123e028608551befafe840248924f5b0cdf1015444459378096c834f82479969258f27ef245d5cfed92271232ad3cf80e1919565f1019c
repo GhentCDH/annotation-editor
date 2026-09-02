@@ -1,0 +1,28 @@
+import { Component } from 'vue';
+export declare enum IconEnum {
+    Edit = "Edit",
+    Delete = "Delete",
+    BarsArrowDown = "BarsArrowDown",
+    BarsArrowUp = "BarsArrowUp",
+    Funnel = "Funnel",
+    Close = "Close",
+    Plus = "Plus",
+    PaperClip = "PaperClip",
+    Hamburger = "Hamburger",
+    ChevronRight = "ChevronRight",
+    ChevronLeft = "ChevronLeft",
+    ChevronDown = "ChevronDown",
+    ChevronUp = "ChevronUp",
+    DblChevronLeft = "DblChevronLeft",
+    DblChevronRight = "DblChevronRight",
+    Language = "Language",
+    Check = "Check",
+    View = "View",
+    Text = "Text",
+    Link = "Link",
+    Filter = "Filter",
+    Sync = "Sync"
+}
+export declare const IconMap: Record<IconEnum, Component>;
+export type IconDef = keyof typeof IconMap;
+export type IconProp = IconDef | Component;

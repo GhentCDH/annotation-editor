@@ -1,0 +1,19 @@
+import { Ref } from 'vue';
+import { OptionValue } from '../ListResults.properties';
+type OptionsProperties = {
+    labelKey: string;
+    valueKey: string;
+};
+export declare const getLabel: (item: any, props: OptionsProperties) => any;
+export declare const getValue: (item: any, props: OptionsProperties) => any;
+type OptionsStrategy<ITEM> = {
+    options: Ref<OptionValue[]>;
+    setOptions: (options: ITEM[] | undefined) => void;
+    getOption: (options: ITEM) => OptionValue | undefined;
+    getOriginal: (options: OptionValue) => ITEM | undefined;
+    getOriginals: (...options: OptionValue[]) => ITEM[];
+    getLabels: (...options: ITEM[]) => string[];
+    getValues: (...options: ITEM[]) => string[];
+};
+export declare const useOptions: <ITEM = any>(props: OptionsProperties) => OptionsStrategy<ITEM>;
+export {};

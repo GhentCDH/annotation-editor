@@ -1,0 +1,116 @@
+import { i as e, n as t, o as n, r, t as i } from "./vuedraggable.umd-BTBrmSo9.js";
+import { computed as a, createBlock as o, createElementBlock as s, createElementVNode as c, createVNode as l, defineComponent as u, isRef as d, normalizeClass as f, openBlock as p, ref as m, toDisplayString as h, unref as g, withCtx as _, withModifiers as v } from "vue";
+//#region ../crouton-editor-vue/dist/TableCanvasEditor-BO4TIwrk.js
+var y = /* @__PURE__ */ n(i(), 1), b = {
+	columns: {
+		type: Array,
+		required: !0
+	},
+	drafts: {
+		type: Object,
+		required: !0
+	}
+}, x = {
+	field: {
+		type: Object,
+		required: !0
+	},
+	typeOptions: {
+		type: Array,
+		required: !0
+	},
+	selected: {
+		type: Boolean,
+		default: !1
+	}
+}, S = { class: "flex-1 min-w-0" }, C = { class: "text-xs font-medium truncate" }, w = { class: "text-[10px] uppercase tracking-wide opacity-50" }, T = /* @__PURE__ */ u({
+	__name: "TableColumnChip",
+	props: x,
+	emits: [
+		"change-type",
+		"remove",
+		"select"
+	],
+	setup(e, { emit: t }) {
+		let n = e, i = t, o = a(() => n.typeOptions.find((e) => e.value === n.field.type)?.label ?? n.field.type);
+		return (e, t) => (p(), s("div", {
+			class: f(["card bg-base-100 border border-base-300 shadow-sm flex flex-row items-center gap-2 px-3 py-2 cursor-pointer", { "ring-2 ring-primary": e.selected }]),
+			onClick: t[4] ||= (e) => i("select")
+		}, [
+			c("span", {
+				class: "drag-handle cursor-grab active:cursor-grabbing select-none text-base-content/40 hover:text-base-content/70",
+				title: "Drag to reorder",
+				onClick: t[0] ||= v(() => {}, ["stop"])
+			}, " ⠿ "),
+			c("div", S, [c("div", C, h(e.field.label), 1), c("div", w, h(o.value), 1)]),
+			c("div", { onClick: t[3] ||= v(() => {}, ["stop"]) }, [l(r, {
+				"type-options": e.typeOptions,
+				"current-type": e.field.type,
+				"remove-label": "Remove from table",
+				onChangeType: t[1] ||= (e) => i("change-type", e),
+				onRemove: t[2] ||= (e) => i("remove")
+			}, null, 8, ["type-options", "current-type"])])
+		], 2));
+	}
+}), E = /* @__PURE__ */ u({
+	__name: "TableCanvasEditor",
+	props: b,
+	setup(n) {
+		let { layout: r, orderedFields: i, onDragEnd: a, onChangeType: s, onRemove: c, lastRemoved: u, undoRemove: f, onAddField: h, typeOptionsFor: v } = t(n, "table", { supportsColspan: !1 }), b = m(null), x = (e) => {
+			b.value = b.value === e ? null : e;
+		};
+		return (t, n) => (p(), o(e, {
+			"last-removed": g(u),
+			"hidden-fields": g(r).hiddenFields,
+			"has-fields": !!g(i).length,
+			columns: t.columns,
+			drafts: t.drafts,
+			context: "table",
+			"selected-field-id": b.value,
+			"warning-text": "Table visual mode is new and less proven than Form/View — drag to reorder columns, use the menu to change type or hide. Switch back to Table if something looks wrong.",
+			"empty-text": "No columns to lay out — add one below, or edit columns in the Table view.",
+			"onUpdate:selectedFieldId": n[1] ||= (e) => b.value = e,
+			onUndo: g(f),
+			onAdd: g(h)
+		}, {
+			default: _(() => [l(g(y.default), {
+				modelValue: g(i),
+				"onUpdate:modelValue": n[0] ||= (e) => d(i) ? i.value = e : null,
+				"item-key": "id",
+				handle: ".drag-handle",
+				tag: "div",
+				class: "flex flex-wrap gap-2",
+				onEnd: g(a)
+			}, {
+				item: _(({ element: e }) => [l(T, {
+					field: e,
+					"type-options": g(v)(e.type),
+					selected: b.value === e.id,
+					onChangeType: (t) => g(s)(e.id, t),
+					onRemove: (t) => g(c)(e.id),
+					onSelect: (t) => x(e.id)
+				}, null, 8, [
+					"field",
+					"type-options",
+					"selected",
+					"onChangeType",
+					"onRemove",
+					"onSelect"
+				])]),
+				_: 1
+			}, 8, ["modelValue", "onEnd"])]),
+			_: 1
+		}, 8, [
+			"last-removed",
+			"hidden-fields",
+			"has-fields",
+			"columns",
+			"drafts",
+			"selected-field-id",
+			"onUndo",
+			"onAdd"
+		]));
+	}
+});
+//#endregion
+export { E as default };

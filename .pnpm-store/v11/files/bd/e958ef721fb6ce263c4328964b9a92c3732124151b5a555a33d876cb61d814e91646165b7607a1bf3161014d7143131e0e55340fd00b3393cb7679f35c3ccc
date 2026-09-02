@@ -1,0 +1,277 @@
+import { O as e, v as t } from "./renderers-D20PBZBF.js";
+import { Fragment as n, Transition as r, computed as i, createBlock as ee, createCommentVNode as a, createElementBlock as o, createElementVNode as s, createTextVNode as c, createVNode as l, defineComponent as u, normalizeClass as d, onMounted as f, openBlock as p, ref as m, renderList as h, toDisplayString as g, withCtx as _ } from "vue";
+//#region src/status/StatusEnumsSection.vue?vue&type=script&setup=true&lang.ts
+var v = { key: 0 }, y = {
+	key: 0,
+	class: "mb-4"
+}, b = { class: "ml-auto text-sm text-gray-500" }, x = {
+	key: 0,
+	class: "mt-2 space-y-2 pl-4 border-l-2 border-gray-200"
+}, S = { class: "font-semibold text-sm text-gray-800" }, C = { class: "text-xs text-gray-500 mb-2" }, w = { class: "space-y-1" }, T = { class: "font-mono text-xs bg-gray-50 px-2 py-1 rounded" }, E = { class: "ml-2 text-gray-600" }, D = { key: 1 }, O = { class: "ml-auto text-sm text-gray-500" }, k = {
+	key: 0,
+	class: "mt-2 space-y-2 pl-4 border-l-2 border-gray-200"
+}, A = { class: "font-semibold text-sm text-gray-800" }, j = { class: "text-xs text-gray-500 mb-2" }, M = { class: "space-y-1" }, N = { class: "font-mono text-xs bg-gray-50 px-2 py-1 rounded" }, P = { class: "ml-2 text-gray-600" }, F = {
+	key: 2,
+	class: "text-sm text-gray-500"
+}, I = /* @__PURE__ */ u({
+	__name: "StatusEnumsSection",
+	props: { enums: {} },
+	setup(e) {
+		let t = m(!1), i = m(!1);
+		return (ee, c) => e.enums && (e.enums.system.length > 0 || e.enums.project.length > 0) ? (p(), o("section", v, [
+			c[6] ||= s("h2", { class: "text-lg font-semibold mb-2" }, "Enums", -1),
+			e.enums.system.length > 0 ? (p(), o("div", y, [s("button", {
+				class: "flex items-center gap-2 w-full p-3 rounded-lg border border-gray-200 bg-gray-50 hover:bg-gray-100 transition-colors",
+				onClick: c[0] ||= (e) => t.value = !t.value
+			}, [
+				(p(), o("svg", {
+					class: d(["w-4 h-4 transition-transform", t.value ? "rotate-180" : ""]),
+					fill: "none",
+					stroke: "currentColor",
+					viewBox: "0 0 24 24"
+				}, [...c[2] ||= [s("path", {
+					"stroke-linecap": "round",
+					"stroke-linejoin": "round",
+					"stroke-width": "2",
+					d: "M19 14l-7 7m0 0l-7-7m7 7V3"
+				}, null, -1)]], 2)),
+				c[3] ||= s("span", { class: "font-semibold text-gray-800" }, "System Enums", -1),
+				s("span", b, g(e.enums.system.length) + " enums", 1)
+			]), l(r, {
+				"enter-active-class": "transition-all duration-200",
+				"leave-active-class": "transition-all duration-200",
+				"enter-from-class": "opacity-0 max-h-0",
+				"enter-to-class": "opacity-100 max-h-screen",
+				"leave-from-class": "opacity-100 max-h-screen",
+				"leave-to-class": "opacity-0 max-h-0"
+			}, {
+				default: _(() => [t.value ? (p(), o("div", x, [(p(!0), o(n, null, h(e.enums.system, (e) => (p(), o("div", {
+					key: e.name,
+					class: "rounded p-3 bg-white border border-gray-100"
+				}, [
+					s("h3", S, g(e.name), 1),
+					s("p", C, g(e.category), 1),
+					s("ul", w, [(p(!0), o(n, null, h(e.values, (e, t) => (p(), o("li", {
+						key: t,
+						class: "text-sm text-gray-700"
+					}, [s("span", T, g(e.value), 1), s("span", E, g(e.label), 1)]))), 128))])
+				]))), 128))])) : a("", !0)]),
+				_: 1
+			})])) : a("", !0),
+			e.enums.project.length > 0 ? (p(), o("div", D, [s("button", {
+				class: "flex items-center gap-2 w-full p-3 rounded-lg border border-gray-200 bg-gray-50 hover:bg-gray-100 transition-colors",
+				onClick: c[1] ||= (e) => i.value = !i.value
+			}, [
+				(p(), o("svg", {
+					class: d(["w-4 h-4 transition-transform", i.value ? "rotate-180" : ""]),
+					fill: "none",
+					stroke: "currentColor",
+					viewBox: "0 0 24 24"
+				}, [...c[4] ||= [s("path", {
+					"stroke-linecap": "round",
+					"stroke-linejoin": "round",
+					"stroke-width": "2",
+					d: "M19 14l-7 7m0 0l-7-7m7 7V3"
+				}, null, -1)]], 2)),
+				c[5] ||= s("span", { class: "font-semibold text-gray-800" }, "Project Enums", -1),
+				s("span", O, g(e.enums.project.length) + " enums", 1)
+			]), l(r, {
+				"enter-active-class": "transition-all duration-200",
+				"leave-active-class": "transition-all duration-200",
+				"enter-from-class": "opacity-0 max-h-0",
+				"enter-to-class": "opacity-100 max-h-screen",
+				"leave-from-class": "opacity-100 max-h-screen",
+				"leave-to-class": "opacity-0 max-h-0"
+			}, {
+				default: _(() => [i.value ? (p(), o("div", k, [(p(!0), o(n, null, h(e.enums.project, (e) => (p(), o("div", {
+					key: e.name,
+					class: "rounded p-3 bg-white border border-gray-100"
+				}, [
+					s("h3", A, g(e.name), 1),
+					s("p", j, g(e.category), 1),
+					s("ul", M, [(p(!0), o(n, null, h(e.values, (e, t) => (p(), o("li", {
+						key: t,
+						class: "text-sm text-gray-700"
+					}, [s("span", N, g(e.value), 1), s("span", P, g(e.label), 1)]))), 128))])
+				]))), 128))])) : a("", !0)]),
+				_: 1
+			})])) : a("", !0),
+			!e.enums || e.enums.system.length === 0 && e.enums.project.length === 0 ? (p(), o("p", F, " No enums configured. ")) : a("", !0)
+		])) : a("", !0);
+	}
+}), L = { class: "max-w-3xl mx-auto p-6 space-y-6" }, R = { class: "flex items-center gap-2" }, z = { class: "font-semibold" }, B = {
+	key: 0,
+	class: "mt-1 text-sm text-red-700"
+}, V = {
+	key: 0,
+	class: "font-semibold text-green-800"
+}, H = {
+	key: 1,
+	class: "font-semibold text-red-800"
+}, U = {
+	key: 0,
+	class: "font-normal"
+}, W = {
+	key: 1,
+	class: "font-normal"
+}, G = {
+	key: 1,
+	class: "flex gap-2 flex-wrap"
+}, K = { class: "rounded bg-gray-100 px-2 py-1 text-sm font-mono" }, q = { class: "rounded bg-gray-100 px-2 py-1 text-sm font-mono" }, J = { class: "rounded bg-gray-100 px-2 py-1 text-sm font-mono" }, Y = { key: 2 }, te = { class: "space-y-1" }, X = { class: "font-medium" }, Z = {
+	key: 0,
+	class: "text-sm text-red-600"
+}, Q = {
+	key: 0,
+	class: "text-sm text-gray-500"
+}, ne = { key: 3 }, re = { class: "space-y-1" }, ie = { class: "font-medium" }, ae = { class: "text-sm text-gray-500 ml-1" }, oe = {
+	key: 0,
+	class: "ml-2 rounded bg-gray-100 px-1.5 py-0.5 text-xs font-mono"
+}, se = {
+	key: 1,
+	class: "ml-1 rounded bg-gray-100 px-1.5 py-0.5 text-xs font-medium text-gray-600"
+}, ce = {
+	key: 2,
+	class: "ml-1 rounded bg-amber-100 px-1.5 py-0.5 text-xs font-medium text-amber-700"
+}, le = ["title"], ue = { key: 0 }, de = ["disabled", "onClick"], fe = ["disabled", "onClick"], pe = ["disabled", "onClick"], me = {
+	key: 7,
+	class: "text-sm text-amber-600"
+}, he = { key: 0 }, ge = {
+	key: 8,
+	class: "text-sm text-red-600"
+}, _e = {
+	key: 0,
+	class: "text-sm text-gray-500"
+}, ve = { key: 5 }, ye = { class: "rounded-lg border p-4 border-gray-200 bg-gray-50 space-y-2" }, be = { class: "flex items-center gap-2 text-sm" }, $ = { class: "font-medium" }, xe = { class: "text-gray-500" }, Se = { class: "space-y-1 mt-2" }, Ce = { class: "rounded bg-gray-100 px-1.5 py-0.5 font-mono text-xs" }, we = {
+	key: 0,
+	class: "rounded bg-amber-100 px-1.5 py-0.5 text-xs font-medium text-amber-700"
+}, Te = {
+	key: 1,
+	class: "rounded bg-green-100 px-1.5 py-0.5 text-xs font-medium text-green-700"
+}, Ee = {
+	key: 6,
+	class: "text-gray-500"
+}, De = /* @__PURE__ */ u({
+	__name: "StatusView",
+	setup(r) {
+		let l = m(null), u = m(!0), _ = m(!1), v = m(null), y = m(null), b = t(), x = i(() => b.isDev.value), S = i(() => l.value ? l.value.summary.databaseErrors + l.value.summary.resourceErrors : 0), C = async () => {
+			l.value = (await e().get("/crouton/status.json")).data, _.value = !0;
+		}, w = async (t) => {
+			y.value = t;
+			try {
+				await e().post(`/_app/resources/${encodeURIComponent(t)}/publish`), await C();
+			} catch (e) {
+				console.error("Publish failed", e);
+			} finally {
+				y.value = null;
+			}
+		}, T = async (t) => {
+			y.value = t;
+			try {
+				await e().post(`/_app/resources/${encodeURIComponent(t)}/remove-from-menu`), await C(), await b.refreshLayout();
+			} catch (e) {
+				console.error("Remove from menu failed", e);
+			} finally {
+				y.value = null;
+			}
+		}, E = async (t) => {
+			y.value = t;
+			try {
+				await e().post(`/_app/resources/${encodeURIComponent(t)}/add-to-menu`), await C(), await b.refreshLayout();
+			} catch (e) {
+				console.error("Add to menu failed", e);
+			} finally {
+				y.value = null;
+			}
+		};
+		return f(async () => {
+			try {
+				await C();
+			} catch (e) {
+				_.value = !1, v.value = e.message ?? "Could not reach backend";
+			} finally {
+				u.value = !1;
+			}
+		}), (e, t) => (p(), o("div", L, [
+			t[4] ||= s("h1", { class: "text-2xl font-bold" }, "Crouton Status", -1),
+			s("div", { class: d(["rounded-lg border p-4", _.value ? "border-green-300 bg-green-50" : "border-red-300 bg-red-50"]) }, [s("div", R, [s("span", { class: d(["inline-block w-3 h-3 rounded-full", _.value ? "bg-green-500" : "bg-red-500"]) }, null, 2), s("span", z, " Backend: " + g(_.value ? "Running" : "Down"), 1)]), v.value ? (p(), o("p", B, g(v.value), 1)) : a("", !0)], 2),
+			l.value ? (p(), o("div", {
+				key: 0,
+				class: d(["rounded-lg border p-4", l.value.summary.ok ? "border-green-300 bg-green-50" : "border-red-300 bg-red-50"])
+			}, [l.value.summary.ok ? (p(), o("span", V, " All systems operational ")) : (p(), o("span", H, [
+				c(g(S.value) + " issue(s) detected ", 1),
+				l.value.summary.databaseErrors ? (p(), o("span", U, " — " + g(l.value.summary.databaseErrors) + " database ", 1)) : a("", !0),
+				l.value.summary.resourceErrors ? (p(), o("span", W, " — " + g(l.value.summary.resourceErrors) + " resource ", 1)) : a("", !0)
+			]))], 2)) : a("", !0),
+			l.value ? (p(), o("div", G, [
+				s("span", K, " app v" + g(l.value.version), 1),
+				s("span", q, " crouton v" + g(l.value.croutonVersion), 1),
+				s("span", J, g(l.value.environment), 1)
+			])) : a("", !0),
+			l.value ? (p(), o("section", Y, [
+				t[0] ||= s("h2", { class: "text-lg font-semibold mb-2" }, "Databases", -1),
+				s("ul", te, [(p(!0), o(n, null, h(l.value.databases, (e) => (p(), o("li", {
+					key: e.name,
+					class: "flex items-start gap-2"
+				}, [s("span", { class: d(["inline-block w-2.5 h-2.5 rounded-full mt-1.5 shrink-0", e.connected ? "bg-green-500" : "bg-red-500"]) }, null, 2), s("div", null, [s("span", X, g(e.name), 1), e.error ? (p(), o("p", Z, g(e.error), 1)) : a("", !0)])]))), 128))]),
+				l.value.databases.length === 0 ? (p(), o("p", Q, " No databases configured. ")) : a("", !0)
+			])) : a("", !0),
+			l.value ? (p(), o("section", ne, [
+				t[2] ||= s("h2", { class: "text-lg font-semibold mb-2" }, "Resources", -1),
+				s("ul", re, [(p(!0), o(n, null, h(l.value.resources, (e) => (p(), o("li", {
+					key: e.name,
+					class: "flex items-start gap-2"
+				}, [s("span", { class: d(["inline-block w-2.5 h-2.5 rounded-full mt-1.5 shrink-0", e.draft ? "bg-gray-400" : e.valid ? "bg-green-500" : "bg-red-500"]) }, null, 2), s("div", null, [
+					s("span", ie, g(e.name), 1),
+					s("span", ae, "(" + g(e.path) + ")", 1),
+					e.version == null ? a("", !0) : (p(), o("span", oe, " v" + g(e.version), 1)),
+					e.draft ? (p(), o("span", se, " draft — not loaded ")) : a("", !0),
+					e.hidden ? (p(), o("span", ce, " hidden ")) : a("", !0),
+					e.kind === "custom" ? (p(), o("span", {
+						key: 3,
+						class: "ml-1 rounded bg-indigo-100 px-1.5 py-0.5 text-xs font-medium text-indigo-700",
+						title: e.customOperations?.length ? `repository.ts implements: ${e.customOperations.join(", ")}` : "No repository.ts loaded"
+					}, [t[1] ||= c(" custom", -1), e.customOperations?.length ? (p(), o("span", ue, " — " + g(e.customOperations.length) + " ops", 1)) : a("", !0)], 8, le)) : a("", !0),
+					x.value && e.draft ? (p(), o("button", {
+						key: 4,
+						class: "ml-2 rounded bg-blue-500 px-2 py-0.5 text-xs text-white hover:bg-blue-600",
+						disabled: y.value === e.name,
+						onClick: (t) => w(e.name)
+					}, g(y.value === e.name ? "..." : "Publish"), 9, de)) : a("", !0),
+					x.value && (e.hidden || e.draft) ? (p(), o("button", {
+						key: 5,
+						class: "ml-1 rounded bg-green-500 px-2 py-0.5 text-xs text-white hover:bg-green-600",
+						disabled: y.value === e.name,
+						onClick: (t) => E(e.name)
+					}, g(y.value === e.name ? "..." : "Add to menu"), 9, fe)) : a("", !0),
+					x.value && e.valid && !e.draft && !e.hidden ? (p(), o("button", {
+						key: 6,
+						class: "ml-1 rounded bg-gray-400 px-2 py-0.5 text-xs text-white hover:bg-gray-500",
+						disabled: y.value === e.name,
+						onClick: (t) => T(e.name)
+					}, g(y.value === e.name ? "..." : "Remove from menu"), 9, pe)) : a("", !0),
+					e.expectedVersion != null && e.expectedVersion !== e.version ? (p(), o("p", me, [c(" needs migration to v" + g(e.expectedVersion), 1), e.error ? (p(), o("span", he, " — " + g(e.error), 1)) : a("", !0)])) : e.error ? (p(), o("p", ge, g(e.error), 1)) : a("", !0)
+				])]))), 128))]),
+				l.value.resources.length === 0 ? (p(), o("p", _e, " No resources loaded. ")) : a("", !0)
+			])) : a("", !0),
+			l.value ? (p(), ee(I, {
+				key: 4,
+				enums: l.value.enums
+			}, null, 8, ["enums"])) : a("", !0),
+			l.value?.i18n ? (p(), o("section", ve, [t[3] ||= s("h2", { class: "text-lg font-semibold mb-2" }, "Translations", -1), s("div", ye, [s("div", be, [
+				s("span", { class: d(["inline-block w-2.5 h-2.5 rounded-full", l.value.i18n.active ? "bg-green-500" : "bg-gray-400"]) }, null, 2),
+				s("span", $, g(l.value.i18n.active ? "Active" : "Inactive"), 1),
+				s("span", xe, " — default: " + g(l.value.i18n.defaultLanguage), 1)
+			]), s("ul", Se, [(p(!0), o(n, null, h(l.value.i18n.bundles, (e) => (p(), o("li", {
+				key: e.language,
+				class: "flex items-center gap-2 text-sm"
+			}, [
+				s("span", Ce, g(e.language), 1),
+				s("span", null, g(e.keyCount) + " keys", 1),
+				e.emptyKeys > 0 ? (p(), o("span", we, g(e.emptyKeys) + " untranslated ", 1)) : (p(), o("span", Te, " complete "))
+			]))), 128))])])])) : a("", !0),
+			u.value ? (p(), o("div", Ee, "Loading status...")) : a("", !0)
+		]));
+	}
+});
+//#endregion
+export { De as default };

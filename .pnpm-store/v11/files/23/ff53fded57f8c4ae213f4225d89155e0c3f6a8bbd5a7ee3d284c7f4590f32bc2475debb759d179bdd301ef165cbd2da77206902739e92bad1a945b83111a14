@@ -1,0 +1,146 @@
+import { ExtractPublicPropTypes, PropType } from 'vue';
+import { ViewDef } from '@ghentcdh/crouton-core';
+import { ErrorMode, FormEventPayload, HttpClient } from '@ghentcdh/crouton-forms-vue';
+import { ResourceApiInstance } from '../resource';
+export declare const CroutonFormProperties: {
+    /** Title displayed in the modal header. */
+    title: {
+        type: StringConstructor;
+        required: false;
+    };
+    /** Label for the save button. */
+    saveLabel: {
+        type: StringConstructor;
+        default: string;
+    };
+    /** Label for the cancel button. */
+    cancelLabel: {
+        type: StringConstructor;
+        default: string;
+    };
+    layout: {
+        type: StringConstructor;
+        default: string;
+    };
+    /** Callback for form events dispatched by custom renderers. */
+    onEvents: {
+        type: PropType<(payload: FormEventPayload) => void>;
+        required: boolean;
+    };
+    /** Initial form data to populate the form with. */
+    data: {
+        type: PropType<any>;
+        required: true;
+    };
+    /** When validation errors are shown. */
+    errorMode: {
+        type: PropType<ErrorMode>;
+        default: "onBlur";
+        required: boolean;
+    };
+    /** HTTP client passed through to the inner JsonForm for remote renderers (e.g. autocomplete). */
+    http: {
+        type: PropType<HttpClient>;
+        default: null;
+        required: boolean;
+    };
+    /** Custom renderer registry passed to the inner JsonForm. */
+    renderers: {
+        type: PropType<any[]>;
+        default: null;
+        required: boolean;
+    };
+    /**
+     * When true, form changes are saved automatically (debounced) instead of
+     * requiring an explicit Save button click. Save/Cancel are replaced by a
+     * Close button with a status indicator. Requires `onAutoSave`.
+     */
+    autoSave: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    /**
+     * Called with the current form data whenever the debounce fires and the form
+     * is valid. Should return a promise. Only used when `autoSave` is true.
+     */
+    onAutoSave: {
+        type: PropType<(data: any) => Promise<any>>;
+        default: null;
+    };
+    /**
+     * Called when a relation inside the form is created, updated, or deleted.
+     * Should return a promise resolving to the fresh parent record. When
+     * provided the form reloads automatically after every relation change,
+     * and any pending auto-save debounce is cancelled first to prevent stale
+     * data from overwriting the server state.
+     * Only meaningful in edit mode (relations require an existing parent id).
+     */
+    onRefreshData: {
+        type: PropType<() => Promise<any>>;
+        default: null;
+    };
+    validateOnMount: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    showButtons: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    readonly: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    formMaxWidth: {
+        type: StringConstructor;
+        default: string;
+    };
+    views: {
+        type: PropType<ViewDef>;
+        required: boolean;
+    };
+    formatBeforeSave: {
+        type: PropType<(data: any) => Promise<any>>;
+        required: boolean;
+        default: null;
+    };
+    resourceApi: {
+        type: PropType<ResourceApiInstance>;
+        required: boolean;
+    };
+    saveId: {
+        type: StringConstructor;
+        required: boolean;
+        default: null;
+    };
+    showErrors: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+};
+export type CroutonFormProps = ExtractPublicPropTypes<typeof CroutonFormProperties>;
+/** Result payload returned when the modal is submitted. */
+export type CroutonFormData<DATA = any> = {
+    /** The form data at the time of submission. */
+    data: DATA;
+    /** Whether the form passed validation. */
+    valid: boolean;
+};
+export type CroutonFormEmitsType = {
+    cancel: [value: null];
+    /** Emitted when no resourceApi is defined. */
+    save: [data: unknown];
+    /** Emitted on successful save when resourceApi is defined. */
+    onSaveSuccess: [response: unknown];
+    /** Emitted on failed save when resourceApi is defined. */
+    onSaveError: [error: unknown];
+    /** Emitted on cancel or after save so the parent can close/clean up (matches FormModal). */
+    closeModal: [result: CroutonFormData | null];
+    /** Emitted when a custom renderer dispatches a form event. */
+    events: [payload: FormEventPayload];
+    /** Emitted when validation errors change. */
+    errors: [errors: unknown];
+    /** Emitted when form validity changes. */
+    valid: [isValid: boolean];
+};
+//# sourceMappingURL=CroutonForm.properties.d.ts.map

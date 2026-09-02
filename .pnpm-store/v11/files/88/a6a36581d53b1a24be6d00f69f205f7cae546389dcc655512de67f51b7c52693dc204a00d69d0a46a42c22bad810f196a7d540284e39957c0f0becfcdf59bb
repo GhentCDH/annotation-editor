@@ -1,0 +1,11 @@
+import { ConfirmModalProps, ConfirmResult } from './modal.model';
+declare const __VLS_export: import('vue').DefineComponent<ConfirmModalProps, {}, {}, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, {
+    closeModal: (args_0: ConfirmResult) => any;
+}, string, import('vue').PublicProps, Readonly<ConfirmModalProps> & Readonly<{
+    onCloseModal?: ((args_0: ConfirmResult) => any) | undefined;
+}>, {
+    confirmLabel: string;
+    cancelLabel: string;
+}, {}, {}, {}, string, import('vue').ComponentProvideOptions, false, {}, any>;
+declare const _default: typeof __VLS_export;
+export default _default;

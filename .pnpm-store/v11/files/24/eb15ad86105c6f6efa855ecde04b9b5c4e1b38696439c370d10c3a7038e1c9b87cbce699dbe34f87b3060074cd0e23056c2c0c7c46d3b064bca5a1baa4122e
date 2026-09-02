@@ -1,0 +1,22 @@
+export declare const DrawerProperties: {
+    widthLeft: {
+        type: NumberConstructor;
+        default: number;
+    };
+    widthRight: {
+        type: NumberConstructor;
+        default: number;
+    };
+    initialLeftOpen: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    initialRightOpen: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    drawerColor: {
+        type: StringConstructor;
+        default: string;
+    };
+};

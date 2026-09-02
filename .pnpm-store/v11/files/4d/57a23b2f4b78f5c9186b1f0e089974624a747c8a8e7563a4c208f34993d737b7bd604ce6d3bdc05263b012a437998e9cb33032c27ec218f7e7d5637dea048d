@@ -1,0 +1,7 @@
+import { AnnotatedText, CreateAnnotationsProps } from './CreateAnnotations.model';
+import { BaseAnnotation } from '../../model';
+import { Annotation } from '../../model/';
+export declare const createAnnotatedText: <ANNOTATION extends BaseAnnotation = Annotation>(id: string, config?: CreateAnnotationsProps<ANNOTATION>) => AnnotatedText<ANNOTATION>;
+export declare const getAnnotatedText: <ANNOTATION extends BaseAnnotation = Annotation>(id: string) => AnnotatedText<ANNOTATION>;
+export declare const clearAnnotatedTextCache: () => void;
+//# sourceMappingURL=createAnnotatedText.d.ts.map

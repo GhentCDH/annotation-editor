@@ -1,0 +1,14 @@
+import { RequestData } from './resource.types';
+import { OperationKey } from '../composables/form-def.schema';
+import { FormDef } from '../composables/form-def.types';
+export declare const croutonApiCall: (formDef: Pick<FormDef, "id" | "operations">, operation: OperationKey, defaultUriParams: Record<string, string>, data?: any, signal?: AbortSignal) => Promise<import('axios').AxiosResponse<any, any, {}>>;
+export declare const resourceApi: (formDef: Pick<FormDef, "id" | "operations" | "idField">, defaultUriParams?: Record<string, string>) => {
+    loadData: (requestData: RequestData, signal?: AbortSignal) => Promise<any>;
+    getOneById: (id: string) => Promise<any>;
+    save: (id: string, data: any) => Promise<any>;
+    patch: (id: string, data: any) => Promise<any>;
+    create: (data: any) => Promise<any>;
+    delete: (data: any) => Promise<any>;
+};
+export type ResourceApiInstance = ReturnType<typeof resourceApi>;
+//# sourceMappingURL=resource.api.d.ts.map

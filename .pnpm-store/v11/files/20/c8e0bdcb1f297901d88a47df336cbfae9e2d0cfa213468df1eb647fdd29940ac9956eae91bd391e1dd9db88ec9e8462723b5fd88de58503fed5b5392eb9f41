@@ -1,0 +1,17 @@
+export declare const CollapseRowProperties: {
+    title: {
+        type: StringConstructor;
+    };
+    label: {
+        type: StringConstructor;
+    };
+    labelLink: {
+        type: StringConstructor;
+    };
+    description: {
+        type: StringConstructor;
+    };
+    descriptionLink: {
+        type: StringConstructor;
+    };
+};

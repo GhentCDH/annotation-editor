@@ -1,0 +1,11 @@
+import { PropType } from 'vue';
+import { IconProp } from './icon-list';
+import { Size } from '../const/size';
+export declare const IconProperties: {
+    icon: {
+        type: PropType<IconProp>;
+    };
+    size: {
+        type: PropType<Size>;
+    };
+};

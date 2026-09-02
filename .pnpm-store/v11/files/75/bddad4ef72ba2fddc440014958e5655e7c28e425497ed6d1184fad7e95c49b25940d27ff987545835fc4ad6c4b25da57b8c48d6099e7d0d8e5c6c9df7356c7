@@ -1,0 +1,16 @@
+import { default as memoize } from 'memoizee';
+import { AnnotationDrawPath } from '../../../../model';
+export type PathParams = {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    r: number;
+    leftBorder: boolean;
+    rightBorder: boolean;
+};
+export type createAnnotationPathFn = (params: PathParams) => AnnotationDrawPath;
+export declare const createRightBorder: ((x: number, y: number, right: number, bottom: number, r: number) => string[]) & memoize.Memoized<(x: number, y: number, right: number, bottom: number, r: number) => string[]>;
+export declare const createLeftBorder: ((x: number, y: number, bottom: number, r: number) => string[]) & memoize.Memoized<(x: number, y: number, bottom: number, r: number) => string[]>;
+export declare const createAnnotationFill: ({ x, y, width, height, r, leftBorder, rightBorder, }: PathParams) => string;
+//# sourceMappingURL=path.d.ts.map

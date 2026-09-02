@@ -1,0 +1,30 @@
+export type PageProps = {
+    currentPage: number;
+    page: number;
+    label: string;
+    neverActive?: boolean;
+    disabled?: boolean;
+};
+export declare const PaginationButtonProperties: {
+    currentPage: {
+        type: NumberConstructor;
+        required: true;
+    };
+    page: {
+        type: NumberConstructor;
+        required: true;
+    };
+    label: {
+        type: StringConstructor;
+        required: true;
+    };
+    neverActive: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    disabled: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+};
+export declare const PaginationButtonEmits: string[];

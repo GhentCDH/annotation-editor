@@ -1,0 +1,7 @@
+import { Ref } from 'vue';
+/**
+ * Minimal drop-in for @vueuse/core's computedAsync.
+ * Tracks reactive dependencies inside `fn` and re-runs whenever they change.
+ */
+export declare const computedAsync: <T>(fn: () => Promise<T>, initialValue?: T) => Ref<T | undefined>;
+//# sourceMappingURL=computedAsync.d.ts.map

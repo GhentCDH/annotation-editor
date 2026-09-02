@@ -1,0 +1,14 @@
+import { Locator, Page } from '@playwright/test';
+import { Harness } from './Harness';
+/**
+ * Drives the `@ghentcdh/ui` `InputNumber` component.
+ * Renders `<input type="number" aria-label="{id}">` — role `spinbutton`.
+ */
+export declare class NumberHarness extends Harness {
+    static byId(parent: Locator | Page, id: string): NumberHarness;
+    static byLabel(parent: Locator | Page, label: string): NumberHarness;
+    static for(locator: Locator): NumberHarness;
+    fill(value: number): Promise<this>;
+    clear(): Promise<this>;
+    value(): Promise<number | null>;
+}

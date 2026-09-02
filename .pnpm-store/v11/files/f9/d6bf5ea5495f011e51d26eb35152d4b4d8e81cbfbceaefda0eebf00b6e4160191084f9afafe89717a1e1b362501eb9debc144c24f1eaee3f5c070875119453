@@ -1,0 +1,8 @@
+export declare const LanguageSelectProperties: {
+    hideLabel: {
+        type: BooleanConstructor;
+        required: false;
+        default: boolean;
+    };
+};
+//# sourceMappingURL=LanguageSelect.properties.d.ts.map

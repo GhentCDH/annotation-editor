@@ -1,0 +1,123 @@
+import { AnnotationEventType, EventData } from './events';
+import { BaseAnnotationDi } from '../di/BaseAnnotationDi';
+import { AnnotationId } from '../model';
+export declare class ExternalEventSender<ANNOTATION> extends BaseAnnotationDi {
+    sendEvent<EVENT extends AnnotationEventType<ANNOTATION>>({ event, mouseEvent, annotationUuid, }: {
+        event: EVENT;
+        mouseEvent?: MouseEvent;
+        annotationUuid: AnnotationId;
+    }, additionalData?: Partial<EventData<ANNOTATION>[EVENT]>): {
+        id: string | number;
+        start: number;
+        end: number;
+        _render: {
+            isGutter: boolean;
+            render: string;
+            lines: {
+                start: number;
+                end: number;
+                text: string;
+                lineNumber: number;
+                uuid: string;
+                maxLineWeight: number;
+                flatText: string;
+                html: string;
+                gutter?: string | undefined;
+                element?: any;
+            }[];
+            weight?: number | null | undefined;
+        };
+        _style: {
+            default: {
+                backgroundColor: string;
+                borderColor: string;
+                borderRadius: number;
+                borderWidth: number;
+                gutterWidth: number;
+                gutterGap: number;
+                tagTextColor: string;
+                tagBorderColor: string;
+                tagBackgroundColor: string;
+                tagBorderWidth: number;
+            };
+            edit: {
+                backgroundColor: string;
+                borderColor: string;
+                borderRadius: number;
+                borderWidth: number;
+                gutterWidth: number;
+                gutterGap: number;
+                tagTextColor: string;
+                tagBorderColor: string;
+                tagBackgroundColor: string;
+                tagBorderWidth: number;
+            };
+            active: {
+                backgroundColor: string;
+                borderColor: string;
+                borderRadius: number;
+                borderWidth: number;
+                gutterWidth: number;
+                gutterGap: number;
+                tagTextColor: string;
+                tagBorderColor: string;
+                tagBackgroundColor: string;
+                tagBorderWidth: number;
+            };
+            hover: {
+                backgroundColor: string;
+                borderColor: string;
+                borderRadius: number;
+                borderWidth: number;
+                gutterWidth: number;
+                gutterGap: number;
+                tagTextColor: string;
+                tagBorderColor: string;
+                tagBackgroundColor: string;
+                tagBorderWidth: number;
+            };
+        };
+        _drawMetadata: {
+            draws: {
+                uuid: string;
+                annotationUuid: string | number;
+                lineNumber: number;
+                path: {
+                    border?: string | undefined;
+                    fill?: string | undefined;
+                };
+                draggable: {
+                    start?: {
+                        height: number;
+                        x: number;
+                        y: number;
+                    } | undefined;
+                    end?: {
+                        height: number;
+                        x: number;
+                        y: number;
+                    } | undefined;
+                };
+                height: {
+                    height: number;
+                    x: number;
+                    y: number;
+                };
+                weight: number;
+            }[];
+            dimensions?: {
+                x: number;
+                y1: number;
+                y2: number;
+            } | undefined;
+        };
+        label?: string | undefined;
+        textSelection?: string | undefined;
+        _tagMetadata?: {
+            label: string;
+            padding: number;
+            fontSize: number;
+        } | null | undefined;
+    };
+}
+//# sourceMappingURL=send-event.d.ts.map

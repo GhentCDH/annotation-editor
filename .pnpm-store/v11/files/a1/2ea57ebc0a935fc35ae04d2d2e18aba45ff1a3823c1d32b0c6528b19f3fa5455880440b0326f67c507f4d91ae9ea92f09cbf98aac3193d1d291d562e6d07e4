@@ -1,0 +1,29 @@
+import { Locator, Page } from '@playwright/test';
+import { Harness } from './Harness';
+/**
+ * Drives the `@ghentcdh/ui` `AutoComplete` component.
+ *
+ * Input is `role="combobox"`. Options are portaled `role="option"` items.
+ * The component supports remote-fetched options, freeText mode, and an
+ * optional "Create new" button.
+ */
+export declare class AutocompleteHarness extends Harness {
+    static byId(parent: Locator | Page, id: string): AutocompleteHarness;
+    static byLabel(parent: Locator | Page, label: string): AutocompleteHarness;
+    static for(locator: Locator): AutocompleteHarness;
+    /** Type a query, wait for the matching option, click it. */
+    fill(value: string): Promise<this>;
+    /** Just type a query without selecting — useful for asserting dropdown state. */
+    query(value: string): Promise<this>;
+    /** Pick a specific option by visible label, after `query()` has filtered. */
+    pickOption(label: string): Promise<this>;
+    /** Press a key — useful for arrow-down / Enter / Esc keyboard nav tests. */
+    press(key: string): Promise<this>;
+    /** Click the "Create new" button (requires `enableCreate`). */
+    clickCreateNew(): Promise<void>;
+    clear(): Promise<this>;
+    value(): Promise<string>;
+    /** The listbox is portaled — locate it relative to the Page. */
+    listbox(): Locator;
+    options(): Locator;
+}

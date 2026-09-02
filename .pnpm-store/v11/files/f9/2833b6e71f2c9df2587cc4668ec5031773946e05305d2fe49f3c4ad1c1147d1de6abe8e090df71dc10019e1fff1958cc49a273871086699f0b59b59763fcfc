@@ -1,0 +1,19 @@
+import { AnnotationRender } from './annotation-render';
+import { AnnotationDimension, AnnotationDraw, BaseAnnotation, TextAnnotation } from '../../../model';
+import { CustomAnnotationStyle } from '../style';
+import { DefaultAnnotationStyle } from '../style/annotation.style.default';
+export declare const createGutterPath: (x: number, y: number, width: number, height: number) => {
+    fill: string;
+};
+export declare const createGutterStyle: (color: string, style?: Partial<DefaultAnnotationStyle>) => Partial<DefaultAnnotationStyle>;
+export declare class GutterAnnotationRender extends AnnotationRender<BaseAnnotation> {
+    readonly weightOrder: number;
+    readonly isGutter: boolean;
+    readonly renderTag = false;
+    constructor(name: string, style?: CustomAnnotationStyle);
+    createDraws(annotation: TextAnnotation): {
+        draws: AnnotationDraw[];
+        dimensions: AnnotationDimension;
+    };
+}
+//# sourceMappingURL=GutterAnnotationRender.d.ts.map

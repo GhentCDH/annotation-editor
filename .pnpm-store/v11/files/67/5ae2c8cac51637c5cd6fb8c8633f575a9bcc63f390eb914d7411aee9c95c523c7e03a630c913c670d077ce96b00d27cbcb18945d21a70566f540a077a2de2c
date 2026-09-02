@@ -1,0 +1,58 @@
+import { Ref } from 'vue';
+import { ResourceModals } from './resource.actions';
+import { ResourceApiInstance } from './resource.api';
+import { HandleEvent } from './resource.types';
+import { Action } from '../composables/form-def.schema';
+import { FormDef } from '../composables/form-def.types';
+import { Request } from '../utils/request';
+export interface UseResourcesProperties {
+    initialRequestParams?: Partial<Request>;
+    onRequest?: (request: Request) => void;
+    handleEvent?: HandleEvent;
+    defaultUriParams?: Record<string, string>;
+    readonly?: boolean;
+    initialLoad?: boolean;
+    inline?: boolean;
+}
+export interface UseResource {
+    id: string;
+    operations: Record<string, unknown>;
+    uiSchema: any;
+    schema: any;
+    filterSchema: Record<string, any> | undefined;
+    loading: boolean;
+    data: any[];
+    page: {
+        count: number;
+        pageSize: number;
+        page: number;
+        totalPages: number;
+    };
+    sort: {
+        sortColumn: string;
+        sortDirection: string;
+    };
+    filter: any[];
+    search: string;
+    onSort: (id: string) => void;
+    onUpdatePage: (page: number) => void;
+    onUpdatePageSize: (size: number) => void;
+    onUpdateFilters: (filters: any) => void;
+    onUpdateSearch: (search: string) => void;
+    cellRenderers: any[];
+    actions: any;
+    backendAction: (action: Action) => Promise<any>;
+    tableActions: any[];
+    create: () => void;
+    edit: (id: unknown) => void;
+    view: (id: unknown) => void;
+    delete: (id: unknown) => void;
+    closeForm: (result: any) => void;
+    form: ResourceModals['form'];
+    api: ResourceApiInstance;
+    reload: () => void;
+}
+export declare const useResourcesByUri: (uri: string, params?: UseResourcesProperties) => Ref<UseResource | null | undefined>;
+export declare const useResourcesById: (id: string, params?: UseResourcesProperties) => Ref<UseResource | null>;
+export declare const useResources: (formDef: FormDef | null | undefined, { initialRequestParams, onRequest, handleEvent, defaultUriParams, readonly, initialLoad, inline, }?: UseResourcesProperties) => UseResource | null;
+//# sourceMappingURL=useResources.d.ts.map

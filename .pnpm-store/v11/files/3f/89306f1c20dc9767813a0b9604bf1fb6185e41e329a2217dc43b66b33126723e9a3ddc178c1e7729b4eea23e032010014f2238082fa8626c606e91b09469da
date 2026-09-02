@@ -1,0 +1,1 @@
+import{t as e}from"../useNprogress-PUbP9y7v.js";export{e as useNprogress};

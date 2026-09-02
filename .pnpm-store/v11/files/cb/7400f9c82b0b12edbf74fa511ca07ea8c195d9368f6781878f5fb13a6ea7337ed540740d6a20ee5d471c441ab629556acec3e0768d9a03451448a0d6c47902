@@ -1,0 +1,29 @@
+import { Component, Ref } from 'vue';
+import { TableAction } from '@ghentcdh/ui';
+import { Resource } from './resource';
+import { ResourceApiInstance } from './resource.api';
+import { HandleEvent } from './resource.types';
+import { Action } from '../composables/form-def.schema';
+import { FormDef } from '../composables/form-def.types';
+export declare const backendAction: (resource: Resource, formDef: FormDef, defaultUriParams: Record<string, string>, action: Action) => (formData: any) => Promise<void> | undefined;
+export declare const actions: (api: ResourceApiInstance, resource: Resource, formDef: FormDef | null | undefined, defaultUriParams: Record<string, string>, handleEvent: HandleEvent, readonly: boolean, modals?: ReturnType<typeof resourceModals>) => TableAction[];
+/**
+ * Build the list of table-level (toolbar) action buttons for a resource.
+ * These are global actions — no row data is passed to the handler.
+ */
+export declare const tableActions: (resource: Resource, formDef: FormDef | null | undefined) => TableAction[];
+export interface ResourceModals {
+    form: Ref<{
+        component: Component;
+        config: any;
+        hideTable: boolean;
+        customComponent: Component | null;
+    } | null>;
+    closeForm: (result: any) => void;
+    create: () => void;
+    edit: (id: unknown) => void;
+    view: (id: unknown) => void;
+    delete: (id: unknown) => void;
+}
+export declare const resourceModals: (api: ResourceApiInstance, resource: Resource, formDef: FormDef, handleEvent: HandleEvent, inline: boolean) => ResourceModals;
+//# sourceMappingURL=resource.actions.d.ts.map

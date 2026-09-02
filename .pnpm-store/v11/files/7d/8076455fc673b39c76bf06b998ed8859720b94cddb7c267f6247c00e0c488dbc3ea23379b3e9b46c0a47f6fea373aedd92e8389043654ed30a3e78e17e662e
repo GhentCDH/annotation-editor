@@ -1,0 +1,8 @@
+import { Component } from 'vue';
+export interface CustomComponentEntry {
+    tester: (element: string) => number;
+    renderer: Component;
+}
+export declare const customComponentIs: (type: string, rank: number) => CustomComponentEntry["tester"];
+export declare const findCustomComponent: (registry: CustomComponentEntry[], element: string | null | undefined) => Component | undefined;
+//# sourceMappingURL=custom-component.d.ts.map

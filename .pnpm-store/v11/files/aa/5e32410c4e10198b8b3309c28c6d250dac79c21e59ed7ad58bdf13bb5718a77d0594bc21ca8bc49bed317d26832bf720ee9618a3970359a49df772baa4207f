@@ -1,0 +1,16 @@
+import { default as memoize } from 'memoizee';
+export declare const insideRange: ((left: number, right: number, value: number, offset?: number) => boolean) & memoize.Memoized<(left: number, right: number, value: number, offset?: number) => boolean>;
+export declare const isInsideBoundingRect: (x: number, y: number, rect: DOMRect) => boolean;
+export declare const findLineElement: (node: Node) => {
+    lineElement: null;
+    lineUid: null;
+    offset: number;
+    lineHeight: number;
+} | {
+    lineElement: HTMLElement;
+    lineUid: string | null;
+    offset: number;
+    lineHeight: number;
+};
+export declare const calculateOffset: ((lineHeight: number, height: number) => number) & memoize.Memoized<(lineHeight: number, height: number) => number>;
+//# sourceMappingURL=bounding-rect.d.ts.map

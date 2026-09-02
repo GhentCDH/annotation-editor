@@ -1,0 +1,14 @@
+import { Locator, Page } from '@playwright/test';
+import { Harness } from './Harness';
+/**
+ * Drives the `@ghentcdh/ui` `Textarea` component.
+ * Plain text-area; use `MarkdownHarness` for the rich editor.
+ */
+export declare class TextAreaHarness extends Harness {
+    static byId(parent: Locator | Page, id: string): TextAreaHarness;
+    static byLabel(parent: Locator | Page, label: string): TextAreaHarness;
+    static for(locator: Locator): TextAreaHarness;
+    fill(value: string): Promise<this>;
+    clear(): Promise<this>;
+    value(): Promise<string>;
+}

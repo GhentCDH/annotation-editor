@@ -1,0 +1,18 @@
+import { InternalEvent, InternalEventData } from './internal.events';
+export type InternalEventListenerType = InternalEvent;
+export type EventData<DATA> = {
+    event: InternalEvent;
+    mouseEvent?: MouseEvent | undefined | null;
+    data: DATA;
+};
+export type EventCallback<DATA> = (event: EventData<DATA>) => void;
+export declare class InternalEventListener {
+    private readonly eventMap;
+    on<EVENT extends InternalEvent>(event: EVENT, callback: EventCallback<InternalEventData[EVENT]>): this;
+    private block;
+    get isBlocking(): boolean;
+    blockEvents(reason: string): void;
+    unBlockEvents(reason: string): void;
+    sendEvent<EVENT extends InternalEvent>(event: EVENT, data: InternalEventData[EVENT], mouseEvent?: MouseEvent | undefined | null): void;
+}
+//# sourceMappingURL=internal.event.listener.d.ts.map

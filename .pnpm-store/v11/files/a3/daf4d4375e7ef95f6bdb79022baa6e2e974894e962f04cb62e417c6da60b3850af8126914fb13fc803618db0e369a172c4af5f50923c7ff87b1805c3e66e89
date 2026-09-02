@@ -1,0 +1,2 @@
+DATABASE_URL=postgresql://crouton:crouton@localhost:5432/{{name}}?schema=public
+BACKEND_PORT=3000

@@ -1,0 +1,82 @@
+import { Container, Token } from './container';
+import { Annotation, BaseAnnotation } from '../model';
+import { AnnotationAdapter } from '../adapter/annotation';
+import { AnnotationRender } from '../adapter/annotation/renderer';
+import { Snapper, TextAdapter } from '../adapter/text';
+/**
+ * Scoped dependency injection module for annotation-related services.
+ *
+ * This module creates a scoped container that holds all services needed for
+ * rendering and interacting with annotations. Each annotation component instance
+ * should have its own AnnotationModule to ensure proper isolation.
+ *
+ * Services are registered with lazy instantiation - they're only created when
+ * first requested via inject().
+ *
+ * @example
+ * ```ts
+ * const module = new AnnotationModule(rootContainer, {
+ *   textAdapter: myTextAdapter,
+ *   annotationAdapter: myAnnotationAdapter,
+ * });
+ *
+ * const svgModel = module.inject(SvgModel);
+ * ```
+ */
+export declare class AnnotationModule {
+    /** Scoped container for this module's services */
+    protected readonly container: Container;
+    /**
+     * Creates a new AnnotationModule with its own scoped container.
+     *
+     * @param parentContainer - Parent container (usually rootContainer) for hierarchical lookup
+     * @param config - Configuration with required adapters
+     */
+    constructor(parentContainer: Container, adapters: {
+        annotationAdapter: AnnotationAdapter<any>;
+        textAdapter: TextAdapter;
+    });
+    /**
+     * Registers all annotation-related services with the container.
+     * Order matters: SvgModel must be registered last as it depends on other services.
+     */
+    configure(adapters: {
+        annotationAdapter: AnnotationAdapter<any>;
+        textAdapter: TextAdapter;
+    }): void;
+    /**
+     * Retrieve a service from this module's container.
+     *
+     * @param token - The token identifying the service (class, string, or symbol)
+     * @returns The service instance
+     */
+    inject<T>(token: Token<T>): T;
+    /**
+     * Destroy this module and clean up all service instances.
+     * Should be called when the annotation component is unmounted.
+     */
+    destroy(): void;
+    /**
+     * @deprecated use createAnnotatedText(id, {textAdapter})
+     * @param adapter
+     */
+    updateTextAdapter(adapter: TextAdapter): this;
+    /**
+     * @deprecated use createAnnotatedText(id, {annotationAdapter})
+     * @param adapter
+     */
+    updateAnnotationAdapter(adapter: AnnotationAdapter<any>): this;
+    private useDefaultAnnotationAdapter;
+    private useDefaultTextAdapter;
+    updateSnapper(snapper: Snapper): this;
+    getSnapper(): Snapper;
+    getTextAdapter(): TextAdapter;
+    private hasTextAdapter;
+    private hasAnnotationAdapter;
+    getAnnotationAdapter<ANNOTATION extends BaseAnnotation = Annotation>(): AnnotationAdapter<ANNOTATION>;
+    getAllRenderInstances(): AnnotationRender<any>[];
+    registerRender(token: string | symbol, factory: () => AnnotationRender<any>): void;
+    hasRender(token: string | symbol): boolean;
+    injectRender(token: string | symbol): AnnotationRender<any>;
+}
+//# sourceMappingURL=annotation.module.d.ts.map

@@ -1,0 +1,28 @@
+import { D as e } from "./renderers-D20PBZBF.js";
+import { Fragment as t, createCommentVNode as n, createElementBlock as r, defineComponent as i, openBlock as a, renderList as o, toDisplayString as s, unref as c } from "vue";
+//#region src/i18n/LanguageSelect.properties.ts
+var l = { hideLabel: {
+	type: Boolean,
+	required: !1,
+	default: !1
+} }, u = ["value"], d = ["value"], f = /* @__PURE__ */ i({
+	__name: "LanguageSelect",
+	props: l,
+	setup(i) {
+		let { language: l, languages: f, setLanguage: p } = e(), m = (e) => {
+			let t = e.target;
+			p(t.value);
+		};
+		return (e, i) => c(f).length > 1 ? (a(), r("select", {
+			key: 0,
+			value: c(l),
+			class: "select select-sm select-bordered w-full",
+			onChange: m
+		}, [(a(!0), r(t, null, o(c(f), (e) => (a(), r("option", {
+			key: e,
+			value: e
+		}, s(e.toUpperCase()), 9, d))), 128))], 40, u)) : n("", !0);
+	}
+});
+//#endregion
+export { f as t };

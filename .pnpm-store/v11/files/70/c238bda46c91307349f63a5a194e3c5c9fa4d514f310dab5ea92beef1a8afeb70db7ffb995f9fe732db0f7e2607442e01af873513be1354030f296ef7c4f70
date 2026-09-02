@@ -1,0 +1,51 @@
+import { AnnotatedText } from './CreateAnnotations.model';
+import { Snapper, TextAdapter, TextAdapterParams } from '../../adapter/text';
+import { AnnotationAdapter, AnnotationAdapterParams, AnnotationStyleParams, CustomAnnotationStyle } from '../../adapter/annotation';
+import { AnnotationEventType, ErrorEventCallback, EventCallback } from '../../events';
+import { AnnotationId, BaseAnnotation } from '../../model';
+import { AnnotationRender } from '../../adapter/annotation/renderer';
+import { tagLabelFn } from '../../tag/TagRenderer';
+import { RenderInstances } from '../../adapter/annotation/renderer/render-instances';
+export declare class CreateAnnotationsImpl<ANNOTATION extends BaseAnnotation> implements AnnotatedText<ANNOTATION> {
+    private readonly id;
+    private annotationsMap;
+    private readonly svgModel;
+    private readonly draw;
+    private text;
+    private readonly eventListener;
+    private readonly annotationModule;
+    private readonly mainContainer;
+    constructor(id: string, adapters: {
+        annotationAdapter: AnnotationAdapter<ANNOTATION>;
+        textAdapter: TextAdapter;
+    });
+    private annotations;
+    setText(text: string): this;
+    setSnapper(snapper: Snapper): this;
+    setTagLabelFn(tagFn: tagLabelFn<ANNOTATION> | null): this;
+    setAnnotations(annotations: ANNOTATION[]): this;
+    private recalculate;
+    on<EVENT extends AnnotationEventType<ANNOTATION>>(event: EVENT, callback: EventCallback<EVENT, ANNOTATION>): this;
+    onError(callback: ErrorEventCallback): this;
+    private init;
+    private redrawSvg;
+    destroy(): this;
+    highlightAnnotations(ids: AnnotationId[]): this;
+    selectAnnotations(ids: AnnotationId[]): this;
+    setAnnotationAdapter(adapterOrParams: AnnotationAdapterParams | AnnotationAdapter<ANNOTATION>): this;
+    setAnnotationAdapterParams(params: AnnotationAdapterParams): this;
+    setTextAdapter(adapterOrParams: TextAdapter | TextAdapterParams): this;
+    setTextAdapterParams(params: TextAdapterParams): this;
+    scrollToAnnotation(id: AnnotationId): this;
+    addAnnotation(annotation: ANNOTATION): this;
+    updateAnnotation(id: AnnotationId, annotation: ANNOTATION): this;
+    deleteAnnotation(id: AnnotationId): this;
+    setRenderParams(params: Partial<RenderInstances<ANNOTATION>>): this;
+    registerRender(render: AnnotationRender<ANNOTATION>): this;
+    registerRenders(...renders: AnnotationRender<any>[]): this;
+    updateRenderStyle(name: string, style: CustomAnnotationStyle): this;
+    registerStyle(name: string, style: CustomAnnotationStyle): this;
+    setStyleParams(params: Partial<AnnotationStyleParams<ANNOTATION>>): this;
+    registerStyles(styles: Record<string, CustomAnnotationStyle>): this;
+}
+//# sourceMappingURL=CreateAnnotations.d.ts.map

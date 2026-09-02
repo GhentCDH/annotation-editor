@@ -1,0 +1,110 @@
+import { PropType } from 'vue';
+declare const __VLS_export: import('vue').DefineComponent<import('vue').ExtractPropTypes<{
+    /** Title displayed in the modal header. */
+    modalTitle: {
+        type: StringConstructor;
+        required: true;
+    };
+    /** Label for the close button. */
+    closeLabel: {
+        type: StringConstructor;
+        default: string;
+    };
+    column: {
+        type: ObjectConstructor;
+        required: true;
+    };
+    options: {
+        type: ObjectConstructor;
+        required: true;
+    };
+    /** Callback invoked when the modal closes (with result or `null` on cancel). */
+    onClose: {
+        type: PropType<() => void>;
+        default: () => void;
+    };
+    /**
+     * Show the Edit button.
+     * The caller wires the action by listening to the `edit` event via `onEdit`
+     * in the props object — Vue's v-bind spread in modalWrapper converts onXxx
+     * keys into event handlers automatically.
+     */
+    canEdit: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    /**
+     * Show the Delete button.
+     * The caller wires the action by listening to the `delete` event via `onDelete`
+     * in the props object.
+     */
+    canDelete: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    /** Initial form data to populate the form with. */
+    data: {
+        type: PropType<any>;
+        required: true;
+    };
+}>, {}, {}, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, {
+    closeModal: (result: unknown) => any;
+}, string, import('vue').PublicProps, Readonly<import('vue').ExtractPropTypes<{
+    /** Title displayed in the modal header. */
+    modalTitle: {
+        type: StringConstructor;
+        required: true;
+    };
+    /** Label for the close button. */
+    closeLabel: {
+        type: StringConstructor;
+        default: string;
+    };
+    column: {
+        type: ObjectConstructor;
+        required: true;
+    };
+    options: {
+        type: ObjectConstructor;
+        required: true;
+    };
+    /** Callback invoked when the modal closes (with result or `null` on cancel). */
+    onClose: {
+        type: PropType<() => void>;
+        default: () => void;
+    };
+    /**
+     * Show the Edit button.
+     * The caller wires the action by listening to the `edit` event via `onEdit`
+     * in the props object — Vue's v-bind spread in modalWrapper converts onXxx
+     * keys into event handlers automatically.
+     */
+    canEdit: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    /**
+     * Show the Delete button.
+     * The caller wires the action by listening to the `delete` event via `onDelete`
+     * in the props object.
+     */
+    canDelete: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    /** Initial form data to populate the form with. */
+    data: {
+        type: PropType<any>;
+        required: true;
+    };
+}>> & Readonly<{
+    onCloseModal?: ((result: unknown) => any) | undefined;
+}>, {
+    onClose: () => void;
+    closeLabel: string;
+    canEdit: boolean;
+    canDelete: boolean;
+}, {}, {}, {}, string, import('vue').ComponentProvideOptions, true, {}, any>;
+declare const _default: typeof __VLS_export;
+export default _default;
+//# sourceMappingURL=RelationModal.vue.d.ts.map

@@ -1,0 +1,14 @@
+{
+  "name": "@{{name}}/generated-default-types",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*"
+  },
+  "dependencies": {
+    "tslib": "^2.8.0",
+    "zod": "^4.0.0"
+  }
+}

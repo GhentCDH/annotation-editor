@@ -1,0 +1,85 @@
+declare const __VLS_export: import('vue').DefineComponent<import('vue').ExtractPropTypes<{
+    title: {
+        type: StringConstructor;
+        required: true;
+    };
+    items: {
+        type: import('vue').PropType<Array<Record<string, any>>>;
+        required: true;
+    };
+    modelValue: {
+        type: import('vue').PropType<Array<import('./Filter.properties').FilterItem | any>>;
+        default: () => never[];
+    };
+    labelKey: {
+        type: StringConstructor;
+        default: string;
+    };
+    valueKey: {
+        type: StringConstructor;
+        default: string;
+    };
+    colorKey: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    countKey: {
+        type: StringConstructor;
+        default: string;
+    };
+    counts: {
+        type: import('vue').PropType<Record<string, number>>;
+        default: undefined;
+    };
+    opened: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+}>, {}, {}, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, {}, string, import('vue').PublicProps, Readonly<import('vue').ExtractPropTypes<{
+    title: {
+        type: StringConstructor;
+        required: true;
+    };
+    items: {
+        type: import('vue').PropType<Array<Record<string, any>>>;
+        required: true;
+    };
+    modelValue: {
+        type: import('vue').PropType<Array<import('./Filter.properties').FilterItem | any>>;
+        default: () => never[];
+    };
+    labelKey: {
+        type: StringConstructor;
+        default: string;
+    };
+    valueKey: {
+        type: StringConstructor;
+        default: string;
+    };
+    colorKey: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    countKey: {
+        type: StringConstructor;
+        default: string;
+    };
+    counts: {
+        type: import('vue').PropType<Record<string, number>>;
+        default: undefined;
+    };
+    opened: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+}>> & Readonly<{}>, {
+    modelValue: any[];
+    labelKey: string;
+    valueKey: string;
+    opened: boolean;
+    colorKey: string;
+    countKey: string;
+    counts: Record<string, number>;
+}, {}, {}, {}, string, import('vue').ComponentProvideOptions, true, {}, any>;
+declare const _default: typeof __VLS_export;
+export default _default;

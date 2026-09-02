@@ -1,0 +1,39 @@
+import { JsonFormsRendererRegistryEntry } from '@jsonforms/core';
+import { ComponentPublicInstance } from 'vue';
+import { FormEventPayload } from '@ghentcdh/crouton-forms-vue';
+import { CroutonFormEmitsType, CroutonFormProps } from './CroutonForm.properties';
+/**
+ * Shared editable-form logic used by both FormModal and AutoSaveForm.
+ *
+ * Extracts auto-save wiring, validity tracking, form event handlers, and
+ * renderer resolution so the two wrapper components are pure templates.
+ */
+export declare const useFormLogic: (properties: CroutonFormProps, emits: <K extends keyof CroutonFormEmitsType>(event: K, ...args: CroutonFormEmitsType[K]) => void, formData: {
+    value: any;
+}, formRef: {
+    value: ComponentPublicInstance | null | undefined;
+}) => {
+    id: string;
+    valid: import('vue').Ref<boolean, boolean>;
+    renderers: JsonFormsRendererRegistryEntry[] | undefined;
+    autoSaveStatus: import('vue').ComputedRef<import('@ghentcdh/crouton-forms-vue').AutoSaveStatus>;
+    autoSaveStatusLabel: import('vue').ComputedRef<"" | "Saving…" | "Saved ✓" | "Fill required fields to save" | "Save failed">;
+    autoSaveStatusClass: import('vue').ComputedRef<{
+        'text-gray-400': boolean;
+        'text-blue-500': boolean;
+        'text-green-600': boolean;
+        'text-amber-500': boolean;
+        'text-red-500': boolean;
+    }>;
+    onCancel: () => void;
+    onValid: (isValid: boolean) => void;
+    onChange: (data: any) => void;
+    onSubmit: () => void;
+    onRetry: () => void;
+    onFormEvents: (payload: FormEventPayload) => void;
+    onErrors: (_errors: any) => void;
+    uiSchema: Record<string, unknown> | null;
+    schema: Record<string, unknown> | null;
+    errors: import('vue').Ref<null, null>;
+};
+//# sourceMappingURL=useFormLogic.d.ts.map

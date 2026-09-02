@@ -1,0 +1,44 @@
+import { CellRendererEntry } from '@ghentcdh/crouton-forms-vue';
+export declare const isCustomFormat: (format: string) => import('@jsonforms/core').Tester;
+export declare const isRelationControl: import('@jsonforms/core').Tester;
+/**
+ * Additional renderers to pass as the `renderers` prop.
+ * These are merged ON TOP of the base renderers inside FormComponent —
+ * no need to include customRenderes or relationReadonlyRenderers here.
+ */
+export declare const relationRenderers: {
+    tester: (uischema: import('@jsonforms/core').UISchemaElement, schema: import('@jsonforms/core').JsonSchema, context: import('@jsonforms/core').TesterContext) => number;
+    renderer: import('vue').Raw<import('vue').DefineComponent<{
+        uischema: import('@jsonforms/core').ControlElement;
+        schema: import('@jsonforms/core').JsonSchema;
+    }, {}, {}, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, {}, string, import('vue').PublicProps, Readonly<{
+        uischema: import('@jsonforms/core').ControlElement;
+        schema: import('@jsonforms/core').JsonSchema;
+    }> & Readonly<{}>, {}, {}, {}, {}, string, import('vue').ComponentProvideOptions, false, {}, any>>;
+}[];
+/**
+ * All custom control renderers to pass as the `renderers` prop.
+ * Merged ON TOP of the base renderers inside the form modal.
+ */
+export declare const customControlRenderers: {
+    tester: (uischema: import('@jsonforms/core').UISchemaElement, schema: import('@jsonforms/core').JsonSchema, context: import('@jsonforms/core').TesterContext) => number;
+    renderer: import('vue').Raw<import('vue').DefineComponent<{
+        uischema: import('@jsonforms/core').ControlElement;
+        schema: import('@jsonforms/core').JsonSchema;
+    }, {}, {}, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, {}, string, import('vue').PublicProps, Readonly<{
+        uischema: import('@jsonforms/core').ControlElement;
+        schema: import('@jsonforms/core').JsonSchema;
+    }> & Readonly<{}>, {}, {}, {}, {}, string, import('vue').ComponentProvideOptions, false, {}, any>>;
+}[];
+export declare const relationReadonlyRenderers: {
+    tester: (uischema: import('@jsonforms/core').UISchemaElement, schema: import('@jsonforms/core').JsonSchema, context: import('@jsonforms/core').TesterContext) => number;
+    renderer: import('vue').Raw<import('vue').DefineComponent<{
+        uischema: import('@jsonforms/core').ControlElement;
+        schema: import('@jsonforms/core').JsonSchema;
+    }, {}, {}, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, {}, string, import('vue').PublicProps, Readonly<{
+        uischema: import('@jsonforms/core').ControlElement;
+        schema: import('@jsonforms/core').JsonSchema;
+    }> & Readonly<{}>, {}, {}, {}, {}, string, import('vue').ComponentProvideOptions, false, {}, any>>;
+}[];
+export declare const customCellRenderers: CellRendererEntry[];
+//# sourceMappingURL=renderers.d.ts.map

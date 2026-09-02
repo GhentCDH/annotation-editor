@@ -1,0 +1,14 @@
+import { Locator, Page } from '@playwright/test';
+import { Harness } from './Harness';
+/**
+ * Drives the `@ghentcdh/ui` `Checkbox` component.
+ * Renders `<input role="checkbox" aria-label="{id}">`.
+ */
+export declare class BooleanHarness extends Harness {
+    static byId(parent: Locator | Page, id: string): BooleanHarness;
+    static byLabel(parent: Locator | Page, label: string): BooleanHarness;
+    static for(locator: Locator): BooleanHarness;
+    fill(value: boolean): Promise<this>;
+    toggle(): Promise<this>;
+    value(): Promise<boolean>;
+}

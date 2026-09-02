@@ -1,0 +1,20 @@
+import { BaseAnnotationDi } from '../../../di/BaseAnnotationDi';
+import { BaseAnnotation, TextAnnotation } from '../../../model';
+import { AnnotationSvg } from '../../model/svg.types';
+import { AnnotationModule } from '../../../di/annotation.module';
+export declare class EventAnnotations extends BaseAnnotationDi {
+    addToAnnotation(annotation: TextAnnotation, rect: AnnotationSvg): EventAnnotation<BaseAnnotation>;
+}
+declare class EventAnnotation<ANNOTATION extends BaseAnnotation> extends BaseAnnotationDi {
+    private readonly annotation;
+    private readonly externalEventSender;
+    private readonly annotationColors;
+    constructor(mod: AnnotationModule, annotation: TextAnnotation, rect: AnnotationSvg);
+    private sendEvent;
+    private hover;
+    private leave;
+    private click;
+    private doubleClick;
+}
+export {};
+//# sourceMappingURL=EventAnnotation.d.ts.map

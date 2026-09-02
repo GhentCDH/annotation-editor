@@ -1,0 +1,80 @@
+declare const __VLS_export: import('vue').DefineComponent<import('vue').ExtractPropTypes<{
+    options: {
+        type: import('vue').PropType<any>;
+        required: true;
+    };
+    labelKey: {
+        type: StringConstructor;
+        required: false;
+        default: string;
+    };
+    label: {
+        type: StringConstructor;
+        required: true;
+    };
+    valueKey: {
+        type: StringConstructor;
+        required: false;
+        default: string;
+    };
+    value: {
+        type: import('vue').PropType<string | number | Record<string, unknown> | null>;
+        default: null;
+    };
+    enableCreate: {
+        type: BooleanConstructor;
+        required: false;
+        default: boolean;
+    };
+    formValues: {
+        type: import('vue').PropType<Record<string, unknown> | null>;
+        required: false;
+        default: null;
+    };
+}>, {}, {}, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, {} & {
+    change: (value: unknown) => any;
+}, string, import('vue').PublicProps, Readonly<import('vue').ExtractPropTypes<{
+    options: {
+        type: import('vue').PropType<any>;
+        required: true;
+    };
+    labelKey: {
+        type: StringConstructor;
+        required: false;
+        default: string;
+    };
+    label: {
+        type: StringConstructor;
+        required: true;
+    };
+    valueKey: {
+        type: StringConstructor;
+        required: false;
+        default: string;
+    };
+    value: {
+        type: import('vue').PropType<string | number | Record<string, unknown> | null>;
+        default: null;
+    };
+    enableCreate: {
+        type: BooleanConstructor;
+        required: false;
+        default: boolean;
+    };
+    formValues: {
+        type: import('vue').PropType<Record<string, unknown> | null>;
+        required: false;
+        default: null;
+    };
+}>> & Readonly<{
+    onChange?: ((value: unknown) => any) | undefined;
+}>, {
+    value: string | number | Record<string, unknown> | null;
+    labelKey: string;
+    valueKey: string;
+    enableCreate: boolean;
+    formValues: Record<string, unknown> | null;
+}, {}, {}, {}, string, import('vue').ComponentProvideOptions, true, {}, any>;
+declare const _default: typeof __VLS_export;
+export default _default;
+//# sourceMappingURL=RelationAutocomplete.vue.d.ts.map

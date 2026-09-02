@@ -1,0 +1,6 @@
+export declare function useAutoCompleteSearch(props: any): {
+    results: import('vue').Ref<any[] | undefined, any[] | undefined>;
+    isLoading: import('vue').Ref<boolean | undefined, boolean | undefined>;
+    triggerSearch: (query: string) => void;
+    clear: () => void;
+};

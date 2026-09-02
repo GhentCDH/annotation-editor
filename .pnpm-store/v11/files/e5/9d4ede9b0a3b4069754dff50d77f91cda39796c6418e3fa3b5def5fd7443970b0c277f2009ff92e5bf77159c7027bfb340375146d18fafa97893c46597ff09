@@ -1,0 +1,114 @@
+import { CustomAnnotationStyle } from './annotation.style.default';
+import { AnnotationStyle } from '../../../model';
+export declare class AnnotationRenderStyle<ANNOTATION> {
+    private defaultStyle;
+    protected readonly styleMap: Map<string, {
+        default: {
+            backgroundColor: string;
+            borderColor: string;
+            borderRadius: number;
+            borderWidth: number;
+            gutterWidth: number;
+            gutterGap: number;
+            tagTextColor: string;
+            tagBorderColor: string;
+            tagBackgroundColor: string;
+            tagBorderWidth: number;
+        };
+        edit: {
+            backgroundColor: string;
+            borderColor: string;
+            borderRadius: number;
+            borderWidth: number;
+            gutterWidth: number;
+            gutterGap: number;
+            tagTextColor: string;
+            tagBorderColor: string;
+            tagBackgroundColor: string;
+            tagBorderWidth: number;
+        };
+        active: {
+            backgroundColor: string;
+            borderColor: string;
+            borderRadius: number;
+            borderWidth: number;
+            gutterWidth: number;
+            gutterGap: number;
+            tagTextColor: string;
+            tagBorderColor: string;
+            tagBackgroundColor: string;
+            tagBorderWidth: number;
+        };
+        hover: {
+            backgroundColor: string;
+            borderColor: string;
+            borderRadius: number;
+            borderWidth: number;
+            gutterWidth: number;
+            gutterGap: number;
+            tagTextColor: string;
+            tagBorderColor: string;
+            tagBackgroundColor: string;
+            tagBorderWidth: number;
+        };
+    }>;
+    private defaultStyleName;
+    private styleFn;
+    constructor(defaultStyle?: CustomAnnotationStyle);
+    registerStyle(name: string, style: CustomAnnotationStyle): void;
+    getDefaultStyle(): AnnotationStyle;
+    setDefaultStyleName(name: string): void;
+    setStyleFn(styleFn: (annotation: ANNOTATION) => string | CustomAnnotationStyle | null): void;
+    getStyle(annotation: ANNOTATION | null): {
+        default: {
+            backgroundColor: string;
+            borderColor: string;
+            borderRadius: number;
+            borderWidth: number;
+            gutterWidth: number;
+            gutterGap: number;
+            tagTextColor: string;
+            tagBorderColor: string;
+            tagBackgroundColor: string;
+            tagBorderWidth: number;
+        };
+        edit: {
+            backgroundColor: string;
+            borderColor: string;
+            borderRadius: number;
+            borderWidth: number;
+            gutterWidth: number;
+            gutterGap: number;
+            tagTextColor: string;
+            tagBorderColor: string;
+            tagBackgroundColor: string;
+            tagBorderWidth: number;
+        };
+        active: {
+            backgroundColor: string;
+            borderColor: string;
+            borderRadius: number;
+            borderWidth: number;
+            gutterWidth: number;
+            gutterGap: number;
+            tagTextColor: string;
+            tagBorderColor: string;
+            tagBackgroundColor: string;
+            tagBorderWidth: number;
+        };
+        hover: {
+            backgroundColor: string;
+            borderColor: string;
+            borderRadius: number;
+            borderWidth: number;
+            gutterWidth: number;
+            gutterGap: number;
+            tagTextColor: string;
+            tagBorderColor: string;
+            tagBackgroundColor: string;
+            tagBorderWidth: number;
+        };
+    } | CustomAnnotationStyle;
+    updateDefaultStyle(style: CustomAnnotationStyle): void;
+}
+//# sourceMappingURL=annotation-render.style.d.ts.map

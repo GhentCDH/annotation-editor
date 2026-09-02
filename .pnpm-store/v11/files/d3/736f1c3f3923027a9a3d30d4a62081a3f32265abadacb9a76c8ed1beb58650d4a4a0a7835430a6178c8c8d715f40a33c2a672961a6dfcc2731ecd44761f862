@@ -1,0 +1,17 @@
+import { TextAdapter, TextAdapterParams } from '../TextAdapter';
+import { TextLine } from '../../../model';
+/**
+ * This adapter is used to parse a text that includes line numbers.
+ *
+ * f.e. `1.Χ[αι]ρήμ[ων] Ἀπολλωνίωι τῶι\n2.[φι]λτάτωι χαίρειν.`
+ * will be parsed into an array of TextLine objects of 2 lines, in the gutter the line number will appear.
+ */
+export declare class TextLineAdapterImpl extends TextAdapter {
+    name: string;
+    _parse(text: string): {
+        lines: TextLine[];
+        flatText: string;
+    };
+}
+export declare const TextLineAdapter: (params?: TextAdapterParams) => TextLineAdapterImpl;
+//# sourceMappingURL=TextLineAdapter.d.ts.map

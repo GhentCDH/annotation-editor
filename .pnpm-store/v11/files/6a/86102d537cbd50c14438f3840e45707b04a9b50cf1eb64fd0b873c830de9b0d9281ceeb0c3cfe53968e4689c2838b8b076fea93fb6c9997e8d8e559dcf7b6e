@@ -1,0 +1,16 @@
+import { Locator, Page } from '@playwright/test';
+import { Harness } from './Harness';
+/**
+ * Drives the `@ghentcdh/ui` `Alert` component.
+ *
+ * Renders `<div role="alert">` with a message and type-based CSS class.
+ */
+export declare class AlertHarness extends Harness {
+    /** Resolve the alert by its message text. */
+    static byMessage(parent: Locator | Page, message: string): AlertHarness;
+    /** Resolve the first (or only) alert on the page. */
+    static first(parent: Locator | Page): AlertHarness;
+    static for(locator: Locator): AlertHarness;
+    message(): Promise<string>;
+    hasClass(cls: string): Promise<boolean>;
+}

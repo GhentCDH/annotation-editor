@@ -1,0 +1,8 @@
+import { Ref } from 'vue';
+export declare const useFilter: (items: Ref<Array<Record<string, any>>>, modelValue: Ref<Array<any>>, valueKey: Ref<string>, emit: (event: "update:modelValue", value: Array<any>) => void) => {
+    isSelected: (id: any) => boolean;
+    selectedLabel: import('vue').ComputedRef<string>;
+    selectAll: () => void;
+    selectNone: () => void;
+    toggleItem: (id: any, checked: boolean) => void;
+};

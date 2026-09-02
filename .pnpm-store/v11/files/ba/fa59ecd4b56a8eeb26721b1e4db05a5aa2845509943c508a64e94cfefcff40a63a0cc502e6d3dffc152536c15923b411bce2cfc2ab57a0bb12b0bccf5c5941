@@ -1,0 +1,45 @@
+import { FormEventPayload } from '@ghentcdh/crouton-forms-vue';
+import { FormDef } from '../composables/useCrouton';
+export type OpenFormPayload<TData = any, TResult = any> = {
+    data?: TData;
+    onSuccess: (result: TResult) => void;
+    onError?: (error: unknown) => void;
+};
+export declare const useFormDefRepository: (formDef: FormDef) => {
+    create: (object: {
+        id?: string;
+    }, options?: {
+        skipAuth?: boolean;
+        queryParams?: Record<string, any>;
+        contentType?: string;
+    }) => Promise<any>;
+    patch: (id: string, object: {
+        id?: string;
+    }, options?: {
+        skipAuth?: boolean;
+        queryParams?: Record<string, any>;
+        contentType?: string;
+    }) => Promise<any>;
+    createMulti: (objects: {
+        id?: string;
+    }[], options?: {
+        skipAuth?: boolean;
+        queryParams?: Record<string, any>;
+        contentType?: string;
+    }) => Promise<void | any[]>;
+    delete: (id: string, options?: {
+        skipAuth?: boolean;
+        queryParams?: Record<string, any>;
+        contentType?: string;
+    }) => Promise<void | {
+        data: any;
+    }>;
+    get: (id: string, options?: {
+        skipAuth?: boolean;
+        queryParams?: Record<string, any>;
+        contentType?: string;
+    }) => Promise<any>;
+};
+export declare const openFormModal: (key: string, payload: OpenFormPayload) => Promise<void>;
+export declare const handleFormEvents: (payload: FormEventPayload) => void;
+//# sourceMappingURL=resource-modal.d.ts.map

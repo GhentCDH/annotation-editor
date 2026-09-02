@@ -1,0 +1,8 @@
+import { TreeNode, TreeProps } from './props';
+declare const __VLS_export: import('vue').DefineComponent<TreeProps, {}, {}, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, {
+    select: (node: TreeNode) => any;
+}, string, import('vue').PublicProps, Readonly<TreeProps> & Readonly<{
+    onSelect?: ((node: TreeNode) => any) | undefined;
+}>, {}, {}, {}, {}, string, import('vue').ComponentProvideOptions, false, {}, any>;
+declare const _default: typeof __VLS_export;
+export default _default;

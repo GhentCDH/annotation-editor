@@ -1,0 +1,19 @@
+import { W3CAnnotation } from '@ghentcdh/w3c-utils';
+import { AnnotationAdapter, AnnotationAdapterParams } from '../AnnotationAdapter';
+import { Annotation, TextAnnotation } from '../../../model';
+export type W3CAnnotationAdapterParams = {
+    sourceUri?: string;
+    language?: string;
+} & AnnotationAdapterParams;
+export declare class W3CAnnotationAdapterImpl extends AnnotationAdapter<W3CAnnotation, W3CAnnotationAdapterParams> {
+    name: string;
+    private sourceUri?;
+    private language?;
+    private readonly w3cBuilderMap;
+    constructor(params?: W3CAnnotationAdapterParams);
+    setParams(params: W3CAnnotationAdapterParams): void;
+    _parse(annotation: W3CAnnotation): Annotation | null;
+    format(annotation: TextAnnotation, isNew: boolean, hasChanged: boolean): W3CAnnotation | null;
+}
+export declare const W3CAnnotationAdapter: (params?: W3CAnnotationAdapterParams) => AnnotationAdapter<W3CAnnotation>;
+//# sourceMappingURL=W3CAnnotationAdapter.d.ts.map

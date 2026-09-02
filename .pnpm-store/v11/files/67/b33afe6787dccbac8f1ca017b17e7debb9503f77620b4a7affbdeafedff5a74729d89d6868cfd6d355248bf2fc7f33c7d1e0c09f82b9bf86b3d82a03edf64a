@@ -1,0 +1,64 @@
+declare const __VLS_export: import('vue').DefineComponent<import('vue').ExtractPropTypes<{
+    options: {
+        type: import('vue').PropType<any>;
+        required: true;
+    };
+    labelKey: {
+        type: StringConstructor;
+        required: false;
+        default: string;
+    };
+    label: {
+        type: StringConstructor;
+        required: true;
+    };
+    valueKey: {
+        type: StringConstructor;
+        required: false;
+        default: string;
+    };
+    values: {
+        type: import('vue').PropType<any[]>;
+        required: true;
+    };
+    enableCreate: {
+        type: BooleanConstructor;
+        required: false;
+        default: boolean;
+    };
+}>, {}, {}, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, {}, string, import('vue').PublicProps, Readonly<import('vue').ExtractPropTypes<{
+    options: {
+        type: import('vue').PropType<any>;
+        required: true;
+    };
+    labelKey: {
+        type: StringConstructor;
+        required: false;
+        default: string;
+    };
+    label: {
+        type: StringConstructor;
+        required: true;
+    };
+    valueKey: {
+        type: StringConstructor;
+        required: false;
+        default: string;
+    };
+    values: {
+        type: import('vue').PropType<any[]>;
+        required: true;
+    };
+    enableCreate: {
+        type: BooleanConstructor;
+        required: false;
+        default: boolean;
+    };
+}>> & Readonly<{}>, {
+    labelKey: string;
+    valueKey: string;
+    enableCreate: boolean;
+}, {}, {}, {}, string, import('vue').ComponentProvideOptions, true, {}, any>;
+declare const _default: typeof __VLS_export;
+export default _default;
+//# sourceMappingURL=RelationInline.vue.d.ts.map

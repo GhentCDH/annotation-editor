@@ -1,0 +1,4 @@
+import { Annotation, BaseAnnotation } from '../../model';
+import { EventListener } from '../../events/event.listener';
+export declare const validateAnnotation: <ANNOTATION extends BaseAnnotation>(annotation: Annotation, textLength: number, eventListener: EventListener<ANNOTATION>) => void;
+//# sourceMappingURL=assign_annotation_to_line.d.ts.map

@@ -1,0 +1,15 @@
+import { SvgAnnotationRender } from './SvgAnnotationRender';
+import { PathParams } from './_utils/path';
+import { AnnotationDrawPath, BaseAnnotation } from '../../../model';
+import { CustomAnnotationStyle } from '../style';
+import { DefaultAnnotationStyle } from '../style/annotation.style.default';
+export declare const createUnderlineStyle: (color: string, style?: Partial<DefaultAnnotationStyle>) => Partial<DefaultAnnotationStyle>;
+export declare class UnderLineAnnotationRender extends SvgAnnotationRender<BaseAnnotation> {
+    readonly weightOrder: number;
+    readonly isGutter: boolean;
+    readonly renderTag = true;
+    fillBg: boolean;
+    constructor(name: string, style?: CustomAnnotationStyle);
+    createPath(params: PathParams): AnnotationDrawPath;
+}
+//# sourceMappingURL=UnderLineAnnotationRender.d.ts.map

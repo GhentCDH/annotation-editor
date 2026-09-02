@@ -1,0 +1,8 @@
+import { Ref } from 'vue';
+export type UseFocusTrapOptions = {
+    containerRef: Ref<HTMLElement | null>;
+    isActive: Ref<boolean>;
+    onEscape?: () => void;
+    restoreFocus?: boolean;
+};
+export declare const useFocusTrap: ({ containerRef, isActive, onEscape, restoreFocus, }: UseFocusTrapOptions) => void;

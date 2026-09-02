@@ -1,0 +1,16 @@
+import { TreeNode } from './props';
+type __VLS_Props = {
+    active?: string;
+    node: TreeNode;
+    expanded: Set<string>;
+    isExpanded: (id: string) => boolean;
+};
+declare const __VLS_export: import('vue').DefineComponent<__VLS_Props, {}, {}, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, {} & {
+    select: (node: TreeNode) => any;
+    toggle: (node: TreeNode) => any;
+}, string, import('vue').PublicProps, Readonly<__VLS_Props> & Readonly<{
+    onSelect?: ((node: TreeNode) => any) | undefined;
+    onToggle?: ((node: TreeNode) => any) | undefined;
+}>, {}, {}, {}, {}, string, import('vue').ComponentProvideOptions, false, {}, any>;
+declare const _default: typeof __VLS_export;
+export default _default;

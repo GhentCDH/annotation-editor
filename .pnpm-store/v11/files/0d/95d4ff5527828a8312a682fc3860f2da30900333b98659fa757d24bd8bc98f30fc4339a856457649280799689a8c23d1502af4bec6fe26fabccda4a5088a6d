@@ -1,0 +1,4 @@
+import { default as memoize } from 'memoizee';
+import { TextLine } from '../../../model';
+export declare const _textToLines: ((text: string, textOffset: number) => TextLine[]) & memoize.Memoized<(text: string, textOffset: number) => TextLine[]>;
+//# sourceMappingURL=text_utilities.d.ts.map

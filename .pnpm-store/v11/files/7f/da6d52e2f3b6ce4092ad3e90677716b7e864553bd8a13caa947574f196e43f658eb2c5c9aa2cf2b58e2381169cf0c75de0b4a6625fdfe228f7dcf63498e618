@@ -1,0 +1,35 @@
+import { PropType } from 'vue';
+import { IconProp } from '../icons/icon-list';
+export type CollapseAction = {
+    label?: string;
+    icon?: IconProp;
+    tooltip?: string;
+    disabled?: boolean;
+    onClick: () => void;
+};
+export declare const CollapseProperties: {
+    title: {
+        type: StringConstructor;
+        required: true;
+    };
+    opened: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    heightFull: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    scrollable: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    disabled: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    actions: {
+        type: PropType<Array<CollapseAction>>;
+        default: () => never[];
+    };
+};

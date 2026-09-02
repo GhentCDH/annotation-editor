@@ -1,0 +1,50 @@
+import { ResourceApiInstance } from './resource.api';
+import { FormDef } from '../composables/form-def.types';
+import { Request } from '../utils/request';
+export declare class Resource {
+    private formDef;
+    private api;
+    private onRequest;
+    private requestData;
+    loading: import('vue').Ref<boolean, boolean>;
+    private abortController;
+    constructor(formDef: FormDef, api: ResourceApiInstance, initialRequestParams: Partial<Request>, onRequest: (request: Request) => void, initialLoad: boolean);
+    reload(): Promise<any>;
+    data: import('vue').Ref<null, null>;
+    pageData: import('vue').Ref<{
+        count: number;
+        pageSize: number;
+        page: number;
+        totalPages: number;
+    }, {
+        count: number;
+        pageSize: number;
+        page: number;
+        totalPages: number;
+    } | {
+        count: number;
+        pageSize: number;
+        page: number;
+        totalPages: number;
+    }>;
+    sort: import('vue').Ref<{
+        sortColumn: string;
+        sortDirection: string;
+    }, {
+        sortColumn: string;
+        sortDirection: string;
+    } | {
+        sortColumn: string;
+        sortDirection: string;
+    }>;
+    private loadData;
+    private updateRequest;
+    onSort: (id: string) => void;
+    updatePage: (page: number) => void;
+    updatePageSize: (size: number) => void;
+    /** Update the active filter strings (wire format: `"field:value:operator"`). */
+    updateFilters: (filter: string[]) => void;
+    /** Update the search query (`q` param used for lookup search). */
+    updateSearch: (q: string) => void;
+}
+//# sourceMappingURL=resource.d.ts.map

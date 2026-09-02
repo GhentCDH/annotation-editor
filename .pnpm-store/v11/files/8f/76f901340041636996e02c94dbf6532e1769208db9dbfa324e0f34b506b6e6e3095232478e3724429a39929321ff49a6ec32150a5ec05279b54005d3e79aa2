@@ -1,0 +1,1 @@
+{"version":3,"file":"RelationReadonlyRenderer.vue.d.ts","sourceRoot":"","sources":["../../src/relation/RelationReadonlyRenderer.vue"],"names":[],"mappings":"AA6BA;AAAA,OAqDO,KAAK,EAAE,cAAc,EAAE,UAAU,EAAE,MAAM,iBAAiB,CAAC;AAMlE,KAAK,WAAW,GAAG;IAAE,QAAQ,EAAE,cAAc,CAAC;IAAC,MAAM,EAAE,UAAU,CAAA;CAAE,CAAC;AAwIpE,QAAA,MAAM,YAAY,kSAEhB,CAAC;wBACkB,OAAO,YAAY;AAAxC,wBAAyC"}

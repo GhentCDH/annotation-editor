@@ -1,0 +1,15 @@
+import { CloseProps, ConfirmModalProps, ConfirmResult, ModalWrapperModel } from './modal.model';
+type ModalUnknown = ModalWrapperModel<CloseProps<unknown>, unknown>;
+export declare class ModalService {
+    private static instance;
+    showModal: import('vue').Ref<number | boolean, number | boolean>;
+    modals: ModalUnknown[];
+    private openModal;
+    private closeModal;
+    static showConfirm<PROPS extends ConfirmModalProps & CloseProps<ConfirmResult>>(props: PROPS): void;
+    static openModal<PROPS extends CloseProps<RESULT>, RESULT>(modal: Omit<ModalWrapperModel<PROPS, RESULT>, 'id'>): void;
+    static getInstance(): ModalService;
+    static closeAll(): void;
+    private closeAll;
+}
+export {};

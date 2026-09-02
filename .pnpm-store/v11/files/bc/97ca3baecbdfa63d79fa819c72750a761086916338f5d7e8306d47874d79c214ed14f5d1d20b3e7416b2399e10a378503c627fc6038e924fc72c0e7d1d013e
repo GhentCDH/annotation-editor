@@ -1,0 +1,7 @@
+{
+  "name": "{{#if noPrefix}}{{name}}-{{/if}}{{#if prefix}}{{prefix}}-{{/if}}frontend",
+  "$schema": "{{schemaPath}}",
+  "projectType": "application",
+  "sourceRoot": "{{appsRoot}}/frontend/src",
+  "tags": ["scope:frontend"]
+}

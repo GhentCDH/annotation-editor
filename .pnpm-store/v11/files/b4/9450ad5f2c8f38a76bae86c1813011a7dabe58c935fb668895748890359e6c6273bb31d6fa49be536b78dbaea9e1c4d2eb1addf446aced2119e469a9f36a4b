@@ -1,0 +1,59 @@
+import { default as RBush } from 'rbush';
+import { DimensionsWithScale } from './unscaled';
+import { TextRasterItem } from '../draw/text/text-raster';
+/**
+ * Result object containing information about a character position in text.
+ */
+export type CharacterPositionResult = {
+    /** Which side of the character's center the click occurred */
+    side: 'left' | 'right';
+    /** The position of the character in the text (0-indexed) */
+    characterPos: number;
+    /** @deprecated use characterPos instead */
+    newIndex: number;
+};
+/**
+ * Determines which character in the text is at a given point on the screen.
+ *
+ * This function:
+ * 1. Converts screen coordinates to SVG container-relative coordinates
+ * 2. Searches the R-tree for text at that position
+ * 3. Determines which side of the character was clicked (left or right of center)
+ *
+ * @param x - Absolute X coordinate (screen space)
+ * @param y - Absolute Y coordinate (screen space)
+ * @param textElementDimensions
+ * @param textTree
+ * @returns Character position info, or null if no text at that point
+ */
+export declare function getCharacterFromTextNodesAtPoint(x: number, y: number, textElementDimensions: DimensionsWithScale, textTree: RBush<TextRasterItem>): CharacterPositionResult | null;
+/**
+ * Calculates the new start/end positions for a text selection based on a character click.
+ *
+ * This function handles the logic for extending or modifying a text selection:
+ * - When clicking on the "right" side of a character, it moves to the next position
+ * - It ensures the returned range always has start <= end (handles backward selections)
+ * - It intelligently updates either the start or end of the selection based on the target
+ *
+ * @param characterPos - The position result from clicking on a character
+ * @param originalPos - The current selection start and end positions
+ * @param target - Whether we're updating the 'start' or 'end' of the selection
+ * @returns New selection range with start <= end
+ *
+ * @example
+ * // Extending selection to the right
+ * getCharacterStartEndPosition(
+ *   { characterPos: 10, side: 'right' },
+ *   { start: 5, end: 8 },
+ *   'end'
+ * )
+ * // Returns: { start: 5, end: 11 } (moved to position after character 10)
+ */
+export declare const getCharacterStartEndPosition: ({ characterPos, side }: CharacterPositionResult, originalPos: {
+    start: number;
+    end: number;
+}, target: "start" | "end") => {
+    start: number;
+    end: number;
+};
+//# sourceMappingURL=character-position.d.ts.map

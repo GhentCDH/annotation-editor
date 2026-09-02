@@ -1,0 +1,45 @@
+import { AnnotationRender } from './annotation-render';
+import { PathParams } from './_utils/path';
+import { AnnotationDrawPath, BaseAnnotation, TextAnnotation } from '../../../model';
+import { CustomAnnotationStyle } from '../style';
+export declare abstract class SvgAnnotationRender<ANNOTATION extends BaseAnnotation> extends AnnotationRender<ANNOTATION> {
+    protected borders: boolean;
+    protected fillBg: boolean;
+    protected constructor(name: string, defaultStyle: CustomAnnotationStyle, style: CustomAnnotationStyle);
+    abstract createPath(params: PathParams): AnnotationDrawPath;
+    createDraws(annotation: TextAnnotation): {
+        draws: {
+            uuid: string;
+            annotationUuid: string | number;
+            lineNumber: number;
+            path: {
+                border?: string | undefined;
+                fill?: string | undefined;
+            };
+            draggable: {
+                start?: {
+                    height: number;
+                    x: number;
+                    y: number;
+                } | undefined;
+                end?: {
+                    height: number;
+                    x: number;
+                    y: number;
+                } | undefined;
+            };
+            height: {
+                height: number;
+                x: number;
+                y: number;
+            };
+            weight: number;
+        }[];
+        dimensions: {
+            x: number;
+            y1: number;
+            y2: number;
+        };
+    };
+}
+//# sourceMappingURL=SvgAnnotationRender.d.ts.map

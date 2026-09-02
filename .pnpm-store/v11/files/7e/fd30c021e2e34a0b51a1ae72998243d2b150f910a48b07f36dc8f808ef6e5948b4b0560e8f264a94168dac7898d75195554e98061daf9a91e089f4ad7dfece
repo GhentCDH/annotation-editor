@@ -1,0 +1,15 @@
+import { PropType } from 'vue';
+import { ColumnDef } from '../column.model';
+export declare const SortHeaderProperties: {
+    column: {
+        type: PropType<ColumnDef>;
+        required: true;
+    };
+    sortColumn: {
+        type: StringConstructor;
+    };
+    sortDirection: {
+        type: PropType<"asc" | "desc">;
+    };
+};
+export declare const SortHeaderEmits: string[];

@@ -1,0 +1,9 @@
+import { AnnotationAdapter, AnnotationAdapterParams } from './AnnotationAdapter';
+import { Annotation, TextAnnotation } from '../../model';
+export declare class DefaultAnnotationAdapterImpl extends AnnotationAdapter<Annotation> {
+    name: string;
+    _parse(annotation: Annotation): Annotation;
+    format(annotation: TextAnnotation, isNew: boolean, hasChanged: boolean): Annotation | null;
+}
+export declare const DefaultAnnotationAdapter: (params?: AnnotationAdapterParams) => AnnotationAdapter<Annotation>;
+//# sourceMappingURL=DefaultAnnotationAdapter.d.ts.map

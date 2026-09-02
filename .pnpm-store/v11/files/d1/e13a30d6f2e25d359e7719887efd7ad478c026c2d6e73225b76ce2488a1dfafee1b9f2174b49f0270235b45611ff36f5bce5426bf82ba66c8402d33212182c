@@ -1,0 +1,10 @@
+import { AnnotationId, TextAnnotation } from '../../../model';
+import { SvgModel } from '../../model/svg.types';
+import { BaseAnnotationDi } from '../../../di/BaseAnnotationDi';
+export declare class Tag extends BaseAnnotationDi {
+    readonly svgModel: SvgModel;
+    drawAll(): void;
+    drawTag(annotation: TextAnnotation): boolean;
+    removeTag(annotationUuid: AnnotationId): void;
+}
+//# sourceMappingURL=tag.d.ts.map

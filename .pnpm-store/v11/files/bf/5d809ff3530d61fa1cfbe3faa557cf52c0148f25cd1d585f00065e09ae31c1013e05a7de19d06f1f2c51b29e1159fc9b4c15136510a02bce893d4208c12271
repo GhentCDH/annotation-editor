@@ -1,0 +1,3 @@
+export declare const getLineHeight: (text: string, offset?: number) => number;
+export declare const getLineHeightOnElement: (element: HTMLElement) => number;
+//# sourceMappingURL=line-height.d.ts.map

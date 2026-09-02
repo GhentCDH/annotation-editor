@@ -1,0 +1,36 @@
+import { Selection } from 'd3-selection';
+import { AnnotationId } from '../../model';
+export type AnnotationSvg = Selection<SVGElement, unknown, null, undefined>;
+export declare const DUMMY_UID = "dummy-uid";
+export declare const SVG_ID: {
+    ANNOTATION_UID: string;
+    ANNOTATION_ROLE: string;
+    LINE_UID: string;
+};
+export declare const SVG_ROLE: {
+    BORDER: string;
+    FILL: string;
+    HANDLE: string;
+    ANNOTATIONS: string;
+    TAG: string;
+};
+/**
+ * this contains some helper function for the svg drawing, here there should not be any dependency on edit them
+ */
+export declare class SvgModel {
+    annotations: AnnotationSvg;
+    handles: AnnotationSvg;
+    svg: AnnotationSvg;
+    tagSvg: AnnotationSvg;
+    textElement: HTMLDivElement;
+    createTextElement(): this;
+    createModel(): this;
+    getTextElementDimensions(): import('../position/unscaled').DimensionsWithScale;
+    findTags(annotationUuid: AnnotationId): Selection<import('d3-selection').BaseType, unknown, SVGElement, unknown> | null;
+    findRelatedAnnotations(annotationUuid: AnnotationId, selector?: string): Selection<import('d3-selection').BaseType, unknown, SVGElement, unknown> | null;
+    findFills(annotationUuid: AnnotationId): Selection<import('d3-selection').BaseType, unknown, SVGElement, unknown> | null;
+    findBorders(annotationUuid: AnnotationId): Selection<import('d3-selection').BaseType, unknown, SVGElement, unknown> | null;
+    setClass(annotationUuid: AnnotationId, cssClass: string): void;
+    node(): SVGElement | null;
+}
+//# sourceMappingURL=svg.types.d.ts.map

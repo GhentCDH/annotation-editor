@@ -1,0 +1,4 @@
+import { AnnotationDraw, TextAnnotation } from '../../../model';
+import { AnnotationModule } from '../../../di/annotation.module';
+export declare const drawAnnotationHandles: (annotation: TextAnnotation, draw: AnnotationDraw, annotationModule: AnnotationModule) => void;
+//# sourceMappingURL=edit.d.ts.map

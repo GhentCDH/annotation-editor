@@ -1,0 +1,253 @@
+import { RenderInstances } from './renderer/render-instances';
+import { AnnotationDimension, AnnotationDraw, AnnotationId, BaseAnnotation, TextAnnotation, TextLine } from '../../model';
+export declare class AnnotationCache<ANNOTATION extends BaseAnnotation> {
+    private readonly originalAnnotationsMap;
+    private readonly parsedAnnotationsMap;
+    gutter: {
+        maxWeight: number;
+        paddingLeft: number;
+    };
+    positions: {
+        minStartPosition: number;
+        maxStartPosition: number;
+    };
+    readonly getAnnotationsSortedBy: (() => {
+        id: string | number;
+        start: number;
+        end: number;
+        _render: {
+            isGutter: boolean;
+            render: string;
+            lines: {
+                start: number;
+                end: number;
+                text: string;
+                lineNumber: number;
+                uuid: string;
+                maxLineWeight: number;
+                flatText: string;
+                html: string;
+                gutter?: string | undefined;
+                element?: any;
+            }[];
+            weight?: number | null | undefined;
+        };
+        _style: {
+            default: {
+                backgroundColor: string;
+                borderColor: string;
+                borderRadius: number;
+                borderWidth: number;
+                gutterWidth: number;
+                gutterGap: number;
+                tagTextColor: string;
+                tagBorderColor: string;
+                tagBackgroundColor: string;
+                tagBorderWidth: number;
+            };
+            edit: {
+                backgroundColor: string;
+                borderColor: string;
+                borderRadius: number;
+                borderWidth: number;
+                gutterWidth: number;
+                gutterGap: number;
+                tagTextColor: string;
+                tagBorderColor: string;
+                tagBackgroundColor: string;
+                tagBorderWidth: number;
+            };
+            active: {
+                backgroundColor: string;
+                borderColor: string;
+                borderRadius: number;
+                borderWidth: number;
+                gutterWidth: number;
+                gutterGap: number;
+                tagTextColor: string;
+                tagBorderColor: string;
+                tagBackgroundColor: string;
+                tagBorderWidth: number;
+            };
+            hover: {
+                backgroundColor: string;
+                borderColor: string;
+                borderRadius: number;
+                borderWidth: number;
+                gutterWidth: number;
+                gutterGap: number;
+                tagTextColor: string;
+                tagBorderColor: string;
+                tagBackgroundColor: string;
+                tagBorderWidth: number;
+            };
+        };
+        _drawMetadata: {
+            draws: {
+                uuid: string;
+                annotationUuid: string | number;
+                lineNumber: number;
+                path: {
+                    border?: string | undefined;
+                    fill?: string | undefined;
+                };
+                draggable: {
+                    start?: {
+                        height: number;
+                        x: number;
+                        y: number;
+                    } | undefined;
+                    end?: {
+                        height: number;
+                        x: number;
+                        y: number;
+                    } | undefined;
+                };
+                height: {
+                    height: number;
+                    x: number;
+                    y: number;
+                };
+                weight: number;
+            }[];
+            dimensions?: {
+                x: number;
+                y1: number;
+                y2: number;
+            } | undefined;
+        };
+        label?: string | undefined;
+        textSelection?: string | undefined;
+        _tagMetadata?: {
+            label: string;
+            padding: number;
+            fontSize: number;
+        } | null | undefined;
+    }[]) & {
+        sortBy: (sortBy?: "weight") => {
+            id: string | number;
+            start: number;
+            end: number;
+            _render: {
+                isGutter: boolean;
+                render: string;
+                lines: {
+                    start: number;
+                    end: number;
+                    text: string;
+                    lineNumber: number;
+                    uuid: string;
+                    maxLineWeight: number;
+                    flatText: string;
+                    html: string;
+                    gutter?: string | undefined;
+                    element?: any;
+                }[];
+                weight?: number | null | undefined;
+            };
+            _style: {
+                default: {
+                    backgroundColor: string;
+                    borderColor: string;
+                    borderRadius: number;
+                    borderWidth: number;
+                    gutterWidth: number;
+                    gutterGap: number;
+                    tagTextColor: string;
+                    tagBorderColor: string;
+                    tagBackgroundColor: string;
+                    tagBorderWidth: number;
+                };
+                edit: {
+                    backgroundColor: string;
+                    borderColor: string;
+                    borderRadius: number;
+                    borderWidth: number;
+                    gutterWidth: number;
+                    gutterGap: number;
+                    tagTextColor: string;
+                    tagBorderColor: string;
+                    tagBackgroundColor: string;
+                    tagBorderWidth: number;
+                };
+                active: {
+                    backgroundColor: string;
+                    borderColor: string;
+                    borderRadius: number;
+                    borderWidth: number;
+                    gutterWidth: number;
+                    gutterGap: number;
+                    tagTextColor: string;
+                    tagBorderColor: string;
+                    tagBackgroundColor: string;
+                    tagBorderWidth: number;
+                };
+                hover: {
+                    backgroundColor: string;
+                    borderColor: string;
+                    borderRadius: number;
+                    borderWidth: number;
+                    gutterWidth: number;
+                    gutterGap: number;
+                    tagTextColor: string;
+                    tagBorderColor: string;
+                    tagBackgroundColor: string;
+                    tagBorderWidth: number;
+                };
+            };
+            _drawMetadata: {
+                draws: {
+                    uuid: string;
+                    annotationUuid: string | number;
+                    lineNumber: number;
+                    path: {
+                        border?: string | undefined;
+                        fill?: string | undefined;
+                    };
+                    draggable: {
+                        start?: {
+                            height: number;
+                            x: number;
+                            y: number;
+                        } | undefined;
+                        end?: {
+                            height: number;
+                            x: number;
+                            y: number;
+                        } | undefined;
+                    };
+                    height: {
+                        height: number;
+                        x: number;
+                        y: number;
+                    };
+                    weight: number;
+                }[];
+                dimensions?: {
+                    x: number;
+                    y1: number;
+                    y2: number;
+                } | undefined;
+            };
+            label?: string | undefined;
+            textSelection?: string | undefined;
+            _tagMetadata?: {
+                label: string;
+                padding: number;
+                fontSize: number;
+            } | null | undefined;
+        }[];
+    };
+    private getAnnotations;
+    private getSortedByWeightAnnotations;
+    addAnnotation(annotationId: AnnotationId, originalAnnotation: ANNOTATION, parsedAnnotation: TextAnnotation): void;
+    getOriginalAnnotation(annotationId: AnnotationId): ANNOTATION;
+    clear(): void;
+    getParsedAnnotation(annotationId: AnnotationId): TextAnnotation;
+    calculateWeights(lines: TextLine[], renderInstances: RenderInstances<any>): void;
+    private calculateGutterWeights;
+    calculateTextAnnotationsWeight(lines: TextLine[], renderInstances: RenderInstances<any>): void;
+    addDrawAnnotations(annotationUuid: AnnotationId, annotations: AnnotationDraw[], dimensions: AnnotationDimension): void;
+    clearDrawAnnotation(): void;
+}
+//# sourceMappingURL=AnnotationCache.d.ts.map

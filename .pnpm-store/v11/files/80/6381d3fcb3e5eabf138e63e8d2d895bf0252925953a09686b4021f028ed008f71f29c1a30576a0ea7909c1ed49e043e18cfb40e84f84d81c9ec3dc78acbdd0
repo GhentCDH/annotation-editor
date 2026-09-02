@@ -1,0 +1,136 @@
+import { AbstractAnnotationEventEdit } from './abstract-annotation-event.edit';
+import { Position } from '../types';
+import { CharacterPositionResult } from '../../position';
+import { TextAnnotation } from '../../../model';
+import { AnnotationModule } from '../../../di/annotation.module';
+export declare class DragAnnotation extends AbstractAnnotationEventEdit {
+    private readonly minStartPosition;
+    private readonly getCharacterFromTextNodesAtPoint;
+    private dragBusy;
+    private startDimensions;
+    private endDimensions;
+    private pickupIndex;
+    private textStart;
+    constructor(minStartPosition: number, annotation: TextAnnotation, annotationModule: AnnotationModule, getCharacterFromTextNodesAtPoint: (position: Position) => CharacterPositionResult | null);
+    protected onStart(position: Position): void;
+    protected onDrag(position: Position, target: 'start' | 'end'): {
+        startEnd: {
+            start: number;
+            end: number;
+        };
+        prevPosition: Pick<{
+            id: string | number;
+            start: number;
+            end: number;
+            _render: {
+                isGutter: boolean;
+                render: string;
+                lines: {
+                    start: number;
+                    end: number;
+                    text: string;
+                    lineNumber: number;
+                    uuid: string;
+                    maxLineWeight: number;
+                    flatText: string;
+                    html: string;
+                    gutter?: string | undefined;
+                    element?: any;
+                }[];
+                weight?: number | null | undefined;
+            };
+            _style: {
+                default: {
+                    backgroundColor: string;
+                    borderColor: string;
+                    borderRadius: number;
+                    borderWidth: number;
+                    gutterWidth: number;
+                    gutterGap: number;
+                    tagTextColor: string;
+                    tagBorderColor: string;
+                    tagBackgroundColor: string;
+                    tagBorderWidth: number;
+                };
+                edit: {
+                    backgroundColor: string;
+                    borderColor: string;
+                    borderRadius: number;
+                    borderWidth: number;
+                    gutterWidth: number;
+                    gutterGap: number;
+                    tagTextColor: string;
+                    tagBorderColor: string;
+                    tagBackgroundColor: string;
+                    tagBorderWidth: number;
+                };
+                active: {
+                    backgroundColor: string;
+                    borderColor: string;
+                    borderRadius: number;
+                    borderWidth: number;
+                    gutterWidth: number;
+                    gutterGap: number;
+                    tagTextColor: string;
+                    tagBorderColor: string;
+                    tagBackgroundColor: string;
+                    tagBorderWidth: number;
+                };
+                hover: {
+                    backgroundColor: string;
+                    borderColor: string;
+                    borderRadius: number;
+                    borderWidth: number;
+                    gutterWidth: number;
+                    gutterGap: number;
+                    tagTextColor: string;
+                    tagBorderColor: string;
+                    tagBackgroundColor: string;
+                    tagBorderWidth: number;
+                };
+            };
+            _drawMetadata: {
+                draws: {
+                    uuid: string;
+                    annotationUuid: string | number;
+                    lineNumber: number;
+                    path: {
+                        border?: string | undefined;
+                        fill?: string | undefined;
+                    };
+                    draggable: {
+                        start?: {
+                            height: number;
+                            x: number;
+                            y: number;
+                        } | undefined;
+                        end?: {
+                            height: number;
+                            x: number;
+                            y: number;
+                        } | undefined;
+                    };
+                    height: {
+                        height: number;
+                        x: number;
+                        y: number;
+                    };
+                    weight: number;
+                }[];
+                dimensions?: {
+                    x: number;
+                    y1: number;
+                    y2: number;
+                } | undefined;
+            };
+            label?: string | undefined;
+            textSelection?: string | undefined;
+            _tagMetadata?: {
+                label: string;
+                padding: number;
+                fontSize: number;
+            } | null | undefined;
+        }, "start" | "end">;
+    } | null;
+}
+//# sourceMappingURL=drag.annotations.d.ts.map

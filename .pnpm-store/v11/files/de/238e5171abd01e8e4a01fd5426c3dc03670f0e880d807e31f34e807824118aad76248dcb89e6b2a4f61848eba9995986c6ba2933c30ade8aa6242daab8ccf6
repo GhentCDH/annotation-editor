@@ -1,0 +1,164 @@
+export declare const AutocompleteProperties: {
+    /** v-model binding */
+    modelValue: {
+        type: (StringConstructor | ObjectConstructor)[];
+        default: string;
+    };
+    /**
+     * HTTP mode: async function that receives the search string and returns
+     * an array of strings or { label, value } objects.
+     * e.g. :fetchOptions="(q) => fetch(`/api/search?q=${q}`).then(r => r.json())"
+     */
+    fetchOptions: {
+        type: FunctionConstructor;
+        default: null;
+    };
+    /** Debounce delay in ms for HTTP mode */
+    debounceMs: {
+        type: NumberConstructor;
+        default: number;
+    };
+    /** How many results to show at once */
+    maxResults: {
+        type: NumberConstructor;
+        default: number;
+    };
+    /** Allow free-text (don't clear input if nothing selected) */
+    freeText: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    options: {
+        type: import('vue').PropType<Array<import('./ListResults.properties').OptionValue>>;
+        required: false;
+    };
+    isLoading: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    query: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    isActive: {
+        type: FunctionConstructor;
+        default: (item: any) => boolean;
+    };
+    teleported: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    labelKey: {
+        type: StringConstructor;
+        default: string;
+    };
+    valueKey: {
+        type: StringConstructor;
+        default: string;
+    };
+    enableCreate: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    clearable: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    value: {
+        type: import('vue').PropType<any>;
+        default: undefined;
+    };
+    id: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    placeholder: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    description: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    errors: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    label: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    visible: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    required: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    enabled: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    isFocused: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    isTouched: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    hideLabel: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    styles: {
+        type: import('vue').PropType<import('..').MyStyles>;
+        default: () => {
+            readonly group: {
+                readonly root: "group";
+                readonly label: "text-primary text-lg font-bold";
+                readonly item: "group-item";
+            };
+            readonly verticalLayout: {
+                readonly root: "flex flex-col gap-x-2";
+                readonly item: "w-full";
+            };
+            readonly horizontalLayout: {
+                readonly root: "flex flex-row gap-x-2";
+                readonly item: "w-full";
+            };
+            readonly arrayList: {
+                readonly root: "fieldset";
+                readonly legend: "fieldset-legend text-xl capitalize";
+            };
+            readonly control: {
+                readonly root: "fieldset";
+                readonly wrapper: "fieldset";
+                readonly label: "fieldset-legend";
+                readonly error: "";
+                readonly input: "input";
+                readonly textarea: "textarea h-32";
+                readonly checkbox: "checkbox";
+                readonly select: "input pr-14";
+                readonly description: "form-control--description label text-xs text-gray-500";
+            };
+            readonly fixedArrayList: {
+                readonly root: "flex flex-row gap-x-2";
+                readonly item: "w-full";
+            };
+        };
+    };
+    width: {
+        type: StringConstructor;
+        default: string;
+    };
+    size: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    hideErrors: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+};

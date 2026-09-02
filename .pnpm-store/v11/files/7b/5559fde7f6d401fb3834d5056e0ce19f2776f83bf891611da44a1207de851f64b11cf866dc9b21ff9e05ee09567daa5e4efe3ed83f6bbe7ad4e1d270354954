@@ -1,0 +1,19 @@
+import { Locator, Page } from '@playwright/test';
+import { Harness } from './Harness';
+/**
+ * Drives the `@ghentcdh/ui` `Input` component. The component renders
+ * `<input aria-label="{id}">` inside a `ControlWrapper`, so we look up by
+ * the aria-label (= `id`) by default.
+ */
+export declare class TextHarness extends Harness {
+    static byId(parent: Locator | Page, id: string): TextHarness;
+    /** Resolve by visible label (the `<legend>` text). */
+    static byLabel(parent: Locator | Page, label: string): TextHarness;
+    static for(locator: Locator): TextHarness;
+    fill(value: string): Promise<this>;
+    /** Type character-by-character — useful when the control reacts to each keystroke. */
+    type(value: string): Promise<this>;
+    clear(): Promise<this>;
+    value(): Promise<string>;
+    blur(): Promise<this>;
+}

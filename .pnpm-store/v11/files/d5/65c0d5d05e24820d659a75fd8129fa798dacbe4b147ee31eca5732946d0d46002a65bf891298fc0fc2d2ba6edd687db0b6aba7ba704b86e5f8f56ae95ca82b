@@ -1,0 +1,6 @@
+import { ControlProperties } from '../properties';
+type StyleControlProperties = Pick<ControlProperties, 'errors' | 'isTouched' | 'size'>;
+export declare const showErrors: ({ isTouched, errors }: StyleControlProperties) => boolean;
+export declare const isDescriptionHidden: (visible: boolean, description: string | undefined, isFocused: boolean, showUnfocusedDescription: boolean) => boolean;
+export declare const buildInputStyle: (styles: string, properties: StyleControlProperties) => any;
+export {};

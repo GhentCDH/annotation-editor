@@ -1,0 +1,11 @@
+import { ControlElement, JsonSchema } from '@jsonforms/core';
+import { ComputedRef, Ref } from 'vue';
+import { UseResource } from '../resource';
+export declare const useRelationBinding: (uischema: ControlElement, schema: JsonSchema, readonly?: boolean) => Record<string, any> & {
+    isInline: boolean;
+    isNew: ComputedRef<boolean>;
+    message: string | null;
+    resource: Ref<UseResource | null | undefined>;
+    appliedOptions: ComputedRef<Record<string, any>>;
+};
+//# sourceMappingURL=useRelationBinding.d.ts.map

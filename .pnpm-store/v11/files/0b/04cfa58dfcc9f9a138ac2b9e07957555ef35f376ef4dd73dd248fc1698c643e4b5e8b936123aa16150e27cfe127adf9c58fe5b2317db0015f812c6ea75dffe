@@ -1,0 +1,30 @@
+import { PropType } from 'vue';
+import { Size } from '../const';
+export declare const ModalProperties: {
+    modalTitle: {
+        type: StringConstructor;
+        required: true;
+    };
+    buttonLabel: {
+        type: StringConstructor;
+    };
+    buttonSaveLabel: {
+        type: StringConstructor;
+    };
+    data: {
+        default: undefined;
+    };
+    open: {
+        type: BooleanConstructor;
+        default: false;
+    };
+    disableClose: {
+        type: BooleanConstructor;
+        default: false;
+    };
+    width: {
+        type: PropType<Size>;
+        default: string;
+    };
+};
+export declare const ModalEmits: string[];

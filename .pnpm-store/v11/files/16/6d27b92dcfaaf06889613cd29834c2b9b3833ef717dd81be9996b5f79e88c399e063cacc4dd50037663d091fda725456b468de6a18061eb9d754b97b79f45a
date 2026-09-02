@@ -1,0 +1,31 @@
+import { UseResource } from '../resource/useResources';
+declare const __VLS_export: import('vue').DefineComponent<import('vue').ExtractPropTypes<{
+    label: {
+        type: StringConstructor;
+        required: true;
+    };
+    resource: {
+        type: import('vue').PropType<UseResource>;
+        required: true;
+    };
+    values: {
+        type: import('vue').PropType<any[]>;
+        required: true;
+    };
+}>, {}, {}, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, {}, string, import('vue').PublicProps, Readonly<import('vue').ExtractPropTypes<{
+    label: {
+        type: StringConstructor;
+        required: true;
+    };
+    resource: {
+        type: import('vue').PropType<UseResource>;
+        required: true;
+    };
+    values: {
+        type: import('vue').PropType<any[]>;
+        required: true;
+    };
+}>> & Readonly<{}>, {}, {}, {}, {}, string, import('vue').ComponentProvideOptions, true, {}, any>;
+declare const _default: typeof __VLS_export;
+export default _default;
+//# sourceMappingURL=RelationTable.vue.d.ts.map

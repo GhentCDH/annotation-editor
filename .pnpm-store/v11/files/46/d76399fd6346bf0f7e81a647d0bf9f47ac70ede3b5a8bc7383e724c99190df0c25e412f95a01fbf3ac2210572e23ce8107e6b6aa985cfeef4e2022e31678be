@@ -1,0 +1,24 @@
+import { Locator, Page } from '@playwright/test';
+import { Harness } from './Harness';
+/**
+ * Drives the `@ghentcdh/ui` `SelectComponent`.
+ *
+ * Combobox button (`role="combobox"`) opens a portaled `role="listbox"` with
+ * `role="option"` items, each containing an `<a>` that emits the selection.
+ */
+export declare class SelectHarness extends Harness {
+    static byId(parent: Locator | Page, id: string): SelectHarness;
+    static byLabel(parent: Locator | Page, label: string): SelectHarness;
+    static for(locator: Locator): SelectHarness;
+    open(): Promise<this>;
+    fill(label: string): Promise<this>;
+    select(label: string): Promise<this>;
+    value(): Promise<string>;
+    /** Click the "Clear" button rendered next to the select. */
+    clear(): Promise<this>;
+    /**
+     * Click the "Create new" button. Requires `enableCreate` to be set on
+     * the component (SelectWrapper conditionally renders the button).
+     */
+    clickCreateNew(): Promise<void>;
+}

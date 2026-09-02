@@ -1,0 +1,21 @@
+import { RenderParams } from './annotation-render';
+import { BaseAnnotation, TextAnnotation } from '../../../model';
+import { AnnotationModule } from '../../../di/annotation.module';
+import { BaseAnnotationDi } from '../../../di/BaseAnnotationDi';
+export declare class RenderInstances<ANNOTATION extends BaseAnnotation> extends BaseAnnotationDi {
+    private renderParams;
+    constructor(annotationModule: AnnotationModule);
+    setParams(params: Partial<RenderParams<ANNOTATION>>): void;
+    get defaultRenderer(): string;
+    private getRenders;
+    getGutterRenders(): import('./annotation-render').AnnotationRender<any>[];
+    getTextRenders(): import('./annotation-render').AnnotationRender<any>[];
+    getDefaultRenderer(): import('./annotation-render').AnnotationRender<any>;
+    getRenderer(annotation: ANNOTATION): import('./annotation-render').AnnotationRender<any>;
+    get highlightInstance(): import('./annotation-render').AnnotationRender<any>;
+    createDraws(annotation: TextAnnotation): {
+        draws: import('../../../model').AnnotationDraw[];
+        dimensions: import('../../../model').AnnotationDimension;
+    };
+}
+//# sourceMappingURL=render-instances.d.ts.map

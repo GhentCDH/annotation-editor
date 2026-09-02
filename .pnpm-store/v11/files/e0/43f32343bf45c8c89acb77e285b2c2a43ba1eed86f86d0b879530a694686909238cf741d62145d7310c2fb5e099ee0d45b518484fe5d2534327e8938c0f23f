@@ -1,0 +1,6 @@
+import { MenuWithItems } from './menu.type';
+declare const __VLS_export: import('vue').DefineComponent<MenuWithItems, {}, {}, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, {}, string, import('vue').PublicProps, Readonly<MenuWithItems> & Readonly<{}>, {
+    disabled: boolean;
+}, {}, {}, {}, string, import('vue').ComponentProvideOptions, false, {}, any>;
+declare const _default: typeof __VLS_export;
+export default _default;

@@ -1,0 +1,4 @@
+export type Size = 'xs' | 'sm' | 'lg' | 'xl';
+export declare const ModalSize: Record<Size, string>;
+export declare const ButtonSize: Record<Size, string>;
+export declare const BadgeSize: Record<Size, string>;

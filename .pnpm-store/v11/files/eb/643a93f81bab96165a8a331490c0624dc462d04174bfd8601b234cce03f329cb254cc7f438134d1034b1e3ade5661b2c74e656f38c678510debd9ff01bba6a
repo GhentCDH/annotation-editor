@@ -1,0 +1,4 @@
+import { AxiosInstance } from 'axios';
+export declare const configureApi: (api: AxiosInstance) => void;
+export declare const useApi: () => AxiosInstance;
+//# sourceMappingURL=useApi.d.ts.map

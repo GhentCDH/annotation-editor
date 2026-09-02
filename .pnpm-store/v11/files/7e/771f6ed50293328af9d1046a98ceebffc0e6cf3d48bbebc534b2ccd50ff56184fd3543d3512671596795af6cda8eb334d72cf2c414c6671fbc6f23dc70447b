@@ -1,0 +1,10 @@
+import { BaseAnnotationDiFn } from '../di/BaseAnnotationDiFn';
+export declare abstract class BaseAdapter<PARAMS> extends BaseAnnotationDiFn {
+    /**
+     * Name of the adapter. Be unique :-).
+     */
+    abstract name: string;
+    constructor(params: PARAMS);
+    abstract setParams(params: PARAMS): void;
+}
+//# sourceMappingURL=BaseAdapter.d.ts.map

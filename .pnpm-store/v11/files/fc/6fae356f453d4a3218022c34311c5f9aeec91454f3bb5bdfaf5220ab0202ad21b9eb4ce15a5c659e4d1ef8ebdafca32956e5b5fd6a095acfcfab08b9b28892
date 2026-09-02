@@ -1,0 +1,71 @@
+import { n as e } from "./renderers-D20PBZBF.js";
+import { computed as t, createElementBlock as n, createVNode as r, defineComponent as i, openBlock as a, ref as o, unref as s, watch as c } from "vue";
+import { useRoute as l, useRouter as u } from "vue-router";
+//#region src/resource/ResourceView.vue?vue&type=script&setup=true&lang.ts
+var d = { class: "max-w-screen-xl m-auto p-4" }, f = /* @__PURE__ */ i({
+	__name: "ResourceView",
+	setup(i) {
+		let f = l(), p = u(), m = t(() => f.params.formId), h = ({ event: e, data: t }) => {
+			let n = {
+				id: t?.id,
+				event: e
+			};
+			e === "close" && (n = {
+				id: void 0,
+				event: void 0
+			}), p.push({ query: {
+				...f.query,
+				...n
+			} });
+		}, g = (e) => {
+			p.push({ query: {
+				...f.query,
+				...e
+			} });
+		}, _ = o(null), v = (e) => {
+			let t = f.query.id, n = f.query.event;
+			if (m.value === e.id) {
+				if (!n) {
+					e.closeForm(null);
+					return;
+				}
+				if (n === "create") {
+					e.create();
+					return;
+				}
+				if (t) switch (n) {
+					case "view":
+						e.view(t);
+						break;
+					case "update":
+						e.edit(t);
+						break;
+					case "delete":
+						e.delete(t);
+						break;
+				}
+			}
+		}, y = (e) => {
+			_.value = e, v(e);
+		};
+		return c(() => ({
+			id: f.query.id,
+			event: f.query.event
+		}), (e) => {
+			_.value && v(_.value);
+		}, {
+			immediate: !0,
+			once: !0
+		}), c(() => f.query.event, (e, t) => {
+			e !== t && !e && _.value?.closeForm(null);
+		}), (t, i) => (a(), n("div", d, [r(e, {
+			"form-id": m.value,
+			"initial-request-params": s(f).query,
+			onHandleEvent: h,
+			onOnRequest: g,
+			onInitialLoad: y
+		}, null, 8, ["form-id", "initial-request-params"])]));
+	}
+});
+//#endregion
+export { f as default };

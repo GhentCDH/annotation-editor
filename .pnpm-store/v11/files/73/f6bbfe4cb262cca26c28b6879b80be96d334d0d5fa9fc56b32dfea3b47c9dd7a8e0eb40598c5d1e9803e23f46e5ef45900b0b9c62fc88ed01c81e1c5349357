@@ -1,0 +1,22 @@
+import { Locator, Page } from '@playwright/test';
+import { Harness } from './Harness';
+/**
+ * Drives the `@ghentcdh/ui` `Collapse` component.
+ *
+ * The collapse uses a hidden `<input type="checkbox" aria-label="Toggle {title}">`
+ * to control open/close state. Content lives inside `.collapse-content`.
+ */
+export declare class CollapseHarness extends Harness {
+    /** Resolve by the collapse title text. */
+    static byTitle(parent: Locator | Page, title: string): CollapseHarness;
+    static for(locator: Locator): CollapseHarness;
+    /** Toggle open/close by clicking the hidden checkbox. */
+    toggle(): Promise<this>;
+    /** Whether the collapse is currently open (checkbox checked). */
+    isOpen(): Promise<boolean>;
+    /** The title text element. */
+    title(): Locator;
+    /** The content wrapper. */
+    content(): Locator;
+    private checkbox;
+}

@@ -1,0 +1,5 @@
+export declare const CroutonStatusRoutes: {
+    path: string;
+    component: () => Promise<typeof import("./StatusView.vue")>;
+}[];
+//# sourceMappingURL=status.routes.d.ts.map

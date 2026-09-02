@@ -1,0 +1,2291 @@
+import * as _ghentcdh_crouton_core from '@ghentcdh/crouton-core';
+import { DataSource, ListRequest, I18nConfig, Translator, TranslationBundle, SecurityConfig, JsonResourceOperations, OperatorType } from '@ghentcdh/crouton-core';
+export { buildViews } from '@ghentcdh/crouton-core';
+import { OnModuleDestroy, Type, CanActivate, DynamicModule, ExecutionContext } from '@nestjs/common';
+import { z, ZodObject } from 'zod';
+import { Reflector, ModuleRef } from '@nestjs/core';
+
+/**
+ * Per-datasource, resource-keyed data-access contract.
+ *
+ * Prisma is the default adapter (`kind: "prisma"`). A developer can supply a
+ * `custom` adapter by setting `adapter: "custom"` in `data-source.json` and
+ * exporting a `DataSourceAdapter` (or factory) from the datasource `index.ts`.
+ *
+ * Phase 1: only the lifecycle interface is required. CRUD methods will move
+ * here in phase 2 when hooks are hoisted out of the Prisma repositories.
+ */
+interface DataSourceAdapter {
+    readonly kind: string;
+    /**
+     * Raw backend handle — the escape hatch for action procedures and
+     * `ctx.prisma`. `undefined` on a non-Prisma adapter.
+     */
+    readonly client?: unknown;
+    /** Return `true` when this adapter can serve the given model key. */
+    supports?(model: string): boolean;
+    connect?(): Promise<void>;
+    disconnect?(): Promise<void>;
+}
+
+type DataSourceEntry = {
+    config: DataSource;
+    adapter: DataSourceAdapter;
+};
+
+declare class DataSourceRegistry implements OnModuleDestroy {
+    private readonly adapters;
+    private defaultName;
+    constructor(entries: DataSourceEntry[]);
+    resolveAdapter(name?: string): DataSourceAdapter;
+    /** Returns the raw backend client for escape-hatch usage (`ctx.prisma`, action procedures). */
+    resolveClient(name?: string): unknown;
+    /**
+     * Backward-compatible alias — returns the raw client, same as `resolveClient`.
+     * Prefer `resolveAdapter` for new code.
+     */
+    resolve(name?: string): unknown;
+    entries(): {
+        name: string;
+        adapter: DataSourceAdapter;
+        client: unknown;
+    }[];
+    onModuleDestroy(): Promise<void>;
+    /**
+     * Disconnect every datasource. Called by `onModuleDestroy` and also by the
+     * dev "restart backend" action before `process.exit()`.
+     */
+    disconnectAll(): Promise<void>;
+}
+
+/**
+ * Scan a directory for data-source subdirectories and load their configs + adapters.
+ *
+ * Each subdirectory must contain:
+ * - `data-source.json` — config with `name`, `type`, and optional `default`
+ * - `index.ts` (or `.js`) — default export of a PrismaClient instance
+ */
+declare const loadDataSourcesFromDir: (dirPath: string) => Promise<DataSourceEntry[]>;
+
+/**
+ * Default adapter: wraps a generated PrismaClient.
+ *
+ * Phase 1: the lifecycle wrapper only. `ReadRepository`/`WriteRepository`
+ * still construct themselves from `adapter.client` inside `createCrudRepository`.
+ * Phase 2 will hoist their hook/decoration logic here.
+ */
+declare class PrismaDataSourceAdapter implements DataSourceAdapter {
+    readonly kind: "prisma";
+    readonly client: unknown;
+    constructor(prismaClient: unknown);
+    supports(model: string): boolean;
+    disconnect(): Promise<void>;
+}
+
+/**
+ * In-memory reference adapter — useful for tests and as a template for custom
+ * adapters. Not intended for production use.
+ *
+ * Seed model rows with `seed(model, rows)` before the test; `supports(model)`
+ * returns `true` for every seeded model.
+ */
+declare class InMemoryDataSourceAdapter implements DataSourceAdapter {
+    readonly kind: "in-memory";
+    readonly client: undefined;
+    private readonly store;
+    seed(model: string, rows: unknown[]): this;
+    supports(model: string): boolean;
+    disconnect(): Promise<void>;
+}
+
+declare const WriteOpSchema: z.ZodEnum<{
+    create: "create";
+    update: "update";
+    patch: "patch";
+    upsert: "upsert";
+    delete: "delete";
+}>;
+type WriteOp = z.infer<typeof WriteOpSchema>;
+declare const ReadOpSchema: z.ZodEnum<{
+    findAll: "findAll";
+    findOne: "findOne";
+}>;
+type ReadOp = z.infer<typeof ReadOpSchema>;
+/**
+ * The parent a nested read or write is scoped to.
+ *
+ * Present whenever the resource is reached under a parent — as a sub-resource
+ * declared by a relation column on the parent (`param` is the parent's own `id`),
+ * or as a resource that declares `parent` and mounts its own controller beneath
+ * it (`param` is the name it chose, e.g. `groupId`). Absent on a top-level write.
+ *
+ * Deliberately the same shape as `CustomRepositoryContext.parent`, so a hook and a
+ * `repository.ts` read the parent identically.
+ */
+interface ParentHookContext {
+    route: string;
+    param: string;
+    id: string | number;
+}
+interface WriteHookContext<PRISMACLIENT = unknown> {
+    /** The datasource adapter for this resource. Use `dataSource.client` to reach the raw backend. */
+    dataSource: DataSourceAdapter;
+    /**
+     * Raw Prisma client — backward-compatible alias for `dataSource.client`.
+     * `undefined` on a non-Prisma datasource.
+     * @deprecated prefer `dataSource.client`
+     */
+    prisma: PRISMACLIENT;
+    op: WriteOp;
+    id?: string | number;
+    request?: any;
+    parent?: ParentHookContext;
+}
+interface ReadHookContext<PRISMACLIENT = unknown> {
+    /** The datasource adapter for this resource. Use `dataSource.client` to reach the raw backend. */
+    dataSource: DataSourceAdapter;
+    /**
+     * Raw Prisma client — backward-compatible alias for `dataSource.client`.
+     * `undefined` on a non-Prisma datasource.
+     * @deprecated prefer `dataSource.client`
+     */
+    prisma: PRISMACLIENT;
+    op: ReadOp;
+    request?: any;
+    parent?: ParentHookContext;
+}
+declare const ResourceHooksSchema: z.ZodObject<{
+    beforeWrite: z.ZodOptional<z.ZodCustom<(data: any, ctx: WriteHookContext<any>) => Promise<any> | any, (data: any, ctx: WriteHookContext<any>) => Promise<any> | any>>;
+    afterWrite: z.ZodOptional<z.ZodCustom<(result: any, ctx: WriteHookContext<any>) => Promise<any> | any, (result: any, ctx: WriteHookContext<any>) => Promise<any> | any>>;
+    afterRead: z.ZodOptional<z.ZodCustom<(row: any, ctx: ReadHookContext<any>) => Promise<any> | any, (row: any, ctx: ReadHookContext<any>) => Promise<any> | any>>;
+}, z.core.$strip>;
+/**
+ * Hand-written interface so the `PRISMACLIENT` generic is preserved.
+ * `z.infer<typeof ResourceHooksSchema>` erases it (Zod wraps every custom()
+ * in `ZodType<T>`, discarding the generic), making `ctx.prisma` always `any`.
+ */
+interface ResourceHooks<PRISMACLIENT = any> {
+    beforeWrite?: (data: any, ctx: WriteHookContext<PRISMACLIENT>) => Promise<any> | any;
+    afterWrite?: (result: any, ctx: WriteHookContext<PRISMACLIENT>) => Promise<any> | any;
+    afterRead?: (row: any, ctx: ReadHookContext<PRISMACLIENT>) => Promise<any> | any;
+}
+
+/**
+ * Contract for a `kind: "custom"` resource's `repository.ts`.
+ *
+ * The file default-exports an object implementing whichever operations the
+ * resource enables. Discovery is by convention, like `hooks.ts` — see
+ * `custom-repository.loader`.
+ *
+ * Hand-written interfaces, deliberately not `z.infer` of a Zod object:
+ * `ResourceHooks` takes that shortcut and its `PRISMACLIENT` generic is erased
+ * by the inference, so `ctx.prisma` is always `any` in a hook file. Here the
+ * generics survive, and `CustomRepository<Row, PrismaClient>` gives a typed
+ * `ctx.prisma`.
+ */
+/** Operations a custom repository can implement. */
+type CustomOp = 'findAll' | 'findOne' | 'create' | 'update' | 'patch' | 'delete';
+interface CustomRepositoryContext<PRISMA = any> {
+    /**
+     * Resolved datasource client for this resource — the one named by the
+     * resource's `database`, or the project default.
+     *
+     * `undefined` when the project has no datasources at all, which is a valid
+     * setup for a backend whose resources are all custom.
+     */
+    prisma: PRISMA;
+    /** Escape hatch for a resource that reads from more than one database. */
+    dataSources: {
+        resolve(name?: string): any;
+        entries(): {
+            name: string;
+            client: any;
+        }[];
+    };
+    /** The fully resolved resource config, including columns and views. */
+    config: Resource;
+    /** Which operation is executing. */
+    op: CustomOp;
+    /**
+     * Zero-based row offset derived from `page`/`pageSize`, for backends that
+     * paginate by offset rather than page number.
+     */
+    offset: number;
+    /** Record id, on the operations that address one. */
+    id?: string | number;
+    /**
+     * The incoming HTTP request, when the controller layer supplies one.
+     * Same value hooks receive as `ctx.request` — use it for auth/tenant context.
+     */
+    request?: any;
+    /**
+     * Set when the resource declares a `parent`, i.e. it is mounted at
+     * `<route>/:<param>/…`. The id is read from the path on every request, so it
+     * is always present for a nested resource.
+     *
+     * The parent-aware operations receive the same id as their first argument;
+     * this is here for the cases where you want it inside a shared helper.
+     */
+    parent?: {
+        route: string;
+        param: string;
+        id: string | number;
+    };
+}
+/** Rows plus the total matching count, used to build the list envelope. */
+interface CustomListResult<T = any> {
+    data: T[];
+    count: number;
+}
+/**
+ * Operations for a resource that declares a `parent`.
+ *
+ * A nested resource is *only* reachable under its parent, so these replace the
+ * unnested operations rather than supplementing them — the parent id is always
+ * available, and a query can never accidentally run across every parent.
+ */
+interface CustomParentRepository<T = any, PRISMA = any> {
+    /** List the children of one parent. Returns rows *and* the total count. */
+    findAllByParent?(parentId: string | number, params: ListRequest, ctx: CustomRepositoryContext<PRISMA>): Promise<CustomListResult<T>>;
+    /** Fetch one child of one parent. Return `null`/`undefined` for a 404. */
+    findOneByParent?(parentId: string | number, id: string | number, ctx: CustomRepositoryContext<PRISMA>): Promise<T | null | undefined>;
+    createByParent?(parentId: string | number, data: any, ctx: CustomRepositoryContext<PRISMA>): Promise<T>;
+    updateByParent?(parentId: string | number, id: string | number, data: any, ctx: CustomRepositoryContext<PRISMA>): Promise<T>;
+    /** Falls back to `updateByParent` when not implemented. */
+    patchByParent?(parentId: string | number, id: string | number, data: any, ctx: CustomRepositoryContext<PRISMA>): Promise<T>;
+    deleteByParent?(parentId: string | number, id: string | number, ctx: CustomRepositoryContext<PRISMA>): Promise<T>;
+}
+interface CustomRepository<T = any, PRISMA = any> extends CustomParentRepository<T, PRISMA> {
+    /**
+     * List rows. Must return the total `count` as well — the framework builds the
+     * `{ data, request: { count, totalPages, ... } }` envelope from it.
+     *
+     * `params.filter` holds raw `field:value:operator` strings; `parseFilterString`
+     * is exported from crouton-api if you want to reuse the grammar.
+     */
+    findAll?(params: ListRequest, ctx: CustomRepositoryContext<PRISMA>): Promise<CustomListResult<T>>;
+    /** Fetch one row. Return `null`/`undefined` to produce a 404. */
+    findOne?(id: string | number, ctx: CustomRepositoryContext<PRISMA>): Promise<T | null | undefined>;
+    create?(data: any, ctx: CustomRepositoryContext<PRISMA>): Promise<T>;
+    update?(id: string | number, data: any, ctx: CustomRepositoryContext<PRISMA>): Promise<T>;
+    /**
+     * Partial update. Falls back to `update` when not implemented, matching the
+     * Prisma repository where `patch` is `update` with a partial schema.
+     */
+    patch?(id: string | number, data: any, ctx: CustomRepositoryContext<PRISMA>): Promise<T>;
+    delete?(id: string | number, ctx: CustomRepositoryContext<PRISMA>): Promise<T>;
+}
+
+/**
+ * Translation registry: holds per-language bundles and provides a
+ * `translatorFor(language)` factory. Loaded once at boot; dev mode
+ * reloads from disk on each request.
+ */
+
+declare class TranslationRegistry {
+    private readonly translationsDir;
+    private readonly i18nConfig;
+    private bundles;
+    constructor(translationsDir: string, i18nConfig: I18nConfig);
+    get languages(): readonly string[];
+    get defaultLanguage(): string;
+    /** Whether i18n is active (at least one bundle loaded). */
+    get active(): boolean;
+    translatorFor(language: string): Translator;
+    /** Raw bundle for a language (falls back to default). */
+    bundleFor(language: string): TranslationBundle;
+}
+
+declare class ResourceConfigRegistry {
+    private readonly loader;
+    private configs;
+    private translationRegistry?;
+    /**
+     * Per-language memo: `Map<language, Map<route, Resource>>`.
+     * Cleared whenever the underlying configs reload (dev mode).
+     */
+    private localizedCache;
+    constructor(loader: ResourceConfigLoader, initialConfigs: Resource[]);
+    setTranslationRegistry(registry: TranslationRegistry): void;
+    getAll(language?: string): Promise<Resource[]>;
+    getByRoute(route: string, language?: string): Promise<Resource | undefined>;
+    /**
+     * On-disk directory containing `route`'s `resource.json`, if known.
+     * Only meaningful after a load has populated the loader's internal map —
+     * callers in dev mode should call `getByRoute`/`getAll` first in the same
+     * request to guarantee freshness.
+     */
+    getResourceDir(route: string): string | undefined;
+    private getLocalized;
+    private localize;
+}
+
+declare const SubResourceConfigSchema: z.ZodObject<{
+    column: z.ZodString;
+    relation: z.ZodString;
+    childRoute: z.ZodString;
+    childKind: z.ZodDefault<z.ZodEnum<{
+        custom: "custom";
+        prisma: "prisma";
+    }>>;
+    childDir: z.ZodOptional<z.ZodString>;
+    repository: z.ZodOptional<z.ZodCustom<CustomRepository<any, any>, CustomRepository<any, any>>>;
+    childModel: z.ZodString;
+    foreignKey: z.ZodString;
+    name: z.ZodOptional<z.ZodString>;
+    title: z.ZodOptional<z.ZodString>;
+    idField: z.ZodOptional<z.ZodString>;
+    idType: z.ZodOptional<z.ZodEnum<{
+        string: "string";
+        number: "number";
+    }>>;
+    views: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodObject<{
+        json_schema: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        ui_schema: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        ui: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        data: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        columns: z.ZodArray<z.ZodObject<{
+            id: z.ZodString;
+            label: z.ZodOptional<z.ZodString>;
+            sortable: z.ZodOptional<z.ZodBoolean>;
+            searchable: z.ZodOptional<z.ZodBoolean>;
+            fieldInput: z.ZodOptional<z.ZodObject<{
+                type: z.ZodOptional<z.ZodString>;
+                customRender: z.ZodOptional<z.ZodString>;
+                format: z.ZodOptional<z.ZodString>;
+                resource: z.ZodOptional<z.ZodString>;
+                relationType: z.ZodOptional<z.ZodEnum<{
+                    oneToOne: "oneToOne";
+                    manyToOne: "manyToOne";
+                    oneToMany: "oneToMany";
+                    manyToMany: "manyToMany";
+                }>>;
+                foreignKey: z.ZodOptional<z.ZodString>;
+                relation: z.ZodOptional<z.ZodString>;
+                position: z.ZodOptional<z.ZodNumber>;
+                defaultValue: z.ZodOptional<z.ZodUnknown>;
+                options: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                    colspan: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
+                    sort: z.ZodOptional<z.ZodString>;
+                    sortDir: z.ZodOptional<z.ZodEnum<{
+                        asc: "asc";
+                        desc: "desc";
+                    }>>;
+                    direction: z.ZodOptional<z.ZodString>;
+                    displayKey: z.ZodOptional<z.ZodString>;
+                    resource: z.ZodOptional<z.ZodString>;
+                }, z.core.$catchall<z.ZodUnknown>>, z.ZodUnknown]>>;
+                detail: z.ZodOptional<z.ZodObject<{
+                    layout: z.ZodEnum<{
+                        row: "row";
+                        collapse: "collapse";
+                    }>;
+                    titleKey: z.ZodOptional<z.ZodString>;
+                    controls: z.ZodArray<z.ZodObject<{
+                        property: z.ZodString;
+                        type: z.ZodOptional<z.ZodString>;
+                        options: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                        hideLabel: z.ZodOptional<z.ZodBoolean>;
+                        width: z.ZodOptional<z.ZodString>;
+                    }, z.core.$strip>>;
+                }, z.core.$strip>>;
+            }, z.core.$strip>>;
+        }, z.core.$strip>>;
+        defaultSort: z.ZodOptional<z.ZodString>;
+    }, z.core.$strip>>>;
+    operations: z.ZodObject<{
+        findAll: z.ZodDefault<z.ZodUnion<readonly [z.ZodBoolean, z.ZodObject<{
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>]>>;
+        findOne: z.ZodDefault<z.ZodUnion<readonly [z.ZodBoolean, z.ZodObject<{
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>]>>;
+        create: z.ZodDefault<z.ZodUnion<readonly [z.ZodBoolean, z.ZodObject<{
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>]>>;
+        update: z.ZodDefault<z.ZodUnion<readonly [z.ZodBoolean, z.ZodObject<{
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>]>>;
+        patch: z.ZodDefault<z.ZodUnion<readonly [z.ZodBoolean, z.ZodObject<{
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>]>>;
+        upsert: z.ZodDefault<z.ZodUnion<readonly [z.ZodBoolean, z.ZodObject<{
+            upsertOn: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>]>>;
+        delete: z.ZodDefault<z.ZodUnion<readonly [z.ZodBoolean, z.ZodObject<{
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>]>>;
+    }, z.core.$strip>;
+    actions: z.ZodOptional<z.ZodArray<z.ZodPipe<z.ZodUnion<readonly [z.ZodObject<{
+        id: z.ZodString;
+        label: z.ZodString;
+        icon: z.ZodOptional<z.ZodString>;
+        tooltip: z.ZodOptional<z.ZodString>;
+        condition: z.ZodOptional<z.ZodObject<{
+            field: z.ZodString;
+            op: z.ZodDefault<z.ZodEnum<{
+                gt: "gt";
+                lt: "lt";
+                eq: "eq";
+                neq: "neq";
+                exists: "exists";
+                notExists: "notExists";
+                gte: "gte";
+                lte: "lte";
+            }>>;
+            value: z.ZodOptional<z.ZodUnknown>;
+        }, z.core.$strip>>;
+        type: z.ZodDefault<z.ZodLiteral<"procedure">>;
+        procedure: z.ZodString;
+        method: z.ZodDefault<z.ZodOptional<z.ZodString>>;
+        data: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    }, z.core.$strip>, z.ZodObject<{
+        id: z.ZodString;
+        label: z.ZodString;
+        icon: z.ZodOptional<z.ZodString>;
+        tooltip: z.ZodOptional<z.ZodString>;
+        condition: z.ZodOptional<z.ZodObject<{
+            field: z.ZodString;
+            op: z.ZodDefault<z.ZodEnum<{
+                gt: "gt";
+                lt: "lt";
+                eq: "eq";
+                neq: "neq";
+                exists: "exists";
+                notExists: "notExists";
+                gte: "gte";
+                lte: "lte";
+            }>>;
+            value: z.ZodOptional<z.ZodUnknown>;
+        }, z.core.$strip>>;
+        type: z.ZodDefault<z.ZodLiteral<"link">>;
+        href: z.ZodString;
+        blank: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+    }, z.core.$strip>]>, z.ZodTransform<({
+        tooltip: string;
+    } & {
+        id: string;
+        label: string;
+        type: "procedure";
+        procedure: string;
+        method: string;
+        icon?: string | undefined;
+        tooltip?: string | undefined;
+        condition?: {
+            field: string;
+            op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+            value?: unknown;
+        } | undefined;
+        data?: Record<string, unknown> | undefined;
+    }) | ({
+        tooltip: string;
+    } & {
+        id: string;
+        label: string;
+        type: "link";
+        href: string;
+        blank: boolean;
+        icon?: string | undefined;
+        tooltip?: string | undefined;
+        condition?: {
+            field: string;
+            op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+            value?: unknown;
+        } | undefined;
+    }), {
+        id: string;
+        label: string;
+        type: "procedure";
+        procedure: string;
+        method: string;
+        icon?: string | undefined;
+        tooltip?: string | undefined;
+        condition?: {
+            field: string;
+            op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+            value?: unknown;
+        } | undefined;
+        data?: Record<string, unknown> | undefined;
+    } | {
+        id: string;
+        label: string;
+        type: "link";
+        href: string;
+        blank: boolean;
+        icon?: string | undefined;
+        tooltip?: string | undefined;
+        condition?: {
+            field: string;
+            op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+            value?: unknown;
+        } | undefined;
+    }>>>>;
+    modalSize: z.ZodOptional<z.ZodEnum<{
+        xs: "xs";
+        sm: "sm";
+        lg: "lg";
+        xl: "xl";
+    }>>;
+    include: z.ZodOptional<z.ZodArray<z.ZodType<any, unknown, z.core.$ZodTypeInternals<any, unknown>, ZodTypeDef>>>;
+    calculatedColumns: z.ZodOptional<z.ZodArray<z.ZodPipe<z.ZodObject<{
+        id: z.ZodString;
+        alias: z.ZodString;
+        label: z.ZodOptional<z.ZodString>;
+        sqlExpression: z.ZodString;
+        type: z.ZodOptional<z.ZodEnum<{
+            string: "string";
+            number: "number";
+            boolean: "boolean";
+        }>>;
+        position: z.ZodOptional<z.ZodNumber>;
+        hiddenInTable: z.ZodOptional<z.ZodBoolean>;
+        hiddenInView: z.ZodOptional<z.ZodBoolean>;
+        fieldInput: z.ZodOptional<z.ZodObject<{
+            type: z.ZodOptional<z.ZodString>;
+            customRender: z.ZodOptional<z.ZodString>;
+            format: z.ZodOptional<z.ZodString>;
+            resource: z.ZodOptional<z.ZodString>;
+            relationType: z.ZodOptional<z.ZodEnum<{
+                oneToOne: "oneToOne";
+                manyToOne: "manyToOne";
+                oneToMany: "oneToMany";
+                manyToMany: "manyToMany";
+            }>>;
+            foreignKey: z.ZodOptional<z.ZodString>;
+            relation: z.ZodOptional<z.ZodString>;
+            position: z.ZodOptional<z.ZodNumber>;
+            defaultValue: z.ZodOptional<z.ZodUnknown>;
+            options: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                colspan: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
+                sort: z.ZodOptional<z.ZodString>;
+                sortDir: z.ZodOptional<z.ZodEnum<{
+                    asc: "asc";
+                    desc: "desc";
+                }>>;
+                direction: z.ZodOptional<z.ZodString>;
+                displayKey: z.ZodOptional<z.ZodString>;
+                resource: z.ZodOptional<z.ZodString>;
+            }, z.core.$catchall<z.ZodUnknown>>, z.ZodUnknown]>>;
+            detail: z.ZodOptional<z.ZodObject<{
+                layout: z.ZodEnum<{
+                    row: "row";
+                    collapse: "collapse";
+                }>;
+                titleKey: z.ZodOptional<z.ZodString>;
+                controls: z.ZodArray<z.ZodObject<{
+                    property: z.ZodString;
+                    type: z.ZodOptional<z.ZodString>;
+                    options: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    hideLabel: z.ZodOptional<z.ZodBoolean>;
+                    width: z.ZodOptional<z.ZodString>;
+                }, z.core.$strip>>;
+            }, z.core.$strip>>;
+        }, z.core.$strip>>;
+    }, z.core.$strip>, z.ZodTransform<{
+        id: string;
+        alias: string;
+        sqlExpression: string;
+        label?: string | undefined;
+        type?: "string" | "number" | "boolean" | undefined;
+        position?: number | undefined;
+        hiddenInTable?: boolean | undefined;
+        hiddenInView?: boolean | undefined;
+        fieldInput?: {
+            type?: string | undefined;
+            customRender?: string | undefined;
+            format?: string | undefined;
+            resource?: string | undefined;
+            relationType?: "oneToOne" | "manyToOne" | "oneToMany" | "manyToMany" | undefined;
+            foreignKey?: string | undefined;
+            relation?: string | undefined;
+            position?: number | undefined;
+            defaultValue?: unknown;
+            options?: unknown;
+            detail?: {
+                layout: "row" | "collapse";
+                controls: {
+                    property: string;
+                    type?: string | undefined;
+                    options?: Record<string, unknown> | undefined;
+                    hideLabel?: boolean | undefined;
+                    width?: string | undefined;
+                }[];
+                titleKey?: string | undefined;
+            } | undefined;
+        } | undefined;
+    }, {
+        id: string;
+        alias: string;
+        sqlExpression: string;
+        label?: string | undefined;
+        type?: "string" | "number" | "boolean" | undefined;
+        position?: number | undefined;
+        hiddenInTable?: boolean | undefined;
+        hiddenInView?: boolean | undefined;
+        fieldInput?: {
+            type?: string | undefined;
+            customRender?: string | undefined;
+            format?: string | undefined;
+            resource?: string | undefined;
+            relationType?: "oneToOne" | "manyToOne" | "oneToMany" | "manyToMany" | undefined;
+            foreignKey?: string | undefined;
+            relation?: string | undefined;
+            position?: number | undefined;
+            defaultValue?: unknown;
+            options?: unknown;
+            detail?: {
+                layout: "row" | "collapse";
+                controls: {
+                    property: string;
+                    type?: string | undefined;
+                    options?: Record<string, unknown> | undefined;
+                    hideLabel?: boolean | undefined;
+                    width?: string | undefined;
+                }[];
+                titleKey?: string | undefined;
+            } | undefined;
+        } | undefined;
+    }>>>>;
+    includeInFindOne: z.ZodOptional<z.ZodBoolean>;
+    hiddenInTable: z.ZodOptional<z.ZodBoolean>;
+    findOneOrderBy: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    hooks: z.ZodOptional<z.ZodObject<{
+        beforeWrite: z.ZodOptional<z.ZodCustom<(data: any, ctx: WriteHookContext<any>) => Promise<any> | any, (data: any, ctx: WriteHookContext<any>) => Promise<any> | any>>;
+        afterWrite: z.ZodOptional<z.ZodCustom<(result: any, ctx: WriteHookContext<any>) => Promise<any> | any, (result: any, ctx: WriteHookContext<any>) => Promise<any> | any>>;
+        afterRead: z.ZodOptional<z.ZodCustom<(row: any, ctx: ReadHookContext<any>) => Promise<any> | any, (row: any, ctx: ReadHookContext<any>) => Promise<any> | any>>;
+    }, z.core.$strip>>;
+    valueLabelColumns: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        field: z.ZodString;
+        values: z.ZodDefault<z.ZodArray<z.ZodObject<{
+            value: z.ZodUnknown;
+            label: z.ZodString;
+        }, z.core.$strip>>>;
+        enumName: z.ZodOptional<z.ZodString>;
+    }, z.core.$strip>>>;
+    relationType: z.ZodOptional<z.ZodEnum<{
+        manyToOne: "manyToOne";
+        oneToMany: "oneToMany";
+    }>>;
+}, z.core.$strip>;
+type SubResourceConfig = z.infer<typeof SubResourceConfigSchema>;
+
+declare const loadResourceHooks: (basePath: string) => Promise<ResourceHooks | undefined>;
+/**
+ * Attach each sub-resource's hooks.
+ *
+ * Two locations, checked in order:
+ *
+ * 1. `<parent>/hooks/<childName>.ts` — the original convention, which keeps every
+ *    child's hooks together under the parent that serves them.
+ * 2. `<childDir>/hooks.ts` — the child's own directory, same filename a top-level
+ *    resource uses.
+ *
+ * The second exists because a child with its own directory already keeps
+ * `resource.json` and (for `kind: "custom"`) `repository.ts` there, so putting
+ * `hooks.ts` beside them is the obvious guess — and until it was supported that
+ * file was silently ignored, with no error and no status-page entry.
+ *
+ * The parent-scoped location wins when both are present, so nothing that relied on
+ * convention 1 changes behaviour.
+ */
+declare const loadSubResourceHooks: (subResources: SubResourceConfig[], basePath: string) => Promise<void>;
+
+/**
+ * A column whose stored scalar is serialized as `{ value, label }` on read and
+ * normalized back to the scalar on write. Computed at load time from columns
+ * flagged `fieldInput.options.emitObject` that carry an `options.values` list.
+ */
+declare const ValueLabelColumnSchema: z.ZodObject<{
+    field: z.ZodString;
+    values: z.ZodDefault<z.ZodArray<z.ZodObject<{
+        value: z.ZodUnknown;
+        label: z.ZodString;
+    }, z.core.$strip>>>;
+    enumName: z.ZodOptional<z.ZodString>;
+}, z.core.$strip>;
+type ValueLabelColumn = z.infer<typeof ValueLabelColumnSchema>;
+
+/**
+ * Lifecycle-hook application, extracted so every repository implementation
+ * treats hooks identically.
+ *
+ * All four helpers now accept a `DataSourceAdapter` instead of a raw Prisma
+ * client. The adapter is forwarded into the hook context as `dataSource`; the
+ * raw client is available as `ctx.prisma` (= `adapter.client`) for backward
+ * compatibility with existing hook files.
+ */
+type HookTarget = {
+    hooks?: ResourceHooks;
+    valueLabelColumns?: ValueLabelColumn[];
+};
+/**
+ * `afterRead` for a list, plus the `{ value, label }` envelope.
+ *
+ * The envelope is applied on list reads only — `findOne` feeds the form/detail
+ * view, where the select control maps the stored scalar to its label itself and
+ * submits the scalar back.
+ */
+declare const decorateRows: (rows: any[], op: ReadOp, target: HookTarget, adapter: DataSourceAdapter, request?: any, parent?: ParentHookContext) => Promise<any[]>;
+/** `afterRead` for a single row. Deliberately no value-label envelope. */
+declare const decorateRow: (row: any, op: ReadOp, target: HookTarget, adapter: DataSourceAdapter, request?: any, parent?: ParentHookContext) => Promise<any>;
+/** Unwrap value-label envelopes, then run `beforeWrite`. */
+declare const prepareWrite: (data: any, op: WriteOp, target: HookTarget, adapter: DataSourceAdapter, id?: string | number, request?: any, parent?: ParentHookContext) => Promise<any>;
+/** Run `afterWrite` on the persisted result. */
+declare const postWrite: (result: any, op: WriteOp, target: HookTarget, adapter: DataSourceAdapter, id?: string | number, request?: any, parent?: ParentHookContext) => Promise<any>;
+
+declare const ResourceSchema: z.ZodObject<{
+    $schema: z.ZodOptional<z.ZodString>;
+    schemaVersion: z.ZodOptional<z.ZodNumber>;
+    draft: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+    kind: z.ZodDefault<z.ZodEnum<{
+        custom: "custom";
+        prisma: "prisma";
+    }>>;
+    name: z.ZodString;
+    route: z.ZodString;
+    model: z.ZodOptional<z.ZodString>;
+    tag: z.ZodString;
+    title: z.ZodOptional<z.ZodString>;
+    table: z.ZodOptional<z.ZodString>;
+    database: z.ZodOptional<z.ZodString>;
+    parent: z.ZodOptional<z.ZodObject<{
+        route: z.ZodString;
+        param: z.ZodDefault<z.ZodString>;
+        idType: z.ZodOptional<z.ZodEnum<{
+            string: "string";
+            number: "number";
+        }>>;
+    }, z.core.$strip>>;
+    sidebar: z.ZodDefault<z.ZodObject<{
+        hide: z.ZodDefault<z.ZodBoolean>;
+        position: z.ZodOptional<z.ZodNumber>;
+        label: z.ZodOptional<z.ZodString>;
+        group: z.ZodOptional<z.ZodString>;
+    }, z.core.$strip>>;
+    display: z.ZodDefault<z.ZodObject<{
+        mode: z.ZodDefault<z.ZodEnum<{
+            page: "page";
+            modal: "modal";
+        }>>;
+        customComponent: z.ZodDefault<z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+    }, z.core.$strip>>;
+    security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+        public: z.ZodLiteral<true>;
+    }, z.core.$strip>, z.ZodObject<{
+        guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+    }, z.core.$strip>]>>;
+    operations: z.ZodObject<{
+        findAll: z.ZodDefault<z.ZodUnion<readonly [z.ZodBoolean, z.ZodObject<{
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>]>>;
+        findOne: z.ZodDefault<z.ZodUnion<readonly [z.ZodBoolean, z.ZodObject<{
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>]>>;
+        create: z.ZodDefault<z.ZodUnion<readonly [z.ZodBoolean, z.ZodObject<{
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>]>>;
+        update: z.ZodDefault<z.ZodUnion<readonly [z.ZodBoolean, z.ZodObject<{
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>]>>;
+        patch: z.ZodDefault<z.ZodUnion<readonly [z.ZodBoolean, z.ZodObject<{
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>]>>;
+        upsert: z.ZodDefault<z.ZodUnion<readonly [z.ZodBoolean, z.ZodObject<{
+            upsertOn: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>]>>;
+        delete: z.ZodDefault<z.ZodUnion<readonly [z.ZodBoolean, z.ZodObject<{
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>]>>;
+    }, z.core.$strip>;
+    columns: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodObject<{
+        type: z.ZodOptional<z.ZodUnion<readonly [z.ZodEnum<{
+            string: "string";
+            number: "number";
+            boolean: "boolean";
+            object: "object";
+            array: "array";
+            date: "date";
+            integer: "integer";
+            "date-time": "date-time";
+        }>, z.ZodType<_ghentcdh_crouton_core.JsonSchemaFragment, unknown, z.core.$ZodTypeInternals<_ghentcdh_crouton_core.JsonSchemaFragment, unknown>, ZodTypeDef>]>>;
+        enum: z.ZodOptional<z.ZodString>;
+        columns: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
+        label: z.ZodOptional<z.ZodString>;
+        column: z.ZodOptional<z.ZodString>;
+        hideLabel: z.ZodDefault<z.ZodBoolean>;
+        sortId: z.ZodOptional<z.ZodString>;
+        sortable: z.ZodDefault<z.ZodBoolean>;
+        displayKey: z.ZodOptional<z.ZodString>;
+        hiddenInTable: z.ZodDefault<z.ZodBoolean>;
+        hiddenInView: z.ZodDefault<z.ZodBoolean>;
+        fieldInput: z.ZodOptional<z.ZodObject<{
+            type: z.ZodOptional<z.ZodString>;
+            customRender: z.ZodOptional<z.ZodString>;
+            format: z.ZodOptional<z.ZodString>;
+            resource: z.ZodOptional<z.ZodString>;
+            relationType: z.ZodOptional<z.ZodEnum<{
+                oneToOne: "oneToOne";
+                manyToOne: "manyToOne";
+                oneToMany: "oneToMany";
+                manyToMany: "manyToMany";
+            }>>;
+            foreignKey: z.ZodOptional<z.ZodString>;
+            relation: z.ZodOptional<z.ZodString>;
+            position: z.ZodOptional<z.ZodNumber>;
+            defaultValue: z.ZodOptional<z.ZodUnknown>;
+            options: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                colspan: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
+                sort: z.ZodOptional<z.ZodString>;
+                sortDir: z.ZodOptional<z.ZodEnum<{
+                    asc: "asc";
+                    desc: "desc";
+                }>>;
+                direction: z.ZodOptional<z.ZodString>;
+                displayKey: z.ZodOptional<z.ZodString>;
+                resource: z.ZodOptional<z.ZodString>;
+            }, z.core.$catchall<z.ZodUnknown>>, z.ZodUnknown]>>;
+            detail: z.ZodOptional<z.ZodObject<{
+                layout: z.ZodEnum<{
+                    row: "row";
+                    collapse: "collapse";
+                }>;
+                titleKey: z.ZodOptional<z.ZodString>;
+                controls: z.ZodArray<z.ZodObject<{
+                    property: z.ZodString;
+                    type: z.ZodOptional<z.ZodString>;
+                    options: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    hideLabel: z.ZodOptional<z.ZodBoolean>;
+                    width: z.ZodOptional<z.ZodString>;
+                }, z.core.$strip>>;
+            }, z.core.$strip>>;
+        }, z.core.$strip>>;
+        required: z.ZodOptional<z.ZodBoolean>;
+        hiddenInForm: z.ZodDefault<z.ZodBoolean>;
+        defaultSort: z.ZodDefault<z.ZodBoolean>;
+        searchable: z.ZodDefault<z.ZodBoolean>;
+        filterable: z.ZodDefault<z.ZodBoolean>;
+        createable: z.ZodDefault<z.ZodBoolean>;
+        updateable: z.ZodDefault<z.ZodBoolean>;
+        showWhen: z.ZodOptional<z.ZodObject<{
+            field: z.ZodString;
+            eq: z.ZodOptional<z.ZodUnknown>;
+            neq: z.ZodOptional<z.ZodUnknown>;
+            exists: z.ZodOptional<z.ZodBoolean>;
+            notExists: z.ZodOptional<z.ZodBoolean>;
+        }, z.core.$strip>>;
+        hideWhen: z.ZodOptional<z.ZodObject<{
+            field: z.ZodString;
+            eq: z.ZodOptional<z.ZodUnknown>;
+            neq: z.ZodOptional<z.ZodUnknown>;
+            exists: z.ZodOptional<z.ZodBoolean>;
+            notExists: z.ZodOptional<z.ZodBoolean>;
+        }, z.core.$strip>>;
+        disabledWhen: z.ZodOptional<z.ZodObject<{
+            field: z.ZodString;
+            eq: z.ZodOptional<z.ZodUnknown>;
+            neq: z.ZodOptional<z.ZodUnknown>;
+            exists: z.ZodOptional<z.ZodBoolean>;
+            notExists: z.ZodOptional<z.ZodBoolean>;
+        }, z.core.$strip>>;
+        idField: z.ZodDefault<z.ZodBoolean>;
+        showInLookup: z.ZodDefault<z.ZodBoolean>;
+        columnType: z.ZodDefault<z.ZodString>;
+        fieldView: z.ZodOptional<z.ZodObject<{
+            type: z.ZodOptional<z.ZodString>;
+            customRender: z.ZodOptional<z.ZodString>;
+            format: z.ZodOptional<z.ZodString>;
+            resource: z.ZodOptional<z.ZodString>;
+            relationType: z.ZodOptional<z.ZodEnum<{
+                oneToOne: "oneToOne";
+                manyToOne: "manyToOne";
+                oneToMany: "oneToMany";
+                manyToMany: "manyToMany";
+            }>>;
+            foreignKey: z.ZodOptional<z.ZodString>;
+            relation: z.ZodOptional<z.ZodString>;
+            position: z.ZodOptional<z.ZodNumber>;
+            defaultValue: z.ZodOptional<z.ZodUnknown>;
+            options: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                colspan: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
+                sort: z.ZodOptional<z.ZodString>;
+                sortDir: z.ZodOptional<z.ZodEnum<{
+                    asc: "asc";
+                    desc: "desc";
+                }>>;
+                direction: z.ZodOptional<z.ZodString>;
+                displayKey: z.ZodOptional<z.ZodString>;
+                resource: z.ZodOptional<z.ZodString>;
+            }, z.core.$catchall<z.ZodUnknown>>, z.ZodUnknown]>>;
+            detail: z.ZodOptional<z.ZodObject<{
+                layout: z.ZodEnum<{
+                    row: "row";
+                    collapse: "collapse";
+                }>;
+                titleKey: z.ZodOptional<z.ZodString>;
+                controls: z.ZodArray<z.ZodObject<{
+                    property: z.ZodString;
+                    type: z.ZodOptional<z.ZodString>;
+                    options: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    hideLabel: z.ZodOptional<z.ZodBoolean>;
+                    width: z.ZodOptional<z.ZodString>;
+                }, z.core.$strip>>;
+            }, z.core.$strip>>;
+        }, z.core.$strip>>;
+        fieldTable: z.ZodOptional<z.ZodObject<{
+            type: z.ZodOptional<z.ZodString>;
+            customRender: z.ZodOptional<z.ZodString>;
+            format: z.ZodOptional<z.ZodString>;
+            resource: z.ZodOptional<z.ZodString>;
+            relationType: z.ZodOptional<z.ZodEnum<{
+                oneToOne: "oneToOne";
+                manyToOne: "manyToOne";
+                oneToMany: "oneToMany";
+                manyToMany: "manyToMany";
+            }>>;
+            foreignKey: z.ZodOptional<z.ZodString>;
+            relation: z.ZodOptional<z.ZodString>;
+            position: z.ZodOptional<z.ZodNumber>;
+            defaultValue: z.ZodOptional<z.ZodUnknown>;
+            options: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                colspan: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
+                sort: z.ZodOptional<z.ZodString>;
+                sortDir: z.ZodOptional<z.ZodEnum<{
+                    asc: "asc";
+                    desc: "desc";
+                }>>;
+                direction: z.ZodOptional<z.ZodString>;
+                displayKey: z.ZodOptional<z.ZodString>;
+                resource: z.ZodOptional<z.ZodString>;
+            }, z.core.$catchall<z.ZodUnknown>>, z.ZodUnknown]>>;
+            detail: z.ZodOptional<z.ZodObject<{
+                layout: z.ZodEnum<{
+                    row: "row";
+                    collapse: "collapse";
+                }>;
+                titleKey: z.ZodOptional<z.ZodString>;
+                controls: z.ZodArray<z.ZodObject<{
+                    property: z.ZodString;
+                    type: z.ZodOptional<z.ZodString>;
+                    options: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    hideLabel: z.ZodOptional<z.ZodBoolean>;
+                    width: z.ZodOptional<z.ZodString>;
+                }, z.core.$strip>>;
+            }, z.core.$strip>>;
+        }, z.core.$strip>>;
+        extend: z.ZodOptional<z.ZodString>;
+    }, z.core.$catchall<z.ZodUnknown>>>>;
+    calculatedColumns: z.ZodDefault<z.ZodArray<z.ZodPipe<z.ZodObject<{
+        id: z.ZodString;
+        alias: z.ZodString;
+        label: z.ZodOptional<z.ZodString>;
+        sqlExpression: z.ZodString;
+        type: z.ZodOptional<z.ZodEnum<{
+            string: "string";
+            number: "number";
+            boolean: "boolean";
+        }>>;
+        position: z.ZodOptional<z.ZodNumber>;
+        hiddenInTable: z.ZodOptional<z.ZodBoolean>;
+        hiddenInView: z.ZodOptional<z.ZodBoolean>;
+        fieldInput: z.ZodOptional<z.ZodObject<{
+            type: z.ZodOptional<z.ZodString>;
+            customRender: z.ZodOptional<z.ZodString>;
+            format: z.ZodOptional<z.ZodString>;
+            resource: z.ZodOptional<z.ZodString>;
+            relationType: z.ZodOptional<z.ZodEnum<{
+                oneToOne: "oneToOne";
+                manyToOne: "manyToOne";
+                oneToMany: "oneToMany";
+                manyToMany: "manyToMany";
+            }>>;
+            foreignKey: z.ZodOptional<z.ZodString>;
+            relation: z.ZodOptional<z.ZodString>;
+            position: z.ZodOptional<z.ZodNumber>;
+            defaultValue: z.ZodOptional<z.ZodUnknown>;
+            options: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                colspan: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
+                sort: z.ZodOptional<z.ZodString>;
+                sortDir: z.ZodOptional<z.ZodEnum<{
+                    asc: "asc";
+                    desc: "desc";
+                }>>;
+                direction: z.ZodOptional<z.ZodString>;
+                displayKey: z.ZodOptional<z.ZodString>;
+                resource: z.ZodOptional<z.ZodString>;
+            }, z.core.$catchall<z.ZodUnknown>>, z.ZodUnknown]>>;
+            detail: z.ZodOptional<z.ZodObject<{
+                layout: z.ZodEnum<{
+                    row: "row";
+                    collapse: "collapse";
+                }>;
+                titleKey: z.ZodOptional<z.ZodString>;
+                controls: z.ZodArray<z.ZodObject<{
+                    property: z.ZodString;
+                    type: z.ZodOptional<z.ZodString>;
+                    options: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    hideLabel: z.ZodOptional<z.ZodBoolean>;
+                    width: z.ZodOptional<z.ZodString>;
+                }, z.core.$strip>>;
+            }, z.core.$strip>>;
+        }, z.core.$strip>>;
+    }, z.core.$strip>, z.ZodTransform<{
+        id: string;
+        alias: string;
+        sqlExpression: string;
+        label?: string | undefined;
+        type?: "string" | "number" | "boolean" | undefined;
+        position?: number | undefined;
+        hiddenInTable?: boolean | undefined;
+        hiddenInView?: boolean | undefined;
+        fieldInput?: {
+            type?: string | undefined;
+            customRender?: string | undefined;
+            format?: string | undefined;
+            resource?: string | undefined;
+            relationType?: "oneToOne" | "manyToOne" | "oneToMany" | "manyToMany" | undefined;
+            foreignKey?: string | undefined;
+            relation?: string | undefined;
+            position?: number | undefined;
+            defaultValue?: unknown;
+            options?: unknown;
+            detail?: {
+                layout: "row" | "collapse";
+                controls: {
+                    property: string;
+                    type?: string | undefined;
+                    options?: Record<string, unknown> | undefined;
+                    hideLabel?: boolean | undefined;
+                    width?: string | undefined;
+                }[];
+                titleKey?: string | undefined;
+            } | undefined;
+        } | undefined;
+    }, {
+        id: string;
+        alias: string;
+        sqlExpression: string;
+        label?: string | undefined;
+        type?: "string" | "number" | "boolean" | undefined;
+        position?: number | undefined;
+        hiddenInTable?: boolean | undefined;
+        hiddenInView?: boolean | undefined;
+        fieldInput?: {
+            type?: string | undefined;
+            customRender?: string | undefined;
+            format?: string | undefined;
+            resource?: string | undefined;
+            relationType?: "oneToOne" | "manyToOne" | "oneToMany" | "manyToMany" | undefined;
+            foreignKey?: string | undefined;
+            relation?: string | undefined;
+            position?: number | undefined;
+            defaultValue?: unknown;
+            options?: unknown;
+            detail?: {
+                layout: "row" | "collapse";
+                controls: {
+                    property: string;
+                    type?: string | undefined;
+                    options?: Record<string, unknown> | undefined;
+                    hideLabel?: boolean | undefined;
+                    width?: string | undefined;
+                }[];
+                titleKey?: string | undefined;
+            } | undefined;
+        } | undefined;
+    }>>>>;
+    modalSize: z.ZodDefault<z.ZodEnum<{
+        xs: "xs";
+        sm: "sm";
+        lg: "lg";
+        xl: "xl";
+    }>>;
+    include: z.ZodDefault<z.ZodArray<z.ZodType<any, unknown, z.core.$ZodTypeInternals<any, unknown>, ZodTypeDef>>>;
+    valueLabelColumns: z.ZodDefault<z.ZodArray<z.ZodObject<{
+        field: z.ZodString;
+        values: z.ZodDefault<z.ZodArray<z.ZodObject<{
+            value: z.ZodUnknown;
+            label: z.ZodString;
+        }, z.core.$strip>>>;
+        enumName: z.ZodOptional<z.ZodString>;
+    }, z.core.$strip>>>;
+    actions: z.ZodDefault<z.ZodArray<z.ZodUnion<readonly [z.ZodObject<{
+        id: z.ZodString;
+        label: z.ZodOptional<z.ZodString>;
+        icon: z.ZodOptional<z.ZodString>;
+        tooltip: z.ZodOptional<z.ZodString>;
+        condition: z.ZodOptional<z.ZodCustom<{
+            field: string;
+            op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+            value?: unknown;
+        }, {
+            field: string;
+            op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+            value?: unknown;
+        }>>;
+        type: z.ZodOptional<z.ZodLiteral<"procedure">>;
+        method: z.ZodOptional<z.ZodString>;
+        data: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        procedure: z.ZodCustom<(prisma: any, recordId: string | number) => Promise<any>, (prisma: any, recordId: string | number) => Promise<any>>;
+    }, z.core.$strip>, z.ZodObject<{
+        id: z.ZodString;
+        label: z.ZodOptional<z.ZodString>;
+        icon: z.ZodOptional<z.ZodString>;
+        tooltip: z.ZodOptional<z.ZodString>;
+        condition: z.ZodOptional<z.ZodCustom<{
+            field: string;
+            op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+            value?: unknown;
+        }, {
+            field: string;
+            op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+            value?: unknown;
+        }>>;
+        type: z.ZodLiteral<"link">;
+        href: z.ZodString;
+    }, z.core.$strip>]>>>;
+    tableActions: z.ZodDefault<z.ZodArray<z.ZodUnion<readonly [z.ZodObject<{
+        id: z.ZodString;
+        label: z.ZodOptional<z.ZodString>;
+        icon: z.ZodOptional<z.ZodString>;
+        tooltip: z.ZodOptional<z.ZodString>;
+        condition: z.ZodOptional<z.ZodCustom<{
+            field: string;
+            op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+            value?: unknown;
+        }, {
+            field: string;
+            op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+            value?: unknown;
+        }>>;
+        type: z.ZodOptional<z.ZodLiteral<"procedure">>;
+        method: z.ZodOptional<z.ZodString>;
+        data: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        procedure: z.ZodCustom<(prisma: any) => Promise<any>, (prisma: any) => Promise<any>>;
+    }, z.core.$strip>, z.ZodObject<{
+        id: z.ZodString;
+        label: z.ZodOptional<z.ZodString>;
+        icon: z.ZodOptional<z.ZodString>;
+        tooltip: z.ZodOptional<z.ZodString>;
+        condition: z.ZodOptional<z.ZodCustom<{
+            field: string;
+            op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+            value?: unknown;
+        }, {
+            field: string;
+            op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+            value?: unknown;
+        }>>;
+        type: z.ZodLiteral<"link">;
+        href: z.ZodString;
+    }, z.core.$strip>]>>>;
+    subResources: z.ZodDefault<z.ZodLazy<z.ZodArray<z.ZodObject<{
+        column: z.ZodString;
+        relation: z.ZodString;
+        childRoute: z.ZodString;
+        childKind: z.ZodDefault<z.ZodEnum<{
+            custom: "custom";
+            prisma: "prisma";
+        }>>;
+        childDir: z.ZodOptional<z.ZodString>;
+        repository: z.ZodOptional<z.ZodCustom<CustomRepository<any, any>, CustomRepository<any, any>>>;
+        childModel: z.ZodString;
+        foreignKey: z.ZodString;
+        name: z.ZodOptional<z.ZodString>;
+        title: z.ZodOptional<z.ZodString>;
+        idField: z.ZodOptional<z.ZodString>;
+        idType: z.ZodOptional<z.ZodEnum<{
+            string: "string";
+            number: "number";
+        }>>;
+        views: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodObject<{
+            json_schema: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            ui_schema: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            ui: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            data: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            columns: z.ZodArray<z.ZodObject<{
+                id: z.ZodString;
+                label: z.ZodOptional<z.ZodString>;
+                sortable: z.ZodOptional<z.ZodBoolean>;
+                searchable: z.ZodOptional<z.ZodBoolean>;
+                fieldInput: z.ZodOptional<z.ZodObject<{
+                    type: z.ZodOptional<z.ZodString>;
+                    customRender: z.ZodOptional<z.ZodString>;
+                    format: z.ZodOptional<z.ZodString>;
+                    resource: z.ZodOptional<z.ZodString>;
+                    relationType: z.ZodOptional<z.ZodEnum<{
+                        oneToOne: "oneToOne";
+                        manyToOne: "manyToOne";
+                        oneToMany: "oneToMany";
+                        manyToMany: "manyToMany";
+                    }>>;
+                    foreignKey: z.ZodOptional<z.ZodString>;
+                    relation: z.ZodOptional<z.ZodString>;
+                    position: z.ZodOptional<z.ZodNumber>;
+                    defaultValue: z.ZodOptional<z.ZodUnknown>;
+                    options: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                        colspan: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
+                        sort: z.ZodOptional<z.ZodString>;
+                        sortDir: z.ZodOptional<z.ZodEnum<{
+                            asc: "asc";
+                            desc: "desc";
+                        }>>;
+                        direction: z.ZodOptional<z.ZodString>;
+                        displayKey: z.ZodOptional<z.ZodString>;
+                        resource: z.ZodOptional<z.ZodString>;
+                    }, z.core.$catchall<z.ZodUnknown>>, z.ZodUnknown]>>;
+                    detail: z.ZodOptional<z.ZodObject<{
+                        layout: z.ZodEnum<{
+                            row: "row";
+                            collapse: "collapse";
+                        }>;
+                        titleKey: z.ZodOptional<z.ZodString>;
+                        controls: z.ZodArray<z.ZodObject<{
+                            property: z.ZodString;
+                            type: z.ZodOptional<z.ZodString>;
+                            options: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                            hideLabel: z.ZodOptional<z.ZodBoolean>;
+                            width: z.ZodOptional<z.ZodString>;
+                        }, z.core.$strip>>;
+                    }, z.core.$strip>>;
+                }, z.core.$strip>>;
+            }, z.core.$strip>>;
+            defaultSort: z.ZodOptional<z.ZodString>;
+        }, z.core.$strip>>>;
+        operations: z.ZodObject<{
+            findAll: z.ZodDefault<z.ZodUnion<readonly [z.ZodBoolean, z.ZodObject<{
+                security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                    public: z.ZodLiteral<true>;
+                }, z.core.$strip>, z.ZodObject<{
+                    guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+                }, z.core.$strip>]>>;
+            }, z.core.$strip>]>>;
+            findOne: z.ZodDefault<z.ZodUnion<readonly [z.ZodBoolean, z.ZodObject<{
+                security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                    public: z.ZodLiteral<true>;
+                }, z.core.$strip>, z.ZodObject<{
+                    guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+                }, z.core.$strip>]>>;
+            }, z.core.$strip>]>>;
+            create: z.ZodDefault<z.ZodUnion<readonly [z.ZodBoolean, z.ZodObject<{
+                security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                    public: z.ZodLiteral<true>;
+                }, z.core.$strip>, z.ZodObject<{
+                    guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+                }, z.core.$strip>]>>;
+            }, z.core.$strip>]>>;
+            update: z.ZodDefault<z.ZodUnion<readonly [z.ZodBoolean, z.ZodObject<{
+                security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                    public: z.ZodLiteral<true>;
+                }, z.core.$strip>, z.ZodObject<{
+                    guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+                }, z.core.$strip>]>>;
+            }, z.core.$strip>]>>;
+            patch: z.ZodDefault<z.ZodUnion<readonly [z.ZodBoolean, z.ZodObject<{
+                security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                    public: z.ZodLiteral<true>;
+                }, z.core.$strip>, z.ZodObject<{
+                    guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+                }, z.core.$strip>]>>;
+            }, z.core.$strip>]>>;
+            upsert: z.ZodDefault<z.ZodUnion<readonly [z.ZodBoolean, z.ZodObject<{
+                upsertOn: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+                security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                    public: z.ZodLiteral<true>;
+                }, z.core.$strip>, z.ZodObject<{
+                    guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+                }, z.core.$strip>]>>;
+            }, z.core.$strip>]>>;
+            delete: z.ZodDefault<z.ZodUnion<readonly [z.ZodBoolean, z.ZodObject<{
+                security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                    public: z.ZodLiteral<true>;
+                }, z.core.$strip>, z.ZodObject<{
+                    guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+                }, z.core.$strip>]>>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>;
+        actions: z.ZodOptional<z.ZodArray<z.ZodPipe<z.ZodUnion<readonly [z.ZodObject<{
+            id: z.ZodString;
+            label: z.ZodString;
+            icon: z.ZodOptional<z.ZodString>;
+            tooltip: z.ZodOptional<z.ZodString>;
+            condition: z.ZodOptional<z.ZodObject<{
+                field: z.ZodString;
+                op: z.ZodDefault<z.ZodEnum<{
+                    gt: "gt";
+                    lt: "lt";
+                    eq: "eq";
+                    neq: "neq";
+                    exists: "exists";
+                    notExists: "notExists";
+                    gte: "gte";
+                    lte: "lte";
+                }>>;
+                value: z.ZodOptional<z.ZodUnknown>;
+            }, z.core.$strip>>;
+            type: z.ZodDefault<z.ZodLiteral<"procedure">>;
+            procedure: z.ZodString;
+            method: z.ZodDefault<z.ZodOptional<z.ZodString>>;
+            data: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        }, z.core.$strip>, z.ZodObject<{
+            id: z.ZodString;
+            label: z.ZodString;
+            icon: z.ZodOptional<z.ZodString>;
+            tooltip: z.ZodOptional<z.ZodString>;
+            condition: z.ZodOptional<z.ZodObject<{
+                field: z.ZodString;
+                op: z.ZodDefault<z.ZodEnum<{
+                    gt: "gt";
+                    lt: "lt";
+                    eq: "eq";
+                    neq: "neq";
+                    exists: "exists";
+                    notExists: "notExists";
+                    gte: "gte";
+                    lte: "lte";
+                }>>;
+                value: z.ZodOptional<z.ZodUnknown>;
+            }, z.core.$strip>>;
+            type: z.ZodDefault<z.ZodLiteral<"link">>;
+            href: z.ZodString;
+            blank: z.ZodDefault<z.ZodOptional<z.ZodBoolean>>;
+        }, z.core.$strip>]>, z.ZodTransform<({
+            tooltip: string;
+        } & {
+            id: string;
+            label: string;
+            type: "procedure";
+            procedure: string;
+            method: string;
+            icon?: string | undefined;
+            tooltip?: string | undefined;
+            condition?: {
+                field: string;
+                op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+                value?: unknown;
+            } | undefined;
+            data?: Record<string, unknown> | undefined;
+        }) | ({
+            tooltip: string;
+        } & {
+            id: string;
+            label: string;
+            type: "link";
+            href: string;
+            blank: boolean;
+            icon?: string | undefined;
+            tooltip?: string | undefined;
+            condition?: {
+                field: string;
+                op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+                value?: unknown;
+            } | undefined;
+        }), {
+            id: string;
+            label: string;
+            type: "procedure";
+            procedure: string;
+            method: string;
+            icon?: string | undefined;
+            tooltip?: string | undefined;
+            condition?: {
+                field: string;
+                op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+                value?: unknown;
+            } | undefined;
+            data?: Record<string, unknown> | undefined;
+        } | {
+            id: string;
+            label: string;
+            type: "link";
+            href: string;
+            blank: boolean;
+            icon?: string | undefined;
+            tooltip?: string | undefined;
+            condition?: {
+                field: string;
+                op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+                value?: unknown;
+            } | undefined;
+        }>>>>;
+        modalSize: z.ZodOptional<z.ZodEnum<{
+            xs: "xs";
+            sm: "sm";
+            lg: "lg";
+            xl: "xl";
+        }>>;
+        include: z.ZodOptional<z.ZodArray<z.ZodType<any, unknown, z.core.$ZodTypeInternals<any, unknown>, ZodTypeDef>>>;
+        calculatedColumns: z.ZodOptional<z.ZodArray<z.ZodPipe<z.ZodObject<{
+            id: z.ZodString;
+            alias: z.ZodString;
+            label: z.ZodOptional<z.ZodString>;
+            sqlExpression: z.ZodString;
+            type: z.ZodOptional<z.ZodEnum<{
+                string: "string";
+                number: "number";
+                boolean: "boolean";
+            }>>;
+            position: z.ZodOptional<z.ZodNumber>;
+            hiddenInTable: z.ZodOptional<z.ZodBoolean>;
+            hiddenInView: z.ZodOptional<z.ZodBoolean>;
+            fieldInput: z.ZodOptional<z.ZodObject<{
+                type: z.ZodOptional<z.ZodString>;
+                customRender: z.ZodOptional<z.ZodString>;
+                format: z.ZodOptional<z.ZodString>;
+                resource: z.ZodOptional<z.ZodString>;
+                relationType: z.ZodOptional<z.ZodEnum<{
+                    oneToOne: "oneToOne";
+                    manyToOne: "manyToOne";
+                    oneToMany: "oneToMany";
+                    manyToMany: "manyToMany";
+                }>>;
+                foreignKey: z.ZodOptional<z.ZodString>;
+                relation: z.ZodOptional<z.ZodString>;
+                position: z.ZodOptional<z.ZodNumber>;
+                defaultValue: z.ZodOptional<z.ZodUnknown>;
+                options: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                    colspan: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
+                    sort: z.ZodOptional<z.ZodString>;
+                    sortDir: z.ZodOptional<z.ZodEnum<{
+                        asc: "asc";
+                        desc: "desc";
+                    }>>;
+                    direction: z.ZodOptional<z.ZodString>;
+                    displayKey: z.ZodOptional<z.ZodString>;
+                    resource: z.ZodOptional<z.ZodString>;
+                }, z.core.$catchall<z.ZodUnknown>>, z.ZodUnknown]>>;
+                detail: z.ZodOptional<z.ZodObject<{
+                    layout: z.ZodEnum<{
+                        row: "row";
+                        collapse: "collapse";
+                    }>;
+                    titleKey: z.ZodOptional<z.ZodString>;
+                    controls: z.ZodArray<z.ZodObject<{
+                        property: z.ZodString;
+                        type: z.ZodOptional<z.ZodString>;
+                        options: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                        hideLabel: z.ZodOptional<z.ZodBoolean>;
+                        width: z.ZodOptional<z.ZodString>;
+                    }, z.core.$strip>>;
+                }, z.core.$strip>>;
+            }, z.core.$strip>>;
+        }, z.core.$strip>, z.ZodTransform<{
+            id: string;
+            alias: string;
+            sqlExpression: string;
+            label?: string | undefined;
+            type?: "string" | "number" | "boolean" | undefined;
+            position?: number | undefined;
+            hiddenInTable?: boolean | undefined;
+            hiddenInView?: boolean | undefined;
+            fieldInput?: {
+                type?: string | undefined;
+                customRender?: string | undefined;
+                format?: string | undefined;
+                resource?: string | undefined;
+                relationType?: "oneToOne" | "manyToOne" | "oneToMany" | "manyToMany" | undefined;
+                foreignKey?: string | undefined;
+                relation?: string | undefined;
+                position?: number | undefined;
+                defaultValue?: unknown;
+                options?: unknown;
+                detail?: {
+                    layout: "row" | "collapse";
+                    controls: {
+                        property: string;
+                        type?: string | undefined;
+                        options?: Record<string, unknown> | undefined;
+                        hideLabel?: boolean | undefined;
+                        width?: string | undefined;
+                    }[];
+                    titleKey?: string | undefined;
+                } | undefined;
+            } | undefined;
+        }, {
+            id: string;
+            alias: string;
+            sqlExpression: string;
+            label?: string | undefined;
+            type?: "string" | "number" | "boolean" | undefined;
+            position?: number | undefined;
+            hiddenInTable?: boolean | undefined;
+            hiddenInView?: boolean | undefined;
+            fieldInput?: {
+                type?: string | undefined;
+                customRender?: string | undefined;
+                format?: string | undefined;
+                resource?: string | undefined;
+                relationType?: "oneToOne" | "manyToOne" | "oneToMany" | "manyToMany" | undefined;
+                foreignKey?: string | undefined;
+                relation?: string | undefined;
+                position?: number | undefined;
+                defaultValue?: unknown;
+                options?: unknown;
+                detail?: {
+                    layout: "row" | "collapse";
+                    controls: {
+                        property: string;
+                        type?: string | undefined;
+                        options?: Record<string, unknown> | undefined;
+                        hideLabel?: boolean | undefined;
+                        width?: string | undefined;
+                    }[];
+                    titleKey?: string | undefined;
+                } | undefined;
+            } | undefined;
+        }>>>>;
+        includeInFindOne: z.ZodOptional<z.ZodBoolean>;
+        hiddenInTable: z.ZodOptional<z.ZodBoolean>;
+        findOneOrderBy: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        hooks: z.ZodOptional<z.ZodObject<{
+            beforeWrite: z.ZodOptional<z.ZodCustom<(data: any, ctx: WriteHookContext<any>) => Promise<any> | any, (data: any, ctx: WriteHookContext<any>) => Promise<any> | any>>;
+            afterWrite: z.ZodOptional<z.ZodCustom<(result: any, ctx: WriteHookContext<any>) => Promise<any> | any, (result: any, ctx: WriteHookContext<any>) => Promise<any> | any>>;
+            afterRead: z.ZodOptional<z.ZodCustom<(row: any, ctx: ReadHookContext<any>) => Promise<any> | any, (row: any, ctx: ReadHookContext<any>) => Promise<any> | any>>;
+        }, z.core.$strip>>;
+        valueLabelColumns: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            field: z.ZodString;
+            values: z.ZodDefault<z.ZodArray<z.ZodObject<{
+                value: z.ZodUnknown;
+                label: z.ZodString;
+            }, z.core.$strip>>>;
+            enumName: z.ZodOptional<z.ZodString>;
+        }, z.core.$strip>>>;
+        relationType: z.ZodOptional<z.ZodEnum<{
+            manyToOne: "manyToOne";
+            oneToMany: "oneToMany";
+        }>>;
+    }, z.core.$strip>>>>;
+    lookup: z.ZodOptional<z.ZodObject<{
+        key: z.ZodString;
+        label: z.ZodOptional<z.ZodString>;
+    }, z.core.$strip>>;
+    views: z.ZodRecord<z.ZodString, z.ZodObject<{
+        json_schema: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        ui_schema: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        ui: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        data: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        columns: z.ZodArray<z.ZodObject<{
+            id: z.ZodString;
+            label: z.ZodOptional<z.ZodString>;
+            sortable: z.ZodOptional<z.ZodBoolean>;
+            searchable: z.ZodOptional<z.ZodBoolean>;
+            fieldInput: z.ZodOptional<z.ZodObject<{
+                type: z.ZodOptional<z.ZodString>;
+                customRender: z.ZodOptional<z.ZodString>;
+                format: z.ZodOptional<z.ZodString>;
+                resource: z.ZodOptional<z.ZodString>;
+                relationType: z.ZodOptional<z.ZodEnum<{
+                    oneToOne: "oneToOne";
+                    manyToOne: "manyToOne";
+                    oneToMany: "oneToMany";
+                    manyToMany: "manyToMany";
+                }>>;
+                foreignKey: z.ZodOptional<z.ZodString>;
+                relation: z.ZodOptional<z.ZodString>;
+                position: z.ZodOptional<z.ZodNumber>;
+                defaultValue: z.ZodOptional<z.ZodUnknown>;
+                options: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                    colspan: z.ZodDefault<z.ZodOptional<z.ZodNumber>>;
+                    sort: z.ZodOptional<z.ZodString>;
+                    sortDir: z.ZodOptional<z.ZodEnum<{
+                        asc: "asc";
+                        desc: "desc";
+                    }>>;
+                    direction: z.ZodOptional<z.ZodString>;
+                    displayKey: z.ZodOptional<z.ZodString>;
+                    resource: z.ZodOptional<z.ZodString>;
+                }, z.core.$catchall<z.ZodUnknown>>, z.ZodUnknown]>>;
+                detail: z.ZodOptional<z.ZodObject<{
+                    layout: z.ZodEnum<{
+                        row: "row";
+                        collapse: "collapse";
+                    }>;
+                    titleKey: z.ZodOptional<z.ZodString>;
+                    controls: z.ZodArray<z.ZodObject<{
+                        property: z.ZodString;
+                        type: z.ZodOptional<z.ZodString>;
+                        options: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                        hideLabel: z.ZodOptional<z.ZodBoolean>;
+                        width: z.ZodOptional<z.ZodString>;
+                    }, z.core.$strip>>;
+                }, z.core.$strip>>;
+            }, z.core.$strip>>;
+        }, z.core.$strip>>;
+        defaultSort: z.ZodOptional<z.ZodString>;
+    }, z.core.$strip>>;
+    definition: z.ZodUnion<readonly [z.ZodObject<{
+        findAll: z.ZodOptional<z.ZodUnion<readonly [z.ZodLiteral<true>, z.ZodObject<{
+            schema: z.ZodOptional<z.ZodUnion<readonly [z.ZodCustom<z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>, z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>>, z.ZodObject<{
+                type: z.ZodLiteral<"object">;
+                properties: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+                required: z.ZodOptional<z.ZodArray<z.ZodString>>;
+                additionalProperties: z.ZodOptional<z.ZodBoolean>;
+            }, z.core.$strip>]>>;
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>]>>;
+        findOne: z.ZodOptional<z.ZodUnion<readonly [z.ZodLiteral<true>, z.ZodObject<{
+            schema: z.ZodOptional<z.ZodUnion<readonly [z.ZodCustom<z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>, z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>>, z.ZodObject<{
+                type: z.ZodLiteral<"object">;
+                properties: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+                required: z.ZodOptional<z.ZodArray<z.ZodString>>;
+                additionalProperties: z.ZodOptional<z.ZodBoolean>;
+            }, z.core.$strip>]>>;
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>]>>;
+        create: z.ZodOptional<z.ZodUnion<readonly [z.ZodLiteral<true>, z.ZodObject<{
+            schema: z.ZodOptional<z.ZodUnion<readonly [z.ZodCustom<z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>, z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>>, z.ZodObject<{
+                type: z.ZodLiteral<"object">;
+                properties: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+                required: z.ZodOptional<z.ZodArray<z.ZodString>>;
+                additionalProperties: z.ZodOptional<z.ZodBoolean>;
+            }, z.core.$strip>]>>;
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>]>>;
+        update: z.ZodOptional<z.ZodUnion<readonly [z.ZodLiteral<true>, z.ZodObject<{
+            schema: z.ZodOptional<z.ZodUnion<readonly [z.ZodCustom<z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>, z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>>, z.ZodObject<{
+                type: z.ZodLiteral<"object">;
+                properties: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+                required: z.ZodOptional<z.ZodArray<z.ZodString>>;
+                additionalProperties: z.ZodOptional<z.ZodBoolean>;
+            }, z.core.$strip>]>>;
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>]>>;
+        patch: z.ZodOptional<z.ZodUnion<readonly [z.ZodLiteral<true>, z.ZodObject<{
+            schema: z.ZodOptional<z.ZodUnion<readonly [z.ZodCustom<z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>, z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>>, z.ZodObject<{
+                type: z.ZodLiteral<"object">;
+                properties: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+                required: z.ZodOptional<z.ZodArray<z.ZodString>>;
+                additionalProperties: z.ZodOptional<z.ZodBoolean>;
+            }, z.core.$strip>]>>;
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>]>>;
+        upsert: z.ZodOptional<z.ZodObject<{
+            schema: z.ZodOptional<z.ZodUnion<readonly [z.ZodCustom<z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>, z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>>, z.ZodObject<{
+                type: z.ZodLiteral<"object">;
+                properties: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+                required: z.ZodOptional<z.ZodArray<z.ZodString>>;
+                additionalProperties: z.ZodOptional<z.ZodBoolean>;
+            }, z.core.$strip>]>>;
+            upsertOn: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>>;
+        delete: z.ZodOptional<z.ZodUnion<readonly [z.ZodLiteral<true>, z.ZodObject<{
+            schema: z.ZodOptional<z.ZodUnion<readonly [z.ZodCustom<z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>, z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>>, z.ZodObject<{
+                type: z.ZodLiteral<"object">;
+                properties: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+                required: z.ZodOptional<z.ZodArray<z.ZodString>>;
+                additionalProperties: z.ZodOptional<z.ZodBoolean>;
+            }, z.core.$strip>]>>;
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>]>>;
+    }, z.core.$strip>, z.ZodFunction<z.ZodTuple<readonly [], null>, z.ZodObject<{
+        findAll: z.ZodOptional<z.ZodUnion<readonly [z.ZodLiteral<true>, z.ZodObject<{
+            schema: z.ZodOptional<z.ZodUnion<readonly [z.ZodCustom<z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>, z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>>, z.ZodObject<{
+                type: z.ZodLiteral<"object">;
+                properties: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+                required: z.ZodOptional<z.ZodArray<z.ZodString>>;
+                additionalProperties: z.ZodOptional<z.ZodBoolean>;
+            }, z.core.$strip>]>>;
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>]>>;
+        findOne: z.ZodOptional<z.ZodUnion<readonly [z.ZodLiteral<true>, z.ZodObject<{
+            schema: z.ZodOptional<z.ZodUnion<readonly [z.ZodCustom<z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>, z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>>, z.ZodObject<{
+                type: z.ZodLiteral<"object">;
+                properties: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+                required: z.ZodOptional<z.ZodArray<z.ZodString>>;
+                additionalProperties: z.ZodOptional<z.ZodBoolean>;
+            }, z.core.$strip>]>>;
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>]>>;
+        create: z.ZodOptional<z.ZodUnion<readonly [z.ZodLiteral<true>, z.ZodObject<{
+            schema: z.ZodOptional<z.ZodUnion<readonly [z.ZodCustom<z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>, z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>>, z.ZodObject<{
+                type: z.ZodLiteral<"object">;
+                properties: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+                required: z.ZodOptional<z.ZodArray<z.ZodString>>;
+                additionalProperties: z.ZodOptional<z.ZodBoolean>;
+            }, z.core.$strip>]>>;
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>]>>;
+        update: z.ZodOptional<z.ZodUnion<readonly [z.ZodLiteral<true>, z.ZodObject<{
+            schema: z.ZodOptional<z.ZodUnion<readonly [z.ZodCustom<z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>, z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>>, z.ZodObject<{
+                type: z.ZodLiteral<"object">;
+                properties: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+                required: z.ZodOptional<z.ZodArray<z.ZodString>>;
+                additionalProperties: z.ZodOptional<z.ZodBoolean>;
+            }, z.core.$strip>]>>;
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>]>>;
+        patch: z.ZodOptional<z.ZodUnion<readonly [z.ZodLiteral<true>, z.ZodObject<{
+            schema: z.ZodOptional<z.ZodUnion<readonly [z.ZodCustom<z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>, z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>>, z.ZodObject<{
+                type: z.ZodLiteral<"object">;
+                properties: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+                required: z.ZodOptional<z.ZodArray<z.ZodString>>;
+                additionalProperties: z.ZodOptional<z.ZodBoolean>;
+            }, z.core.$strip>]>>;
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>]>>;
+        upsert: z.ZodOptional<z.ZodObject<{
+            schema: z.ZodOptional<z.ZodUnion<readonly [z.ZodCustom<z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>, z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>>, z.ZodObject<{
+                type: z.ZodLiteral<"object">;
+                properties: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+                required: z.ZodOptional<z.ZodArray<z.ZodString>>;
+                additionalProperties: z.ZodOptional<z.ZodBoolean>;
+            }, z.core.$strip>]>>;
+            upsertOn: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>>;
+        delete: z.ZodOptional<z.ZodUnion<readonly [z.ZodLiteral<true>, z.ZodObject<{
+            schema: z.ZodOptional<z.ZodUnion<readonly [z.ZodCustom<z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>, z.ZodObject<Readonly<{
+                [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+            }>, z.core.$strip>>, z.ZodObject<{
+                type: z.ZodLiteral<"object">;
+                properties: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+                required: z.ZodOptional<z.ZodArray<z.ZodString>>;
+                additionalProperties: z.ZodOptional<z.ZodBoolean>;
+            }, z.core.$strip>]>>;
+            security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+                public: z.ZodLiteral<true>;
+            }, z.core.$strip>, z.ZodObject<{
+                guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+            }, z.core.$strip>]>>;
+        }, z.core.$strip>]>>;
+    }, z.core.$strip>>]>;
+    hooks: z.ZodOptional<z.ZodObject<{
+        beforeWrite: z.ZodOptional<z.ZodCustom<(data: any, ctx: WriteHookContext<any>) => Promise<any> | any, (data: any, ctx: WriteHookContext<any>) => Promise<any> | any>>;
+        afterWrite: z.ZodOptional<z.ZodCustom<(result: any, ctx: WriteHookContext<any>) => Promise<any> | any, (result: any, ctx: WriteHookContext<any>) => Promise<any> | any>>;
+        afterRead: z.ZodOptional<z.ZodCustom<(row: any, ctx: ReadHookContext<any>) => Promise<any> | any, (row: any, ctx: ReadHookContext<any>) => Promise<any> | any>>;
+    }, z.core.$strip>>;
+    repository: z.ZodOptional<z.ZodCustom<CustomRepository<any, any>, CustomRepository<any, any>>>;
+    idField: z.ZodString;
+    idType: z.ZodDefault<z.ZodEnum<{
+        string: "string";
+        number: "number";
+    }>>;
+}, z.core.$strip>;
+type Resource = z.infer<typeof ResourceSchema>;
+
+declare abstract class ResourceConfigLoader {
+    abstract loadAll(): Promise<Resource[]>;
+    abstract loadByRoute(route: string): Promise<Resource | undefined>;
+    /**
+     * On-disk directory containing this resource's `resource.json`, if the
+     * loader knows one (populated as a side effect of the last `loadAll()`).
+     * Returns `undefined` for loaders with no filesystem concept (e.g. a
+     * resource defined purely via `resource.ts`) or before any load has run.
+     */
+    getResourceDir(_route: string): string | undefined;
+}
+
+type CroutonAppConfig = {
+    baseUrl: string;
+    /** Named security guards and an optional module-level default. */
+    security?: {
+        /** Map of guard name → NestJS guard class (e.g. `{ admin: AdminGuard }`). */
+        guards: Record<string, Type<CanActivate>>;
+        /** Applied when neither the operation nor the resource declares security. */
+        default?: SecurityConfig;
+    };
+};
+declare class CroutonApiModule {
+    onModuleInit(): void;
+    private static forResources;
+    static forResourceDir(dirPath: string, dataSourcesPath: string, appConfig: CroutonAppConfig): Promise<DynamicModule>;
+    static forLoader(loader: ResourceConfigLoader, configs: Resource[], dataSources: DataSourceEntry[], appConfig: CroutonAppConfig): Promise<DynamicModule>;
+}
+
+/**
+ * Filesystem-driven resource loader.
+ *
+ * Two sources feed the resource registry:
+ *
+ *   1. `<dir>/<name>/resource.json` — declarative configuration
+ *      (route / operations / columns / …).
+ *
+ *   2. `<dir>/<name>/resource.ts` — imperative configuration as a
+ *      plain `ResourceConfig` default export.
+ *
+ * When both exist for the same name, the JSON wins.
+ *
+ * The JSON only carries operation toggles; actual Zod schemas come from
+ * a sibling `schema.ts` (default export). If the JSON lists `columns`,
+ * the loader narrows the Zod schema down to those column ids via
+ * `.pick()` before attaching it to every enabled operation.
+ *
+ * A `kind: "custom"` resource has no `schema.ts` — its json model is built
+ * from the column `type`s — and supplies data access in `repository.ts`.
+ *
+ * `resource.ts` / `hooks.ts` / `schema.ts` / `repository.ts` do **not** import
+ * from each other — this loader is the only place that stitches them together.
+ */
+
+declare const loadResourceConfigsFromDir: (dirPath: string, baseUrl?: string, enumsFile?: string, onResourceDir?: (route: string, dir: string) => void) => Promise<Resource[]>;
+
+declare class FileSystemResourceConfigLoader extends ResourceConfigLoader {
+    private readonly dirPath;
+    private readonly baseUrl?;
+    private readonly enumsFile?;
+    private dirsByRoute;
+    constructor(dirPath: string, baseUrl?: string | undefined, enumsFile?: string | undefined);
+    loadAll(): Promise<Resource[]>;
+    loadByRoute(route: string): Promise<Resource | undefined>;
+    getResourceDir(route: string): string | undefined;
+}
+
+declare const ResourceDefinitionSchema: z.ZodObject<{
+    findAll: z.ZodOptional<z.ZodUnion<readonly [z.ZodLiteral<true>, z.ZodObject<{
+        schema: z.ZodOptional<z.ZodUnion<readonly [z.ZodCustom<z.ZodObject<Readonly<{
+            [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+        }>, z.core.$strip>, z.ZodObject<Readonly<{
+            [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+        }>, z.core.$strip>>, z.ZodObject<{
+            type: z.ZodLiteral<"object">;
+            properties: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+            required: z.ZodOptional<z.ZodArray<z.ZodString>>;
+            additionalProperties: z.ZodOptional<z.ZodBoolean>;
+        }, z.core.$strip>]>>;
+        security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+            public: z.ZodLiteral<true>;
+        }, z.core.$strip>, z.ZodObject<{
+            guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+        }, z.core.$strip>]>>;
+    }, z.core.$strip>]>>;
+    findOne: z.ZodOptional<z.ZodUnion<readonly [z.ZodLiteral<true>, z.ZodObject<{
+        schema: z.ZodOptional<z.ZodUnion<readonly [z.ZodCustom<z.ZodObject<Readonly<{
+            [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+        }>, z.core.$strip>, z.ZodObject<Readonly<{
+            [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+        }>, z.core.$strip>>, z.ZodObject<{
+            type: z.ZodLiteral<"object">;
+            properties: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+            required: z.ZodOptional<z.ZodArray<z.ZodString>>;
+            additionalProperties: z.ZodOptional<z.ZodBoolean>;
+        }, z.core.$strip>]>>;
+        security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+            public: z.ZodLiteral<true>;
+        }, z.core.$strip>, z.ZodObject<{
+            guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+        }, z.core.$strip>]>>;
+    }, z.core.$strip>]>>;
+    create: z.ZodOptional<z.ZodUnion<readonly [z.ZodLiteral<true>, z.ZodObject<{
+        schema: z.ZodOptional<z.ZodUnion<readonly [z.ZodCustom<z.ZodObject<Readonly<{
+            [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+        }>, z.core.$strip>, z.ZodObject<Readonly<{
+            [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+        }>, z.core.$strip>>, z.ZodObject<{
+            type: z.ZodLiteral<"object">;
+            properties: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+            required: z.ZodOptional<z.ZodArray<z.ZodString>>;
+            additionalProperties: z.ZodOptional<z.ZodBoolean>;
+        }, z.core.$strip>]>>;
+        security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+            public: z.ZodLiteral<true>;
+        }, z.core.$strip>, z.ZodObject<{
+            guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+        }, z.core.$strip>]>>;
+    }, z.core.$strip>]>>;
+    update: z.ZodOptional<z.ZodUnion<readonly [z.ZodLiteral<true>, z.ZodObject<{
+        schema: z.ZodOptional<z.ZodUnion<readonly [z.ZodCustom<z.ZodObject<Readonly<{
+            [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+        }>, z.core.$strip>, z.ZodObject<Readonly<{
+            [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+        }>, z.core.$strip>>, z.ZodObject<{
+            type: z.ZodLiteral<"object">;
+            properties: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+            required: z.ZodOptional<z.ZodArray<z.ZodString>>;
+            additionalProperties: z.ZodOptional<z.ZodBoolean>;
+        }, z.core.$strip>]>>;
+        security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+            public: z.ZodLiteral<true>;
+        }, z.core.$strip>, z.ZodObject<{
+            guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+        }, z.core.$strip>]>>;
+    }, z.core.$strip>]>>;
+    patch: z.ZodOptional<z.ZodUnion<readonly [z.ZodLiteral<true>, z.ZodObject<{
+        schema: z.ZodOptional<z.ZodUnion<readonly [z.ZodCustom<z.ZodObject<Readonly<{
+            [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+        }>, z.core.$strip>, z.ZodObject<Readonly<{
+            [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+        }>, z.core.$strip>>, z.ZodObject<{
+            type: z.ZodLiteral<"object">;
+            properties: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+            required: z.ZodOptional<z.ZodArray<z.ZodString>>;
+            additionalProperties: z.ZodOptional<z.ZodBoolean>;
+        }, z.core.$strip>]>>;
+        security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+            public: z.ZodLiteral<true>;
+        }, z.core.$strip>, z.ZodObject<{
+            guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+        }, z.core.$strip>]>>;
+    }, z.core.$strip>]>>;
+    upsert: z.ZodOptional<z.ZodObject<{
+        schema: z.ZodOptional<z.ZodUnion<readonly [z.ZodCustom<z.ZodObject<Readonly<{
+            [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+        }>, z.core.$strip>, z.ZodObject<Readonly<{
+            [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+        }>, z.core.$strip>>, z.ZodObject<{
+            type: z.ZodLiteral<"object">;
+            properties: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+            required: z.ZodOptional<z.ZodArray<z.ZodString>>;
+            additionalProperties: z.ZodOptional<z.ZodBoolean>;
+        }, z.core.$strip>]>>;
+        upsertOn: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+        security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+            public: z.ZodLiteral<true>;
+        }, z.core.$strip>, z.ZodObject<{
+            guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+        }, z.core.$strip>]>>;
+    }, z.core.$strip>>;
+    delete: z.ZodOptional<z.ZodUnion<readonly [z.ZodLiteral<true>, z.ZodObject<{
+        schema: z.ZodOptional<z.ZodUnion<readonly [z.ZodCustom<z.ZodObject<Readonly<{
+            [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+        }>, z.core.$strip>, z.ZodObject<Readonly<{
+            [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+        }>, z.core.$strip>>, z.ZodObject<{
+            type: z.ZodLiteral<"object">;
+            properties: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+            required: z.ZodOptional<z.ZodArray<z.ZodString>>;
+            additionalProperties: z.ZodOptional<z.ZodBoolean>;
+        }, z.core.$strip>]>>;
+        security: z.ZodOptional<z.ZodUnion<readonly [z.ZodObject<{
+            public: z.ZodLiteral<true>;
+        }, z.core.$strip>, z.ZodObject<{
+            guard: z.ZodUnion<readonly [z.ZodString, z.ZodArray<z.ZodString>]>;
+        }, z.core.$strip>]>>;
+    }, z.core.$strip>]>>;
+}, z.core.$strip>;
+type ResourceDefinition = z.infer<typeof ResourceDefinitionSchema>;
+
+declare const SchemaInputSchema: z.ZodUnion<readonly [z.ZodCustom<ZodObject<Readonly<{
+    [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+}>, z.core.$strip>, ZodObject<Readonly<{
+    [k: string]: z.core.$ZodType<unknown, unknown, z.core.$ZodTypeInternals<unknown, unknown>>;
+}>, z.core.$strip>>, ZodObject<{
+    type: z.ZodLiteral<"object">;
+    properties: z.ZodRecord<z.ZodString, z.ZodUnknown>;
+    required: z.ZodOptional<z.ZodArray<z.ZodString>>;
+    additionalProperties: z.ZodOptional<z.ZodBoolean>;
+}, z.core.$strip>]>;
+type SchemaInput = z.infer<typeof SchemaInputSchema>;
+
+declare const ResourceRowProcedureActionSchema: z.ZodObject<{
+    id: z.ZodString;
+    label: z.ZodOptional<z.ZodString>;
+    icon: z.ZodOptional<z.ZodString>;
+    tooltip: z.ZodOptional<z.ZodString>;
+    condition: z.ZodOptional<z.ZodCustom<{
+        field: string;
+        op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+        value?: unknown;
+    }, {
+        field: string;
+        op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+        value?: unknown;
+    }>>;
+    type: z.ZodOptional<z.ZodLiteral<"procedure">>;
+    method: z.ZodOptional<z.ZodString>;
+    data: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    procedure: z.ZodCustom<(prisma: any, recordId: string | number) => Promise<any>, (prisma: any, recordId: string | number) => Promise<any>>;
+}, z.core.$strip>;
+declare const ResourceTableProcedureActionSchema: z.ZodObject<{
+    id: z.ZodString;
+    label: z.ZodOptional<z.ZodString>;
+    icon: z.ZodOptional<z.ZodString>;
+    tooltip: z.ZodOptional<z.ZodString>;
+    condition: z.ZodOptional<z.ZodCustom<{
+        field: string;
+        op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+        value?: unknown;
+    }, {
+        field: string;
+        op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+        value?: unknown;
+    }>>;
+    type: z.ZodOptional<z.ZodLiteral<"procedure">>;
+    method: z.ZodOptional<z.ZodString>;
+    data: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    procedure: z.ZodCustom<(prisma: any) => Promise<any>, (prisma: any) => Promise<any>>;
+}, z.core.$strip>;
+type ResourceRowProcedureAction = z.infer<typeof ResourceRowProcedureActionSchema>;
+type ResourceTableProcedureAction = z.infer<typeof ResourceTableProcedureActionSchema>;
+declare const ResourceRowActionSchema: z.ZodUnion<readonly [z.ZodObject<{
+    id: z.ZodString;
+    label: z.ZodOptional<z.ZodString>;
+    icon: z.ZodOptional<z.ZodString>;
+    tooltip: z.ZodOptional<z.ZodString>;
+    condition: z.ZodOptional<z.ZodCustom<{
+        field: string;
+        op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+        value?: unknown;
+    }, {
+        field: string;
+        op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+        value?: unknown;
+    }>>;
+    type: z.ZodOptional<z.ZodLiteral<"procedure">>;
+    method: z.ZodOptional<z.ZodString>;
+    data: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    procedure: z.ZodCustom<(prisma: any, recordId: string | number) => Promise<any>, (prisma: any, recordId: string | number) => Promise<any>>;
+}, z.core.$strip>, z.ZodObject<{
+    id: z.ZodString;
+    label: z.ZodOptional<z.ZodString>;
+    icon: z.ZodOptional<z.ZodString>;
+    tooltip: z.ZodOptional<z.ZodString>;
+    condition: z.ZodOptional<z.ZodCustom<{
+        field: string;
+        op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+        value?: unknown;
+    }, {
+        field: string;
+        op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+        value?: unknown;
+    }>>;
+    type: z.ZodLiteral<"link">;
+    href: z.ZodString;
+}, z.core.$strip>]>;
+type ResourceRowAction = z.infer<typeof ResourceRowActionSchema>;
+declare const ResourceTableActionSchema: z.ZodUnion<readonly [z.ZodObject<{
+    id: z.ZodString;
+    label: z.ZodOptional<z.ZodString>;
+    icon: z.ZodOptional<z.ZodString>;
+    tooltip: z.ZodOptional<z.ZodString>;
+    condition: z.ZodOptional<z.ZodCustom<{
+        field: string;
+        op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+        value?: unknown;
+    }, {
+        field: string;
+        op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+        value?: unknown;
+    }>>;
+    type: z.ZodOptional<z.ZodLiteral<"procedure">>;
+    method: z.ZodOptional<z.ZodString>;
+    data: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    procedure: z.ZodCustom<(prisma: any) => Promise<any>, (prisma: any) => Promise<any>>;
+}, z.core.$strip>, z.ZodObject<{
+    id: z.ZodString;
+    label: z.ZodOptional<z.ZodString>;
+    icon: z.ZodOptional<z.ZodString>;
+    tooltip: z.ZodOptional<z.ZodString>;
+    condition: z.ZodOptional<z.ZodCustom<{
+        field: string;
+        op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+        value?: unknown;
+    }, {
+        field: string;
+        op: "gt" | "lt" | "eq" | "neq" | "exists" | "notExists" | "gte" | "lte";
+        value?: unknown;
+    }>>;
+    type: z.ZodLiteral<"link">;
+    href: z.ZodString;
+}, z.core.$strip>]>;
+type ResourceTableAction = z.infer<typeof ResourceTableActionSchema>;
+declare const isRowProcedureAction: (action: ResourceRowAction) => action is ResourceRowProcedureAction;
+declare const isTableProcedureAction: (action: ResourceTableAction) => action is ResourceTableProcedureAction;
+
+type CrudOperation = 'findAll' | 'findOne' | 'create' | 'update' | 'patch' | 'upsert' | 'delete';
+declare const resolveDefinition: (config: Resource) => ResourceDefinition;
+declare const isOperationEnabled: (def: ResourceDefinition | JsonResourceOperations, op: CrudOperation) => boolean;
+declare const schemaFor: (def: ResourceDefinition, op: CrudOperation) => SchemaInput | undefined;
+declare const upsertOnFor: (def: ResourceDefinition) => string | string[] | undefined;
+/** Effective security for one operation: op-level → resource global → module default. */
+declare const securityFor: (config: Resource, def: ResourceDefinition, op: CrudOperation, moduleDefault?: SecurityConfig) => SecurityConfig | undefined;
+/** Same precedence for sub-resources: op-level → parent global → module default. */
+declare const securityForSub: (config: Resource, sub: SubResourceConfig, op: CrudOperation, moduleDefault?: SecurityConfig) => SecurityConfig | undefined;
+
+declare class SecurityGuardRegistry {
+    private readonly guards;
+    constructor(guards?: Record<string, Type<CanActivate>>);
+    resolve(name: string): Type<CanActivate>;
+    classes(): Type<CanActivate>[];
+}
+
+declare const CROUTON_SECURITY = "crouton:security";
+declare class CroutonSecurityGuard implements CanActivate {
+    private readonly reflector;
+    private readonly registry;
+    private readonly moduleRef;
+    constructor(reflector: Reflector, registry: SecurityGuardRegistry, moduleRef: ModuleRef);
+    canActivate(context: ExecutionContext): Promise<boolean>;
+}
+
+/**
+ * Parse a filter string of the form `field:value:operator`.
+ * The last segment is treated as the operator only when it matches a known value.
+ * Values that contain colons are handled correctly (everything between the first and last colon is the value).
+ * Defaults to `contains` when no recognised operator is present.
+ */
+declare const parseFilterString: (raw: string) => {
+    field: string;
+    value: string;
+    operator: OperatorType;
+} | null;
+/**
+ * Build a Prisma `where` clause from an array of filter strings.
+ * Returns `undefined` (no filter) when the array is empty or all entries are unparseable.
+ */
+declare const buildFilterWhere: (filter: string[] | undefined) => Record<string, unknown> | undefined;
+
+export { CROUTON_SECURITY, CroutonApiModule, CroutonSecurityGuard, type CrudOperation, type CustomListResult, type CustomOp, type CustomRepository, type CustomRepositoryContext, type DataSourceAdapter, type DataSourceEntry, DataSourceRegistry, FileSystemResourceConfigLoader, type HookTarget, InMemoryDataSourceAdapter, type ParentHookContext, PrismaDataSourceAdapter, type ReadHookContext, type ReadOp, ReadOpSchema, ResourceConfigLoader, ResourceConfigRegistry, type ResourceHooks, ResourceHooksSchema, SecurityGuardRegistry, type WriteHookContext, type WriteOp, WriteOpSchema, buildFilterWhere, decorateRow, decorateRows, isOperationEnabled, isRowProcedureAction, isTableProcedureAction, loadDataSourcesFromDir, loadResourceConfigsFromDir, loadResourceHooks, loadSubResourceHooks, parseFilterString, postWrite, prepareWrite, resolveDefinition, schemaFor, securityFor, securityForSub, upsertOnFor };

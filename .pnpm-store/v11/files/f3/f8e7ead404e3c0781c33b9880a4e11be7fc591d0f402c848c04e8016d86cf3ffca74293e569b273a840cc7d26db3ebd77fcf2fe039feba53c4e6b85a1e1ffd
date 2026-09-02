@@ -1,0 +1,23 @@
+import { Tag } from './tag/tag';
+import { DrawAnnotation } from './annotations/DrawAnnotation';
+import { DrawText } from './text/DrawText';
+import { BaseAnnotationDi } from '../../di/BaseAnnotationDi';
+import { BaseAnnotation, TextAnnotation } from '../../model';
+import { AnnotationModule } from '../../di/annotation.module';
+/**
+ * This is a dispatcher class for all actions made on visual drawing of the annotations
+ */
+export declare class Draw<ANNOTATION extends BaseAnnotation> extends BaseAnnotationDi<ANNOTATION> {
+    readonly annotation: DrawAnnotation;
+    readonly text: DrawText;
+    readonly tag: Tag;
+    constructor(mod: AnnotationModule);
+    initialDraw(): this;
+    drawTags(): this;
+    setText(text: string): this;
+    setAnnotations(annotations: ANNOTATION[]): this;
+    setAnnotation(annotation: TextAnnotation): void;
+    initDraw(text: string, annotations: ANNOTATION[]): this;
+    compute(): this;
+}
+//# sourceMappingURL=Draw.d.ts.map

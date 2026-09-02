@@ -1,0 +1,59 @@
+import { a as e, o as t, t as n } from "./ControlWrapper-8o-deDw7.js";
+import { Fragment as r, createBlock as i, createElementBlock as a, createElementVNode as o, createVNode as s, defineComponent as c, guardReactiveProps as l, mergeModels as u, normalizeClass as d, normalizeProps as f, onBeforeUnmount as p, openBlock as m, renderList as h, unref as g, useModel as _, withCtx as v } from "vue";
+import y from "@tiptap/starter-kit";
+import { EditorContent as b, useEditor as x } from "@tiptap/vue-3";
+import { Markdown as S } from "tiptap-markdown";
+//#region src/form/text/Markdown.vue?vue&type=script&setup=true&lang.ts
+var C = ["aria-label"], w = { class: "flex items-center gap-1 px-3 py-2 border-b border-base-300 bg-base-200" }, T = ["title", "onClick"], E = ["innerHTML"], D = { class: "card-body p-3" }, O = /* @__PURE__ */ c({
+	__name: "Markdown",
+	props: /*@__PURE__*/ u(e, {
+		modelValue: {},
+		modelModifiers: {}
+	}),
+	emits: /*@__PURE__*/ u(t, ["update:modelValue"]),
+	setup(e, { emit: t }) {
+		let c = e, u = t, O = _(e, "modelValue"), k = x({
+			content: O.value ?? "",
+			extensions: [y.configure({
+				heading: !1,
+				blockquote: !1,
+				bulletList: !1,
+				orderedList: !1,
+				listItem: !1,
+				code: !1,
+				codeBlock: !1,
+				horizontalRule: !1,
+				hardBreak: !1
+			}), S.configure({
+				html: !1,
+				transformPastedText: !0
+			})],
+			onUpdate({ editor: e }) {
+				let t = e.storage.markdown.getMarkdown();
+				O.value = t, u("change", t);
+			}
+		});
+		return p(() => {
+			k.value?.destroy();
+		}), (e, t) => (m(), i(n, f(l(c)), {
+			default: v(() => [o("div", {
+				class: d([[e.minHeight], "card bg-base-100 border border-base-300 w-full"]),
+				"aria-label": e.id,
+				role: "textbox"
+			}, [o("div", w, [(m(!0), a(r, null, h(e.actions, (e) => (m(), a("button", {
+				key: e.name,
+				tabindex: "-1",
+				type: "button",
+				class: d(["btn btn-sm btn-ghost", { "btn-active": g(k)?.isActive(e.name) }]),
+				title: e.label,
+				onClick: (t) => e.action(g(k))
+			}, [o("span", { innerHTML: e.label }, null, 8, E)], 10, T))), 128))]), o("div", D, [s(g(b), {
+				editor: g(k),
+				class: "prose prose-sm max-w-none h-full"
+			}, null, 8, ["editor"])])], 10, C)]),
+			_: 1
+		}, 16));
+	}
+});
+//#endregion
+export { O as default };

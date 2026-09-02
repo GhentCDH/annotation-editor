@@ -1,0 +1,13 @@
+export declare const TextCellProperties: {
+    data: {
+        type: ObjectConstructor;
+        required: true;
+    };
+    column: {
+        type: ObjectConstructor;
+        required: true;
+    };
+    options: {
+        type: ObjectConstructor;
+    };
+};

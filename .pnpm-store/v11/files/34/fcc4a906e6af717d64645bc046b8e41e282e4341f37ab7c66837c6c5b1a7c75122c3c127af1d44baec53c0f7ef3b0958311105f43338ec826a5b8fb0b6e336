@@ -1,0 +1,1 @@
+import{t as e}from"../useRtl-D1MtsePv.js";export{e as useRtl};

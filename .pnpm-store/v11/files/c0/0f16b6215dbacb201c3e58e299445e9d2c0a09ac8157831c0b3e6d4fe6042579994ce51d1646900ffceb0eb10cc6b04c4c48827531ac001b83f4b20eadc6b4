@@ -1,0 +1,13 @@
+import { TextLine } from '../../../model';
+import { Limit } from '../TextAdapter';
+export type UpdateLineFn = (textLine: TextLine, start: number, end: number, diff: {
+    start: number;
+    end: number;
+}) => TextLine;
+export declare const getDiff: (line: TextLine, limit: Limit) => {
+    start: number;
+    end: number;
+};
+export declare const mapLineToLimit: (textLine: TextLine, limit: Limit, updateLine: UpdateLineFn) => TextLine | null;
+export declare const mapLinesToLimit: (textLines: TextLine[], limit: Limit, updateLine: UpdateLineFn) => TextLine[];
+//# sourceMappingURL=mapLineToLimit.d.ts.map

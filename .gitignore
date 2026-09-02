@@ -50,3 +50,6 @@ _tmp**
 
 .cache
 .temp
+
+# scratch/temp files
+_tmp_*

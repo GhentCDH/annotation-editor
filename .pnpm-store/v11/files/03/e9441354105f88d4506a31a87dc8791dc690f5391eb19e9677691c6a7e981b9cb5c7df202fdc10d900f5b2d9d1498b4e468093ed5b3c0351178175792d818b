@@ -1,0 +1,36 @@
+export declare const myStyles: {
+    readonly group: {
+        readonly root: "group";
+        readonly label: "text-primary text-lg font-bold";
+        readonly item: "group-item";
+    };
+    readonly verticalLayout: {
+        readonly root: "flex flex-col gap-x-2";
+        readonly item: "w-full";
+    };
+    readonly horizontalLayout: {
+        readonly root: "flex flex-row gap-x-2";
+        readonly item: "w-full";
+    };
+    readonly arrayList: {
+        readonly root: "fieldset";
+        readonly legend: "fieldset-legend text-xl capitalize";
+    };
+    readonly control: {
+        readonly root: "fieldset";
+        readonly wrapper: "fieldset";
+        readonly label: "fieldset-legend";
+        readonly error: "";
+        readonly input: "input";
+        readonly textarea: "textarea h-32";
+        readonly checkbox: "checkbox";
+        readonly select: "input pr-14";
+        readonly description: "form-control--description label text-xs text-gray-500";
+    };
+    readonly fixedArrayList: {
+        readonly root: "flex flex-row gap-x-2";
+        readonly item: "w-full";
+    };
+};
+export type MyStyles = typeof myStyles;
+export declare const mergeStyles: (overrides?: Partial<MyStyles>) => MyStyles;

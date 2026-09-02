@@ -1,0 +1,19 @@
+import { TextAnnotation } from '../../model';
+export type SnapperResult = {
+    start: number;
+    end: number;
+    modified: boolean;
+};
+export type SnapperAction = 'move-start' | 'move-end' | 'drag';
+export declare abstract class Snapper {
+    abstract setText(text: string, offsetStart: number): void;
+    abstract fixOffset(annotation: TextAnnotation): SnapperResult;
+}
+export declare class DefaultSnapper extends Snapper {
+    protected text: string;
+    protected offsetStart: number;
+    protected textLength: number;
+    setText(text: string, offsetStart: number): void;
+    fixOffset(annotation: TextAnnotation): SnapperResult;
+}
+//# sourceMappingURL=snapper.d.ts.map

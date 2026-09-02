@@ -1,0 +1,138 @@
+import { z } from 'zod';
+import { W3CAgent, W3CAnnotation, W3CBody, W3CCssStylesheet, W3CFragmentSelector as W3CFragmentSelectorSchema, W3CMotivation, W3CSpecificResource, W3CSvgSelector as W3CSvgSelectorSchema, W3CTarget, W3CTextPositionSelector as W3CTextPositionSelectorSchema, W3CTextQuoteSelector as W3CTextQuoteSelectorSchema, W3CTextualBody } from './annotation.schema';
+type TextQuoteSelector = z.infer<typeof W3CTextQuoteSelectorSchema>;
+type TextPositionSelector = z.infer<typeof W3CTextPositionSelectorSchema>;
+type FragmentSelector = z.infer<typeof W3CFragmentSelectorSchema>;
+type SvgSelector = z.infer<typeof W3CSvgSelectorSchema>;
+type BuildResult = {
+    success: true;
+    data: W3CAnnotation;
+} | {
+    success: false;
+    errors: z.ZodIssue[];
+};
+export declare class W3CAnnotationBuilder {
+    private state;
+    constructor(existing?: W3CAnnotation);
+    /** Return a deep copy of this builder */
+    clone(): W3CAnnotationBuilder;
+    setId(id: string): this;
+    setContext(ctx: 'http://www.w3.org/ns/anno.jsonld' | string[]): this;
+    /** Add a context entry, converting to array if needed (deduplicates) */
+    addContext(ctx: 'http://www.w3.org/ns/anno.jsonld' | string): this;
+    setMotivation(motivation: W3CMotivation | W3CMotivation[]): this;
+    addMotivation(motivation: W3CMotivation): this;
+    removeMotivation(motivation: W3CMotivation): this;
+    setTarget(target: W3CTarget | W3CTarget[]): this;
+    addTarget(target: W3CTarget): this;
+    /** Replace the target whose source / IRI matches `sourceUri` */
+    replaceTarget(sourceUri: string, target: W3CTarget): this;
+    removeTarget(sourceUri: string): this;
+    /**
+     * Upsert a TextQuoteSelector on the SpecificResource target matching
+     * `sourceUri` (or the first SpecificResource target if omitted).
+     */
+    updateTextQuoteSelector(selector: Omit<TextQuoteSelector, 'type'>, sourceUri?: string): this;
+    updateTextPositionSelector(selector: Omit<TextPositionSelector, 'type'>, sourceUri?: string): this;
+    updateFragmentSelector(selector: Omit<FragmentSelector, 'type'>, sourceUri?: string): this;
+    updateSvgSelector(selector: Omit<SvgSelector, 'type'>, sourceUri?: string): this;
+    removeTextQuoteSelector(sourceUri?: string): this;
+    removeTextPositionSelector(sourceUri?: string): this;
+    removeFragmentSelector(sourceUri?: string): this;
+    setBody(body: W3CBody | W3CBody[]): this;
+    addBody(body: W3CBody): this;
+    /** Add or replace a TextualBody with the given purpose */
+    updateTextualBody(value: string, purpose?: W3CMotivation, extras?: Partial<Omit<W3CTextualBody, 'type' | 'value' | 'purpose'>>): this;
+    /** Add or replace a body matching the given `type` */
+    updateBodyByType(type: string, body: W3CBody): this;
+    removeTextualBody(purpose?: W3CMotivation): this;
+    setCreator(creator: W3CAgent | W3CAgent[]): this;
+    setGenerator(generator: W3CAgent | W3CAgent[]): this;
+    setCreated(date: string | Date): this;
+    setModified(date: string | Date): this;
+    /** Stamp `modified` with the current timestamp */
+    touch(): this;
+    setStylesheet(stylesheet: W3CCssStylesheet | string): this;
+    /**
+     * Merge a partial W3C annotation into the current state.
+     *
+     * - Scalar fields (`id`, `created`, `modified`, ...) are overwritten by the incoming value.
+     * - Array-like fields (`target`, `body`, `creator`, ...) are concatenated.
+     * - String array fields (`motivation`, `rights`, `via`) are concatenated and deduplicated.
+     */
+    merge(partial: Partial<W3CAnnotation>): this;
+    /**
+     * Return all TextQuoteSelectors from the annotation,
+     * optionally scoped to a specific target source URI.
+     */
+    getTextQuoteSelector(sourceUri?: string): TextQuoteSelector[];
+    getTextPositionSelector(sourceUri?: string): TextPositionSelector[];
+    getFragmentSelector(sourceUri?: string): FragmentSelector[];
+    /**
+     * Return all bodies whose `type` matches the given type string.
+     * Handles both single-string and array-of-strings `type` fields.
+     */
+    getBodiesByType(type: string): W3CBody[];
+    /**
+     * Return all bodies that have a matching `purpose`.
+     * When no purpose is provided, returns all bodies that have any purpose set.
+     */
+    getBodiesByPurpose(purpose?: W3CMotivation): W3CBody[];
+    /**
+     * Return all SpecificResource targets, optionally filtered by source URI.
+     */
+    getSpecificResourceTargets(sourceUri?: string): W3CSpecificResource[];
+    /**
+     * Return the source URI of the first SpecificResource target,
+     * or `undefined` if none exists.
+     */
+    getSourceUri(): string | undefined;
+    /** Return a snapshot of the current (potentially unvalidated) state */
+    peek(): Readonly<Partial<W3CAnnotation>>;
+    /**
+     * Validate and return the annotation.
+     * Throws a descriptive error if validation fails.
+     */
+    build(): W3CAnnotation;
+    /**
+     * Like build() but returns a result object instead of throwing.
+     */
+    safeBuild(): BuildResult;
+    /**
+     * Validate the current state without producing the final object.
+     * Returns an array of issues (empty = valid).
+     */
+    validate(): z.ZodIssue[];
+    private _findOrCreateSpecificResource;
+    private _upsertSelectorOnTarget;
+    private _removeSelectorFromTarget;
+}
+/**
+ * Create a new annotation builder, optionally seeded with an existing annotation.
+ *
+ * @example
+ * // Create from scratch
+ * const ann = w3cAnnotation()
+ *   .setId('https://example.org/anno/1')
+ *   .setMotivation('oa:commenting')
+ *   .addTarget({ type: 'SpecificResource', source: 'https://example.org/doc' })
+ *   .updateTextQuoteSelector({ exact: 'Hello world', prefix: 'Say ', suffix: '!' })
+ *   .updateTextualBody('Great quote!', 'oa:commenting')
+ *   .touch()
+ *   .build();
+ *
+ * @example
+ * // Update an existing annotation
+ * const updated = w3cAnnotation(existing)
+ *   .updateTextQuoteSelector({ exact: 'New selection' }, 'https://example.org/doc')
+ *   .updatePurpose('oa:tagging')
+ *   .touch()
+ *   .build();
+ *
+ * @example
+ * // Read without mutating
+ * const quotes = w3cAnnotation(existing)
+ *   .getTextQuoteSelector('https://example.org/doc');
+ */
+export declare const w3cAnnotation: (existing?: W3CAnnotation) => W3CAnnotationBuilder;
+export {};

@@ -1,0 +1,50 @@
+import { useCrouton } from '../composables/useCrouton';
+import { RequestData } from '../resource/resource.types';
+export declare abstract class PageService {
+    private onRequest;
+    protected requestData: import('vue').Ref<any, any>;
+    loading: import('vue').Ref<boolean, boolean>;
+    private abortController;
+    constructor(initialRequestParams: Partial<Request>, onRequest: (request: Request) => void);
+    reload(): Promise<any>;
+    pageData: import('vue').Ref<{
+        count: number;
+        pageSize: number;
+        page: number;
+        totalPages: number;
+    }, {
+        count: number;
+        pageSize: number;
+        page: number;
+        totalPages: number;
+    } | {
+        count: number;
+        pageSize: number;
+        page: number;
+        totalPages: number;
+    }>;
+    sort: import('vue').Ref<{
+        sortColumn: string;
+        sortDirection: string;
+    }, {
+        sortColumn: string;
+        sortDirection: string;
+    } | {
+        sortColumn: string;
+        sortDirection: string;
+    }>;
+    protected crouton: ReturnType<typeof useCrouton>;
+    protected abstract loadDataRequest(signal: AbortSignal): Promise<any>;
+    protected abstract afterLoadData(data: any): void;
+    private loadData;
+    protected updateRequest: (data: Partial<RequestData>) => void;
+    onSort: (id: string) => void;
+    updatePage: (page: number) => void;
+    updatePageSize: (size: number) => void;
+    getFormDef(formId: any): Promise<import('..').FormDef>;
+    apiCall(formDefId: string, method: string, signal: AbortSignal, data?: {
+        defaultUriParams?: Record<string, string>;
+        data?: any;
+    }): Promise<import('axios').AxiosResponse<any, any, {}>>;
+}
+//# sourceMappingURL=PageService.d.ts.map

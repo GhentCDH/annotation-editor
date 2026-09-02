@@ -1,0 +1,30 @@
+import { PropType } from 'vue';
+export type OptionValue = {
+    label: string;
+    value: string;
+    disabled?: boolean;
+};
+export declare const ListResultsEmits: string[];
+export declare const ListProperties: {
+    options: {
+        type: PropType<Array<OptionValue>>;
+        required: false;
+    };
+    isLoading: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    query: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    isActive: {
+        type: FunctionConstructor;
+        default: (item: any) => boolean;
+    };
+    /** When true the list is teleported to <body>; positioning is handled via inline style from the parent */
+    teleported: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+};

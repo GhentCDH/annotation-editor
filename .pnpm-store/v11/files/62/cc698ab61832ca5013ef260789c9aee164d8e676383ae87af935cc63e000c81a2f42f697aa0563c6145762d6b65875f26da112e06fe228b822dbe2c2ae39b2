@@ -1,0 +1,221 @@
+import { z } from 'zod/v4';
+export declare const annotationTargetSchema: z.ZodUnion<readonly [z.ZodLiteral<"gutter">, z.ZodLiteral<"text">]>;
+export type AnnotationTarget = z.infer<typeof annotationTargetSchema>;
+export declare const annotationIdSchema: z.ZodUnion<readonly [z.ZodString, z.ZodNumber]>;
+export declare const annotationSchema: z.ZodObject<{
+    id: z.ZodUnion<readonly [z.ZodString, z.ZodNumber]>;
+    start: z.ZodNumber;
+    end: z.ZodNumber;
+    label: z.ZodOptional<z.ZodString>;
+    textSelection: z.ZodOptional<z.ZodString>;
+}, z.core.$strip>;
+export type AnnotationId = z.infer<typeof annotationIdSchema>;
+/**
+ * Represents an annotation with various properties.
+ * @property {string} id - The unique identifier for the annotation.
+ * @property {number} start - The start position of the annotation.
+ * @property {number} end - The end position of the annotation.
+ * @property {string} [label] - An optional label for the annotation
+ * @property {AnnotationColor} [color] - An optional color for the annotation.
+ */
+export type Annotation = z.infer<typeof annotationSchema>;
+export declare const renderStyleSchema: z.ZodObject<{
+    renderStyle: z.ZodAny;
+}, z.core.$strip>;
+export declare const styleDetailSchema: z.ZodObject<{
+    backgroundColor: z.ZodString;
+    borderColor: z.ZodString;
+    borderRadius: z.ZodNumber;
+    borderWidth: z.ZodNumber;
+    gutterWidth: z.ZodNumber;
+    gutterGap: z.ZodNumber;
+    tagTextColor: z.ZodString;
+    tagBorderColor: z.ZodString;
+    tagBackgroundColor: z.ZodString;
+    tagBorderWidth: z.ZodNumber;
+}, z.core.$strip>;
+export declare const styleSchema: z.ZodObject<{
+    default: z.ZodObject<{
+        backgroundColor: z.ZodString;
+        borderColor: z.ZodString;
+        borderRadius: z.ZodNumber;
+        borderWidth: z.ZodNumber;
+        gutterWidth: z.ZodNumber;
+        gutterGap: z.ZodNumber;
+        tagTextColor: z.ZodString;
+        tagBorderColor: z.ZodString;
+        tagBackgroundColor: z.ZodString;
+        tagBorderWidth: z.ZodNumber;
+    }, z.core.$strip>;
+    edit: z.ZodObject<{
+        backgroundColor: z.ZodString;
+        borderColor: z.ZodString;
+        borderRadius: z.ZodNumber;
+        borderWidth: z.ZodNumber;
+        gutterWidth: z.ZodNumber;
+        gutterGap: z.ZodNumber;
+        tagTextColor: z.ZodString;
+        tagBorderColor: z.ZodString;
+        tagBackgroundColor: z.ZodString;
+        tagBorderWidth: z.ZodNumber;
+    }, z.core.$strip>;
+    active: z.ZodObject<{
+        backgroundColor: z.ZodString;
+        borderColor: z.ZodString;
+        borderRadius: z.ZodNumber;
+        borderWidth: z.ZodNumber;
+        gutterWidth: z.ZodNumber;
+        gutterGap: z.ZodNumber;
+        tagTextColor: z.ZodString;
+        tagBorderColor: z.ZodString;
+        tagBackgroundColor: z.ZodString;
+        tagBorderWidth: z.ZodNumber;
+    }, z.core.$strip>;
+    hover: z.ZodObject<{
+        backgroundColor: z.ZodString;
+        borderColor: z.ZodString;
+        borderRadius: z.ZodNumber;
+        borderWidth: z.ZodNumber;
+        gutterWidth: z.ZodNumber;
+        gutterGap: z.ZodNumber;
+        tagTextColor: z.ZodString;
+        tagBorderColor: z.ZodString;
+        tagBackgroundColor: z.ZodString;
+        tagBorderWidth: z.ZodNumber;
+    }, z.core.$strip>;
+}, z.core.$strip>;
+export type AnnotationStyle = z.infer<typeof styleSchema>;
+export declare const renderSchema: z.ZodObject<{
+    weight: z.ZodOptional<z.ZodNullable<z.ZodOptional<z.ZodNumber>>>;
+    isGutter: z.ZodBoolean;
+    render: z.ZodString;
+    lines: z.ZodDefault<z.ZodArray<z.ZodObject<{
+        start: z.ZodNumber;
+        end: z.ZodNumber;
+        text: z.ZodString;
+        gutter: z.ZodOptional<z.ZodString>;
+        lineNumber: z.ZodNumber;
+        uuid: z.ZodDefault<z.ZodString>;
+        maxLineWeight: z.ZodDefault<z.ZodNumber>;
+        flatText: z.ZodString;
+        html: z.ZodString;
+        element: z.ZodOptional<z.ZodAny>;
+    }, z.core.$strip>>>;
+}, z.core.$strip>;
+export type TextRender = z.infer<typeof renderSchema>;
+export declare const textAnnotationSchema: z.ZodObject<{
+    id: z.ZodUnion<readonly [z.ZodString, z.ZodNumber]>;
+    start: z.ZodNumber;
+    end: z.ZodNumber;
+    label: z.ZodOptional<z.ZodString>;
+    textSelection: z.ZodOptional<z.ZodString>;
+    _render: z.ZodObject<{
+        weight: z.ZodOptional<z.ZodNullable<z.ZodOptional<z.ZodNumber>>>;
+        isGutter: z.ZodBoolean;
+        render: z.ZodString;
+        lines: z.ZodDefault<z.ZodArray<z.ZodObject<{
+            start: z.ZodNumber;
+            end: z.ZodNumber;
+            text: z.ZodString;
+            gutter: z.ZodOptional<z.ZodString>;
+            lineNumber: z.ZodNumber;
+            uuid: z.ZodDefault<z.ZodString>;
+            maxLineWeight: z.ZodDefault<z.ZodNumber>;
+            flatText: z.ZodString;
+            html: z.ZodString;
+            element: z.ZodOptional<z.ZodAny>;
+        }, z.core.$strip>>>;
+    }, z.core.$strip>;
+    _style: z.ZodObject<{
+        default: z.ZodObject<{
+            backgroundColor: z.ZodString;
+            borderColor: z.ZodString;
+            borderRadius: z.ZodNumber;
+            borderWidth: z.ZodNumber;
+            gutterWidth: z.ZodNumber;
+            gutterGap: z.ZodNumber;
+            tagTextColor: z.ZodString;
+            tagBorderColor: z.ZodString;
+            tagBackgroundColor: z.ZodString;
+            tagBorderWidth: z.ZodNumber;
+        }, z.core.$strip>;
+        edit: z.ZodObject<{
+            backgroundColor: z.ZodString;
+            borderColor: z.ZodString;
+            borderRadius: z.ZodNumber;
+            borderWidth: z.ZodNumber;
+            gutterWidth: z.ZodNumber;
+            gutterGap: z.ZodNumber;
+            tagTextColor: z.ZodString;
+            tagBorderColor: z.ZodString;
+            tagBackgroundColor: z.ZodString;
+            tagBorderWidth: z.ZodNumber;
+        }, z.core.$strip>;
+        active: z.ZodObject<{
+            backgroundColor: z.ZodString;
+            borderColor: z.ZodString;
+            borderRadius: z.ZodNumber;
+            borderWidth: z.ZodNumber;
+            gutterWidth: z.ZodNumber;
+            gutterGap: z.ZodNumber;
+            tagTextColor: z.ZodString;
+            tagBorderColor: z.ZodString;
+            tagBackgroundColor: z.ZodString;
+            tagBorderWidth: z.ZodNumber;
+        }, z.core.$strip>;
+        hover: z.ZodObject<{
+            backgroundColor: z.ZodString;
+            borderColor: z.ZodString;
+            borderRadius: z.ZodNumber;
+            borderWidth: z.ZodNumber;
+            gutterWidth: z.ZodNumber;
+            gutterGap: z.ZodNumber;
+            tagTextColor: z.ZodString;
+            tagBorderColor: z.ZodString;
+            tagBackgroundColor: z.ZodString;
+            tagBorderWidth: z.ZodNumber;
+        }, z.core.$strip>;
+    }, z.core.$strip>;
+    _drawMetadata: z.ZodObject<{
+        draws: z.ZodDefault<z.ZodArray<z.ZodObject<{
+            uuid: z.ZodString;
+            annotationUuid: z.ZodUnion<readonly [z.ZodString, z.ZodNumber]>;
+            lineNumber: z.ZodNumber;
+            path: z.ZodObject<{
+                border: z.ZodOptional<z.ZodString>;
+                fill: z.ZodOptional<z.ZodString>;
+            }, z.core.$strip>;
+            draggable: z.ZodObject<{
+                start: z.ZodOptional<z.ZodObject<{
+                    height: z.ZodNumber;
+                    x: z.ZodNumber;
+                    y: z.ZodNumber;
+                }, z.core.$strip>>;
+                end: z.ZodOptional<z.ZodObject<{
+                    height: z.ZodNumber;
+                    x: z.ZodNumber;
+                    y: z.ZodNumber;
+                }, z.core.$strip>>;
+            }, z.core.$strip>;
+            height: z.ZodObject<{
+                height: z.ZodNumber;
+                x: z.ZodNumber;
+                y: z.ZodNumber;
+            }, z.core.$strip>;
+            weight: z.ZodNumber;
+        }, z.core.$strip>>>;
+        dimensions: z.ZodOptional<z.ZodObject<{
+            x: z.ZodNumber;
+            y1: z.ZodNumber;
+            y2: z.ZodNumber;
+        }, z.core.$strip>>;
+    }, z.core.$strip>;
+    _tagMetadata: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        label: z.ZodString;
+        padding: z.ZodNumber;
+        fontSize: z.ZodNumber;
+    }, z.core.$strip>>>;
+}, z.core.$strip>;
+export type TextAnnotation = z.infer<typeof textAnnotationSchema>;
+export type BaseAnnotation = Pick<Annotation, 'id'>;
+//# sourceMappingURL=annotation.model.d.ts.map

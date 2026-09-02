@@ -1,0 +1,17 @@
+import { FormDef } from './form-def.types';
+export declare class FormDefCache {
+    private cache;
+    getFormDefById(formId: string): Promise<FormDef>;
+    getFormDefByUri(uri: string): Promise<FormDef>;
+    /**
+     * Drops cached `FormDef` entries for `formId` across all languages so the
+     * next `getFormDef` call refetches from the backend.
+     */
+    invalidate(formId: string): void;
+    /**
+     * Drops every cached `FormDef`. Used after a multi-resource database sync
+     * or a language change where all cached entries must be refreshed.
+     */
+    invalidateAll(): void;
+}
+//# sourceMappingURL=form-def.d.ts.map

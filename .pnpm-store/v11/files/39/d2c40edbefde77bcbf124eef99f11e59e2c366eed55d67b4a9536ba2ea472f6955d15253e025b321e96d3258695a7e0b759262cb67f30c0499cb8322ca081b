@@ -1,0 +1,16 @@
+export declare const styles: {
+    text: string;
+    svg: string;
+    wrapper: string;
+    line: {
+        wrapper: string;
+        text: {
+            wrapper: string;
+        };
+        gutter: {
+            wrapper: string;
+        };
+    };
+};
+export type Style = typeof styles;
+//# sourceMappingURL=styles.const.d.ts.map

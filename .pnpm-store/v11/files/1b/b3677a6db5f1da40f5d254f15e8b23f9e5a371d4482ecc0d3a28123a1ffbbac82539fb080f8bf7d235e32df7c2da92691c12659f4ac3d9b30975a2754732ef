@@ -1,0 +1,2337 @@
+import { a as e, c as t, i as n, l as r, n as i, o as a, r as o, s, t as c } from "./ControlWrapper-8o-deDw7.js";
+import { Fragment as l, Teleport as u, Transition as d, camelize as f, computed as p, createBlock as m, createCommentVNode as h, createElementBlock as g, createElementVNode as _, createTextVNode as v, createVNode as y, defineAsyncComponent as b, defineComponent as x, getCurrentInstance as S, guardReactiveProps as C, h as w, mergeModels as T, mergeProps as E, nextTick as D, normalizeClass as O, normalizeProps as k, normalizeStyle as A, onMounted as ee, onUnmounted as te, openBlock as j, ref as M, renderList as N, renderSlot as P, resolveComponent as ne, resolveDynamicComponent as F, toDisplayString as I, toHandlerKey as L, toRef as re, unref as R, useAttrs as ie, useModel as z, useSlots as ae, vModelCheckbox as oe, vModelDynamic as se, vModelText as ce, watch as B, withCtx as V, withDirectives as H, withModifiers as U } from "vue";
+import { RouterLink as le } from "vue-router";
+//#region src/icons/icon-list.ts
+function W(e) {
+	return x({ render() {
+		return w("svg", {
+			xmlns: "http://www.w3.org/2000/svg",
+			fill: "none",
+			viewBox: "0 0 24 24",
+			"stroke-width": "1.5",
+			stroke: "currentColor",
+			"aria-hidden": "true"
+		}, e.map((e) => w("path", {
+			"stroke-linecap": "round",
+			"stroke-linejoin": "round",
+			d: e
+		})));
+	} });
+}
+var ue = W(["M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"]), de = W(["M3 4.5h14.25M3 9h9.75M3 13.5h9.75m4.5-4.5v12m0 0-3.75-3.75M17.25 21 21 17.25"]), fe = W(["M3 4.5h14.25M3 9h9.75M3 13.5h5.25m5.25-.75L17.25 9m0 0L21 12.75M17.25 9v12"]), pe = W(["m4.5 12.75 6 6 9-13.5"]), me = W(["m18.75 4.5-7.5 7.5 7.5 7.5m-6-15L5.25 12l7.5 7.5"]), he = W(["m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5"]), ge = W(["m19.5 8.25-7.5 7.5-7.5-7.5"]), _e = W(["M15.75 19.5 8.25 12l7.5-7.5"]), ve = W(["m8.25 4.5 7.5 7.5-7.5 7.5"]), ye = W(["m4.5 15.75 7.5-7.5 7.5 7.5"]), be = W(["M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"]), xe = W(["M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z", "M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"]), Se = W(["M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z"]), Ce = W(["m10.5 21 5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 0 1 6-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 0 1-3.827-5.802"]), we = W(["M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"]), Te = W(["m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13"]), Ee = W(["m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"]), De = W(["M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"]), Oe = W(["m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"]), ke = W(["M6 18 18 6M6 6l12 12"]), Ae = W(["M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"]), je = W(["M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"]), G = /* @__PURE__ */ function(e) {
+	return e.Edit = "Edit", e.Delete = "Delete", e.BarsArrowDown = "BarsArrowDown", e.BarsArrowUp = "BarsArrowUp", e.Funnel = "Funnel", e.Close = "Close", e.Plus = "Plus", e.PaperClip = "PaperClip", e.Hamburger = "Hamburger", e.ChevronRight = "ChevronRight", e.ChevronLeft = "ChevronLeft", e.ChevronDown = "ChevronDown", e.ChevronUp = "ChevronUp", e.DblChevronLeft = "DblChevronLeft", e.DblChevronRight = "DblChevronRight", e.Language = "Language", e.Check = "Check", e.View = "View", e.Text = "Text", e.Link = "Link", e.Filter = "Filter", e.Sync = "Sync", e;
+}({}), Me = {
+	Edit: Ee,
+	Delete: Oe,
+	BarsArrowDown: de,
+	BarsArrowUp: fe,
+	Funnel: Se,
+	Close: ke,
+	Plus: De,
+	PaperClip: Te,
+	Hamburger: ue,
+	ChevronRight: ve,
+	ChevronLeft: _e,
+	ChevronDown: ge,
+	ChevronUp: ye,
+	DblChevronLeft: me,
+	DblChevronRight: he,
+	Language: Ce,
+	Check: pe,
+	View: xe,
+	Text: be,
+	Link: we,
+	Filter: je,
+	Sync: Ae
+}, Ne = {
+	icon: { type: [
+		String,
+		Object,
+		Function
+	] },
+	size: { type: String }
+}, K = /* @__PURE__ */ x({
+	__name: "icon",
+	props: Ne,
+	setup(e) {
+		let t = e, n = p(() => t.icon ? typeof t.icon == "string" ? Me[t.icon] : t.icon : null);
+		return (e, t) => n.value ? (j(), m(F(n.value), {
+			key: 0,
+			"aria-hidden": "true",
+			class: O([{
+				"w-full h-full": !e.size,
+				"w-2 h-2": e.size === "xs",
+				"w-4 h-4": e.size === "sm",
+				"w-6 h-6": e.size === "lg",
+				"w-8 h-8": e.size === "xl"
+			}])
+		}, null, 8, ["class"])) : h("", !0);
+	}
+}), Pe = { class: "dropdown dropdown-end" }, Fe = {
+	tabindex: "0",
+	role: "menu",
+	class: "menu dropdown-content bg-white z-1 mt-4 p-2 shadow-sm"
+}, Ie = { class: "min-w-max flex-no-wrap text-black" }, q = /* @__PURE__ */ x({
+	__name: "sub-menu",
+	props: {
+		label: {},
+		items: {},
+		action: { type: Function },
+		disabled: { type: Boolean },
+		btnClass: {},
+		disableArrow: { type: Boolean }
+	},
+	setup(e) {
+		return (t, n) => (j(), g("div", Pe, [_("div", {
+			tabindex: "0",
+			role: "button",
+			"aria-haspopup": "menu",
+			class: O([e.btnClass, "btn btn-ghost text-right flex-nowrap flex"])
+		}, [_("span", null, I(e.label), 1), e.disableArrow ? h("", !0) : (j(), m(R(K), {
+			key: 0,
+			icon: R(G).ChevronDown,
+			size: "sm"
+		}, null, 8, ["icon"]))], 2), _("ul", Fe, [_("li", Ie, [(j(!0), g(l, null, N(e.items, (e) => (j(), m(Le, E({ key: e.label }, { ref_for: !0 }, e), null, 16))), 128))])])]));
+	}
+}), J = "btn btn-ghost text-left justify-between min-w-max font-normal", Le = /* @__PURE__ */ x({
+	__name: "menu-item",
+	props: {
+		label: {},
+		items: {},
+		action: {},
+		disabled: {
+			type: Boolean,
+			default: !1
+		}
+	},
+	setup(e) {
+		let t = e, n = p(() => !t.disabled && t.action && "routerLink" in t.action), r = p(() => !t.disabled && t.action), i = p(() => t.items?.length), a = p(() => {
+			let e = t.action;
+			return e && "routerLink" in e && "params" in e ? {
+				name: e.routerLink,
+				params: e.params
+			} : "";
+		}), o = () => {
+			t.action?.();
+		};
+		return (s, c) => {
+			let l = ne("RouterLink");
+			return i.value ? (j(), m(q, E({ key: 0 }, t, { "btn-class": J }), null, 16)) : n.value ? (j(), m(l, {
+				key: 1,
+				to: a.value,
+				class: O(J),
+				onClick: o
+			}, {
+				default: V(() => [v(I(e.label), 1)]),
+				_: 1
+			}, 8, ["to"])) : r.value ? (j(), g("button", {
+				key: 2,
+				class: O(J),
+				onClick: o
+			}, I(e.label), 1)) : (j(), g("div", {
+				key: 3,
+				class: O([J, { "btn-disabled": e.disabled }])
+			}, I(e.label), 3));
+		};
+	}
+}), Re = { class: "navbar bg-base-100 shadow-sm" }, ze = { class: "flex-1" }, Be = {
+	key: 0,
+	class: "breadcrumbs text-sm"
+}, Ve = { class: "flex grow justify-end px-2" }, He = { class: "flex items-stretch" }, Ue = /* @__PURE__ */ x({
+	__name: "menu",
+	props: {
+		menu: {},
+		breadcrumbs: {}
+	},
+	setup(e) {
+		return (t, n) => {
+			let r = ne("RouterLink");
+			return j(), g("nav", Re, [_("div", ze, [e.breadcrumbs ? (j(), g("div", Be, [_("ul", null, [(j(!0), g(l, null, N(e.breadcrumbs, (e) => (j(), g("li", { key: e.label }, [e.routerLink ? (j(), m(r, {
+				key: 0,
+				to: {
+					name: e.routerLink,
+					params: e.params
+				},
+				role: "navigation",
+				"aria-label": e.label
+			}, {
+				default: V(() => [v(I(e.label), 1)]),
+				_: 2
+			}, 1032, ["to", "aria-label"])) : (j(), g(l, { key: 1 }, [v(I(e.label), 1)], 64))]))), 128))])])) : h("", !0)]), _("div", Ve, [_("div", He, [(j(!0), g(l, null, N(e.menu, (e) => (j(), m(Le, E({ key: e.label }, { ref_for: !0 }, e), null, 16))), 128))])])]);
+		};
+	}
+}), We = /* @__PURE__ */ x({
+	__name: "dropdown",
+	props: { items: {} },
+	setup(e) {
+		let t = M(!0);
+		return (n, r) => (j(), m(q, {
+			items: e.items,
+			label: "test",
+			open: t.value,
+			"btn-class": "",
+			"disable-arrow": !0
+		}, null, 8, ["items", "open"]));
+	}
+}), Ge = {
+	modalTitle: {
+		type: String,
+		required: !0
+	},
+	buttonLabel: { type: String },
+	buttonSaveLabel: { type: String },
+	data: { default: void 0 },
+	open: {
+		type: Boolean,
+		default: !1
+	},
+	disableClose: {
+		type: Boolean,
+		default: !1
+	},
+	width: {
+		type: String,
+		default: "sm"
+	}
+}, Ke = ["closeModal"], qe = "a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex=\"-1\"])", Je = (e) => Array.from(e.querySelectorAll(qe)), Ye = ({ containerRef: e, isActive: t, onEscape: n, restoreFocus: r = !0 }) => {
+	let i = null, a = (t) => {
+		let r = e.value;
+		if (!r) return;
+		if (t.key === "Escape") {
+			n?.();
+			return;
+		}
+		if (t.key !== "Tab") return;
+		let i = Je(r);
+		if (i.length === 0) return;
+		let a = i[0], o = i[i.length - 1];
+		t.shiftKey ? document.activeElement === a && (t.preventDefault(), o.focus()) : document.activeElement === o && (t.preventDefault(), a.focus());
+	}, o = () => {
+		let t = e.value;
+		if (!t) return;
+		i = document.activeElement, document.addEventListener("keydown", a);
+		let n = Je(t);
+		n.length > 0 && n[0].focus();
+	}, s = () => {
+		document.removeEventListener("keydown", a), r && i && (i.focus(), i = null);
+	};
+	B(t, (e) => {
+		e ? o() : s();
+	}, { immediate: !0 }), te(() => {
+		s();
+	});
+}, Xe = {
+	xs: "max-w-xs w-[50VW]",
+	sm: "max-w-sm w-[50VW]",
+	lg: "max-w-2xl w-[80VW]",
+	xl: "max-w-[80VW] w-[80VW]"
+}, Ze = {
+	xs: "btn-xs",
+	sm: "btn-sm",
+	lg: "btn-sm",
+	xl: "btn"
+}, Qe = {
+	xs: "badge-xs text-xxs",
+	sm: "badge-sm text-xs",
+	lg: "badge-sm text-xs",
+	xl: "badge text-xs"
+}, $e = { class: "flex justify-end gap-2 pt-2 mt-2 border-t border-gray-300 shrink-0" }, et = /* @__PURE__ */ x({
+	__name: "modal",
+	props: Ge,
+	emits: Ke,
+	setup(e, { expose: t, emit: n }) {
+		let r = e, i = `modal_${crypto.randomUUID()}`, a = `${i}_title`, o = `${i}_content`, s = M(null), c = M(!1), l = n, u = () => {
+			s.value?.showModal(), c.value = !0;
+		}, d = () => {
+			s.value?.close(), c.value = !1, l("closeModal");
+		}, f = () => {
+			r.disableClose || d();
+		};
+		return Ye({
+			containerRef: s,
+			isActive: c,
+			onEscape: () => {
+				r.disableClose || d();
+			}
+		}), t({
+			closeModal: d,
+			openModal: u
+		}), B(() => r.open, () => {
+			r.open ? u() : d();
+		}), ee(() => {
+			r.open && u();
+		}), (e, t) => (j(), g("dialog", {
+			ref_key: "dialogRef",
+			ref: s,
+			class: "modal",
+			role: "dialog",
+			"aria-modal": "true",
+			"aria-labelledby": a,
+			"aria-describedby": o,
+			onCancel: U(f, ["prevent"])
+		}, [_("div", { class: O(["modal-box bg-white min-h-0 max-h-[90vh] flex flex-col overflow-hidden", R(Xe)[e.width]]) }, [
+			e.disableClose ? h("", !0) : (j(), g("button", {
+				key: 0,
+				type: "button",
+				class: "btn btn-sm btn-circle btn-ghost absolute right-2 top-2",
+				"aria-label": "Close",
+				onClick: d
+			}, " ✕ ")),
+			e.$slots.title ? P(e.$slots, "title", { key: 1 }) : (j(), g("h3", {
+				key: 2,
+				id: a,
+				class: "font-bold shrink-0"
+			}, I(e.modalTitle), 1)),
+			_("div", {
+				id: o,
+				class: "pt-4 flex-1 min-h-0 flex flex-col"
+			}, [P(e.$slots, "content")]),
+			_("div", $e, [P(e.$slots, "actions")])
+		], 2)], 544));
+	}
+}), Y = /* @__PURE__ */ function(e) {
+	return e.button = "button", e.submit = "submit", e.reset = "reset", e;
+}({}), tt = /* @__PURE__ */ function(e) {
+	return e.a = "a", e.button = "button", e;
+}({}), X = /* @__PURE__ */ function(e) {
+	return e.blank = "blank", e.primary = "primary", e.secondary = "secondary", e.error = "error", e.ghost = "ghost", e;
+}({}), nt = {
+	blank: "btn-ghost",
+	primary: "btn-primary",
+	secondary: "btn-soft btn-primary",
+	error: "btn-error",
+	ghost: "btn-ghost"
+}, rt = {
+	blank: "badge-ghost",
+	primary: "badge-primary",
+	secondary: "badge-soft badge-primary",
+	error: "badge-error",
+	ghost: "badge-ghost"
+}, it = {
+	href: { type: String },
+	disabled: {
+		type: Boolean,
+		default: !1
+	},
+	tooltip: { type: String },
+	as: {
+		type: String,
+		default: tt.button
+	},
+	icon: { type: [
+		String,
+		Object,
+		Function
+	] },
+	type: {
+		type: String,
+		default: Y.button
+	},
+	outline: {
+		type: Boolean,
+		default: !1
+	},
+	color: {
+		type: String,
+		default: X.primary
+	},
+	size: {
+		type: String,
+		default: "sm"
+	},
+	square: {
+		type: Boolean,
+		default: !1
+	},
+	noBorder: {
+		type: Boolean,
+		default: !1
+	}
+}, at = ["click"], ot = {
+	icon: { type: [
+		String,
+		Object,
+		Function
+	] },
+	type: {
+		type: String,
+		default: Y.button
+	},
+	color: {
+		type: String,
+		default: X.primary
+	},
+	disabled: {
+		type: Boolean,
+		default: !1
+	},
+	size: {
+		type: String,
+		default: "sm"
+	}
+}, st = ["click"], ct = {
+	key: 1,
+	class: "whitespace-nowrap"
+}, Z = /* @__PURE__ */ x({
+	__name: "btn",
+	props: it,
+	emits: at,
+	setup(e, { emit: t }) {
+		let n = e, r = t;
+		return (e, t) => (j(), m(F(n.as), {
+			class: O([
+				"btn p-1 flex justify-center flex-nowrap",
+				R(nt)[n.color],
+				R(Ze)[n.size],
+				{
+					"btn-outline": n.outline,
+					"btn-square": n.square,
+					tooltip: n.tooltip,
+					"border-0": n.noBorder
+				}
+			]),
+			href: n.href,
+			type: n.type,
+			disabled: n.disabled,
+			"data-tip": n.tooltip,
+			onClick: t[0] ||= (e) => r("click")
+		}, {
+			default: V(() => [n.icon ? (j(), m(R(K), {
+				key: 0,
+				icon: n.icon
+			}, null, 8, ["icon"])) : h("", !0), e.$slots.default ? (j(), g("span", ct, [P(e.$slots, "default")])) : h("", !0)]),
+			_: 3
+		}, 8, [
+			"class",
+			"href",
+			"type",
+			"disabled",
+			"data-tip"
+		]));
+	}
+}), lt = ["type", "disabled"], ut = /* @__PURE__ */ x({
+	__name: "btn-badge",
+	props: ot,
+	emits: st,
+	setup(e, { emit: t }) {
+		let n = e, r = t;
+		return (e, t) => (j(), g("button", {
+			class: O([
+				"badge gap-1",
+				R(Qe)[n.size],
+				R(rt)[n.color]
+			]),
+			type: n.type,
+			disabled: n.disabled,
+			onClick: t[0] ||= (e) => r("click")
+		}, [P(e.$slots, "default"), n.icon ? (j(), m(R(K), {
+			key: 0,
+			icon: n.icon,
+			size: n.size
+		}, null, 8, ["icon", "size"])) : h("", !0)], 10, lt));
+	}
+}), dt = /* @__PURE__ */ x({
+	__name: "confirmModal",
+	props: {
+		title: {},
+		message: {},
+		confirmLabel: { default: "Ok" },
+		cancelLabel: { default: "Cancel" }
+	},
+	emits: ["closeModal"],
+	setup(e, { emit: t }) {
+		let n = t, r = (e) => {
+			n("closeModal", { confirmed: e });
+		};
+		return (t, n) => (j(), m(et, {
+			"modal-title": e.title,
+			open: !0,
+			"disable-close": !0
+		}, {
+			content: V(() => [v(I(e.message), 1)]),
+			actions: V(() => [y(R(Z), {
+				color: R(X).secondary,
+				outline: !0,
+				"aria-label": e.cancelLabel,
+				onClick: n[0] ||= (e) => r(!1)
+			}, {
+				default: V(() => [v(I(e.cancelLabel), 1)]),
+				_: 1
+			}, 8, ["color", "aria-label"]), y(R(Z), {
+				"aria-label": e.confirmLabel,
+				onClick: n[1] ||= (e) => r(!0)
+			}, {
+				default: V(() => [v(I(e.confirmLabel), 1)]),
+				_: 1
+			}, 8, ["aria-label"])]),
+			_: 1
+		}, 8, ["modal-title"]));
+	}
+}), ft = class e {
+	constructor() {
+		this.showModal = M(!1), this.modals = [];
+	}
+	openModal(e) {
+		let t = e.props.onClose, n = crypto.randomUUID(), r = e;
+		e.props.onClose = (e) => {
+			t(e), this.closeModal(n);
+		}, r.id = n, this.modals = [...this.modals, r], this.showModal.value = Date.now();
+	}
+	closeModal(e) {
+		this.modals = this.modals.filter((t) => t.id !== e), this.showModal.value = Date.now();
+	}
+	static showConfirm(e) {
+		this.getInstance().openModal({
+			component: dt,
+			props: e
+		});
+	}
+	static openModal(e) {
+		this.getInstance().openModal(e);
+	}
+	static getInstance() {
+		return this.instance ||= new e(), this.instance;
+	}
+	static closeAll() {
+		this.instance.closeAll();
+	}
+	closeAll() {
+		this.modals = [], this.showModal.value = !1;
+	}
+}, pt = /* @__PURE__ */ x({
+	__name: "modalWrapper",
+	setup(e) {
+		let t = ft.getInstance(), n = p(() => t.showModal.value ? t.modals : []);
+		return (e, t) => (j(!0), g(l, null, N(n.value, (e) => (j(), m(F(e?.component), E({
+			key: e.id,
+			ref_for: !0
+		}, e?.props, {
+			open: !0,
+			onCloseModal: e?.props?.onClose
+		}), null, 16, ["onCloseModal"]))), 128));
+	}
+}), mt = /* @__PURE__ */ x({
+	__name: "notification-message",
+	props: {
+		message: {},
+		type: {}
+	},
+	setup(e) {
+		let t = {
+			success: "alert-success",
+			error: "alert-error",
+			warning: "alert-warning",
+			info: "alert-info"
+		};
+		return (n, r) => (j(), g("div", {
+			role: "alert",
+			class: O(`alert ${t[e.type]} `)
+		}, [_("span", null, I(e.message), 1)], 2));
+	}
+}), ht = 5e3, gt = class e {
+	constructor() {
+		this.notifications = M([]), this.addNotification = (e, t = "info") => {
+			let n = {
+				id: crypto.randomUUID(),
+				duration: ht,
+				message: e,
+				type: t
+			};
+			this.notifications.value.push(n), this.removeNotificationAfterDuration(n);
+		}, this.removeNotificationAfterDuration = (e) => {
+			setTimeout(() => {
+				this.removeNotification(e.id);
+			}, e.duration);
+		}, this.removeNotification = (e) => {
+			this.notifications.value = this.notifications.value.filter((t) => t.id !== e);
+		};
+	}
+	static getInstance() {
+		return this.instance ||= new e(), this.instance;
+	}
+	static info(e) {
+		this.getInstance().addNotification(e, "info");
+	}
+	static success(e) {
+		this.getInstance().addNotification(e, "success");
+	}
+	static warning(e) {
+		this.getInstance().addNotification(e, "warning");
+	}
+	static error(e) {
+		this.getInstance().addNotification(e, "error");
+	}
+	static removeNotification(e) {
+		this.getInstance().removeNotification(e);
+	}
+}, _t = { class: "toast toast-top toast-center z-[999]" }, vt = /* @__PURE__ */ x({
+	__name: "notifications",
+	setup(e) {
+		let t = gt.getInstance();
+		return (e, n) => (j(), g("div", _t, [(j(!0), g(l, null, N(R(t).notifications.value, (e) => (j(), m(mt, E({ key: e.id }, { ref_for: !0 }, e), null, 16))), 128))]));
+	}
+}), yt = { class: "flex h-screen flex-col" }, bt = { class: "shrink-0" }, xt = { class: "navbar bg-primary text-primary-content w-full z-100" }, St = { class: "navbar-start" }, Ct = { class: "navbar-center" }, wt = ["href"], Tt = { class: "navbar-end" }, Et = { class: "drawer-content overflow-y-auto mb-2 mr-2 shadow-md" }, Dt = { class: "drawer-side h-full shadow-md" }, Ot = { class: "flex-grow overflow-y-auto" }, kt = { class: "bg-base-200 p-4" }, At = /* @__PURE__ */ x({
+	__name: "shell.component",
+	props: {
+		title: {},
+		menu: {},
+		user: {},
+		version: {},
+		widthSidebar: { default: 300 }
+	},
+	emits: ["logout"],
+	setup(e, { emit: t }) {
+		let n = e, r = M(!1), i = () => {
+			r.value = !r.value;
+		}, a = t, o = p(() => n.user ? {
+			label: n.user.name,
+			items: [{
+				label: "Logout",
+				action: () => {
+					a("logout");
+				}
+			}]
+		} : null);
+		return (t, n) => (j(), g(l, null, [
+			y(vt),
+			y(R(pt)),
+			_("div", yt, [_("header", bt, [_("nav", xt, [
+				_("div", St, [e.menu?.length ? (j(), g("button", {
+					key: 0,
+					"aria-label": "open sidebar",
+					class: "btn btn-square btn-ghost p-1",
+					onClick: i
+				}, [y(R(K), { icon: R(G).Hamburger }, null, 8, ["icon"])])) : h("", !0)]),
+				_("div", Ct, [_("a", {
+					class: "btn btn-ghost text-primary-content text-lg color-white",
+					href: R("/")
+				}, I(e.title), 9, wt)]),
+				_("div", Tt, [o.value ? (j(), m(R(q), E({ key: 0 }, o.value, { "btn-class": "" }), null, 16)) : h("", !0)])
+			])]), _("div", { class: O(["drawer flex-1 overflow-hidden", { "drawer-open": r.value }]) }, [
+				H(_("input", {
+					id: "app-drawer",
+					"onUpdate:modelValue": n[0] ||= (e) => r.value = e,
+					type: "checkbox",
+					class: "drawer-toggle"
+				}, null, 512), [[oe, r.value]]),
+				_("main", Et, [P(t.$slots, "default")]),
+				_("div", Dt, [n[1] ||= _("label", {
+					for: "app-drawer",
+					"aria-label": "close sidebar",
+					class: "drawer-overlay"
+				}, null, -1), _("div", {
+					class: "menu bg-base-100 h-full flex flex-col justify-between",
+					style: A({ width: e.widthSidebar + "px" })
+				}, [_("ul", Ot, [(j(!0), g(l, null, N(e.menu, (e) => (j(), g("li", { key: e.label }, [y(R(le), { to: {
+					name: e.routerLink,
+					params: e.params
+				} }, {
+					default: V(() => [v(I(e.label), 1)]),
+					_: 2
+				}, 1032, ["to"])]))), 128))]), _("div", kt, " version: " + I(e.version), 1)], 4)])
+			], 2)])
+		], 64));
+	}
+}), Q = /* @__PURE__ */ x({
+	__name: "pagination-button.component",
+	props: {
+		currentPage: {
+			type: Number,
+			required: !0
+		},
+		page: {
+			type: Number,
+			required: !0
+		},
+		label: {
+			type: String,
+			required: !0
+		},
+		neverActive: {
+			type: Boolean,
+			default: !1
+		},
+		disabled: {
+			type: Boolean,
+			default: !1
+		}
+	},
+	emits: ["updatePage", "updatePageSize"],
+	setup(e, { emit: t }) {
+		let n = e, r = t, i = p(() => n.neverActive ? !1 : n.page === n.currentPage), a = p(() => n.neverActive ? X.blank : i.value ? X.primary : X.secondary), o = () => {
+			r("updatePage", n.page);
+		};
+		return (e, t) => (j(), m(R(Z), {
+			disabled: e.disabled,
+			square: !0,
+			size: "xs",
+			color: a.value,
+			onClick: t[0] ||= (e) => o()
+		}, {
+			default: V(() => [v(I(e.label), 1)]),
+			_: 1
+		}, 8, ["disabled", "color"]));
+	}
+}), jt = {
+	totalItems: {
+		type: Number,
+		default: 0
+	},
+	itemsPerPage: {
+		type: Number,
+		default: 1
+	},
+	currentPage: {
+		type: Number,
+		default: 1
+	},
+	pageSizeOptions: {
+		type: Array,
+		default: () => [
+			10,
+			20,
+			50,
+			100
+		]
+	}
+}, Mt = ["updatePage", "updatePageSize"], Nt = { class: "flex items-center justify-between gap-4" }, Pt = { class: "flex gap-1" }, Ft = { class: "flex items-center gap-4 text-xs text-base-content/60" }, It = { class: "flex items-center gap-2 whitespace-nowrap text-sm" }, Lt = ["value"], Rt = ["value"], zt = { class: "whitespace-nowrap" }, $ = 6, Bt = /* @__PURE__ */ x({
+	__name: "pagination.component",
+	props: jt,
+	emits: Mt,
+	setup(e, { emit: t }) {
+		let n = e, r = t, i = p(() => {
+			let e = Math.ceil(n.totalItems / n.itemsPerPage);
+			return e < 1 ? 1 : e;
+		}), a = $ / 2, o = p(() => {
+			if (i.value <= $) return {
+				min: 1,
+				max: i.value
+			};
+			let e = n.currentPage - a;
+			e <= 1 ? e = 1 : e + $ > i.value && (e = i.value - $);
+			let t = e + $;
+			return {
+				min: e,
+				max: t
+			};
+		}), s = (e) => ({
+			label: "...",
+			currentPage: e,
+			page: -10,
+			disabled: !0,
+			neverActive: !0
+		}), c = p(() => {
+			let e = i.value;
+			e < 1 && (e = 1);
+			let t = n.currentPage, r = [], { min: a, max: c } = o.value;
+			return Array.from({ length: e }, (n, i) => {
+				let o = i + 1;
+				o !== 1 && o !== e && (o > c || o < a) || (o === e && e > 1 && c < e && r.push(s(t)), r.push({
+					label: `${o}`,
+					totalPages: e,
+					currentPage: t,
+					page: o
+				}), o === 1 && e > 1 && a > 1 && r.push(s(t)));
+			}), r;
+		}), u = p(() => {
+			let e = (n.currentPage - 1) * n.itemsPerPage;
+			return Math.min(e + n.itemsPerPage, n.totalItems);
+		}), d = (e) => {
+			r("updatePage", e);
+		}, f = (e) => {
+			r("updatePageSize", Number(e.target.value));
+		};
+		return (e, t) => (j(), g("div", Nt, [_("div", Pt, [
+			y(Q, E(n, {
+				page: 1,
+				label: "<<",
+				"current-page": e.currentPage,
+				"never-active": !0,
+				disabled: e.currentPage === 1,
+				onUpdatePage: d
+			}), null, 16, ["current-page", "disabled"]),
+			y(Q, E(n, {
+				page: e.currentPage - 1,
+				label: "<",
+				"current-page": e.currentPage,
+				"never-active": !0,
+				disabled: e.currentPage === 1,
+				onUpdatePage: d
+			}), null, 16, [
+				"page",
+				"current-page",
+				"disabled"
+			]),
+			(j(!0), g(l, null, N(c.value, (e) => (j(), m(Q, E({
+				key: e.page,
+				ref_for: !0
+			}, e, { onUpdatePage: d }), null, 16))), 128)),
+			y(Q, E(n, {
+				page: e.currentPage + 1,
+				label: ">",
+				"current-page": e.currentPage,
+				"never-active": !0,
+				disabled: n.currentPage === i.value,
+				onUpdatePage: d
+			}), null, 16, [
+				"page",
+				"current-page",
+				"disabled"
+			]),
+			y(Q, E(n, {
+				page: i.value,
+				label: ">>",
+				"current-page": e.currentPage,
+				"never-active": !0,
+				disabled: n.currentPage === i.value,
+				onUpdatePage: d
+			}), null, 16, [
+				"page",
+				"current-page",
+				"disabled"
+			])
+		]), _("div", Ft, [_("label", It, [t[0] ||= v(" Records per page: ", -1), _("select", {
+			class: "select select-xs select-bordered",
+			value: n.itemsPerPage,
+			onChange: f
+		}, [(j(!0), g(l, null, N(e.pageSizeOptions, (e) => (j(), g("option", {
+			key: e,
+			value: e
+		}, I(e), 9, Rt))), 128))], 40, Lt)]), _("span", zt, " Showing " + I(u.value) + " of " + I(e.totalItems) + " records", 1)])]));
+	}
+}), Vt = {
+	column: {
+		type: Object,
+		required: !0
+	},
+	sortColumn: { type: String },
+	sortDirection: { type: String }
+}, Ht = ["sort"], Ut = ["disabled"], Wt = { class: "whitespace-nowrap" }, Gt = { class: "h-4 w-4 relative" }, Kt = /* @__PURE__ */ x({
+	__name: "sort.header",
+	props: Vt,
+	emits: Ht,
+	setup(e, { emit: t }) {
+		let n = e, r = t, i = p(() => n.column.options?.sortable !== !1), a = p(() => n.sortDirection === "asc" ? G.BarsArrowUp : G.BarsArrowDown), o = p(() => n.column.options?.sortId ?? n.column.id), s = () => {
+			i.value && r("sort", o.value);
+		};
+		return (e, t) => (j(), g("button", {
+			class: O(["flex items-center gap-2", i.value ? "cursor-pointer" : "cursor-default"]),
+			disabled: !i.value,
+			onClick: s
+		}, [_("span", Wt, I(e.column.label), 1), _("div", Gt, [i.value && e.sortColumn === o.value ? (j(), m(R(K), {
+			key: 0,
+			icon: a.value
+		}, null, 8, ["icon"])) : h("", !0)])], 10, Ut));
+	}
+}), qt = {
+	loading: {
+		type: Boolean,
+		default: !1
+	},
+	multiselect: {
+		type: Boolean,
+		default: !1
+	},
+	actions: { type: Array },
+	data: { type: Array },
+	displayColumns: {
+		type: Array,
+		required: !0
+	},
+	page: { type: Object },
+	sort: { type: Object }
+}, Jt = [
+	"updatePage",
+	"updatePageSize",
+	"sort",
+	"selectionChange"
+], Yt = { class: "border border-gray-200" }, Xt = { class: "overflow-x-auto" }, Zt = { class: "w-full text-sm" }, Qt = { class: "text-xs text-text-muted font-medium border-b border-gray-200 border-solid sticky top-0 rounded-md" }, $t = { class: "border-b border-gray-200" }, en = {
+	key: 0,
+	class: "px-3 py-1 w-10 text-left border-r border-gray-200"
+}, tn = ["checked", "indeterminate"], nn = { key: 0 }, rn = ["colspan"], an = { key: 1 }, on = ["colspan"], sn = ["ui-id"], cn = {
+	key: 0,
+	class: "py-1 px-3"
+}, ln = ["checked", "onChange"], un = {
+	class: "px-3 flex items-center gap-2 rounded-sm relative hover:border hover:bg-gray-50 hover:border-gray-200 border-transparent max-w-56",
+	style: {
+		"min-width": "100%",
+		"min-height": "38px"
+	}
+}, dn = { class: "whitespace-nowrap overflow-hidden overflow-ellipsis" }, fn = { class: "align-middle p-0 sticky right-0 bg-white hover:bg-gray-50 shadow-[-4px_0_6px_-2px_rgba(0,0,0,0.05)]" }, pn = { class: "px-3 py-1 items-center justify-end gap-1 flex whitespace-nowrap" }, mn = { key: 0 }, hn = /* @__PURE__ */ x({
+	inheritAttrs: !1,
+	__name: "table.component",
+	props: qt,
+	emits: Jt,
+	setup(e, { emit: t }) {
+		let n = e, r = M(/* @__PURE__ */ new Set());
+		B(() => n.data, () => {
+			r.value.clear();
+		});
+		let i = p(() => !!n.data?.length && n.data.every((e) => r.value.has(e.id))), a = p(() => !!n.data?.some((e) => r.value.has(e.id)) && !i.value), o = (e) => {
+			let t = new Set(r.value);
+			t.has(e.id) ? t.delete(e.id) : t.add(e.id), r.value = t, u("selectionChange", n.data?.filter((e) => t.has(e.id)) ?? []);
+		}, s = () => {
+			i.value ? r.value = /* @__PURE__ */ new Set() : r.value = new Set(n.data?.map((e) => e.id) ?? []), u("selectionChange", n.data?.filter((e) => r.value.has(e.id)) ?? []);
+		}, c = p(() => {
+			let e = n.actions ?? [];
+			return f.value && e.push({
+				tooltip: "View",
+				icon: G.View,
+				action: x
+			}), v.value && e.push({
+				tooltip: "Edit",
+				icon: G.Edit,
+				action: S
+			}), b.value && e.push({
+				tooltip: "Delete",
+				icon: G.Delete,
+				action: C
+			}), e;
+		}), u = t, d = ie(), f = p(() => "onView" in d), v = p(() => "onEdit" in d), b = p(() => "onDelete" in d), x = (e) => {
+			d.onView?.(e);
+		}, S = (e) => {
+			d.onEdit?.(e);
+		}, C = (e) => {
+			d.onDelete?.(e);
+		}, w = (e) => {
+			u("updatePage", e);
+		}, T = (e) => {
+			u("updatePageSize", e);
+		}, D = (e) => {
+			u("sort", e);
+		};
+		return (e, t) => (j(), g("div", Yt, [_("div", Xt, [_("table", Zt, [_("thead", Qt, [_("tr", $t, [
+			e.multiselect ? (j(), g("th", en, [_("input", {
+				type: "checkbox",
+				checked: i.value,
+				indeterminate: a.value,
+				class: "cursor-pointer",
+				onChange: s
+			}, null, 40, tn)])) : h("", !0),
+			(j(!0), g(l, null, N(e.displayColumns, (t) => (j(), g("th", {
+				key: t.scope,
+				class: "relative px-3 py-1 text-left font-semibold text-text-accent hover:bg-gray-50 select-none border-r border-gray-200",
+				style: A(t.width ? {
+					width: t.width,
+					maxWidth: t.width,
+					minWidth: t.width
+				} : { minWidth: "150px" })
+			}, [y(Kt, E({ column: t }, { ref_for: !0 }, e.sort, { onSort: D }), null, 16, ["column"])], 4))), 128)),
+			t[0] ||= _("th", { class: "sticky right-0 w-10 cursor-grab rounded-tr-md visible bg-white shadow-[-4px_0_6px_-2px_rgba(0,0,0,0.05)]" }, " \xA0 ", -1)
+		])]), _("tbody", null, [e.loading ? (j(), g("tr", nn, [_("td", {
+			colspan: e.displayColumns.length + 1 + +!!e.multiselect,
+			class: "text-center p-2"
+		}, [...t[1] ||= [_("span", { class: "loading loading-bars loading-xs" }, null, -1)]], 8, rn)])) : e.data?.length ? h("", !0) : (j(), g("tr", an, [_("td", {
+			colspan: e.displayColumns.length + 1 + +!!e.multiselect,
+			class: "text-center p-8 font-bold"
+		}, " No records found ", 8, on)])), (j(!0), g(l, null, N(e.data, (t) => (j(), g("tr", {
+			key: t.id,
+			"ui-id": `table_${t.id}`,
+			class: "hover:bg-gray-100 transition-none transition-colors border-b border-gray-200"
+		}, [
+			e.multiselect ? (j(), g("td", cn, [_("input", {
+				type: "checkbox",
+				checked: r.value.has(t.id),
+				class: "cursor-pointer",
+				onChange: (e) => o(t)
+			}, null, 40, ln)])) : h("", !0),
+			(j(!0), g(l, null, N(e.displayColumns, (e) => (j(), g("td", {
+				key: e.scope,
+				class: "py-1 px-3 text-sm overflow-hidden"
+			}, [_("div", un, [_("div", dn, [(j(), m(F(e.component), E({ ref_for: !0 }, e, {
+				data: t,
+				column: e
+			}), null, 16, ["data", "column"]))])])]))), 128)),
+			_("td", fn, [_("span", pn, [(j(!0), g(l, null, N(c.value, (e) => (j(), g(l, { key: e.label }, [!e.visible || e.visible(t) ? (j(), m(Z, {
+				key: 0,
+				"aria-label": e.tooltip ?? e.label,
+				icon: e.icon,
+				color: R(X).secondary,
+				size: "xs",
+				onClick: (n) => e.action(t)
+			}, {
+				default: V(() => [e.label ? (j(), g("span", mn, I(e.label), 1)) : h("", !0)]),
+				_: 2
+			}, 1032, [
+				"aria-label",
+				"icon",
+				"color",
+				"onClick"
+			])) : h("", !0)], 64))), 128))])])
+		], 8, sn))), 128))])])]), e.page ? (j(), m(Bt, {
+			key: 0,
+			class: "p-3",
+			"total-items": e.page.count,
+			"items-per-page": e.page.pageSize,
+			"current-page": e.page.page,
+			onUpdatePage: w,
+			onUpdatePageSize: T
+		}, null, 8, [
+			"total-items",
+			"items-per-page",
+			"current-page"
+		])) : h("", !0)]));
+	}
+}), gn = {
+	data: {
+		type: Object,
+		required: !0
+	},
+	column: {
+		type: Object,
+		required: !0
+	},
+	options: { type: Object }
+}, _n = { class: "truncate" }, vn = ["href"], yn = /* @__PURE__ */ x({
+	__name: "text.cell",
+	props: gn,
+	setup(e) {
+		let t = e, n = p(() => {
+			let e = t.column.options?.dataPath ?? t.column.id, n = t.data[e];
+			if (n == null) return null;
+			let r = t.column.options?.key;
+			return r ? n[r] ?? null : t.column.options?.format === "keyValue" ? n[t.column.options.key] : n;
+		}), r = p(() => typeof n.value == "string" && n.value.startsWith("http"));
+		return (e, t) => (j(), g("div", _n, [r.value ? (j(), g("a", {
+			key: 0,
+			href: n.value,
+			target: "_blank",
+			rel: "noopener noreferrer"
+		}, I(n.value), 9, vn)) : (j(), g(l, { key: 1 }, [v(I(n.value), 1)], 64))]));
+	}
+}), bn = { class: "flex justify-center" }, xn = /* @__PURE__ */ x({
+	__name: "boolean.cell",
+	props: gn,
+	setup(e) {
+		let t = e, n = p(() => {
+			let e = t.data[t.column.id];
+			return e ? t.column.options?.format === "keyValue" ? e[t.column.options.key] : e : null;
+		});
+		return (e, t) => (j(), g("div", bn, [n.value === !0 ? (j(), m(K, {
+			key: 0,
+			icon: R(G).Check,
+			size: "sm"
+		}, null, 8, ["icon"])) : h("", !0)]));
+	}
+}), Sn = (e, t) => {
+	let n = e.__vccOpts || e;
+	for (let [e, r] of t) n[e] = r;
+	return n;
+}, Cn = {}, wn = { class: "card bg-base-100 shadow-sm" }, Tn = { class: "card-body" }, En = {
+	key: 0,
+	class: "card-title"
+}, Dn = {
+	key: 1,
+	class: "card-actions justify-end"
+};
+function On(e, t) {
+	return j(), g("div", wn, [_("div", Tn, [
+		e.$slots.title ? (j(), g("h2", En, [P(e.$slots, "title")])) : h("", !0),
+		_("p", null, [P(e.$slots, "default"), P(e.$slots, "content")]),
+		e.$slots.actions ? (j(), g("div", Dn, [P(e.$slots, "actions")])) : h("", !0)
+	])]);
+}
+var kn = /*#__PURE__*/ Sn(Cn, [["render", On]]), An = (e, t) => {
+	if (!e) return null;
+	let n = (n) => {
+		e.contains(n.target) || t();
+	};
+	return document.addEventListener("click", n), n;
+}, jn = (e) => {
+	document.removeEventListener("click", e);
+}, Mn = {
+	beforeMount(e, t) {
+		e.clickOutsideEvent = function(n) {
+			e === n.target || e.contains(n.target) || t.value(n);
+		}, document.addEventListener("click", e.clickOutsideEvent);
+	},
+	unmounted(e) {
+		document.removeEventListener("click", e.clickOutsideEvent);
+	}
+};
+//#endregion
+//#region src/utils/hasCustomEventListener.ts
+function Nn(e) {
+	return e.replace(/[:\s_-]+(.)/g, (e, t) => t.toUpperCase()).replace(/^[A-Z]/, (e) => e.toLowerCase());
+}
+function Pn(e) {
+	let t = S();
+	if (!t) return !1;
+	let n = t.vnode.props;
+	if (!n) return !1;
+	let r = Nn(e), i = f(e);
+	return [
+		L(e),
+		L(i),
+		L(r),
+		`on:${e}`,
+		`on:${i}`,
+		`on:${r}`
+	].some((e) => !!n[e]);
+}
+//#endregion
+//#region src/form/text/MarkdownFallback.vue?vue&type=script&setup=true&lang.ts
+var Fn = [
+	"id",
+	"aria-label",
+	"value"
+], In = /* @__PURE__ */ x({
+	__name: "MarkdownFallback",
+	props: /*@__PURE__*/ T(e, {
+		modelValue: {},
+		modelModifiers: {}
+	}),
+	emits: /*@__PURE__*/ T(a, ["update:modelValue"]),
+	setup(e, { emit: t }) {
+		let n = e, r = t, i = z(e, "modelValue"), a = (e) => {
+			let t = e.target.value;
+			i.value = t, r("change", t);
+		};
+		return (e, t) => (j(), m(c, k(C(n)), {
+			default: V(() => [_("textarea", {
+				id: e.id,
+				"aria-label": e.id,
+				class: O([[e.minHeight, e.width], "textarea textarea-bordered w-full font-mono text-sm"]),
+				value: i.value ?? "",
+				onInput: a
+			}, null, 42, Fn)]),
+			_: 1
+		}, 16));
+	}
+}), Ln = ["select"], Rn = {
+	options: {
+		type: Array,
+		required: !1
+	},
+	isLoading: {
+		type: Boolean,
+		default: !1
+	},
+	query: {
+		type: String,
+		default: void 0
+	},
+	isActive: {
+		type: Function,
+		default: (e) => !1
+	},
+	teleported: {
+		type: Boolean,
+		default: !1
+	}
+}, zn = {
+	...s,
+	options: {
+		type: Array,
+		required: !0
+	},
+	labelKey: {
+		type: String,
+		default: "label"
+	},
+	valueKey: {
+		type: String,
+		default: "value"
+	},
+	enableCreate: {
+		type: Boolean,
+		default: !1
+	},
+	clearable: {
+		type: Boolean,
+		default: !1
+	},
+	value: {
+		type: null,
+		default: void 0
+	}
+}, Bn = [
+	"select",
+	"clear",
+	"close",
+	"create"
+], Vn = {
+	...Rn,
+	...zn,
+	isOpen: {
+		type: Boolean,
+		default: !1
+	},
+	isActive: {
+		type: Function,
+		default: (e) => !1
+	}
+}, Hn = {
+	key: 1,
+	tabindex: "-1",
+	class: "pointer-events-none"
+}, Un = [
+	"data-index",
+	"aria-selected",
+	"aria-disabled",
+	"onMousedown",
+	"onMousemove"
+], Wn = ["innerHTML"], Gn = {
+	key: 0,
+	xmlns: "http://www.w3.org/2000/svg",
+	class: "h-4 w-4 shrink-0 opacity-80 text-primary",
+	fill: "none",
+	viewBox: "0 0 24 24",
+	stroke: "currentColor",
+	"stroke-width": "2.5"
+};
+function Kn(e, t, n) {
+	if (e || !n) return t;
+	let r = n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+	return t.replace(RegExp(`(${r})`, "gi"), "<mark class=\"bg-warning/40 text-inherit rounded-sm px-0.5\">$1</mark>");
+}
+//#endregion
+//#region src/form/select/ListResults.vue
+var qn = /* @__PURE__ */ x({
+	__name: "ListResults",
+	props: Rn,
+	emits: Ln,
+	setup(e, { expose: t, emit: n }) {
+		let r = e, i = M(-1), a = M(), o = n;
+		B(() => r.options, () => {
+			i.value = -1;
+		});
+		function s() {
+			D(() => {
+				(a.value?.querySelector(`[data-index="${i.value}"]`))?.scrollIntoView({ block: "nearest" });
+			});
+		}
+		function c(e) {
+			let t = r.options?.length ?? 0;
+			if (t) switch (e.key) {
+				case "ArrowDown":
+					e.preventDefault(), i.value = (i.value + 1) % t, s();
+					break;
+				case "ArrowUp":
+					e.preventDefault(), i.value = i.value <= 0 ? t - 1 : i.value - 1, s();
+					break;
+				case "Enter":
+					if (e.preventDefault(), i.value >= 0 && i.value < t) {
+						let e = r.options[i.value];
+						e.disabled || u(e);
+					}
+					break;
+			}
+		}
+		function u(e) {
+			i.value = -1, o("select", e);
+		}
+		return t({ handleKeydown: c }), (e, t) => (j(), g("ul", {
+			ref_key: "listRef",
+			ref: a,
+			role: "listbox",
+			"data-select-listbox": "",
+			class: O(["bg-base-100 border border-base-300 rounded-box shadow-xl overflow-auto max-h-72 origin-top p-1", e.teleported ? "" : "absolute z-50 w-full mt-1"])
+		}, [e.isLoading ? (j(), g(l, { key: 0 }, N(2, (e) => _("li", {
+			key: `skel-${e}`,
+			class: "pointer-events-none px-3 py-2"
+		}, [...t[0] ||= [_("div", { class: "flex items-center gap-3" }, [_("div", { class: "skeleton h-3 w-3/4 rounded" })], -1)]])), 64)) : e.options?.length === 0 ? (j(), g("li", Hn, [...t[1] ||= [_("span", { class: "px-3 py-2 text-sm opacity-50 italic" }, " No results found ", -1)]])) : (j(!0), g(l, { key: 2 }, N(e.options, (n, r) => (j(), g("li", {
+			key: n.value,
+			"data-index": r,
+			role: "option",
+			"aria-selected": r === i.value,
+			"aria-disabled": n.disabled,
+			onMousedown: U((e) => !n.disabled && u(n), ["prevent"]),
+			onMousemove: (e) => !n.disabled && (i.value = r)
+		}, [_("a", { class: O(["text-sm flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm text-base-content no-underline transition-colors duration-100", {
+			"opacity-40 cursor-not-allowed": n.disabled,
+			"cursor-pointer": !n.disabled,
+			"bg-base-200": !n.disabled && r === i.value,
+			"bg-base-300": e.isActive(n),
+			"hover:bg-base-200": !n.disabled && r !== i.value
+		}]) }, [_("span", {
+			class: "whitespace-nowrap",
+			innerHTML: Kn(e.isActive(n), n.label, e.query)
+		}, null, 8, Wn), e.isActive(n) ? (j(), g("svg", Gn, [...t[2] ||= [_("path", {
+			"stroke-linecap": "round",
+			"stroke-linejoin": "round",
+			d: "M5 13l4 4L19 7"
+		}, null, -1)]])) : h("", !0)], 2)], 40, Un))), 128))], 2));
+	}
+}), Jn = ["aria-label"], Yn = { class: "flex items-center w-full" }, Xn = { class: "overflow-hidden w-full" }, Zn = { class: "absolute inset-y-0 right-0 flex items-center pr-3 gap-1 pointer-events-none" }, Qn = {
+	key: 0,
+	class: "loading loading-spinner loading-xs text-primary pointer-events-none"
+}, $n = /* @__PURE__ */ x({
+	__name: "SelectWrapper",
+	props: Vn,
+	emits: Bn,
+	setup(e, { emit: t }) {
+		let n = e, r = M(), i = M(), a = M(), o = t, s = M("body"), l = p(() => {
+			let e = i.value ?? r.value;
+			if (!e) return {};
+			let t = e.getBoundingClientRect();
+			return {
+				position: "fixed",
+				zIndex: 9999,
+				top: `${t.bottom + 4}px`,
+				left: `${t.left}px`,
+				width: `${t.width}px`
+			};
+		}), f = () => {
+			v(), o("clear");
+		}, v = () => {
+			o("close");
+		}, b = (e) => {
+			if (e.key === "Escape") {
+				v();
+				return;
+			}
+			a.value?.handleKeydown(e);
+		}, x = (e) => {
+			r.value && !r.value.contains(e.target) && v();
+		};
+		return ee(() => {
+			document.addEventListener("click", x);
+			let e = r.value?.closest("dialog");
+			e && (s.value = e);
+		}), te(() => {
+			document.removeEventListener("click", x);
+		}), (e, t) => (j(), g("div", {
+			ref_key: "selectWrapperRef",
+			ref: r,
+			"aria-label": e.id,
+			role: "select"
+		}, [y(c, k(C(n)), {
+			default: V(() => [_("div", Yn, [_("div", {
+				ref_key: "inputWrapperRef",
+				ref: i,
+				class: "relative w-full",
+				onKeydown: b
+			}, [
+				_("div", Xn, [P(e.$slots, "default")]),
+				_("div", Zn, [
+					e.isLoading && !e.label ? (j(), g("span", Qn)) : h("", !0),
+					e.query && !e.isLoading && e.clearable ? (j(), g("button", {
+						key: 1,
+						type: "button",
+						class: "pointer-events-auto btn btn-ghost btn-xs btn-circle opacity-60 hover:opacity-100",
+						tabindex: "-1",
+						"aria-label": "Clear",
+						onMousedown: U(f, ["prevent"])
+					}, [...t[2] ||= [_("svg", {
+						xmlns: "http://www.w3.org/2000/svg",
+						class: "h-3.5 w-3.5",
+						fill: "none",
+						viewBox: "0 0 24 24",
+						stroke: "currentColor",
+						"stroke-width": "2.5"
+					}, [_("path", {
+						"stroke-linecap": "round",
+						"stroke-linejoin": "round",
+						d: "M6 18L18 6M6 6l12 12"
+					})], -1)]], 32)) : h("", !0),
+					(j(), g("svg", {
+						xmlns: "http://www.w3.org/2000/svg",
+						class: O(["h-4 w-4 opacity-40 transition-transform duration-200", { "rotate-180": e.isOpen }]),
+						fill: "none",
+						viewBox: "0 0 24 24",
+						stroke: "currentColor",
+						"stroke-width": "2"
+					}, [...t[3] ||= [_("path", {
+						"stroke-linecap": "round",
+						"stroke-linejoin": "round",
+						d: "M19 9l-7 7-7-7"
+					}, null, -1)]], 2))
+				]),
+				(j(), m(u, { to: s.value }, [y(d, {
+					"enter-active-class": "transition-all duration-150 ease-out",
+					"enter-from-class": "opacity-0 -translate-y-1 scale-y-95",
+					"enter-to-class": "opacity-100 translate-y-0 scale-y-100",
+					"leave-active-class": "transition-all duration-100 ease-in",
+					"leave-from-class": "opacity-100 translate-y-0 scale-y-100",
+					"leave-to-class": "opacity-0 -translate-y-1 scale-y-95"
+				}, {
+					default: V(() => [e.isOpen ? (j(), m(qn, {
+						key: 0,
+						ref_key: "listResultsRef",
+						ref: a,
+						teleported: !0,
+						style: A(l.value),
+						query: void 0,
+						options: e.options,
+						"is-loading": e.isLoading,
+						"is-active": e.isActive,
+						onSelect: t[0] ||= (e) => o("select", e)
+					}, null, 8, [
+						"style",
+						"options",
+						"is-loading",
+						"is-active"
+					])) : h("", !0)]),
+					_: 1
+				})], 8, ["to"]))
+			], 544), e.enableCreate ? (j(), m(Z, {
+				key: 0,
+				icon: R(G).Plus,
+				color: R(X).blank,
+				size: "lg",
+				tooltip: "Create new",
+				"aria-label": "create",
+				onClick: t[1] ||= (e) => o("create")
+			}, null, 8, ["icon", "color"])) : h("", !0)])]),
+			_: 3
+		}, 16)], 8, Jn));
+	}
+}), er = (e, t) => {
+	if (e) return typeof e == "object" ? e[t.labelKey] : e;
+}, tr = (e, t) => {
+	if (e) return typeof e == "object" ? e[t.valueKey] : e;
+}, nr = (e) => {
+	let t = M([]), n = /* @__PURE__ */ new Map(), r = /* @__PURE__ */ new Map(), i = (i) => {
+		let a = [];
+		n.clear(), r.clear(), i?.forEach((t) => {
+			let i = {
+				value: tr(t, e),
+				label: er(t, e),
+				...t?.disabled !== void 0 && { disabled: !!t.disabled }
+			};
+			n.set(i.value, t), r.set(i.value, i), a.push(i);
+		}), t.value = a;
+	}, a = (e) => n.get(e.value);
+	return {
+		options: t,
+		setOptions: i,
+		getOriginal: a,
+		getLabels: (...t) => t.map((t) => t != null && typeof t != "object" ? r.get(String(t))?.label ?? String(t) : er(t, e)),
+		getValues: (...t) => t.map((t) => tr(t, e)),
+		getOption: (t) => r.get(tr(t, e)),
+		getOriginals: (...e) => e.map(a).filter(Boolean)
+	};
+}, rr = (e) => nr(e), ir = ["aria-label"], ar = /* @__PURE__ */ x({
+	__name: "SelectComponent",
+	props: /*@__PURE__*/ T(zn, {
+		modelValue: {},
+		modelModifiers: {}
+	}),
+	emits: /*@__PURE__*/ T([
+		"update:modelValue",
+		"change",
+		"clear",
+		"focus",
+		"blur"
+	], ["update:modelValue"]),
+	setup(e, { emit: n }) {
+		let r = M(!1), a = e, o = n, s = z(e, "modelValue"), c = rr(a), { options: l } = c;
+		B(() => a.options, () => {
+			c.setOptions(a.options);
+		}, { immediate: !0 });
+		let u = (e) => {
+			o("change", e);
+		}, d = p(() => s.value ?? a.value), f = p(() => d.value ? c.getLabels(d.value)[0] : ""), h = p(() => t(a.styles)), g = p(() => i(h.value.control.select, a)), v = (e) => {
+			let t = c.getOriginal(e);
+			s.value = t, r.value = !1, u(t);
+		}, y = () => {
+			r.value = !1, s.value = null, u(void 0);
+		}, b = (e) => c.getValues(d.value)?.[0] === e.value, x = () => {
+			r.value = !1;
+		};
+		return (e, t) => (j(), m($n, E(a, {
+			options: R(l),
+			disabled: !e.enabled,
+			"is-open": r.value,
+			query: f.value,
+			"is-active": b,
+			clearable: a.clearable,
+			onClose: x,
+			onSelect: v,
+			onClear: y
+		}), {
+			default: V(() => [_("button", {
+				type: "button",
+				class: O(["truncate block text-left", [g.value, e.width]]),
+				"aria-label": e.id,
+				role: "combobox",
+				onClick: t[0] ||= (e) => r.value = !0
+			}, I(f.value ?? "Select value"), 11, ir)]),
+			_: 1
+		}, 16, [
+			"options",
+			"disabled",
+			"is-open",
+			"query",
+			"clearable"
+		]));
+	}
+}), or = {
+	...zn,
+	...Rn,
+	modelValue: {
+		type: [String, Object],
+		default: ""
+	},
+	fetchOptions: {
+		type: Function,
+		default: null
+	},
+	debounceMs: {
+		type: Number,
+		default: 200
+	},
+	maxResults: {
+		type: Number,
+		default: 8
+	},
+	freeText: {
+		type: Boolean,
+		default: !1
+	}
+};
+//#endregion
+//#region src/form/select/composables/useSearch.ts
+function sr(e) {
+	let t = M([]), n = M(!1);
+	function r(n) {
+		if (!e.options) {
+			t.value = [];
+			return;
+		}
+		let r = n.toLowerCase();
+		t.value = (r ? e.options.filter((t) => er(t, e).toLowerCase().includes(r)) : e.options).slice(0, e.maxResults);
+	}
+	function i() {
+		t.value = [];
+	}
+	return {
+		results: t,
+		isLoading: n,
+		search: r,
+		clear: i
+	};
+}
+function cr(e) {
+	let t = M([]), n = M(!1), r = null, i = null;
+	async function a(r) {
+		i && i.abort(), i = new AbortController(), n.value = !0;
+		try {
+			t.value = (await e.fetchOptions(r, i.signal) || []).slice(0, e.maxResults);
+		} catch (e) {
+			e.name !== "AbortError" && (t.value = []);
+		} finally {
+			n.value = !1;
+		}
+	}
+	function o(t) {
+		r && clearTimeout(r), n.value = !0, r = setTimeout(() => {
+			a(t);
+		}, e.debounceMs);
+	}
+	function s() {
+		r && clearTimeout(r), i && i.abort(), t.value = [], n.value = !1;
+	}
+	return {
+		results: t,
+		isLoading: n,
+		search: o,
+		clear: s
+	};
+}
+function lr(e) {
+	let t = e.fetchOptions ? cr(e) : sr(e);
+	function n(e) {
+		t.search(e);
+	}
+	return {
+		results: t.results,
+		isLoading: t.isLoading,
+		triggerSearch: n,
+		clear: t.clear
+	};
+}
+//#endregion
+//#region src/form/select/AutoComplete.vue?vue&type=script&setup=true&lang.ts
+var ur = [
+	"aria-label",
+	"aria-expanded",
+	"value",
+	"placeholder",
+	"disabled"
+], dr = /* @__PURE__ */ x({
+	__name: "AutoComplete",
+	props: or,
+	emits: [
+		"update:modelValue",
+		"change",
+		"clear",
+		"focus",
+		"blur"
+	],
+	setup(e, { emit: n }) {
+		let r = e, a = n, o = M(null), s = M(""), c = M(!1), l = lr(r), { isLoading: u, triggerSearch: d, clear: f } = l, h = rr(r), { options: g } = h;
+		B(() => l.results.value, () => {
+			h.setOptions(l.results.value);
+		}, { immediate: !0 }), B(() => r.modelValue, (e) => {
+			if (e == null || e === "") {
+				s.value = "";
+				return;
+			}
+			let t = typeof e == "object" ? e[r.labelKey] : e;
+			t !== s.value && (s.value = t);
+		}, { immediate: !0 });
+		let v = (e) => {
+			s.value = e.target.value, r.freeText ? a("update:modelValue", s.value) : a("update:modelValue", ""), d(s.value), c.value = !0;
+		}, y = () => {
+			d(s.value), c.value = !0;
+		};
+		function b() {
+			setTimeout(() => {
+				c.value = !1, r.freeText ? a("change", s.value) : r.modelValue || (s.value = "");
+			}, 150);
+		}
+		let x = (e) => {
+			let t = h.getOriginal(e);
+			s.value = e.label, c.value = !1, a("update:modelValue", t), a("change", t);
+		}, S = () => {
+			s.value = "", f(), c.value = !1, a("update:modelValue", ""), a("clear"), D(() => o.value?.focus());
+		}, C = () => {
+			c.value = !1;
+		}, w = p(() => t(r.styles)), T = p(() => i(w.value.control.select, r));
+		return (e, t) => (j(), m($n, E(r, {
+			options: R(g),
+			"is-loading": R(u),
+			"is-open": c.value,
+			query: s.value,
+			onClose: C,
+			onSelect: x,
+			onClear: S
+		}), {
+			default: V(() => [_("input", {
+				ref_key: "inputRef",
+				ref: o,
+				type: "text",
+				role: "combobox",
+				"aria-label": e.id,
+				"aria-expanded": c.value,
+				"aria-autocomplete": "list",
+				"aria-haspopup": "listbox",
+				autocomplete: "off",
+				"data-lpignore": "true",
+				"data-bwignore": "true",
+				autocorrect: "off",
+				spellcheck: "false",
+				class: O([T.value, "w-full"]),
+				value: s.value,
+				placeholder: e.placeholder,
+				disabled: !e.enabled,
+				onInput: v,
+				onFocus: y,
+				onBlur: b
+			}, null, 42, ur)]),
+			_: 1
+		}, 16, [
+			"options",
+			"is-loading",
+			"is-open",
+			"query"
+		]));
+	}
+}), fr = ["aria-label"], pr = /* @__PURE__ */ x({
+	__name: "MultiSelect",
+	props: /*@__PURE__*/ T(Vn, {
+		modelValue: {},
+		modelModifiers: {}
+	}),
+	emits: /*@__PURE__*/ T([
+		"update:modelValue",
+		"change",
+		"clear",
+		"focus",
+		"blur"
+	], ["update:modelValue"]),
+	setup(e, { emit: n }) {
+		let r = M(!1), a = e, o = n, s = z(e, "modelValue"), c = (e) => {
+			o("change", e);
+		}, l = rr(a), { options: u } = l;
+		B(() => a.options, () => {
+			l.setOptions(a.options);
+		}, { immediate: !0 });
+		let d = p(() => s.value ? l.getLabels(...s.value).join(", ") : void 0), f = p(() => l.getValues(...s.value ?? [])), h = (e) => {
+			let t = s.value ?? [];
+			if (y(e)) t = t.filter((t) => l.getOption(t)?.value !== e.value);
+			else {
+				let n = l.getOriginal(e);
+				t.push(n);
+			}
+			s.value = t, c(t);
+		}, g = () => {
+			r.value = !1, s.value = [], c([]);
+		}, v = () => {
+			r.value = !1;
+		}, y = (e) => f.value?.includes(e.value) ?? !1, b = p(() => t(a.styles)), x = p(() => i(b.value.control.select, a));
+		return (e, t) => (j(), m($n, E(a, {
+			options: R(u),
+			"is-open": r.value,
+			disabled: !e.enabled,
+			query: void 0,
+			"is-active": y,
+			onClose: v,
+			onSelect: h,
+			onClear: g
+		}), {
+			default: V(() => [_("button", {
+				type: "button",
+				class: O(["truncate block text-left", [x.value, e.width]]),
+				"aria-label": e.id,
+				role: "combobox",
+				onClick: t[0] ||= (e) => r.value = !0
+			}, I(d.value ?? "Select value"), 11, fr)]),
+			_: 1
+		}, 16, [
+			"options",
+			"is-open",
+			"disabled"
+		]));
+	}
+}), mr = { ...s }, hr = [
+	"change",
+	"focus",
+	"blur"
+], gr = { class: "flex items-center justify-center h-full" }, _r = { class: "fieldset-label" }, vr = ["aria-label", "disabled"], yr = { class: "font-bold text-gray-500 text-sm" }, br = /* @__PURE__ */ x({
+	__name: "Checkbox",
+	props: /*@__PURE__*/ T(mr, {
+		modelValue: {},
+		modelModifiers: {}
+	}),
+	emits: /*@__PURE__*/ T(hr, ["update:modelValue"]),
+	setup(e, { emit: t }) {
+		let n = e, r = t, a = z(e, "modelValue"), o = (e) => {
+			r("change", a.value);
+		}, s = (e) => {
+			r("focus", e);
+		}, l = (e) => {
+			r("blur", e);
+		}, u = p(() => i(n.styles.control.checkbox, n));
+		return (e, t) => (j(), g("div", gr, [y(c, E(n, { "hide-label": !0 }), {
+			default: V(() => [_("label", _r, [H(_("input", {
+				"onUpdate:modelValue": t[0] ||= (e) => a.value = e,
+				"aria-label": e.id,
+				role: "checkbox",
+				type: "checkbox",
+				class: O(u.value),
+				disabled: !e.enabled,
+				onChange: o,
+				onFocus: s,
+				onBlur: l
+			}, null, 42, vr), [[oe, a.value]]), _("span", yr, I(e.label), 1)])]),
+			_: 1
+		}, 16)]));
+	}
+}), xr = {
+	...s,
+	type: {
+		type: String,
+		default: "text"
+	},
+	clearable: {
+		type: Boolean,
+		default: !1
+	}
+}, Sr = [
+	"change",
+	"focus",
+	"blur",
+	"clear"
+], Cr = { class: "relative w-full" }, wr = [
+	"aria-label",
+	"type",
+	"disabled",
+	"autofocus",
+	"placeholder"
+], Tr = /* @__PURE__ */ x({
+	__name: "Input",
+	props: /*@__PURE__*/ T(xr, {
+		modelValue: {},
+		modelModifiers: {}
+	}),
+	emits: /*@__PURE__*/ T(Sr, ["update:modelValue"]),
+	setup(e, { emit: t }) {
+		let n = e, r = t, a = z(e, "modelValue"), o = (e) => {
+			r("change", e);
+		}, s = (e) => {
+			r("focus", e);
+		}, l = (e) => {
+			r("blur", e);
+		}, u = () => {
+			a.value = "", r("clear");
+		}, d = p(() => i(n.styles.control.input, n));
+		return (e, t) => (j(), m(c, k(C(n)), {
+			default: V(() => [_("div", Cr, [H(_("input", {
+				"onUpdate:modelValue": t[0] ||= (e) => a.value = e,
+				"aria-label": e.id,
+				autocomplete: "off",
+				"data-lpignore": "true",
+				"data-bwignore": "true",
+				type: e.type,
+				class: O([[d.value, { "pr-7": e.clearable && a.value }], "!w-full"]),
+				disabled: !e.enabled,
+				autofocus: e.isFocused,
+				placeholder: e.placeholder,
+				onChange: o,
+				onFocus: s,
+				onBlur: l
+			}, null, 42, wr), [[se, a.value]]), e.clearable && a.value ? (j(), g("button", {
+				key: 0,
+				type: "button",
+				class: "absolute inset-y-0 right-0 flex items-center pr-2 btn btn-ghost btn-xs btn-circle opacity-60 hover:opacity-100",
+				tabindex: "-1",
+				"aria-label": "Clear",
+				onMousedown: U(u, ["prevent"])
+			}, [...t[1] ||= [_("svg", {
+				xmlns: "http://www.w3.org/2000/svg",
+				class: "h-3.5 w-3.5",
+				fill: "none",
+				viewBox: "0 0 24 24",
+				stroke: "currentColor",
+				"stroke-width": "2.5"
+			}, [_("path", {
+				"stroke-linecap": "round",
+				"stroke-linejoin": "round",
+				d: "M6 18L18 6M6 6l12 12"
+			})], -1)]], 32)) : h("", !0)])]),
+			_: 1
+		}, 16));
+	}
+}), Er = {
+	...s,
+	steps: {
+		type: Number,
+		default: 1
+	}
+}, Dr = [
+	"change",
+	"focus",
+	"blur"
+], Or = [
+	"aria-label",
+	"disabled",
+	"step",
+	"autofocus",
+	"placeholder"
+], kr = /* @__PURE__ */ x({
+	__name: "InputNumber",
+	props: /*@__PURE__*/ T(Er, {
+		modelValue: {},
+		modelModifiers: {}
+	}),
+	emits: /*@__PURE__*/ T(Dr, ["update:modelValue"]),
+	setup(e, { emit: t }) {
+		let n = e, r = t, a = z(e, "modelValue"), o = (e) => {
+			r("change", e);
+		}, s = (e) => {
+			r("focus", e);
+		}, l = (e) => {
+			r("blur", e);
+		}, u = p(() => i(n.styles?.control?.input, n));
+		return (e, t) => (j(), m(c, k(C(n)), {
+			default: V(() => [H(_("input", {
+				"onUpdate:modelValue": t[0] ||= (e) => a.value = e,
+				autocomplete: "off",
+				"data-lpignore": "true",
+				"data-bwignore": "true",
+				"aria-label": e.id,
+				type: "number",
+				class: O(["w-full", [u.value]]),
+				disabled: !e.enabled,
+				step: e.steps,
+				autofocus: e.isFocused,
+				placeholder: e.placeholder,
+				onChange: o,
+				onFocus: s,
+				onBlur: l
+			}, null, 42, Or), [[ce, a.value]])]),
+			_: 1
+		}, 16));
+	}
+}), Ar = {
+	...s,
+	rows: {
+		type: Number,
+		default: 4
+	},
+	dir: {
+		type: String,
+		default: "ltr"
+	},
+	height: {
+		type: String,
+		default: void 0
+	},
+	minHeight: {
+		type: String,
+		default: void 0
+	}
+}, jr = [
+	"change",
+	"focus",
+	"blur"
+], Mr = [
+	"aria-label",
+	"disabled",
+	"rows",
+	"dir",
+	"autofocus",
+	"placeholder"
+], Nr = /* @__PURE__ */ x({
+	__name: "Textarea",
+	props: /*@__PURE__*/ T(Ar, {
+		modelValue: {},
+		modelModifiers: {}
+	}),
+	emits: /*@__PURE__*/ T(jr, ["update:modelValue"]),
+	setup(e, { emit: t }) {
+		let n = e, r = t, a = z(e, "modelValue"), o = (e) => {
+			r("change", e);
+		}, s = (e) => {
+			r("focus", e);
+		}, l = (e) => {
+			r("blur", e);
+		}, u = p(() => i(n.styles.control.textarea, n));
+		return (e, t) => (j(), m(c, k(C(n)), {
+			default: V(() => [H(_("textarea", {
+				"onUpdate:modelValue": t[0] ||= (e) => a.value = e,
+				autocomplete: "off",
+				"data-lpignore": "true",
+				"data-bwignore": "true",
+				type: "text",
+				"aria-label": e.id,
+				class: O(["w-full", u.value]),
+				disabled: !e.enabled,
+				rows: e.rows,
+				dir: e.dir,
+				style: A({
+					height: e.height,
+					minHeight: e.minHeight
+				}),
+				autofocus: e.isFocused,
+				placeholder: e.placeholder,
+				onChange: o,
+				onFocus: s,
+				onBlur: l
+			}, null, 46, Mr), [[ce, a.value]])]),
+			_: 1
+		}, 16));
+	}
+}), Pr = b({
+	loader: () => import("./Markdown-DQZZDfN5.js"),
+	errorComponent: In,
+	onError(e, t, n) {
+		console.warn("[@ghentcdh/ui] Markdown editor could not load — install the TipTap peer dependencies (@tiptap/pm, @tiptap/starter-kit, @tiptap/vue-3, tiptap-markdown) to enable it. Falling back to a plain textarea.", e), n();
+	}
+}), Fr = {
+	widthLeft: {
+		type: Number,
+		default: 200
+	},
+	widthRight: {
+		type: Number,
+		default: 200
+	},
+	initialLeftOpen: {
+		type: Boolean,
+		default: !0
+	},
+	initialRightOpen: {
+		type: Boolean,
+		default: !0
+	},
+	drawerColor: {
+		type: String,
+		default: "bg-base-200"
+	}
+}, Ir = { class: "flex h-full overflow-hidden gap-2" }, Lr = {
+	key: 0,
+	id: "drawer-left",
+	class: "min-h-0 relative flex-shrink-0 overflow-visible flex"
+}, Rr = ["aria-expanded", "aria-label"], zr = { class: "flex-1 overflow-y-auto bg-white" }, Br = {
+	key: 1,
+	class: "min-h-0 relative flex-shrink-0 bg-white overflow-visible flex"
+}, Vr = ["aria-expanded", "aria-label"], Hr = /* @__PURE__ */ x({
+	__name: "drawer",
+	props: Fr,
+	setup(e) {
+		let t = e, n = ae(), r = p(() => !!n["left-drawer"]), i = p(() => !!n["right-drawer"]), a = M({
+			left: t.initialLeftOpen,
+			right: t.initialRightOpen
+		}), o = (e) => {
+			a.value[e] = !a.value[e];
+		};
+		return (e, t) => (j(), g("main", Ir, [
+			r.value ? (j(), g("aside", Lr, [_("div", {
+				id: "drawer-left-panel",
+				style: A({ width: a.value.left ? e.widthLeft + "px" : "0px" }),
+				class: O(["h-full overflow-hidden shadow-sm transition-[width] duration-300 ease-in-out", [e.drawerColor]])
+			}, [_("div", {
+				style: A({ width: e.widthLeft + "px" }),
+				class: "h-full overflow-y-auto p-4"
+			}, [P(e.$slots, "left-drawer")], 4)], 6), _("button", {
+				"aria-expanded": a.value.left,
+				"aria-controls": "drawer-left-panel",
+				"aria-label": a.value.left ? "Collapse left panel" : "Expand left panel",
+				class: "hover:bg-base-300 hover:text-base-content transition-colors cursor-pointer",
+				onClick: t[0] ||= (e) => o("left")
+			}, [y(R(K), {
+				size: "lg",
+				icon: a.value.left ? R(G).ChevronLeft : R(G).ChevronRight
+			}, null, 8, ["icon"])], 8, Rr)])) : h("", !0),
+			_("div", zr, [P(e.$slots, "default")]),
+			i.value ? (j(), g("aside", Br, [_("button", {
+				"aria-expanded": a.value.right,
+				"aria-controls": "drawer-right-panel",
+				"aria-label": a.value.right ? "Collapse right panel" : "Expand right panel",
+				class: "hover:bg-base-300 hover:text-base-content transition-colors cursor-pointer",
+				onClick: t[1] ||= (e) => o("right")
+			}, [y(R(K), {
+				size: "lg",
+				icon: a.value.right ? R(G).ChevronRight : R(G).ChevronLeft
+			}, null, 8, ["icon"])], 8, Vr), _("div", {
+				id: "drawer-right-panel",
+				style: A({ width: a.value.right ? e.widthRight + "px" : "0px" }),
+				class: O(["h-full overflow-hidden shadow-sm transition-[width] duration-300 ease-in-out", [e.drawerColor]])
+			}, [_("div", {
+				style: A({ width: e.widthRight + "px" }),
+				class: "h-full overflow-y-auto p-4"
+			}, [P(e.$slots, "right-drawer")], 4)], 6)])) : h("", !0)
+		]));
+	}
+}), Ur = { class: "ml-1" }, Wr = {
+	key: 0,
+	xmlns: "http://www.w3.org/2000/svg",
+	viewBox: "0 0 24 24",
+	fill: "currentColor",
+	"aria-hidden": "true",
+	class: "w-3 h-3"
+}, Gr = {
+	key: 1,
+	xmlns: "http://www.w3.org/2000/svg",
+	viewBox: "0 0 24 24",
+	fill: "currentColor",
+	"aria-hidden": "true",
+	class: "w-3 h-3"
+}, Kr = { class: "truncate flex-1 min-w-0 text-left" }, qr = {
+	key: 0,
+	class: "badge badge-ghost badge-sm flex-shrink-0"
+}, Jr = /* @__PURE__ */ x({
+	__name: "TreeItem",
+	props: {
+		active: {},
+		node: {},
+		expanded: {},
+		isExpanded: { type: Function }
+	},
+	emits: ["toggle", "select"],
+	setup(e, { emit: t }) {
+		let n = e, r = t, i = p(() => n.active === n.node.id);
+		return (t, n) => {
+			let a = ne("TreeItem", !0);
+			return j(), g("li", Ur, [_("div", { class: O(["flex items-center gap-1 cursor-pointer rounded-md px-1 py-0.5\n      hover:bg-gray-100", i.value ? "text-primary" : ""]) }, [(e.node?.children?.length ?? 0) > 0 ? (j(), g("span", {
+				key: 0,
+				class: "flex items-center justify-center",
+				onClick: n[0] ||= (t) => r("toggle", e.node)
+			}, [e.node.children && e.isExpanded(e.node.id) ? (j(), g("svg", Wr, [...n[4] ||= [_("path", {
+				"fill-rule": "evenodd",
+				d: "M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.69l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z",
+				"clip-rule": "evenodd"
+			}, null, -1)]])) : (j(), g("svg", Gr, [...n[5] ||= [_("path", {
+				"fill-rule": "evenodd",
+				d: "M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z",
+				"clip-rule": "evenodd"
+			}, null, -1)]]))])) : h("", !0), _("div", {
+				class: "flex items-center gap-2 w-full min-w-0",
+				onClick: n[1] ||= (t) => r("select", e.node)
+			}, [_("div", Kr, I(e.node.label), 1), e.node.tag ? (j(), g("div", qr, I(e.node.tag), 1)) : h("", !0)])], 2), e.node.children && e.isExpanded(e.node.id) ? (j(), g("ul", {
+				key: 0,
+				class: O(["ml-4 border-l pl-2", {
+					"border-gray-200": !i.value,
+					"border-primary": i.value
+				}])
+			}, [(j(!0), g(l, null, N(e.node.children, (t) => (j(), m(a, {
+				key: t.id,
+				node: t,
+				expanded: e.expanded,
+				active: e.active,
+				"is-expanded": e.isExpanded,
+				onToggle: n[2] ||= (e) => r("toggle", e),
+				onSelect: n[3] ||= (e) => r("select", e)
+			}, null, 8, [
+				"node",
+				"expanded",
+				"active",
+				"is-expanded"
+			]))), 128))], 2)) : h("", !0)]);
+		};
+	}
+}), Yr = { class: "select-none text-sm" }, Xr = /* @__PURE__ */ x({
+	__name: "TreeView",
+	props: {
+		data: {},
+		active: {}
+	},
+	emits: ["select"],
+	setup(e, { emit: t }) {
+		let n = e, r = t, i = M(/* @__PURE__ */ new Set()), a = (e) => {
+			let t = e.id;
+			if (!e.children || e.children.length === 0) {
+				r("select", e);
+				return;
+			}
+			i.value.has(t) ? i.value.delete(t) : i.value.add(t);
+		}, o = (e) => {
+			r("select", e), i.value.add(e.id);
+		}, s = (e) => i.value.has(e);
+		return (t, r) => (j(), g("ul", Yr, [(j(!0), g(l, null, N(n.data, (t) => (j(), m(Jr, {
+			key: t.id,
+			node: t,
+			expanded: i.value,
+			active: e.active,
+			"is-expanded": s,
+			onToggle: a,
+			onSelect: o
+		}, null, 8, [
+			"node",
+			"expanded",
+			"active"
+		]))), 128))]));
+	}
+}), Zr = {
+	key: 0,
+	role: "status",
+	"aria-live": "polite",
+	class: "flex items-center justify-center h-20"
+}, Qr = /* @__PURE__ */ x({
+	__name: "loading",
+	props: { loading: { type: Boolean } },
+	setup(e) {
+		return (t, n) => e.loading ? (j(), g("div", Zr, [...n[0] ||= [_("span", {
+			"aria-hidden": "true",
+			class: "loading loading-bars loading-md text-primary"
+		}, null, -1), _("span", { class: "sr-only" }, "Loading...", -1)]])) : h("", !0);
+	}
+}), $r = {
+	title: {
+		type: String,
+		required: !0
+	},
+	opened: {
+		type: Boolean,
+		default: !0
+	},
+	heightFull: {
+		type: Boolean,
+		default: !1
+	},
+	scrollable: {
+		type: Boolean,
+		default: !1
+	},
+	disabled: {
+		type: Boolean,
+		default: !1
+	},
+	actions: {
+		type: Array,
+		default: () => []
+	}
+}, ei = ["checked", "aria-label"], ti = { class: "collapse-title text-gray-500 text-xs font-medium" }, ni = { class: "flex items-center justify-between" }, ri = {
+	key: 0,
+	class: "list bg-base-100"
+}, ii = {
+	key: 1,
+	class: "shrink-0 pt-2"
+}, ai = /* @__PURE__ */ x({
+	__name: "Collapse",
+	props: $r,
+	setup(e) {
+		let t = ae(), n = e, r = M(n.opened), i = M(n.opened || n.disabled);
+		return (e, a) => (j(), g("div", { class: O(["collapse collapse-arrow bg-white border border-gray-300", [
+			e.scrollable ? "flex-1 min-h-0 !grid-rows-[auto_1fr] overflow-hidden" : "",
+			e.heightFull ? "h-full" : "",
+			e.disabled ? "collapse-open" : "",
+			i.value && !e.scrollable ? "overflow-visible" : ""
+		]]) }, [
+			e.disabled ? h("", !0) : (j(), g("input", {
+				key: 0,
+				type: "checkbox",
+				checked: r.value,
+				tabindex: "-1",
+				"aria-label": "Toggle " + e.title,
+				onChange: a[0] ||= (e) => i.value = e.target.checked
+			}, null, 40, ei)),
+			_("div", ti, [_("div", ni, [_("span", null, I(e.title), 1), n.actions.length > 0 ? (j(), g("div", {
+				key: 0,
+				class: "relative z-10 flex gap-1 overflow-y-auto",
+				onClick: a[1] ||= U(() => {}, ["stop"])
+			}, [(j(!0), g(l, null, N(n.actions, (e, t) => (j(), m(R(Z), {
+				key: t,
+				color: R(X).blank,
+				size: "xs",
+				icon: e.icon,
+				tooltip: e.tooltip,
+				disabled: e.disabled,
+				onClick: e.onClick
+			}, {
+				default: V(() => [v(I(e.label), 1)]),
+				_: 2
+			}, 1032, [
+				"color",
+				"icon",
+				"tooltip",
+				"disabled",
+				"onClick"
+			]))), 128))])) : h("", !0)])]),
+			_("div", { class: O(["collapse-content", [e.scrollable ? "!flex !flex-col min-h-0" : "", R(t).list ? "p-0" : ""]]) }, [
+				_("div", { class: O(e.scrollable ? "flex-1 min-h-0 overflow-y-auto" : "") }, [P(e.$slots, "default")], 2),
+				R(t).list ? (j(), g("ul", ri, [P(e.$slots, "list")])) : h("", !0),
+				R(t).footer ? (j(), g("div", ii, [P(e.$slots, "footer")])) : h("", !0)
+			], 2)
+		], 2));
+	}
+}), oi = {
+	title: { type: String },
+	label: { type: String },
+	labelLink: { type: String },
+	description: { type: String },
+	descriptionLink: { type: String }
+}, si = { class: "list-row" }, ci = { class: "list-col-grow" }, li = { key: 0 }, ui = {
+	key: 1,
+	class: "text-xs text-gray-600"
+}, di = ["href"], fi = { key: 1 }, pi = {
+	key: 0,
+	class: "text-xs text-gray-500"
+}, mi = ["href"], hi = { key: 1 }, gi = /* @__PURE__ */ x({
+	__name: "CollapseRow",
+	props: oi,
+	setup(e) {
+		return (e, t) => (j(), g("li", si, [
+			_("div", ci, [e.title ? (j(), g("div", li, I(e.title), 1)) : h("", !0), e.description || e.descriptionLink ? (j(), g("div", ui, [e.descriptionLink ? (j(), g("a", {
+				key: 0,
+				href: e.descriptionLink,
+				target: "_blank"
+			}, I(e.description ?? e.descriptionLink), 9, di)) : (j(), g("span", fi, I(e.description), 1))])) : h("", !0)]),
+			e.label ? (j(), g("div", pi, [e.labelLink ? (j(), g("a", {
+				key: 0,
+				href: e.labelLink,
+				target: "_blank"
+			}, I(e.label), 9, mi)) : (j(), g("span", hi, I(e.label), 1))])) : h("", !0),
+			P(e.$slots, "default")
+		]));
+	}
+}), _i = { class: "text-gray-800" }, vi = /* @__PURE__ */ x({
+	__name: "alert",
+	props: {
+		message: {},
+		type: {}
+	},
+	setup(e) {
+		let t = {
+			success: "alert-success",
+			error: "alert-error",
+			warning: "alert-warning",
+			info: "alert-info"
+		};
+		return (n, r) => (j(), g("div", {
+			role: "alert",
+			class: O(`alert alert-soft ${t[e.type]} `)
+		}, [_("span", _i, I(e.message), 1), P(n.$slots, "default")], 2));
+	}
+}), yi = {
+	title: {
+		type: String,
+		required: !0
+	},
+	items: {
+		type: Array,
+		required: !0
+	},
+	modelValue: {
+		type: Array,
+		default: () => []
+	},
+	labelKey: {
+		type: String,
+		default: "label"
+	},
+	valueKey: {
+		type: String,
+		default: "id"
+	},
+	colorKey: {
+		type: String,
+		default: void 0
+	},
+	countKey: {
+		type: String,
+		default: "count"
+	},
+	counts: {
+		type: Object,
+		default: void 0
+	},
+	opened: {
+		type: Boolean,
+		default: !0
+	}
+}, bi = ["update:modelValue"], xi = (e, t, n, r) => {
+	let i = p(() => e.value.map((e) => e[n.value]));
+	return {
+		isSelected: (e) => t.value.includes(e),
+		selectedLabel: p(() => {
+			let e = t.value.length;
+			return e === 0 ? "None" : e === i.value.length ? "All" : `${e}`;
+		}),
+		selectAll: () => r("update:modelValue", [...i.value]),
+		selectNone: () => r("update:modelValue", []),
+		toggleItem: (e, n) => {
+			n ? r("update:modelValue", [...t.value, e]) : r("update:modelValue", t.value.filter((t) => t !== e));
+		}
+	};
+}, Si = { class: "flex items-center justify-between mb-2" }, Ci = { class: "text-xs text-base-content/50" }, wi = { class: "flex gap-1" }, Ti = { class: "flex flex-col gap-1" }, Ei = ["checked", "onChange"], Di = { class: "text-sm flex-1 select-none" }, Oi = {
+	key: 1,
+	class: "badge badge-sm badge-ghost"
+}, ki = /* @__PURE__ */ x({
+	__name: "filter",
+	props: yi,
+	emits: bi,
+	setup(e, { emit: t }) {
+		let n = e, r = t, i = p(() => n.items ?? []), { isSelected: a, selectedLabel: o, selectAll: s, selectNone: c, toggleItem: u } = xi(i, re(n, "modelValue"), re(n, "valueKey"), r);
+		return (e, t) => (j(), m(R(ai), {
+			title: e.title,
+			opened: e.opened
+		}, {
+			default: V(() => [_("div", Si, [_("span", Ci, I(R(o)) + " of " + I(i.value.length) + " items ", 1), _("div", wi, [_("button", {
+				class: "btn btn-ghost btn-xs",
+				type: "button",
+				tabindex: "-1",
+				onClick: t[0] ||= (...e) => R(s) && R(s)(...e)
+			}, " All "), _("button", {
+				class: "btn btn-ghost btn-xs",
+				type: "button",
+				tabindex: "-1",
+				onClick: t[1] ||= (...e) => R(c) && R(c)(...e)
+			}, " None ")])]), _("div", Ti, [(j(!0), g(l, null, N(i.value, (t) => (j(), g("label", {
+				key: t[e.valueKey],
+				class: O(["flex items-center gap-3 px-2 py-1.5 rounded-lg cursor-pointer transition-colors hover:bg-base-200", { "bg-base-200/60": R(a)(t[e.valueKey]) }])
+			}, [
+				_("input", {
+					type: "checkbox",
+					class: "checkbox checkbox-sm",
+					checked: R(a)(t[e.valueKey]),
+					onChange: (n) => R(u)(t[e.valueKey], n.target.checked)
+				}, null, 40, Ei),
+				e.colorKey && t[e.colorKey] ? (j(), g("span", {
+					key: 0,
+					class: "w-3 h-3 rounded-full shrink-0 ring-1 ring-black/10",
+					style: A({ backgroundColor: t[e.colorKey] })
+				}, null, 4)) : h("", !0),
+				_("span", Di, I(t[e.labelKey]), 1),
+				t[e.countKey] > 0 ? (j(), g("span", Oi, I(t[e.countKey]), 1)) : h("", !0)
+			], 2))), 128))])]),
+			_: 1
+		}, 8, ["title", "opened"]));
+	}
+});
+//#endregion
+export { vi as Alert, dr as Autocomplete, Qe as BadgeSize, xn as BooleanCell, Z as Btn, ut as BtnBadge, st as BtnBadgeEmits, ot as BtnBadgeProperties, at as BtnEmits, it as BtnProperties, Ze as ButtonSize, tt as ButtonTag, Y as ButtonType, kn as Card, br as Checkbox, Mn as ClickOutside, ai as Collapse, gi as CollapseRow, X as Color, dt as ConfirmModal, c as ControlWrapper, s as ControlWrapperProperties, Hr as Drawer, We as Dropdown, ki as Filter, bi as FilterEmits, yi as FilterProperties, K as Icon, G as IconEnum, Me as IconMap, Ne as IconProperties, Tr as Input, kr as InputNumber, Qr as Loading, Pr as Markdown, Ue as Menu, et as Modal, Ke as ModalEmits, Ge as ModalProperties, ft as ModalService, Xe as ModalSize, pt as ModalWrapper, pr as MultiSelect, mt as NotificationMessage, gt as NotificationService, vt as Notifications, Bt as PaginationComponent, ar as SelectComponent, At as ShellComponent, q as SubMenu, hn as Table, hn as TableComponent, yn as TextCell, Nr as Textarea, Xr as TreeView, An as addClickOutsideEventListener, i as buildInputStyle, Pn as hasCustomEventListener, o as isDescriptionHidden, t as mergeStyles, r as myStyles, jn as removeClickOutsideEventListener, n as showErrors, xi as useFilter, Ye as useFocusTrap };

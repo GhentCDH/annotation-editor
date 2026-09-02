@@ -1,0 +1,6 @@
+export declare const DefaultRenders: {
+    readonly highlight: "highlight";
+    readonly underline: "underline";
+    readonly gutter: "gutter";
+};
+//# sourceMappingURL=default.renderer.d.ts.map

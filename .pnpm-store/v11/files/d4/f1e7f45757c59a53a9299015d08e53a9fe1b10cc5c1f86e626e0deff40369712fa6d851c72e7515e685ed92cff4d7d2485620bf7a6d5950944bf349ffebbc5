@@ -1,0 +1,13 @@
+import { AnnotationEventType, ErrorEventCallback, EventCallback, EventData } from './events';
+import { ErrorCode } from './errors';
+import { BaseAnnotation } from '../model';
+export declare class EventListener<ANNOTATION extends BaseAnnotation> {
+    private readonly eventMap;
+    private readonly errorSet;
+    constructor();
+    register<EVENT extends AnnotationEventType<ANNOTATION>>(event: AnnotationEventType<ANNOTATION>, callback: EventCallback<EVENT, ANNOTATION>): void;
+    registerError(callback: ErrorEventCallback): void;
+    sendError(error: ErrorCode, message: string, ...params: any[]): void;
+    sendEvent<EVENT extends AnnotationEventType<ANNOTATION>>(event: EVENT, data: EventData<ANNOTATION>[EVENT], mouseEvent?: MouseEvent | undefined | null): void;
+}
+//# sourceMappingURL=event.listener.d.ts.map

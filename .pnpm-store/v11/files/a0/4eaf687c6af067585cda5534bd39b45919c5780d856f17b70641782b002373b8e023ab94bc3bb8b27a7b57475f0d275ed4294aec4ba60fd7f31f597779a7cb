@@ -1,0 +1,153 @@
+import { computed as e, createCommentVNode as t, createElementBlock as n, createElementVNode as r, defineComponent as i, normalizeClass as a, openBlock as o, renderSlot as s, toDisplayString as c } from "vue";
+//#region src/form/core/styles.ts
+var l = {
+	group: {
+		root: "group",
+		label: "text-primary text-lg font-bold",
+		item: "group-item"
+	},
+	verticalLayout: {
+		root: "flex flex-col gap-x-2",
+		item: "w-full"
+	},
+	horizontalLayout: {
+		root: "flex flex-row gap-x-2",
+		item: "w-full"
+	},
+	arrayList: {
+		root: "fieldset",
+		legend: "fieldset-legend text-xl capitalize"
+	},
+	control: {
+		root: "fieldset",
+		wrapper: "fieldset",
+		label: "fieldset-legend",
+		error: "",
+		input: "input",
+		textarea: "textarea h-32",
+		checkbox: "checkbox",
+		select: "input pr-14",
+		description: "form-control--description label text-xs text-gray-500"
+	},
+	fixedArrayList: {
+		root: "flex flex-row gap-x-2",
+		item: "w-full"
+	}
+}, u = (e) => {
+	if (!e) return { ...l };
+	let t = { ...l };
+	for (let n of Object.keys(e)) {
+		let r = e[n];
+		r && typeof r == "object" && (t[n] = {
+			...l[n],
+			...r
+		});
+	}
+	return t;
+}, d = {
+	id: {
+		type: String,
+		default: void 0
+	},
+	placeholder: {
+		type: String,
+		default: void 0
+	},
+	description: {
+		type: String,
+		default: void 0
+	},
+	errors: {
+		type: String,
+		default: void 0
+	},
+	label: {
+		type: String,
+		default: void 0
+	},
+	visible: {
+		type: Boolean,
+		default: !1
+	},
+	required: {
+		type: Boolean,
+		default: !1
+	},
+	enabled: {
+		type: Boolean,
+		default: !0
+	},
+	isFocused: {
+		type: Boolean,
+		default: !1
+	},
+	isTouched: {
+		type: Boolean,
+		default: !1
+	},
+	hideLabel: {
+		type: Boolean,
+		default: !1
+	},
+	styles: {
+		type: Object,
+		default: () => l
+	},
+	width: {
+		type: String,
+		default: "!w-48"
+	},
+	size: {
+		type: String,
+		default: void 0
+	},
+	hideErrors: {
+		type: Boolean,
+		default: !1
+	}
+}, f = ["change"], p = {
+	...d,
+	width: {
+		type: String,
+		default: "w-48"
+	},
+	minHeight: {
+		type: String,
+		default: "min-h-[50vh]"
+	},
+	actions: {
+		type: Object,
+		default: () => [{
+			label: "<strong>B</strong>",
+			name: "bold",
+			action: (e) => e?.chain().focus().toggleBold().run()
+		}, {
+			label: "<em>I</em>",
+			name: "italic",
+			action: (e) => e?.chain().focus().toggleItalic().run()
+		}]
+	}
+}, m = ({ isTouched: e, errors: t }) => !!(e && t), h = (e, t, n, r) => t === void 0 || t !== void 0 && !e || !r && !n, g = (e, t) => [e, {
+	"input-sm": t.size === "sm",
+	"input-error": m(t)
+}], _ = {
+	key: 0,
+	class: "flex items-center justify-between mb-2"
+}, v = { key: 0 }, y = /* @__PURE__ */ i({
+	inheritAttrs: !1,
+	__name: "ControlWrapper",
+	props: d,
+	setup(i) {
+		let l = i, d = e(() => !h(l.visible, l.description, l.isFocused, !0)), f = e(() => l.required), p = e(() => m(l)), g = e(() => u(l.styles));
+		return (e, i) => (o(), n("fieldset", { class: a(["fieldset", [e.width, g.value.control.wrapper]]) }, [
+			r("legend", { class: a(["w-full inline-block", [g.value.control.label, { "p-0 h-0 leading-none": e.hideLabel }]]) }, [e.hideLabel ? t("", !0) : (o(), n("div", _, [r("div", null, [r("span", null, c(e.label), 1), f.value ? (o(), n("span", v, "*")) : t("", !0)]), s(e.$slots, "label-action")]))], 2),
+			s(e.$slots, "default"),
+			e.hideErrors ? t("", !0) : (o(), n("p", {
+				key: 0,
+				class: a(["fieldset-label h-4", { "text-error": p.value }])
+			}, c(p.value ? e.errors : d.value ? e.description : null), 3))
+		], 2));
+	}
+});
+//#endregion
+export { p as a, u as c, m as i, l, g as n, f as o, h as r, d as s, y as t };

@@ -1,0 +1,56 @@
+declare const __VLS_export: import('vue').DefineComponent<import('vue').ExtractPropTypes<{
+    label: {
+        type: StringConstructor;
+        required: false;
+    };
+    formId: {
+        type: StringConstructor;
+    };
+    initialRequestParams: {
+        type: ObjectConstructor;
+        default: {};
+    };
+    defaultUriParams: {
+        type: ObjectConstructor;
+        default: {};
+    };
+    hideToolbar: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+}>, {}, {}, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, {
+    handleEvent: (...args: any[]) => void;
+    onRequest: (...args: any[]) => void;
+    initialLoad: (...args: any[]) => void;
+}, string, import('vue').PublicProps, Readonly<import('vue').ExtractPropTypes<{
+    label: {
+        type: StringConstructor;
+        required: false;
+    };
+    formId: {
+        type: StringConstructor;
+    };
+    initialRequestParams: {
+        type: ObjectConstructor;
+        default: {};
+    };
+    defaultUriParams: {
+        type: ObjectConstructor;
+        default: {};
+    };
+    hideToolbar: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+}>> & Readonly<{
+    onHandleEvent?: ((...args: any[]) => any) | undefined;
+    onOnRequest?: ((...args: any[]) => any) | undefined;
+    onInitialLoad?: ((...args: any[]) => any) | undefined;
+}>, {
+    initialRequestParams: Record<string, any>;
+    defaultUriParams: Record<string, any>;
+    hideToolbar: boolean;
+}, {}, {}, {}, string, import('vue').ComponentProvideOptions, true, {}, any>;
+declare const _default: typeof __VLS_export;
+export default _default;
+//# sourceMappingURL=ResourceTable.vue.d.ts.map

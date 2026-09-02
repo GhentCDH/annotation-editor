@@ -1,0 +1,87 @@
+import { C as e, D as t, O as n, b as r, v as i, w as a } from "./renderers-D20PBZBF.js";
+import { t as o } from "./LanguageSelect-PC5Di4BL.js";
+import { Drawer as s } from "@ghentcdh/ui";
+import { Fragment as c, createBlock as l, createCommentVNode as u, createElementBlock as d, createElementVNode as f, createTextVNode as p, createVNode as m, defineComponent as h, openBlock as g, ref as _, renderList as v, resolveComponent as y, toDisplayString as b, unref as x, withCtx as S } from "vue";
+import { RouterLink as C } from "vue-router";
+//#region src/admin/AdminView.vue?vue&type=script&setup=true&lang.ts
+var w = { class: "gap-2 flex flex-col h-full" }, T = { class: "flex items-center justify-between gap-2" }, E = { class: "menu w-full gap-2 flex-1 flex-grow h-full flex-nowrap" }, D = { key: 0 }, O = { open: "" }, k = { class: "font-semibold" }, A = { key: 1 }, j = {
+	key: 0,
+	class: "relative"
+}, M = {
+	key: 0,
+	class: "absolute left-0 z-10 mt-1 max-h-60 w-full overflow-auto rounded border bg-white shadow-lg"
+}, N = {
+	key: 0,
+	class: "p-2 text-sm text-gray-400"
+}, P = ["onClick"], F = { class: "ml-1 text-xs text-gray-400" }, I = { class: "menu w-full" }, L = { key: 0 }, R = { class: "bg-base-200 p-4 text-gray-500 text-sm" }, z = /* @__PURE__ */ h({
+	__name: "AdminView",
+	setup(h) {
+		let z = i(), { languages: B } = t(), V = _(!1), H = _([]), U = async () => {
+			if (V.value) {
+				V.value = !1;
+				return;
+			}
+			try {
+				H.value = (await n().get("/_app/resources/visibility")).data.resources.filter((e) => e.state === "draft" || e.state === "hidden"), V.value = !0;
+			} catch (e) {
+				console.error("Failed to fetch resource visibility", e);
+			}
+		}, W = async (e) => {
+			try {
+				await n().post(`/_app/resources/${encodeURIComponent(e)}/add-to-menu`), V.value = !1, await z.refreshLayout();
+			} catch (e) {
+				console.error("Failed to add resource to menu", e);
+			}
+		};
+		return (t, n) => {
+			let i = y("router-view");
+			return g(), l(x(s), {
+				class: "_h-full",
+				"width-left": 250,
+				"drawer-color": "bg-base-200"
+			}, {
+				"left-drawer": S(() => [f("div", w, [
+					f("div", T, [f("h2", null, b(x(z).title) + " Admin", 1), x(B).length > 1 ? (g(), l(o, { key: 0 })) : u("", !0)]),
+					f("ul", E, [(g(!0), d(c, null, v(x(z).sidebar, (e) => (g(), d(c, { key: e.id }, [x(r)(e) ? (g(), d("li", D, [f("details", O, [f("summary", k, b(e.label), 1), f("ul", null, [(g(!0), d(c, null, v(e.children, (e) => (g(), d("li", { key: e.id }, [m(x(C), {
+						to: {
+							name: x(a),
+							params: { formId: e.id }
+						},
+						"active-class": "bg-white font-bold"
+					}, {
+						default: S(() => [p(b(e.label), 1)]),
+						_: 2
+					}, 1032, ["to"])]))), 128))])])])) : (g(), d("li", A, [m(x(C), {
+						to: {
+							name: x(a),
+							params: { formId: e.id }
+						},
+						"active-class": "bg-white font-bold"
+					}, {
+						default: S(() => [p(b(e.label), 1)]),
+						_: 2
+					}, 1032, ["to"])]))], 64))), 128)), x(z).isDev.value ? (g(), d("li", j, [f("button", {
+						class: "text-sm text-gray-500 hover:text-gray-800",
+						onClick: U
+					}, " + Add resource "), V.value ? (g(), d("ul", M, [H.value.length === 0 ? (g(), d("li", N, " No hidden or draft resources ")) : u("", !0), (g(!0), d(c, null, v(H.value, (e) => (g(), d("li", {
+						key: e.name,
+						class: "cursor-pointer px-3 py-1.5 text-sm hover:bg-gray-100",
+						onClick: (t) => W(e.name)
+					}, [p(b(e.name) + " ", 1), f("span", F, "(" + b(e.state) + ")", 1)], 8, P))), 128))])) : u("", !0)])) : u("", !0)]),
+					f("ul", I, [x(z).isDev.value ? (g(), d("li", L, [m(x(C), {
+						to: { name: x(e) },
+						"active-class": "bg-white font-bold"
+					}, {
+						default: S(() => [...n[0] ||= [p(" Dev tools ", -1)]]),
+						_: 1
+					}, 8, ["to"])])) : u("", !0)]),
+					f("div", R, " version: " + b(x(z).version), 1)
+				])]),
+				default: S(() => [m(i)]),
+				_: 1
+			});
+		};
+	}
+});
+//#endregion
+export { z as default };

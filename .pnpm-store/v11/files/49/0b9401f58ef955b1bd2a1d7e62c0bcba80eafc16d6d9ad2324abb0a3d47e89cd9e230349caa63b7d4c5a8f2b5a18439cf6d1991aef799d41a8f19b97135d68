@@ -1,0 +1,20 @@
+import { Annotation, TextLine } from '../../../model';
+import { Dimensions, DimensionsWithScale } from '../../position/unscaled';
+export declare const getTextRange: (annotation: Annotation, line: TextLine) => {
+    start: number;
+    end: number;
+};
+type RangeDimensions = {
+    original: Dimensions;
+    dimensions: Dimensions;
+};
+/**
+ * Get ranges for an annotation in a line.
+ * Works only if the line has text content.
+ * @param parentDimensions
+ * @param annotation
+ * @param line
+ */
+export declare const getRanges: (parentDimensions: DimensionsWithScale, annotation: Annotation, line: TextLine) => RangeDimensions[] | null;
+export {};
+//# sourceMappingURL=get-range.d.ts.map

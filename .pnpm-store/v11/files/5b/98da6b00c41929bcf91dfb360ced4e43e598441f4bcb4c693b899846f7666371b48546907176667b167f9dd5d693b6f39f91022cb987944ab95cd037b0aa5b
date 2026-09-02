@@ -1,0 +1,21 @@
+import { Locator, Page } from '@playwright/test';
+import { Harness } from './Harness';
+/**
+ * Drives the `@ghentcdh/ui` `Drawer` component.
+ *
+ * The drawer has left/right toggle buttons with aria-labels like
+ * "Collapse left panel" / "Expand left panel".
+ */
+export declare class DrawerHarness extends Harness {
+    /** Resolve the drawer as the `<main>` containing the panels. */
+    static root(parent: Locator | Page): DrawerHarness;
+    static for(locator: Locator): DrawerHarness;
+    toggleLeft(): Promise<this>;
+    toggleRight(): Promise<this>;
+    isLeftOpen(): Promise<boolean>;
+    isRightOpen(): Promise<boolean>;
+    leftPanel(): Locator;
+    rightPanel(): Locator;
+    private leftButton;
+    private rightButton;
+}

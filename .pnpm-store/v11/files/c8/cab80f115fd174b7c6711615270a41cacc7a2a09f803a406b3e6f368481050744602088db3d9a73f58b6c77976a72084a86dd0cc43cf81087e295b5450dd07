@@ -1,0 +1,15 @@
+import { SvgAnnotationRender } from './SvgAnnotationRender';
+import { createAnnotationPathFn, PathParams } from './_utils/path';
+import { AnnotationDrawPath, BaseAnnotation } from '../../../model';
+import { CustomAnnotationStyle } from '../style';
+import { DefaultAnnotationStyle } from '../style/annotation.style.default';
+export declare const createHighlightPath: createAnnotationPathFn;
+export declare const createHighlightStyle: (color: string, style?: Partial<DefaultAnnotationStyle>) => Partial<DefaultAnnotationStyle>;
+export declare class HighlightAnnotationRender extends SvgAnnotationRender<BaseAnnotation> {
+    readonly weightOrder: number;
+    readonly isGutter: boolean;
+    readonly renderTag = true;
+    constructor(name: string, style?: CustomAnnotationStyle);
+    createPath(params: PathParams): AnnotationDrawPath;
+}
+//# sourceMappingURL=TextAnnotationRender.d.ts.map

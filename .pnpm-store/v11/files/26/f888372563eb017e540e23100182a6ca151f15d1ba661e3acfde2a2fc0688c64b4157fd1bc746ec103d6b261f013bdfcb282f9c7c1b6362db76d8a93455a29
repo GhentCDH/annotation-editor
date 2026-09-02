@@ -1,0 +1,56 @@
+declare const _default: typeof __VLS_export;
+export default _default;
+declare const __VLS_export: import('vue').DefineComponent<import('vue').ExtractPropTypes<{
+    loading: {
+        type: BooleanConstructor;
+        default: false;
+    };
+    multiselect: {
+        type: BooleanConstructor;
+        default: false;
+    };
+    actions: {
+        type: import('vue').PropType<import('./table.model').TableAction[]>;
+    };
+    data: {
+        type: import('vue').PropType<any[]>;
+    };
+    displayColumns: {
+        type: import('vue').PropType<import('./table.model').DisplayColumn[]>;
+        required: true;
+    };
+    page: {
+        type: import('vue').PropType<import('./table.component.properties').TablePage>;
+    };
+    sort: {
+        type: import('vue').PropType<import('./table.component.properties').TableSort>;
+    };
+}>, {}, {}, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, {}, string, import('vue').PublicProps, Readonly<import('vue').ExtractPropTypes<{
+    loading: {
+        type: BooleanConstructor;
+        default: false;
+    };
+    multiselect: {
+        type: BooleanConstructor;
+        default: false;
+    };
+    actions: {
+        type: import('vue').PropType<import('./table.model').TableAction[]>;
+    };
+    data: {
+        type: import('vue').PropType<any[]>;
+    };
+    displayColumns: {
+        type: import('vue').PropType<import('./table.model').DisplayColumn[]>;
+        required: true;
+    };
+    page: {
+        type: import('vue').PropType<import('./table.component.properties').TablePage>;
+    };
+    sort: {
+        type: import('vue').PropType<import('./table.component.properties').TableSort>;
+    };
+}>> & Readonly<{}>, {
+    loading: boolean;
+    multiselect: boolean;
+}, {}, {}, {}, string, import('vue').ComponentProvideOptions, true, {}, any>;

@@ -1,0 +1,38 @@
+import { PropType } from 'vue';
+import { DisplayColumn, TableAction } from './table.model';
+export type TablePage = {
+    count: number;
+    pageSize: number;
+    page: number;
+};
+export type TableSort = {
+    sortColumn?: string;
+    sortDirection: 'asc' | 'desc';
+};
+export declare const TableComponentProperties: {
+    loading: {
+        type: BooleanConstructor;
+        default: false;
+    };
+    multiselect: {
+        type: BooleanConstructor;
+        default: false;
+    };
+    actions: {
+        type: PropType<TableAction[]>;
+    };
+    data: {
+        type: PropType<any[]>;
+    };
+    displayColumns: {
+        type: PropType<DisplayColumn[]>;
+        required: true;
+    };
+    page: {
+        type: PropType<TablePage>;
+    };
+    sort: {
+        type: PropType<TableSort>;
+    };
+};
+export declare const TableComponentEmits: string[];

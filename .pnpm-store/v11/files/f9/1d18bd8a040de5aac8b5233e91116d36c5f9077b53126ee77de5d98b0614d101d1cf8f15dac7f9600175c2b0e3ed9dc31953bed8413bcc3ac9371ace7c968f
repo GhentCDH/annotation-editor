@@ -1,0 +1,50 @@
+import { isString } from "@vuepress/helper/client";
+import { useMutationObserver } from "@vueuse/core";
+import { defineComponent, h, ref, shallowRef } from "vue";
+import { useRoutePath } from "vuepress/client";
+import { EyeIcon, FireIcon } from "@theme-hope/components/info/icons";
+import { useMetaLocale } from "@theme-hope/composables/info/useMetaLocale";
+import { usePure } from "@theme-hope/composables/usePure";
+const HOT_VIEW_THRESHOLD = 1000;
+export default defineComponent({
+    name: "PageViewInfo",
+    inheritAttrs: false,
+    props: {
+        /**
+         * Whether show pageview and it's path
+         *
+         * 是否显示浏览量以及其路径
+         */
+        pageview: [Boolean, String],
+    },
+    setup(props) {
+        const routePath = useRoutePath();
+        const metaLocale = useMetaLocale();
+        const isPure = usePure();
+        const pageviewElement = shallowRef();
+        const pageViews = ref(0);
+        useMutationObserver(pageviewElement, () => {
+            // oxlint-disable-next-line typescript/no-non-null-assertion
+            const count = pageviewElement.value.textContent;
+            if (count && !Number.isNaN(Number(count)))
+                pageViews.value = Number(count);
+        }, { childList: true });
+        return () => props.pageview
+            ? h("span", {
+                class: "page-pageview-info",
+                "aria-label": `${metaLocale.value.views}${isPure.value ? "" : "🔢"}`,
+                ...(isPure.value ? {} : { "data-balloon-pos": "up" }),
+            }, [
+                h(pageViews.value < HOT_VIEW_THRESHOLD ? EyeIcon : FireIcon),
+                h("span", {
+                    ref: pageviewElement,
+                    id: "ArtalkPV",
+                    class: "vp-pageview waline-pageview-count",
+                    "data-path": isString(props.pageview) ? props.pageview : routePath.value,
+                    "data-page-key": isString(props.pageview) ? props.pageview : routePath.value,
+                }, "..."),
+            ])
+            : null;
+    },
+});
+//# sourceMappingURL=PageViewInfo.js.map

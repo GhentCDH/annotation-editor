@@ -1,0 +1,24 @@
+import { Locator, Page } from '@playwright/test';
+import { Harness } from './Harness';
+export type MarkdownToolbarButton = 'B' | 'I';
+/**
+ * Drives the `@ghentcdh/ui` `Markdown` component (TipTap-backed).
+ *
+ * The component renders `<div role="textbox" aria-label="{id}">` with a
+ * toolbar of `<button>`s whose visible text is the mark label (`B`, `I`, …).
+ */
+export declare class MarkdownHarness extends Harness {
+    static byId(parent: Locator | Page, id: string): MarkdownHarness;
+    static byLabel(parent: Locator | Page, label: string): MarkdownHarness;
+    static for(locator: Locator): MarkdownHarness;
+    /** The editable inner surface — TipTap renders a nested `role="textbox"`. */
+    private get editor();
+    fill(value: string): Promise<this>;
+    clear(): Promise<this>;
+    typeBold(text: string): Promise<this>;
+    typeItalic(text: string): Promise<this>;
+    type(text: string): Promise<this>;
+    toolbar(name: MarkdownToolbarButton): Locator;
+    /** Is a toolbar mark currently active (the lib adds `btn-active`)? */
+    isMarkActive(name: MarkdownToolbarButton): Promise<boolean>;
+}

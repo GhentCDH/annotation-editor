@@ -1,0 +1,137 @@
+import { PropType } from 'vue';
+import { MyStyles } from '../core/styles';
+/**
+ * Props shared by all form control wrappers (ControlWrapper, ReadonlyWrapper, etc.).
+ * Extend this interface for component-specific props.
+ */
+export interface ControlWrapperProps {
+    /** Unique identifier for the control element. */
+    id?: string;
+    /** Placeholder text shown when the control is empty. */
+    placeholder?: string;
+    /** Help text displayed below the control. */
+    description?: string;
+    /** Error message displayed below the control. */
+    errors?: string;
+    /** Label text displayed above the control. */
+    label?: string;
+    /** Whether the description is visible. @default false */
+    visible?: boolean;
+    /** Whether the field is required (shows asterisk). @default false */
+    required?: boolean;
+    /** Whether the control accepts input. @default true */
+    enabled?: boolean;
+    /** Whether the control currently has focus. @default false */
+    isFocused?: boolean;
+    /** Whether the control has been interacted with. @default false */
+    isTouched?: boolean;
+    /** Hide the label above the control. @default false */
+    hideLabel?: boolean;
+    /** Style overrides merged with default styles. @default myStyles */
+    styles?: MyStyles;
+    /** Tailwind width class applied to the wrapper. @default '!w-48' */
+    width?: string;
+    /** Size variant for the control. */
+    size?: string;
+    /** Hide the error/description message area. @default false */
+    hideErrors?: boolean;
+}
+/**
+ * Runtime Vue props definition for {@link ControlWrapperProps}.
+ * Use with `defineProps()` or spread into other property objects.
+ */
+export declare const ControlWrapperProperties: {
+    id: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    placeholder: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    description: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    errors: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    label: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    visible: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    required: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    enabled: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    isFocused: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    isTouched: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    hideLabel: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+    styles: {
+        type: PropType<MyStyles>;
+        default: () => {
+            readonly group: {
+                readonly root: "group";
+                readonly label: "text-primary text-lg font-bold";
+                readonly item: "group-item";
+            };
+            readonly verticalLayout: {
+                readonly root: "flex flex-col gap-x-2";
+                readonly item: "w-full";
+            };
+            readonly horizontalLayout: {
+                readonly root: "flex flex-row gap-x-2";
+                readonly item: "w-full";
+            };
+            readonly arrayList: {
+                readonly root: "fieldset";
+                readonly legend: "fieldset-legend text-xl capitalize";
+            };
+            readonly control: {
+                readonly root: "fieldset";
+                readonly wrapper: "fieldset";
+                readonly label: "fieldset-legend";
+                readonly error: "";
+                readonly input: "input";
+                readonly textarea: "textarea h-32";
+                readonly checkbox: "checkbox";
+                readonly select: "input pr-14";
+                readonly description: "form-control--description label text-xs text-gray-500";
+            };
+            readonly fixedArrayList: {
+                readonly root: "flex flex-row gap-x-2";
+                readonly item: "w-full";
+            };
+        };
+    };
+    width: {
+        type: StringConstructor;
+        default: string;
+    };
+    size: {
+        type: StringConstructor;
+        default: undefined;
+    };
+    hideErrors: {
+        type: BooleanConstructor;
+        default: boolean;
+    };
+};

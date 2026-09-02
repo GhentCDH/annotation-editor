@@ -1,0 +1,24 @@
+import { NotificationMessage, NotificationType } from './notification-message.ts';
+export declare class NotificationService {
+    private static instance;
+    notifications: import('vue').Ref<{
+        id: string;
+        message: string;
+        type: NotificationType;
+        duration: number;
+    }[], NotificationMessage[] | {
+        id: string;
+        message: string;
+        type: NotificationType;
+        duration: number;
+    }[]>;
+    private addNotification;
+    private removeNotificationAfterDuration;
+    private removeNotification;
+    static getInstance(): NotificationService;
+    static info(message: string): void;
+    static success(message: string): void;
+    static warning(message: string): void;
+    static error(message: string): void;
+    static removeNotification(id: string): void;
+}

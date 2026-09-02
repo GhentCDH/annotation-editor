@@ -1,0 +1,57 @@
+import { JsonFormsRendererRegistryEntry } from '@jsonforms/core';
+import { AxiosInstance } from 'axios';
+import { App, ComputedRef } from 'vue';
+import { CellRendererEntry } from '@ghentcdh/crouton-forms-vue';
+import { FormDef } from './form-def.types';
+import { SidebarNode } from './sidebar';
+import { CustomComponentEntry } from '../utils/custom-component';
+export { isSidebarGroup, isSidebarLeaf, menu } from './sidebar';
+export type { SidebarGroup, SidebarLeaf, SidebarNode } from './sidebar';
+export type { FormDef, FormSchema, FormSchemas } from './form-def.types';
+export declare const AppConfig: {
+    VERSION: string;
+    title: string;
+    /**
+     * Whether form fields are saved automatically on edit.
+     * Served by the backend via `GET /_app/layout` and mirrors `autoSave` in
+     * `crouton.json`. Defaults to `true`; set to `false` in `crouton.json` to
+     * restore explicit Save/Cancel buttons across the whole application.
+     */
+    autoSave: boolean;
+    /**
+     * Whether the connected backend has the visual resource builder enabled
+     * (backend env var `CROUTON_SCHEMA_EDITOR`, defaults to `false` when unset).
+     * Served by the backend via `GET /_app/layout`. Gates dev-only UI such as the
+     * resource schema editor. Defaults to `false` here too, so dev-only
+     * affordances stay hidden until the backend confirms it's enabled.
+     */
+    isDev: boolean;
+    /** Extra control renderers merged on top of the built-in crouton renderers in form/edit modals. */
+    renderers: JsonFormsRendererRegistryEntry[];
+    /** Extra renderers merged on top of the built-in crouton renderers in view (readonly) modals. */
+    readonlyRenderers: JsonFormsRendererRegistryEntry[];
+    /** Extra cell renderers merged on top of the built-in crouton cell renderers in tables. */
+    cellRenderers: CellRendererEntry[];
+    customComponents: CustomComponentEntry[];
+};
+export type UseCrouton = {
+    readonly sidebar: SidebarNode[];
+    version: ComputedRef<string>;
+    title: ComputedRef<string>;
+    autoSave: ComputedRef<boolean>;
+    isDev: ComputedRef<boolean>;
+    readonly renderers: JsonFormsRendererRegistryEntry[];
+    readonly customComponents: CustomComponentEntry[];
+    readonly readonlyRenderers: JsonFormsRendererRegistryEntry[];
+    readonly cellRenderers: CellRendererEntry[];
+    getFormDefById: (formId: string) => Promise<FormDef>;
+    getFormByUri: (uri: string) => Promise<FormDef>;
+    invalidateFormDef: (formId: string) => void;
+    invalidateAllFormDefs: () => void;
+    refreshLayout: () => Promise<void>;
+};
+export declare const useCrouton: () => UseCrouton;
+export declare const CroutonPlugin: (api: AxiosInstance, options?: Partial<typeof AppConfig>) => {
+    install(app: App): void;
+};
+//# sourceMappingURL=useCrouton.d.ts.map
