@@ -16,6 +16,17 @@ _Analysis: `knip` + manual verification. Updated: 2026-09-02._
 > **`annotation-vue`** are internal-only and get **bundled** into the published packages
 > (see Phase 6). `annotation-editor-e2e` is never published.
 
+
+## Execution status (2026-09-02)
+- ✅ **Phase 1–5 done & committed** on `feat/use-crouton-resource` (each build-verified green): temp files removed, 7 deprecated shims removed (internal imports repointed to `@ghentcdh/annotation-ui`), `NoModal.vue` + `annotation.style.ts` removed, unused deps removed (`memoizee`, `vee-validate`, `@ghentcdh/crouton-api`, `@ghentcdh/create-crouton`), e2e dep declared.
+- ⛔ **Phase 6 BLOCKED — reverted, not committed.** Config changes are correct (see steps below) and JS bundling of annotation-vue works, but the editor's **declaration (dts)** build cannot be verified green here:
+  1. *Environment-only (won't affect your machine):* `@ghentcdh/crouton-*` is linked via `pnpm-workspace.yaml` `__overrides` to a sibling `../crouton` checkout absent in the cloud bridge, so it fell back to registry `alpha.50` whose `CroutonForm` API differs → form-type errors in `AnnotationForm.vue`, `AnnotationEditModal.vue`, `Metadata.vue`, `useMetadata.ts`.
+  2. *Real latent bugs bundling surfaces (fix needed):*
+     - `annotation-vue/src/lib/router/annotation-namespace.routes.ts` (~L229–235) reads `def.columns/isRoot/allowedChildren/allowedLinks/type/icon/target` at top level, but current `AnnotationResource` (annotation-core) has those under `def.annotation` and has **no `columns`**. Builds standalone only against annotation-core's stale built `.d.ts` (source/dist skew).
+     - `annotation-vue/src/lib/composables/useAnnotationDefinitions.ts` (~L67) `const style = def.annotation` then `style.icon` — `annotation` is optional → null-safety error.
+  - **Next step:** run `pnpm nx build annotation-editor` locally (where `../crouton` resolves) to confirm the crouton errors vanish, then fix the two annotation-vue issues above, then re-apply Phase 6 config edits and verify.
+- ⏸️ **Phases 7–11 not started** (waiting on Phase 6 direction).
+
 ---
 
 ## Phase 1 — Remove stray root junk _(risk: none)_
