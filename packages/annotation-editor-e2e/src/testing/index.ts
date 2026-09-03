@@ -1,12 +1,8 @@
 /**
- * Re-export the @ghentcdh/ui testing harnesses via a relative path.
+ * Re-export the @ghentcdh/ui testing harnesses from the published package.
  *
- * The installed @ghentcdh/ui package does not expose a ./testing subpath in
- * its exports map, so we import directly from the ghentcdh monorepo source.
+ * The @ghentcdh/ui package exposes these via its `./testing` subpath export.
  */
-export {
-  Harness,
-  byRole,
-} from '../../../../../ghentcdh/libs/ui/src/testing/Harness';
-export { CollapseHarness } from '../../../../../ghentcdh/libs/ui/src/testing/CollapseHarness';
-export { ModalHarness } from '../../../../../ghentcdh/libs/ui/src/testing/ModalHarness';
+export { Harness, byRole } from '@ghentcdh/ui/testing';
+export { CollapseHarness } from '@ghentcdh/ui/testing';
+export { ModalHarness } from '@ghentcdh/ui/testing';
