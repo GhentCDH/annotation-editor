@@ -81,7 +81,8 @@ const toVueDefinition = (
 ): VueAnnotationDefinition => {
   console.log('to vue definition');
   const style = def.annotation;
-  console.log(style);
+  console.table(def);
+  console.table(style);
 
   return {
     id: def.id,

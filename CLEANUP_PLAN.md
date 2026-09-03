@@ -25,7 +25,11 @@ _Analysis: `knip` + manual verification. Updated: 2026-09-02._
      - `annotation-vue/src/lib/router/annotation-namespace.routes.ts` (~L229–235) reads `def.columns/isRoot/allowedChildren/allowedLinks/type/icon/target` at top level, but current `AnnotationResource` (annotation-core) has those under `def.annotation` and has **no `columns`**. Builds standalone only against annotation-core's stale built `.d.ts` (source/dist skew).
      - `annotation-vue/src/lib/composables/useAnnotationDefinitions.ts` (~L67) `const style = def.annotation` then `style.icon` — `annotation` is optional → null-safety error.
   - **Next step:** run `pnpm nx build annotation-editor` locally (where `../crouton` resolves) to confirm the crouton errors vanish, then fix the two annotation-vue issues above, then re-apply Phase 6 config edits and verify.
-- ⏸️ **Phases 7–11 not started** (waiting on Phase 6 direction).
+- ✅ **Phase 7 done** — e2e test-harness imports now use the published `@ghentcdh/ui/testing` subpath instead of the fragile `../../../../../ghentcdh/libs/ui/src/testing/*` relative paths (needs a local `nx e2e` to confirm).
+- ✅ **Phase 10 done** — checked-in `knip.json`, root `knip` script, and an **advisory** knip CI job (`continue-on-error`) in `merge-request.yml`. Run `pnpm knip` locally, tune away any remaining false positives, then drop `continue-on-error` to make it a blocking gate.
+- ✅ **Phase 11 done** — root `package.json` now has `build` / `test` / `lint` / `knip` scripts delegating to nx.
+- ⏸️ **Phases 8 & 9 deferred to local** — trimming unused exports/types and verify-then-remove of ambiguous deps both need a real build to confirm nothing breaks, and I'm no longer running `pnpm install` / `nx build` on the shared folder (it swaps the platform-native binaries — see note). Do these locally: `pnpm knip` lists the current unused exports; remove/keep per the Phase 8 review notes, and build after each.
+- ⚠️ **Native-binary note:** running installs/builds through the cloud bridge (Linux) and locally (macOS) fight over `node_modules` native binaries. After any bridge session, run `rm -rf node_modules && pnpm install` locally before building.
 
 ---
 
