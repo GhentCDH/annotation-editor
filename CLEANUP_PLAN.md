@@ -92,30 +92,22 @@ src/lib/utils/mouse-events.ts
 
 ---
 
-## Phase 6 — Restrict published packages to api / editor / preview _(risk: medium, release-config)_
-**Goal:** publish only `annotation-api`, `annotation-editor`, `annotation-preview`; make
-`annotation-vue` internal and bundle it into the editor.
+## Phase 6 — Publish only core / api / vue _(done — config only)_
+**Decision:** the published npm packages are `@ghentcdh/annotation-core`, `@ghentcdh/annotation-api`, `@ghentcdh/annotation-vue`. `annotation-ui`, `annotation-editor`, `annotation-preview` are internal (`private: true`).
 
-Current state: `annotation-vue` is `private:false`, listed in `nx.json` release, and
-`annotation-editor` **externalizes** `@ghentcdh/annotation-vue` (so it must currently be
-published). `annotation-core` + `annotation-ui` are already bundled + `private:true`.
+Applied:
+1. `nx.json` → `release.projects` = `["annotation-api","annotation-core","annotation-vue"]`.
+2. `annotation-core/package.json` → `"private": false`; `annotation-core/project.json` → added `nx-release-publish` target.
+3. `annotation-editor/package.json` & `annotation-preview/package.json` → `"private": true`.
 
-Steps:
-1. **`nx.json`** → `release.projects`: remove `"annotation-vue"` (leave `annotation-api`,
-   `annotation-editor`, `annotation-preview`).
-2. **`packages/annotation-vue/package.json`** → set `"private": true`.
-3. **`packages/annotation-vue/project.json`** → remove/disable its `nx-release-publish` target.
-4. **`packages/annotation-editor/vite.config.mts`** → remove `'@ghentcdh/annotation-vue'` from
-   `rolldownOptions.external[]` so it gets bundled into the editor output.
-5. **Bundle its types:** add `annotation-vue` to the `bundleDtsImports(...)` packages list in the
-   same vite config (it already inlines `annotation-core`/`annotation-ui` `.d.ts` into `_bundled/`),
-   and ensure `project.json` `build.dependsOn` builds `annotation-vue` first.
-6. Confirm no other published package externalizes an internal-only package. (`annotation-preview`
-   already bundles `annotation-core`; it externalizes only truly-external libs — OK.)
-- **Verify:** `pnpm nx run-many -t build` for the 3 published pkgs; inspect
-  `dist/packages/annotation-editor` — the bundle must contain the annotation-vue code and its
-  `.d.ts` under `_bundled/`, and `package.json`/exports must not reference `@ghentcdh/annotation-vue`.
-  Optionally `npm pack --dry-run` each published package and check the dependency tree.
+No source or vite changes — vue/api still **bundle** annotation-core, so their builds are unchanged; core is now also published standalone. Verify locally:
+```
+rm -rf node_modules && pnpm install     # restore macOS native binaries first
+pnpm nx run-many -t build
+pnpm nx release --dry-run               # confirm only core/api/vue are versioned/published
+```
+
+**Optional follow-up (cleaner, do later):** externalize `@ghentcdh/annotation-core` in `annotation-vue/vite.config.mts` and `annotation-api/vite.config.mts` and declare `"@ghentcdh/annotation-core": "workspace:*"` in both packages' `dependencies`. That stops core being duplicated inside the vue/api bundles and makes consumers install the single published core. Needs a build + `npm pack --dry-run` check.
 
 ---
 

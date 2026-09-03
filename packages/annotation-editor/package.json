@@ -20,5 +20,6 @@
   },
   "peerDependencies": {
     "@ghentcdh/annotated-text": "^1.0.11"
-  }
+  },
+  "private": true
 }

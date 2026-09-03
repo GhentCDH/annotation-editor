@@ -53,5 +53,9 @@ export const loadAnnotationDefinitionsFromUrl = async (
   fetchFn: DefinitionsFetchFn = defaultFetchFn,
 ): Promise<AnnotationResource[]> => {
   const configs = await fetchFn(url);
-  return loadAnnotationDefinitionsFromConfigs(configs, config, factory);
+
+  console.log(configs);
+
+  return configs;
+  // return loadAnnotationDefinitionsFromConfigs(configs, config, factory);
 };

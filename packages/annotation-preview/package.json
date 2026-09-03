@@ -15,5 +15,6 @@
     },
     "./index.css": "./index.css",
     "./package.json": "./package.json"
-  }
+  },
+  "private": true
 }

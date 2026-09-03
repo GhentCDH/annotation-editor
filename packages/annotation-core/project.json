@@ -3,8 +3,16 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/annotation-core/src",
   "projectType": "library",
-  "tags": ["scope:annotation", "type:util"],
+  "tags": [
+    "scope:annotation",
+    "type:util"
+  ],
   "targets": {
+    "nx-release-publish": {
+      "options": {
+        "packageRoot": "dist/{projectRoot}"
+      }
+    },
     "build": {
       "outputs": [
         "{projectRoot}/{options.outDir}",
@@ -25,11 +33,15 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
+      "outputs": [
+        "{options.outputFile}"
+      ]
     },
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{projectRoot}/coverage/unit"]
+      "outputs": [
+        "{projectRoot}/coverage/unit"
+      ]
     }
   }
 }
