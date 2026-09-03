@@ -79,10 +79,7 @@ const toVueDefinition = (
   createStyle: typeof createHighlightStyle,
   activeStyle: typeof createHighlightStyle,
 ): VueAnnotationDefinition => {
-  console.log('to vue definition');
-  const style = def.annotation;
-  console.table(def);
-  console.table(style);
+  const style = def.annotation!;
 
   return {
     id: def.id,
@@ -175,7 +172,6 @@ export const createAnnotationDefinitionsState = (
     },
 
     async loadFromUrl(url: string, fetchFn?: DefinitionsFetchFn) {
-      console.log('loadFromUrl testje');
       state.loading = true;
       state.error = null;
       try {
@@ -185,13 +181,11 @@ export const createAnnotationDefinitionsState = (
           factory,
           fetchFn,
         );
-        console.table('update defs');
         updateDefinitions(defs);
       } catch (e) {
         console.error(e);
         state.error = e instanceof Error ? e : new Error(String(e));
       } finally {
-        console.log(' done loadFromUrl');
         state.loading = false;
       }
     },

@@ -22,13 +22,15 @@
 </template>
 <script lang="ts" setup>
 import { Alert, IconEnum } from '@ghentcdh/ui';
-import { AnnotationInfoCardBase } from '@ghentcdh/annotation-ui';
+import {
+  type AnnotationDefinition,
+  AnnotationInfoCardBase,
+} from '@ghentcdh/annotation-ui';
 import { computed, ref } from 'vue';
 import { AnnotationInfoCardProperties } from './AnnotationInfoCard.properties';
 import LinksDetail from './LinksDetail.vue';
 import { useEditorState } from '../../composables/useEditorState';
 import Navbar from '../../components/navbar.vue';
-import { type AnnotationDefinition } from '@ghentcdh/annotation-ui';
 import { type NavbarAction } from '../../components/navbar.properties';
 
 const properties = defineProps(AnnotationInfoCardProperties);
@@ -60,7 +62,6 @@ const createAnnotation = (annotationType: string) => {
 };
 
 const addActions = (definition: AnnotationDefinition) => {
-  console.log(definition);
   const actions = definition.allowedChildren;
 
   if (actions.length === 0) return null;
@@ -87,7 +88,6 @@ const addActions = (definition: AnnotationDefinition) => {
 };
 
 const createActionLinks = (definition: AnnotationDefinition) => {
-  console.log(definition);
   return definition.allowedLinks.map((link) => ({
     icon: link.icon ?? IconEnum.Link,
     label: `Add ${link.label}`,

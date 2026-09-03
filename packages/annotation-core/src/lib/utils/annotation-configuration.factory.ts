@@ -66,7 +66,6 @@ export const createAnnotationConfiguration = (
       views: {},
     } as unknown as CustomAnnotationStyle;
   }
-
   const listStyles = Object.keys(styles);
 
   const allowedChildrenPerType = groupById(

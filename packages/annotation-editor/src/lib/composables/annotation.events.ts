@@ -1,11 +1,9 @@
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { type TemplateRef } from 'vue';
+import type { SourceModel, type AnnotationUtils , type KeyLabel  } from '@ghentcdh/annotation-ui';
 import { type EditorConfig, type EditorState_ } from './editorState';
-import type { SourceModel } from '@ghentcdh/annotation-ui';
 import { type AnnotationEditModalShow } from '../modals/edit-annotation/AnnotationEditModal.properties';
-import { type AnnotationUtils } from '@ghentcdh/annotation-ui';
 import { type AnnotationEditorEmitsFn } from '../AnnotationEditor.properties';
-import { type KeyLabel } from '@ghentcdh/annotation-ui';
 
 type SelectAnnotationData = {
   annotation: W3CAnnotation;

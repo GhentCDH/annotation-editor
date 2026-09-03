@@ -1,9 +1,9 @@
+import { AnnotationModal } from '@ghentcdh/annotation-ui';
 import {
   type LinkAnnotaitonCloseEvent,
   type LinkAnnotationProps,
   type LinkAnnotationShow,
 } from './link-annotation.properties';
-import { AnnotationModal } from '@ghentcdh/annotation-ui';
 
 export class LinkAnnotation extends AnnotationModal<
   LinkAnnotationProps,

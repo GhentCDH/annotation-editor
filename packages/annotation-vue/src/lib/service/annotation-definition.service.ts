@@ -5,8 +5,6 @@ export class AnnotationDefinitionService {
   private groupedDefinitions: Record<string, AnnotationResource> = {};
 
   constructor(definitions: AnnotationResource[] = []) {
-    console.table(definitions);
-
     if (definitions.length) {
       this.setDefinitions(definitions);
     }
@@ -14,11 +12,8 @@ export class AnnotationDefinitionService {
 
   setDefinitions(definitions: AnnotationResource[]): void {
     this.definitions = definitions;
-    console.log('set definitions');
-    console.table(definitions);
     this.groupedDefinitions = definitions.reduce(
       (acc: Record<string, AnnotationResource>, current) => {
-        console.table(current);
         acc[current.id] = current;
         return acc;
       },

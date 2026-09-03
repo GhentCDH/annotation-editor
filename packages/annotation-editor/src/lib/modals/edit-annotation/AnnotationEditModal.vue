@@ -41,12 +41,12 @@ import { Btn, Collapse, Modal } from '@ghentcdh/ui';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { type AnnotatedText } from '@ghentcdh/annotated-text';
 import { w3cAnnotation, type W3CAnnotation } from '@ghentcdh/w3c-utils';
+import { type Selector } from '@ghentcdh/annotation-ui';
 import {
   AnnotationEditEmits,
   AnnotationEditModalProperties,
 } from './AnnotationEditModal.properties';
 import { useEditorState } from '../../composables/useEditorState';
-import { type Selector } from '@ghentcdh/annotation-ui';
 import { useMetadata } from '../../utils/useMetadata';
 
 let annotatedText: AnnotatedText<W3CAnnotation>;

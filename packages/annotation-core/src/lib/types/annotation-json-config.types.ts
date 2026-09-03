@@ -86,8 +86,8 @@ export const AnnotationJsonResourceSchema = AnnotationJsonResourceShape
     const schemaVersion = obj.schemaVersion ?? BASELINE_RESOURCE_VERSION;
 
     const config = {
-      ...(obj.annotation ?? {}),
       ...obj,
+      ...(obj.annotation ?? {}),
     };
 
     return {

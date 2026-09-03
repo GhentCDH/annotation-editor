@@ -1,9 +1,9 @@
+import { AnnotationModal } from '@ghentcdh/annotation-ui';
 import {
   type AnnotationEditModal,
   type AnnotationEditModalEvent,
   type AnnotationEditModalShow,
 } from './AnnotationEditModal.properties';
-import { AnnotationModal } from '@ghentcdh/annotation-ui';
 
 export class AnnotationEdit extends AnnotationModal<
   AnnotationEditModal,

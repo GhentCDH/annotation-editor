@@ -27,7 +27,7 @@ export const buildAnnotationDefinition = (
     throw new Error(parsed.error as any);
   }
   const json = parsed.data;
-  const columns = json.columns ?? [];
+  const columns = json.columns;
 
   // const json_schema = hasColumns ? (context as any).toJsonSchema() : undefined;
   const views = columns?.length ? buildViewsFromColumns(columns) : undefined;
@@ -47,13 +47,11 @@ export const buildAnnotationDefinition = (
   // );
   const definition: AnnotationResource = annotationResource.parse({
     ...json,
-    isRoot: json.isRoot ?? true,
     context,
     json_ld: context?.toJsonLdContext(),
     json_schema,
     views,
   });
-
   return definition;
 };
 
@@ -62,9 +60,6 @@ export const buildAnnotationDefinitions = (
   annotationDefConfig: AnnotationDefConfig,
   factory?: ContextBuilderFactory,
 ): AnnotationResource[] => {
-  console.log('build annotation definitions');
-  console.table(configs);
-  console.log(annotationDefConfig);
   return configs.map((config) =>
     buildAnnotationDefinition(config, annotationDefConfig, factory),
   );

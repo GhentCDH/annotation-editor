@@ -24,10 +24,10 @@
 import { computed } from 'vue';
 import { IconEnum } from '@ghentcdh/ui';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';;
+import { type AnnotationLink } from '@ghentcdh/annotation-ui';
 import AnnotationText from './Annotation-text.vue';
 import Navbar from '../../components/navbar.vue';
 import { useEditorState } from '../../composables/useEditorState';
-import { type AnnotationLink } from '@ghentcdh/annotation-ui';
 
 const props = defineProps<{ annotation: W3CAnnotation }>();
 

@@ -38,9 +38,10 @@ export const createAnnotationStyleBodyUnsafe = (
   annotationConfig: Partial<AnnotationDefConfig> | undefined,
   style: Partial<AnnotationResource> & Pick<AnnotationContext, 'id' | 'name'>,
 ) => {
+  const resource = { ...style, ...style.annotation };
   const parsed =
     AnnotationStyleContextBuilder(annotationConfig).toAnnotationBodyUnsafe(
-      style,
+      resource,
     );
 
   if (!parsed.success) {
