@@ -3,12 +3,13 @@ import {
   type BaseAnnotation,
   type CustomAnnotationStyle,
 } from '@ghentcdh/annotated-text';
-import { type ContextBuilder, type W3CAnnotation } from '@ghentcdh/w3c-utils';
+import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { type ViewConfig } from '@ghentcdh/crouton-core';
 import { type KeyLabel } from './key-label.type';
 import { type SourceModel } from './source.model';
 import { type ViewDef } from './annotation-definition.type';
 
+// TODO why map this to this and not AnnotationResource & {style: CustomAnnotationStyle}
 export type UIAnnotationDefinition = {
   id: string;
   label: string;
@@ -16,8 +17,7 @@ export type UIAnnotationDefinition = {
   allowedChildren: Array<KeyLabel>;
   allowedLinks: Array<KeyLabel>;
   isRoot?: boolean;
-  context?: ContextBuilder;
-  views: Record<ViewDef, ViewConfig>;
+  schemas: Record<ViewDef, ViewConfig>;
 };
 
 export type AllowedChildrenPerType = Record<string, Array<KeyLabel>>;

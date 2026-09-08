@@ -1,9 +1,11 @@
 {
   "id": "animals",
   "name": "Animals",
-  "color": "#65a378",
-  "target": "highlight",
-  "allowedLinks": ["emotion"],
+  "annotations": {
+    "color": "#65a378",
+    "target": "highlight",
+    "allowedLinks": ["emotion"]
+  },
   "columns": [
     {
       "id": "name",

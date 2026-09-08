@@ -225,7 +225,7 @@ export const createAnnotationNamespaceRoutes = (
           data: {
             id: def.id,
             name: def.name,
-            views: def.views,
+            schemas: def.schemas,
             columns: def.columns,
             isRoot: def.isRoot,
             allowedChildren: def.allowedChildren,

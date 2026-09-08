@@ -3,17 +3,17 @@ import {
   type ComputedRef,
   inject,
   type InjectionKey,
+  nextTick,
   provide,
   reactive,
   shallowReactive,
   type TemplateRef,
   watch,
-  nextTick,
 } from 'vue';
 import {
-  createAnnotationConfiguration,
   annotationUtils,
   type AnnotationUtils,
+  createAnnotationConfiguration,
   createModalConfig,
   getAnnotationElementCenter,
   getMousePosition,
@@ -21,7 +21,10 @@ import {
 } from '@ghentcdh/annotation-ui';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { type PreviewConfig, type PreviewState_ } from './previewState';
-import { type AnnotationPreviewProps, type AnnotationPreviewEmitsFn } from '../AnnotationPreview.properties';
+import {
+  type AnnotationPreviewEmitsFn,
+  type AnnotationPreviewProps,
+} from '../AnnotationPreview.properties';
 import { previewModalDefaults } from '../modals/PreviewModal.defaults';
 
 export type PreviewSelectEvent = {
@@ -70,10 +73,11 @@ export const useProvidePreviewState = (
   });
 
   watch(
-    () =>
-      props.annotationDefinitions &&
-      props.textAdapter &&
-      props.annotationAdapter,
+    () => ({
+      annotationDefinitions: props.annotationDefinitions,
+      textAdapter: props.textAdapter,
+      annotationAdapter: props.annotationAdapter,
+    }),
     () => {
       config.annotation = createAnnotationConfiguration(
         props.annotationDefinitions,
@@ -121,8 +125,10 @@ export const useProvidePreviewState = (
 
       nextTick(() => {
         previewState.selectedAnnotation = annotation;
-        const position = getAnnotationElementCenter(containerRef.value!, id)
-          ?? { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+        const position = getAnnotationElementCenter(
+          containerRef.value!,
+          id,
+        ) ?? { x: window.innerWidth / 2, y: window.innerHeight / 2 };
         config.modal.show('info-card', { annotation, source, position });
         emits('select:annotation', annotation, 'show');
       });
@@ -138,10 +144,9 @@ export const useProvidePreviewState = (
       return;
     }
 
-    const position = getAnnotationElementCenter(
-      containerRef.value!,
-      data.annotation.id,
-    ) ?? getMousePosition(containerRef.value!, data.mouseEvent);
+    const position =
+      getAnnotationElementCenter(containerRef.value!, data.annotation.id) ??
+      getMousePosition(containerRef.value!, data.mouseEvent);
 
     config.modal.show('info-card', {
       annotation: data.annotation,
@@ -164,6 +169,8 @@ export const useProvidePreviewState = (
 export const usePreviewState = (): PreviewState => {
   const ctx = inject(PREVIEW_KEY);
   if (!ctx)
-    throw new Error('usePreviewState() must be called inside an AnnotationPreview');
+    throw new Error(
+      'usePreviewState() must be called inside an AnnotationPreview',
+    );
   return ctx;
 };

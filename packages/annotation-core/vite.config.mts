@@ -3,6 +3,7 @@ import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import { copyPackageJson } from '../../tools/vite/copy-package-json.mts';
 import * as path from 'path';
+import { execSync } from 'node:child_process';
 
 export default defineConfig(() => ({
   root: import.meta.dirname,
@@ -17,6 +18,15 @@ export default defineConfig(() => ({
       pathsToAliases: false,
     }),
     copyPackageJson(),
+    {
+      name: 'gen-resource-schema',
+      closeBundle() {
+        execSync('node scripts/gen-resource-schema.mjs', {
+          cwd: import.meta.dirname,
+          stdio: 'inherit',
+        });
+      },
+    },
   ],
   build: {
     outDir: '../../dist/packages/annotation-core',

@@ -39,7 +39,7 @@ const annotationDef = computed(() =>
   config.annotation.getDefinition(properties.annotationType),
 );
 
-const formDef = computed(() => annotationDef.value?.views?.form);
+const formDef = computed(() => annotationDef.value?.schemas?.form);
 const errorMode = 'onBlur';
 
 onMounted(() => {

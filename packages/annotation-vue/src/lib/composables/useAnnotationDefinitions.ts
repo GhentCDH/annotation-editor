@@ -25,7 +25,7 @@ import {
   type GlobModules,
   loadAnnotationDefinitionsFromConfigs,
   loadAnnotationDefinitionsFromGlob,
-  loadAnnotationDefinitionsFromUrl,
+  loadAnnotationDefinitionsFromUrls,
 } from '../loader/annotation-definition.loader';
 
 export type AnnotationDefinitionsState = {
@@ -37,6 +37,7 @@ export type AnnotationDefinitionsState = {
   loadFromConfigs: (configs: AnnotationJsonConfig[]) => void;
   loadFromDefinitions: (defs: CoreAnnotationDefinition[]) => void;
   loadFromUrl: (url: string, fetchFn?: DefinitionsFetchFn) => Promise<void>;
+  loadFromUrls: (urls: string[], fetchFn?: DefinitionsFetchFn) => Promise<void>;
   loading: boolean;
   error: Error | null;
   service: AnnotationDefinitionService;
@@ -50,6 +51,7 @@ export type ProvideAnnotationDefinitionsOptions = {
   activeHighlightStyle?: typeof createHighlightStyle;
   factory?: ContextBuilderFactory;
   definitionsUrl?: string;
+  definitionsUrls?: string[];
   fetchFn?: DefinitionsFetchFn;
 };
 
@@ -90,7 +92,7 @@ const toVueDefinition = (
       default: createStyle(style.color),
       active: activeStyle(style.color),
     },
-    views: def.views as Record<string, ViewConfig>,
+    schemas: def.schemas as Record<string, ViewConfig>,
     allowedChildren: resolveKeyLabels(style.allowedChildren, grouped),
     allowedLinks: resolveKeyLabels(style.allowedLinks, grouped),
     isRoot: style.isRoot ?? true,
@@ -171,16 +173,32 @@ export const createAnnotationDefinitionsState = (
       updateDefinitions(defs);
     },
 
+    async loadFromUrls(urls: string[], fetchFn?: DefinitionsFetchFn) {
+      state.loading = true;
+      state.error = null;
+      try {
+        const defs = await loadAnnotationDefinitionsFromUrls(urls);
+        updateDefinitions(defs);
+      } catch (e) {
+        console.error(e);
+        state.error = e instanceof Error ? e : new Error(String(e));
+      } finally {
+        state.loading = false;
+      }
+    },
     async loadFromUrl(url: string, fetchFn?: DefinitionsFetchFn) {
       state.loading = true;
       state.error = null;
       try {
-        const defs = await loadAnnotationDefinitionsFromUrl(
-          url,
-          config,
-          factory,
-          fetchFn,
-        );
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(
+            `Failed to fetch annotation definitions: ${response.status} ${response.statusText}`,
+          );
+        }
+        const configuration = await response.json();
+        const urls = configuration.annotations.map((a) => a.schemas);
+        const defs = await loadAnnotationDefinitionsFromUrls(urls);
         updateDefinitions(defs);
       } catch (e) {
         console.error(e);
@@ -209,6 +227,10 @@ export const provideAnnotationDefinitions = (
 
   if (options.definitionsUrl) {
     state.loadFromUrl(options.definitionsUrl, options.fetchFn);
+  }
+
+  if (options.definitionsUrls) {
+    state.loadFromUrls(options.definitionsUrls, options.fetchFn);
   }
 
   provide(ANNOTATION_DEFINITIONS_KEY, state);

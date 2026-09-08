@@ -9,9 +9,10 @@
   >
     <template #content>
       <CroutonForm
+        v-if="annotationDef"
         layout="rows"
         :data="metadata"
-        :views="annotationDef.views"
+        :views="annotationDef.schemas"
         :format-before-save="formatBeforeSave"
         form-max-width="w-max max-w-lg"
         @click="onCancel"
@@ -21,11 +22,7 @@
           <div class="flex-grow">
             <Collapse :title="label.selectLabel">
               <div :id="editId" />
-              <Btn
-                :outline="true"
-                class="mt-2"
-                @click="selectAll"
-              >
+              <Btn :outline="true" class="mt-2" @click="selectAll">
                 Select all text
               </Btn>
             </Collapse>
@@ -61,7 +58,7 @@ const editId = `edit-select-annotation-${Date.now()}--`;
 const { annotationDef, metadata } = useMetadata(props);
 
 const label = computed(() => {
-  const _label = annotationDef.label ?? props.type;
+  const _label = annotationDef?.label ?? props.type;
 
   return {
     title: props.annotation ? `Edit ${_label}` : `Create ${_label}`,

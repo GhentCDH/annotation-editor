@@ -36,26 +36,10 @@ export type DefinitionsFetchFn = (
   url: string,
 ) => Promise<AnnotationJsonConfig[]>;
 
-const defaultFetchFn: DefinitionsFetchFn = async (url: string) => {
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(
-      `Failed to fetch annotation definitions: ${response.status} ${response.statusText}`,
-    );
-  }
-  return response.json();
-};
-
-export const loadAnnotationDefinitionsFromUrl = async (
-  url: string,
-  config: AnnotationDefConfig,
-  factory?: ContextBuilderFactory,
-  fetchFn: DefinitionsFetchFn = defaultFetchFn,
-): Promise<AnnotationResource[]> => {
-  const configs = await fetchFn(url);
-
-  console.log(configs);
-
-  return configs;
-  // return loadAnnotationDefinitionsFromConfigs(configs, config, factory);
+export const loadAnnotationDefinitionsFromUrls = async (urls: string[]) => {
+  return Promise.all(
+    urls.map((a) => {
+      return fetch(a).then((r) => r.json());
+    }),
+  );
 };

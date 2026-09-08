@@ -1,8 +1,10 @@
 {
   "id": "keyconcepts",
   "name": "Key Concepts",
-  "color": "#712793",
-  "target": "highlight",
+  "annotation": {
+    "color": "#712793",
+    "target": "highlight"
+  },
   "columns": [
     {
       "id": "concept",

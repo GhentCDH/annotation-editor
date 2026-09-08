@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { ViewConfigSchema } from '@ghentcdh/crouton-core';
 import { ContextBuilder } from '@ghentcdh/w3c-utils';
 import {
-  annotationConfig,
+  AnnotationConfigSchema,
   AnnotationJsonResourceShape,
 } from './annotation-json-config.types';
 
@@ -12,18 +12,18 @@ export type ViewDef = (typeof viewDefList)[number];
 
 export const annotationColumnDefinition = z.custom<any>();
 
-export const annotationResource = AnnotationJsonResourceShape.pick({
+const _annotationResource = AnnotationJsonResourceShape.pick({
   id: true,
   name: true,
   title: true,
   operations: true,
   annotation: true,
 }).extend({
-  annotation: annotationConfig,
-  json_ld: z.any().optional(),
+  annotation: AnnotationConfigSchema,
   context: z.instanceof(ContextBuilder).optional(),
   views: z.record(ViewDefEnum, ViewConfigSchema).optional(),
 });
 
-// export type AnnotationResource
-export type AnnotationResource = z.infer<typeof annotationResource>;
+export type AnnotationResource = z.infer<typeof _annotationResource>;
+export const annotationResource: z.ZodType<AnnotationResource> =
+  _annotationResource;

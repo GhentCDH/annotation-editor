@@ -9,10 +9,12 @@ import {
   type TemplateRef,
   watch,
 } from 'vue';
-import { createAnnotationConfiguration, createModalConfig  } from '@ghentcdh/annotation-ui';
 import {
   type AnnotationUtils,
-  annotationUtils, type SourceModel 
+  annotationUtils,
+  createAnnotationConfiguration,
+  createModalConfig,
+  type SourceModel,
 } from '@ghentcdh/annotation-ui';
 import {
   type AnnotationEvents,
@@ -84,10 +86,11 @@ export const useProvideEditorState = (
   });
 
   watch(
-    () =>
-      props.annotationDefinitions &&
-      props.textAdapter &&
-      props.annotationAdapter,
+    [
+      () => props.annotationDefinitions,
+      () => props.textAdapter,
+      () => props.annotationAdapter,
+    ],
     () => {
       config.annotation = createAnnotationConfiguration(
         props.annotationDefinitions,

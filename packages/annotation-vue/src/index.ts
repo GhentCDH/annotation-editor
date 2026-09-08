@@ -7,7 +7,7 @@ export {
   type GlobModules,
   loadAnnotationDefinitionsFromGlob,
   loadAnnotationDefinitionsFromConfigs,
-  loadAnnotationDefinitionsFromUrl,
+  loadAnnotationDefinitionsFromUrls,
 } from './lib/loader/annotation-definition.loader';
 export {
   type AnnotationDefinitionsState,

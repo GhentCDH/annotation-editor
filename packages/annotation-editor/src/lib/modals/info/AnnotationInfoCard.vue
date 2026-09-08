@@ -62,7 +62,7 @@ const createAnnotation = (annotationType: string) => {
 };
 
 const addActions = (definition: AnnotationDefinition) => {
-  const actions = definition.allowedChildren;
+  const actions = definition?.allowedChildren ?? [];
 
   if (actions.length === 0) return null;
 
@@ -88,7 +88,7 @@ const addActions = (definition: AnnotationDefinition) => {
 };
 
 const createActionLinks = (definition: AnnotationDefinition) => {
-  return definition.allowedLinks.map((link) => ({
+  return definition?.allowedLinks.map((link) => ({
     icon: link.icon ?? IconEnum.Link,
     label: `Add ${link.label}`,
     disabled: editorState.disableEdits,

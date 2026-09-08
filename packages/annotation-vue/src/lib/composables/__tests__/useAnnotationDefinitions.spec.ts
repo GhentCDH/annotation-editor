@@ -1,6 +1,6 @@
 import { createApp, defineComponent, h, nextTick } from 'vue';
 import {
-  annotationConfig,
+  AnnotationConfigSchema,
   type AnnotationDefConfig,
   type AnnotationResource,
 } from '@ghentcdh/annotation-core';
@@ -30,7 +30,7 @@ const createCoreDef = (
     columns: [],
     context: { toJsonLdContext: () => ({}) },
     ...overrides,
-    annotation: annotationConfig.parse({
+    annotation: AnnotationConfigSchema.parse({
       color: '#000',
       isRoot: true,
       ...overrides,
