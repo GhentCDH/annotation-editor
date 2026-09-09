@@ -17,7 +17,5 @@
 //
 import {layout, sourcesPlainTxt, annotations, definitions, config} from '@demo/demo-text';
 import { AnnotationEditor } from '@ghentcdh/annotation-editor';
-import { provideHttpClient } from '@ghentcdh/crouton-vue';
 
-provideHttpClient(fetch);
 </script>

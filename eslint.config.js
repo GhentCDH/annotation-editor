@@ -1,5 +1,6 @@
 import importPlugin from 'eslint-plugin-import-x';
 import nx from '@nx/eslint-plugin';
+import vuePlugin from 'eslint-plugin-vue';
 
 export default [
   ...nx.configs['flat/base'],
@@ -65,6 +66,7 @@ export default [
     },
   },
   importPlugin.flatConfigs.recommended,
+  ...vuePlugin.configs['flat/base'],
   {
     files: ['**/*.{js,vue,ts,mjs,cjs}'],
     languageOptions: {

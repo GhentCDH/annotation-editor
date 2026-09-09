@@ -5,8 +5,8 @@
     "color": "#712793",
     "target": "highlight"
   },
-  "columns": [
-    {
+  "columns": {
+    "concept": {
       "id": "concept",
       "label": "Concept",
       "type": { "type": "string" },
@@ -15,7 +15,7 @@
         "options": {}
       }
     },
-    {
+    "domain": {
       "id": "domain",
       "label": "Domain",
       "type": { "type": "string" },
@@ -24,7 +24,7 @@
         "options": {}
       }
     },
-    {
+    "abstractConcept": {
       "id": "abstractConcept",
       "label": "Abstract Concept",
       "type": { "type": "boolean" },
@@ -33,5 +33,5 @@
         "options": {}
       }
     }
-  ]
+  }
 }

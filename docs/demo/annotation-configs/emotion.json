@@ -1,25 +1,25 @@
 {
   "id": "emotion",
   "name": "Emotion",
-  "annotations": {
+  "annotation": {
     "color": "#f3ff4d",
     "target": "highlight"
   },
-  "columns": [
-    {
+  "columns": {
+    "concept": {
       "id": "concept",
       "label": "Concept",
       "type": { "type": "string" }
     },
-    {
+    "domain": {
       "id": "domain",
       "label": "Domain",
       "type": { "type": "string" }
     },
-    {
+    "sentiment": {
       "id": "sentiment",
       "label": "Sentiment",
       "type": { "type": "string" }
     }
-  ]
+  }
 }

@@ -19,7 +19,6 @@ import { createHighlightStyle } from '@ghentcdh/annotated-text';
 import { type AxiosInstance } from 'axios';
 import { AnnotationDefinitionService } from '../service/annotation-definition.service';
 import {
-  type DefinitionsFetchFn,
   type GlobModules,
   loadAnnotationDefFromResourceUris,
   loadAnnotationDefinitionsFromConfigs,
@@ -35,12 +34,9 @@ export type AnnotationDefinitionsState = {
   loadFromGlob: (modules: GlobModules) => void;
   loadFromConfigs: (configs: AnnotationJsonResource[]) => void;
   loadFromDefinitions: (defs: CoreAnnotationDefinition[]) => void;
-  loadFromUrl: (url: string, fetchFn?: DefinitionsFetchFn) => Promise<void>;
-  loadFromUrls: (urls: string[], fetchFn?: DefinitionsFetchFn) => Promise<void>;
-  loadFromResourceUris: (
-    urls: string[],
-    fetchFn?: DefinitionsFetchFn,
-  ) => Promise<void>;
+  loadFromUrl: (url: string) => Promise<void>;
+  loadFromUrls: (urls: string[]) => Promise<void>;
+  loadFromResourceUris: (urls: string[]) => Promise<void>;
   loading: boolean;
   error: Error | null;
   service: AnnotationDefinitionService;
@@ -56,7 +52,6 @@ export type ProvideAnnotationDefinitionsOptions = {
   definitionsUrl?: string;
   definitionsUrls?: string[];
   resourceUrls?: string[];
-  fetchFn?: DefinitionsFetchFn;
 };
 
 export const ANNOTATION_DEFINITIONS_KEY: InjectionKey<AnnotationDefinitionsState> =
@@ -159,20 +154,16 @@ export const createAnnotationDefinitionsState = (
     },
 
     loadFromGlob(modules: GlobModules) {
-      const defs = loadAnnotationDefinitionsFromGlob(modules, config, factory);
+      const defs = loadAnnotationDefinitionsFromGlob(modules);
       updateDefinitions(defs);
     },
 
     loadFromConfigs(configs: AnnotationJsonResource[]) {
-      const defs = loadAnnotationDefinitionsFromConfigs(
-        configs,
-        config,
-        factory,
-      );
+      const defs = loadAnnotationDefinitionsFromConfigs(configs);
       updateDefinitions(defs);
     },
 
-    async loadFromUrls(urls: string[], fetchFn?: DefinitionsFetchFn) {
+    async loadFromUrls(urls: string[]) {
       state.loading = true;
       state.error = null;
       try {
@@ -185,7 +176,7 @@ export const createAnnotationDefinitionsState = (
         state.loading = false;
       }
     },
-    async loadFromResourceUris(urls: string[], fetchFn?: DefinitionsFetchFn) {
+    async loadFromResourceUris(urls: string[]) {
       state.loading = true;
       state.error = null;
       try {
@@ -198,7 +189,7 @@ export const createAnnotationDefinitionsState = (
         state.loading = false;
       }
     },
-    async loadFromUrl(url: string, fetchFn?: DefinitionsFetchFn) {
+    async loadFromUrl(url: string) {
       state.loading = true;
       state.error = null;
       try {
@@ -238,14 +229,14 @@ export const provideAnnotationDefinitions = (
   }
 
   if (options.definitionsUrl) {
-    state.loadFromUrl(options.definitionsUrl, options.fetchFn);
+    state.loadFromUrl(options.definitionsUrl);
   }
 
   if (options.definitionsUrls) {
-    state.loadFromUrls(options.definitionsUrls, options.fetchFn);
+    state.loadFromUrls(options.definitionsUrls);
   }
   if (options.resourceUrls) {
-    state.loadFromResourceUris(options.resourceUrls, options.fetchFn);
+    state.loadFromResourceUris(options.resourceUrls);
   }
 
   provide(ANNOTATION_DEFINITIONS_KEY, state);

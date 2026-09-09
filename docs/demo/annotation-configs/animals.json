@@ -1,13 +1,13 @@
 {
   "id": "animals",
   "name": "Animals",
-  "annotations": {
+  "annotation": {
     "color": "#65a378",
     "target": "highlight",
     "allowedLinks": ["emotion"]
   },
-  "columns": [
-    {
+  "columns": {
+    "name": {
       "id": "name",
       "label": "name",
       "type": { "type": "string" },
@@ -16,7 +16,7 @@
         "options": {}
       }
     },
-    {
+    "gender": {
       "id": "gender",
       "label": "Gender",
       "type": { "type": "string" },
@@ -35,7 +35,7 @@
         }
       }
     },
-    {
+    "animalType": {
       "id": "animalType",
       "label": "Animal Type",
       "type": { "type": "string" },
@@ -54,7 +54,7 @@
         }
       }
     },
-    {
+    "breed": {
       "id": "breed",
       "label": "breed",
       "required": false,
@@ -66,7 +66,7 @@
         }
       }
     },
-    {
+    "species": {
       "id": "species",
       "label": "Species",
       "required": false,
@@ -78,5 +78,5 @@
         }
       }
     }
-  ]
+  }
 }

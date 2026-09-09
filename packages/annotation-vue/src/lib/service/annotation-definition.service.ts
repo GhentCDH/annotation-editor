@@ -12,7 +12,7 @@ export class AnnotationDefinitionService {
 
   setDefinitions(definitions: AnnotationResource[]): void {
     this.definitions = definitions;
-    this.groupedDefinitions = definitions.reduce(
+this.groupedDefinitions = this.definitions.reduce(
       (acc: Record<string, AnnotationResource>, current) => {
         acc[current.id] = current;
         return acc;

@@ -12,12 +12,16 @@
         <div><strong>Type:</strong> {{ purposeLabel }}</div>
         <slot name="header-actions" />
       </div>
+      {{ metadata }}
       <MetadataTable
         v-if="metadata"
         :data="metadata"
         :definition="annotationDef"
       />
-      <slot name="links" :annotation="annotation!" />
+      <slot
+        name="links"
+        :annotation="annotation!"
+      />
       <slot name="actions" />
     </div>
   </div>

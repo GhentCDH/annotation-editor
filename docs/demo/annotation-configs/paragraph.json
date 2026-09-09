@@ -7,5 +7,5 @@
     "allowedChildren": ["animals", "keyconcepts", "emotion"],
     "isRoot": true
   },
-  "columns": []
+  "columns": {}
 }

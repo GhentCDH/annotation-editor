@@ -1,6 +1,5 @@
 export { AnnotationDefinitionService } from './lib/service/annotation-definition.service';
 export {
-  type DefinitionsFetchFn,
   type GlobModules,
   loadAnnotationDefinitionsFromGlob,
   loadAnnotationDefinitionsFromConfigs,

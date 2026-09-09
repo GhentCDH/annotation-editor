@@ -1,16 +1,38 @@
 import {
   AnnotationConfigSchema,
-  type AnnotationDefConfig,
   type AnnotationJsonResource,
+  AnnotationJsonResourceSchema,
   type AnnotationResource,
-  buildAnnotationDefinitions,
-  type ContextBuilderFactory,
 } from '@ghentcdh/annotation-core';
-import { parseSchema } from '@ghentcdh/crouton-vue';
+import { parseSchema } from '@ghentcdh/crouton-core';
 
 type GlobModule = { default: AnnotationJsonResource } | AnnotationJsonResource;
 
 export type GlobModules = Record<string, GlobModule>;
+
+export const buildAnnotationDefFromJson = (
+  resource: AnnotationJsonResource,
+): AnnotationResource | null => {
+  try {
+    const parsed = AnnotationJsonResourceSchema.safeParse(resource);
+    if (!parsed.success) {
+      console.error('Resource cannot be parsed:', parsed.error.message);
+      return null;
+    }
+
+    // Compile columns → table/form/view schemas via crouton.
+    // Returns undefined when resource has no columns/views.
+    const compiled = parseSchema(resource, {
+      baseUrl: '',
+      extensions: { annotation: AnnotationConfigSchema },
+    });
+
+    return { ...parsed.data, ...(compiled ?? {}) } as unknown as AnnotationResource;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
 
 const extractConfig = (mod: GlobModule): AnnotationJsonResource => {
   if ('default' in mod) return mod.default;
@@ -19,24 +41,16 @@ const extractConfig = (mod: GlobModule): AnnotationJsonResource => {
 
 export const loadAnnotationDefinitionsFromGlob = (
   modules: GlobModules,
-  config: AnnotationDefConfig,
-  factory?: ContextBuilderFactory,
 ): AnnotationResource[] => {
-  const configs = Object.values(modules).map(extractConfig);
-  return loadAnnotationDefinitionsFromConfigs(configs, config, factory);
+  const resources = Object.values(modules).map(extractConfig);
+  return loadAnnotationDefinitionsFromConfigs(resources);
 };
 
 export const loadAnnotationDefinitionsFromConfigs = (
-  configs: AnnotationJsonResource[],
-  config: AnnotationDefConfig,
-  factory?: ContextBuilderFactory,
+  resources: AnnotationJsonResource[],
 ): AnnotationResource[] => {
-  return buildAnnotationDefinitions(configs, config, factory);
+  return resources.map(buildAnnotationDefFromJson).filter((def) => !!def);
 };
-
-export type DefinitionsFetchFn = (
-  url: string,
-) => Promise<AnnotationJsonResource[]>;
 
 export const loadAnnotationDefinitionsFromUrls = async (urls: string[]) => {
   return Promise.all(
@@ -51,14 +65,7 @@ export const loadAnnotationDefFromResourceUris = async (urls: string[]) => {
     urls.map((a) => {
       return fetch(a)
         .then((r) => r.json())
-        .then((def) =>
-          parseSchema(def, {
-            baseUrl: '',
-            extensions: {
-              annotation: AnnotationConfigSchema,
-            },
-          }),
-        );
+        .then(buildAnnotationDefFromJson);
     }),
   );
 };

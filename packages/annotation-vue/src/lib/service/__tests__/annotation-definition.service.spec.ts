@@ -9,7 +9,7 @@ const createMockDefinition = (
   id,
   name,
   color: '#000',
-  columns: [],
+  columns: {},
   isRoot: true,
   context: { toJsonLdContext: () => ({ '@context': id }) },
   ...overrides,

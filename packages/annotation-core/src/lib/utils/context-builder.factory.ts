@@ -1,10 +1,4 @@
-import { type ContextBuilder } from '@ghentcdh/w3c-utils';
 import { z } from 'zod';
-import { type ViewConfig } from '@ghentcdh/crouton-core';
-import {
-  type AnnotationDefConfig,
-  baseContextBuilder,
-} from './annotation.context-builder';
 
 type JsonSchemaProperty = {
   type: string;
@@ -22,19 +16,4 @@ export const jsonSchemaPropertyToZod = (
     return z.object(shape);
   }
   return z.string();
-};
-
-export const annotationContextBuilderFactory = (
-  id: string,
-  formConfig: ViewConfig,
-  annotationDefConfig: AnnotationDefConfig,
-): ContextBuilder => {
-  const builder = baseContextBuilder(id, annotationDefConfig);
-  if (formConfig.json_schema) {
-    return builder.parseZodSchema(
-      z.fromJSONSchema(formConfig.json_schema) as any,
-    );
-  }
-
-  return builder;
 };
