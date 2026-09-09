@@ -16,25 +16,48 @@ _Analysis: `knip` + manual verification. Updated: 2026-09-02._
 > **`annotation-vue`** are internal-only and get **bundled** into the published packages
 > (see Phase 6). `annotation-editor-e2e` is never published.
 
-
 ## Execution status (2026-09-02)
-- ✅ **Phase 1–5 done & committed** on `feat/use-crouton-resource` (each build-verified green): temp files removed, 7 deprecated shims removed (internal imports repointed to `@ghentcdh/annotation-ui`), `NoModal.vue` + `annotation.style.ts` removed, unused deps removed (`memoizee`, `vee-validate`, `@ghentcdh/crouton-api`, `@ghentcdh/create-crouton`), e2e dep declared.
-- ⛔ **Phase 6 BLOCKED — reverted, not committed.** Config changes are correct (see steps below) and JS bundling of annotation-vue works, but the editor's **declaration (dts)** build cannot be verified green here:
-  1. *Environment-only (won't affect your machine):* `@ghentcdh/crouton-*` is linked via `pnpm-workspace.yaml` `__overrides` to a sibling `../crouton` checkout absent in the cloud bridge, so it fell back to registry `alpha.50` whose `CroutonForm` API differs → form-type errors in `AnnotationForm.vue`, `AnnotationEditModal.vue`, `Metadata.vue`, `useMetadata.ts`.
-  2. *Real latent bugs bundling surfaces (fix needed):*
-     - `annotation-vue/src/lib/router/annotation-namespace.routes.ts` (~L229–235) reads `def.columns/isRoot/allowedChildren/allowedLinks/type/icon/target` at top level, but current `AnnotationResource` (annotation-core) has those under `def.annotation` and has **no `columns`**. Builds standalone only against annotation-core's stale built `.d.ts` (source/dist skew).
-     - `annotation-vue/src/lib/composables/useAnnotationDefinitions.ts` (~L67) `const style = def.annotation` then `style.icon` — `annotation` is optional → null-safety error.
-  - **Next step:** run `pnpm nx build annotation-editor` locally (where `../crouton` resolves) to confirm the crouton errors vanish, then fix the two annotation-vue issues above, then re-apply Phase 6 config edits and verify.
-- ✅ **Phase 7 done** — e2e test-harness imports now use the published `@ghentcdh/ui/testing` subpath instead of the fragile `../../../../../ghentcdh/libs/ui/src/testing/*` relative paths (needs a local `nx e2e` to confirm).
-- ✅ **Phase 10 done** — checked-in `knip.json`, root `knip` script, and an **advisory** knip CI job (`continue-on-error`) in `merge-request.yml`. Run `pnpm knip` locally, tune away any remaining false positives, then drop `continue-on-error` to make it a blocking gate.
+
+- ✅ **Phase 1–5 done & committed** on `feat/use-crouton-resource` (each build-verified green): temp files removed, 7
+  deprecated shims removed (internal imports repointed to `@ghentcdh/annotation-ui`), `NoModal.vue` +
+  `annotation.style.ts` removed, unused deps removed (`memoizee`, `vee-validate`, `@ghentcdh/crouton-api`,
+  `@ghentcdh/create-crouton`), e2e dep declared.
+- ⛔ **Phase 6 BLOCKED — reverted, not committed.** Config changes are correct (see steps below) and JS bundling of
+  annotation-vue works, but the editor's **declaration (dts)** build cannot be verified green here:
+    1. *Environment-only (won't affect your machine):* `@ghentcdh/crouton-*` is linked via `pnpm-workspace.yaml`
+       `__overrides` to a sibling `../crouton` checkout absent in the cloud bridge, so it fell back to registry
+       `alpha.52` whose `CroutonForm` API differs → form-type errors in `AnnotationForm.vue`, `AnnotationEditModal.vue`,
+       `Metadata.vue`, `useMetadata.ts`.
+    2. *Real latent bugs bundling surfaces (fix needed):*
+        - `annotation-vue/src/lib/router/annotation-namespace.routes.ts` (~L229–235) reads
+          `def.columns/isRoot/allowedChildren/allowedLinks/type/icon/target` at top level, but current
+          `AnnotationResource` (annotation-core) has those under `def.annotation` and has **no `columns`**. Builds
+          standalone only against annotation-core's stale built `.d.ts` (source/dist skew).
+        - `annotation-vue/src/lib/composables/useAnnotationDefinitions.ts` (~L67) `const style = def.annotation` then
+          `style.icon` — `annotation` is optional → null-safety error.
+
+    - **Next step:** run `pnpm nx build annotation-editor` locally (where `../crouton` resolves) to confirm the crouton
+      errors vanish, then fix the two annotation-vue issues above, then re-apply Phase 6 config edits and verify.
+- ✅ **Phase 7 done** — e2e test-harness imports now use the published `@ghentcdh/ui/testing` subpath instead of the
+  fragile `../../../../../ghentcdh/libs/ui/src/testing/*` relative paths (needs a local `nx e2e` to confirm).
+- ✅ **Phase 10 done** — checked-in `knip.json`, root `knip` script, and an **advisory** knip CI job
+  (`continue-on-error`) in `merge-request.yml`. Run `pnpm knip` locally, tune away any remaining false positives, then
+  drop `continue-on-error` to make it a blocking gate.
 - ✅ **Phase 11 done** — root `package.json` now has `build` / `test` / `lint` / `knip` scripts delegating to nx.
-- ⏸️ **Phases 8 & 9 deferred to local** — trimming unused exports/types and verify-then-remove of ambiguous deps both need a real build to confirm nothing breaks, and I'm no longer running `pnpm install` / `nx build` on the shared folder (it swaps the platform-native binaries — see note). Do these locally: `pnpm knip` lists the current unused exports; remove/keep per the Phase 8 review notes, and build after each.
-- ⚠️ **Native-binary note:** running installs/builds through the cloud bridge (Linux) and locally (macOS) fight over `node_modules` native binaries. After any bridge session, run `rm -rf node_modules && pnpm install` locally before building.
+- ⏸️ **Phases 8 & 9 deferred to local** — trimming unused exports/types and verify-then-remove of ambiguous deps both
+  need a real build to confirm nothing breaks, and I'm no longer running `pnpm install` / `nx build` on the shared
+  folder (it swaps the platform-native binaries — see note). Do these locally: `pnpm knip` lists the current unused
+  exports; remove/keep per the Phase 8 review notes, and build after each.
+- ⚠️ **Native-binary note:** running installs/builds through the cloud bridge (Linux) and locally (macOS) fight over
+  `node_modules` native binaries. After any bridge session, run `rm -rf node_modules && pnpm install` locally before
+  building.
 
 ---
 
 ## Phase 1 — Remove stray root junk _(risk: none)_
+
 **Goal:** drop 0-byte scratch files.
+
 - Delete `_tmp_19_c0ab22cb16bbe305ff11c7606809763b` and `_tmp_77_65158685dcde1e26a9384403aecf1aa9`.
 - Add `_tmp_*` (and confirm `tmp/`) to `.gitignore`.
 - **Verify:** `git status` clean of these; nothing references them.
@@ -42,8 +65,9 @@ _Analysis: `knip` + manual verification. Updated: 2026-09-02._
 ---
 
 ## Phase 2 — Remove deprecated re-export shims _(risk: low)_
-**Goal:** finish the package split — delete the 7 `@deprecated` 4-line `export *` files in `annotation-editor`.
-Files:
+
+**Goal:** finish the package split — delete the 7 `@deprecated` 4-line `export *` files in `annotation-editor`. Files:
+
 ```
 src/lib/composables/annotationConfiguration.ts
 src/lib/modals/AnnotationModal.definition.ts
@@ -53,109 +77,145 @@ src/lib/types/source.model.ts
 src/lib/utils/annotation-utils.ts
 src/lib/utils/mouse-events.ts
 ```
+
 - First remove the redundant re-export lines in `annotation-editor/src/index.ts`
-  (`./lib/types/source.model`, `./lib/types/AnnotationConfiguration.model`) — the same symbols
-  already arrive via `export * from '@ghentcdh/annotation-ui'`.
+  (`./lib/types/source.model`, `./lib/types/AnnotationConfiguration.model`) — the same symbols already arrive via
+  `export * from '@ghentcdh/annotation-ui'`.
 - Delete the 7 files.
-- **Verify:** `grep -rn "@deprecated" packages/annotation-editor/src` returns nothing; `pnpm nx build annotation-editor`.
+- **Verify:** `grep -rn "@deprecated" packages/annotation-editor/src` returns nothing;
+  `pnpm nx build annotation-editor`.
 
 ---
 
 ## Phase 3 — Remove other verified dead files _(risk: low)_
+
 **Goal:** delete components with zero references.
+
 - `annotation-editor/src/lib/modals/no-modal/NoModal.vue` — no references anywhere.
-- `annotation-ui/src/lib/utils/annotation.style.ts` — only "use" is a commented-out export in `annotation-ui/src/index.ts:9`; delete the file and that comment line.
+- `annotation-ui/src/lib/utils/annotation.style.ts` — only "use" is a commented-out export in
+  `annotation-ui/src/index.ts:9`; delete the file and that comment line.
 - **Verify:** `pnpm nx run-many -t build test`.
 
 ---
 
 ## Phase 4 — Remove verified unused dependencies _(risk: low)_
-**Goal:** drop deps with no imports anywhere in source.
-| Remove from root `package.json` | Type |
-|---|---|
-| `memoizee` | dev |
-| `vee-validate` | dep |
-| `@ghentcdh/crouton-api` | dep |
-| `@ghentcdh/create-crouton` | dep |
+
+**Goal:** drop deps with no imports anywhere in source. | Remove from root `package.json` | Type | |---|---| |
+`memoizee` | dev | | `vee-validate` | dep | | `@ghentcdh/crouton-api` | dep | | `@ghentcdh/create-crouton` | dep |
+
 - `pnpm remove <pkg>` for each, then `pnpm install`.
-- ⚠️ `vee-validate` is also in `annotation-editor`'s vite `external[]` — remove it there too (Phase 6 touches the same file).
+- ⚠️ `vee-validate` is also in `annotation-editor`'s vite `external[]` — remove it there too (Phase 6 touches the same
+  file).
 - **Verify:** `pnpm nx run-many -t build test lint`.
 
 ---
 
 ## Phase 5 — Fix missing dependency declarations _(risk: low, correctness)_
+
 **Goal:** declare what's imported but undeclared — **for published packages only**.
-- `@ghentcdh/annotation-editor` — used across `annotation-editor-e2e`, missing from its `package.json`. Add it (dev/e2e only).
-- `@ghentcdh/annotation-vue` — imported in `annotation-editor/.../AnnotationForm.vue`. **Do NOT add as a runtime dependency** — it is internal-only and gets bundled in Phase 6. (Adding it as a dep would force consumers to install an unpublished package.)
+
+- `@ghentcdh/annotation-editor` — used across `annotation-editor-e2e`, missing from its `package.json`. Add it (dev/e2e
+  only).
+- `@ghentcdh/annotation-vue` — imported in `annotation-editor/.../AnnotationForm.vue`. **Do NOT add as a runtime
+  dependency** — it is internal-only and gets bundled in Phase 6. (Adding it as a dep would force consumers to install
+  an unpublished package.)
 - ✅ `@ghentcdh/crouton-forms-vue` — **already handled** (you removed it; no imports remain).
 - **Verify:** `pnpm install` && `pnpm nx run-many -t build`.
 
 ---
 
 ## Phase 6 — Publish only core / api / vue _(done — config only)_
-**Decision:** the published npm packages are `@ghentcdh/annotation-core`, `@ghentcdh/annotation-api`, `@ghentcdh/annotation-vue`. `annotation-ui`, `annotation-editor`, `annotation-preview` are internal (`private: true`).
+
+**Decision:** the published npm packages are `@ghentcdh/annotation-core`, `@ghentcdh/annotation-api`,
+`@ghentcdh/annotation-vue`. `annotation-ui`, `annotation-editor`, `annotation-preview` are internal (`private: true`).
 
 Applied:
+
 1. `nx.json` → `release.projects` = `["annotation-api","annotation-core","annotation-vue"]`.
-2. `annotation-core/package.json` → `"private": false`; `annotation-core/project.json` → added `nx-release-publish` target.
+2. `annotation-core/package.json` → `"private": false`; `annotation-core/project.json` → added `nx-release-publish`
+   target.
 3. `annotation-editor/package.json` & `annotation-preview/package.json` → `"private": true`.
 
-No source or vite changes — vue/api still **bundle** annotation-core, so their builds are unchanged; core is now also published standalone. Verify locally:
+No source or vite changes — vue/api still **bundle** annotation-core, so their builds are unchanged; core is now also
+published standalone. Verify locally:
+
 ```
 rm -rf node_modules && pnpm install     # restore macOS native binaries first
 pnpm nx run-many -t build
 pnpm nx release --dry-run               # confirm only core/api/vue are versioned/published
 ```
 
-**Optional follow-up (cleaner, do later):** externalize `@ghentcdh/annotation-core` in `annotation-vue/vite.config.mts` and `annotation-api/vite.config.mts` and declare `"@ghentcdh/annotation-core": "workspace:*"` in both packages' `dependencies`. That stops core being duplicated inside the vue/api bundles and makes consumers install the single published core. Needs a build + `npm pack --dry-run` check.
+**Optional follow-up (cleaner, do later):** externalize `@ghentcdh/annotation-core` in `annotation-vue/vite.config.mts`
+and `annotation-api/vite.config.mts` and declare `"@ghentcdh/annotation-core": "workspace:*"` in both packages'
+`dependencies`. That stops core being duplicated inside the vue/api bundles and makes consumers install the single
+published core. Needs a build + `npm pack --dry-run` check.
 
 ---
 
 ## Phase 7 — Fix fragile cross-repo e2e imports _(risk: medium, correctness)_
+
 **Goal:** stop reaching into a sibling checkout that isn't in the repo.
+
 - `annotation-editor-e2e/src/testing/index.ts` imports
-  `../../../../../ghentcdh/libs/ui/src/testing/{Harness,CollapseHarness,ModalHarness}` —
-  breaks on any clean clone.
-- Replace with an import from the published `@ghentcdh/ui` package (already a devDependency), or vendor the harness into the e2e package.
+  `../../../../../ghentcdh/libs/ui/src/testing/{Harness,CollapseHarness,ModalHarness}` — breaks on any clean clone.
+- Replace with an import from the published `@ghentcdh/ui` package (already a devDependency), or vendor the harness into
+  the e2e package.
 - **Verify:** `pnpm nx e2e annotation-editor-e2e` (or at least build/typecheck) resolves without the relative path.
 
 ---
 
 ## Phase 8 — Trim unused export surface _(risk: low, review each)_
+
 **Goal:** shrink public API + generated `.d.ts`. For each, decide **public API → keep** vs **internal → drop `export`**.
-- **Values (7):** `CURRENT_RESOURCE_VERSION` (annotation-core version.ts), `SourceEditEmits`, `Confirm`, `AnnotationEdit`, `LinkAnnotation`, `ToastCard`, `byRole` (e2e).
-- **Types (16):** `NavbarProps`, `SourceEditProps`, `SourceEditEmitsType`, `SourceNavbarProps`, `SourceNavbarEmitsType`, `EditorState`, `AnnotationModalActionMap`, `AnnotationModalAction`, `AnnotationModalDefaults`, `AnnotationModalPropsType`, `ConfirmAction`, `ToastAction`, `EditToastEmitsType`, `PreviewSelectEvent`, `PreviewState`, `GridLayout`.
+
+- **Values (7):** `CURRENT_RESOURCE_VERSION` (annotation-core version.ts), `SourceEditEmits`, `Confirm`,
+  `AnnotationEdit`, `LinkAnnotation`, `ToastCard`, `byRole` (e2e).
+- **Types (16):** `NavbarProps`, `SourceEditProps`, `SourceEditEmitsType`, `SourceNavbarProps`, `SourceNavbarEmitsType`,
+  `EditorState`, `AnnotationModalActionMap`, `AnnotationModalAction`, `AnnotationModalDefaults`,
+  `AnnotationModalPropsType`, `ConfirmAction`, `ToastAction`, `EditToastEmitsType`, `PreviewSelectEvent`,
+  `PreviewState`, `GridLayout`.
 - ⚠️ Many `*Props`/`*EmitsType` are convention-required exports (per `CLAUDE.md`) — review, don't mass-delete.
 - **Verify:** `pnpm nx run-many -t build test`.
 
 ---
 
 ## Phase 9 — Verify-then-remove ambiguous deps _(risk: medium)_
+
 **Goal:** remove only after confirming each is truly unused.
-- `@tiptap/markdown` **vs** `tiptap-markdown` — neither imported directly; keep whichever the tiptap editor config loads, drop the other.
+
+- `@tiptap/markdown` **vs** `tiptap-markdown` — neither imported directly; keep whichever the tiptap editor config
+  loads, drop the other.
 - `@types/uuid` — `uuid@14` ships its own types; likely removable.
-- `vite-plugin-static-copy`, `vite-tsconfig-paths`, `@typescript-eslint/parser`, `@swc/helpers`, `@vue/test-utils`, `vue-tsc` — check each package's vite/eslint/test config before removing (may be used indirectly).
-- **Do NOT touch (knip false positives, used by build/docs/lint):** `vuepress*`, `tailwindcss`, `@tailwindcss/vite`, `@vitejs/plugin-vue`, `vite-plugin-dts`, `eslint-plugin-vue`, `typescript-eslint`, `@eslint/js`, `jsonc-eslint-parser`, `eslint-plugin-import-x`, `prettier`.
+- `vite-plugin-static-copy`, `vite-tsconfig-paths`, `@typescript-eslint/parser`, `@swc/helpers`, `@vue/test-utils`,
+  `vue-tsc` — check each package's vite/eslint/test config before removing (may be used indirectly).
+- **Do NOT touch (knip false positives, used by build/docs/lint):** `vuepress*`, `tailwindcss`, `@tailwindcss/vite`,
+  `@vitejs/plugin-vue`, `vite-plugin-dts`, `eslint-plugin-vue`, `typescript-eslint`, `@eslint/js`,
+  `jsonc-eslint-parser`, `eslint-plugin-import-x`, `prettier`.
 - **Verify:** full `build test lint` + `nx build docs`.
 
 ---
 
 ## Phase 10 — Wire knip into CI _(risk: none, locks in the cleanup)_
+
 **Goal:** make Phases 1–9 self-maintaining.
-- Add a checked-in `knip.json` (adjust the ESLint & Vite plugins so it loads inside the workspace where native bindings resolve).
+
+- Add a checked-in `knip.json` (adjust the ESLint & Vite plugins so it loads inside the workspace where native bindings
+  resolve).
 - Add a root script `"knip": "knip"` and an `nx` target / CI step that fails PRs on new unused code, exports, or deps.
 - **Verify:** `pnpm knip` runs clean after Phases 1–9.
 
 ---
 
 ## Phase 11 — Housekeeping _(risk: none)_
+
 **Goal:** developer ergonomics.
+
 - Root `package.json` only has `prepare`; add `build`/`test`/`lint`/`knip` scripts delegating to nx.
 - Final: `pnpm nx run-many -t build test lint e2e` green, then open PR.
 
 ---
 
 ### Quick-win path
-Phases 1 → 2 → 3 → 4 → 5 are all low-risk and deliver most of the cleanup. Phase 6 is the
-release-scope change (test the bundle carefully). Phases 7–9 are per-item review; Phase 10
-prevents regressions.
+
+Phases 1 → 2 → 3 → 4 → 5 are all low-risk and deliver most of the cleanup. Phase 6 is the release-scope change (test the
+bundle carefully). Phases 7–9 are per-item review; Phase 10 prevents regressions.

@@ -4,6 +4,7 @@ import {
   type AnnotationDefConfig,
   AnnotationStyleContextBuilder,
   AnnotationStyleType,
+  createAnnotationContext,
 } from '@ghentcdh/annotation-core';
 import { type ContextBuilder } from '@ghentcdh/w3c-utils';
 import { type AnnotationDefinitionService } from '../service/annotation-definition.service';
@@ -182,6 +183,9 @@ export const createAnnotationNamespaceRoutes = (
       meta,
       props: (route) => {
         const id = route.params['id'] as string;
+
+        const context = createAnnotationContext();
+
         if (id === AnnotationStyleType && config) {
           return {
             title: `${id}.jsonld`,
@@ -193,25 +197,6 @@ export const createAnnotationNamespaceRoutes = (
       },
     },
     {
-      path: `${base}/:type/anno.jsonld`,
-      name: 'annotation-ns-type-jsonld',
-      component: JsonView,
-      meta,
-      props: (route) => {
-        const type = route.params['type'] as string;
-        const context = service.getContextBuilder(type) as
-          ContextBuilder | undefined;
-        if (!context) return { title: type, data: null };
-        return {
-          title: `${type}/anno.jsonld`,
-          data: {
-            jsonLd: context.toJsonLdContext(),
-            forms: context.toJsonSchema(),
-          },
-        };
-      },
-    },
-    {
       path: `${base}/:id/schemas`,
       name: 'annotation-ns-schemas',
       component: JsonView,
@@ -219,35 +204,16 @@ export const createAnnotationNamespaceRoutes = (
       props: (route) => {
         const id = route.params['id'] as string;
         const def = service.findById(id);
-        if (!def) return { title: id, data: null };
-        return {
-          title: `${id}/schemas`,
-          data: {
-            id: def.id,
-            name: def.name,
-            schemas: def.schemas,
-            columns: def.columns,
-            isRoot: def.isRoot,
-            allowedChildren: def.allowedChildren,
-            allowedLinks: def.allowedLinks,
-            type: def.type,
-            icon: def.icon,
-            target: def.target,
-          },
-        };
-      },
-    },
-    {
-      path: `${base}/:id`,
-      name: 'annotation-ns-by-id',
-      component: JsonView,
-      meta,
-      props: (route) => {
-        const id = route.params['id'] as string;
-        return {
-          title: id,
-          data: service.findById(id) ?? null,
-        };
+        // if (!def) return { title: id, data: null };
+        //
+        // return parseSchema(def, {
+        //   baseUrl: '',
+        //   extensions: {
+        //     annotation: AnnotationConfigSchema,
+        //   },
+        // });
+
+        return def;
       },
     },
     {

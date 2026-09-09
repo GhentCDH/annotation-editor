@@ -7,7 +7,6 @@
     :error-mode="errorMode"
     :schema="formDef.json_schema"
     :ui-schema="formDef.ui_schema"
-    :http="useApi()"
     @errors="onErrors"
     @change="onChange"
   />
@@ -16,7 +15,6 @@
 import { computed, onMounted } from 'vue';
 import { CroutonForm } from '@ghentcdh/crouton-vue';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-import { useApi } from '@ghentcdh/annotation-vue';
 import { useEditorState } from '../../composables/useEditorState';
 
 const formData = defineModel<any>();

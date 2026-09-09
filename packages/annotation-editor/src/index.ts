@@ -1,26 +1,4 @@
 import AnnotationEditor from './lib/AnnotationEditor.vue';
 import './lib/styles.css';
 
-// Re-export annotation-core (Zod-inferred AnnotationDefinition aliased to avoid conflict with UI version)
-export {
-  type AnnotationContext,
-  AnnotationMetadataType,
-  type AnnotationJsonConfig,
-  annotationColumnDefinition,
-  type AnnotationStyle,
-  AnnotationStyleType,
-  AnnotationStyleContextBuilder,
-  createAnnotationStyleBodyUnsafe,
-  type AnnotationDefConfig,
-  resolveConfig,
-  baseContextBuilder,
-  type ContextBuilderFactory,
-  annotationContextBuilderFactory,
-  buildAnnotationDefinition,
-  buildAnnotationDefinitions,
-} from '@ghentcdh/annotation-core';
-
-// Re-export annotation-ui (includes UI-specific AnnotationDefinition)
-export * from '@ghentcdh/annotation-ui';
-
 export { AnnotationEditor };

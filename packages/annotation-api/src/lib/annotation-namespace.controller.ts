@@ -1,12 +1,8 @@
 import { Controller, Get, Inject, Param } from '@nestjs/common';
-import {
-  type AnnotationDefConfig,
-  type AnnotationResource,
-  AnnotationStyleContextBuilder,
-  AnnotationStyleType,
-} from '@ghentcdh/annotation-core';
+import { type AnnotationJsonResource } from '@ghentcdh/annotation-core';
 import { ApiTags } from '@nestjs/swagger';
 import { ResourceConfigRegistry } from '@ghentcdh/crouton-api';
+import { type AnnotationContextService } from './annotation-api.module';
 import { ANNOTATION_DEF_CONFIG_TOKEN } from './utils/annotation.context-builder';
 import { SCHEMA_PREFIX } from './prefix';
 
@@ -15,9 +11,9 @@ import { SCHEMA_PREFIX } from './prefix';
 export class AnnotationNamespaceController {
   constructor(
     @Inject(ResourceConfigRegistry)
-    private readonly service: ResourceConfigRegistry,
+    private readonly service: ResourceConfigRegistry<AnnotationJsonResource>,
     @Inject(ANNOTATION_DEF_CONFIG_TOKEN)
-    private readonly annotationDefConfig: AnnotationDefConfig,
+    private readonly annotationContextService: AnnotationContextService,
   ) {}
 
   @Get()
@@ -34,58 +30,12 @@ export class AnnotationNamespaceController {
         jsonld: `${base}/ns/${a.id}.jsonld`,
       })),
     };
-    // return {
-    //   annotations: this.service
-    //     .findAll()
-    //     .map((annotation) => annotation.annotations),
-    // };
   }
 
   @Get(':id.jsonld')
   async getJsonLd_(@Param('id') id: string) {
-    if (id === AnnotationStyleType)
-      return AnnotationStyleContextBuilder(
-        this.annotationDefConfig,
-      ).toJsonLdContext();
+    const context = await this.annotationContextService.findById(id);
 
-    const build = await this.service.findById(id);
-
-    return build?.json_ld;
-  }
-
-  @Get(':id/schemas')
-  async getSchemas(@Param('id') id: string): Promise<AnnotationResource> {
-    const definition = await this.service.findById(id);
-
-    return definition;
-    // return {
-    //   id: definition.id,
-    //   name: definition.name,
-    //   isRoot: definition.isRoot,
-    //   allowedChildren: definition.allowedChildren,
-    //   allowedLinks: definition.allowedLinks,
-    //   type: definition.type,
-    //   icon: definition.icon,
-    //   target: definition.target,
-    //   views: definition.views,
-    // };
-  }
-
-  @Get('anno.jsonld')
-  async getFullJsonLd() {
-    return null;
-    // const allBuildser = await this.service.getAllContextBuilders();
-    // return allBuildser.map((b) => b.toJsonLdContext());
-  }
-
-  @Get(':type/anno.jsonld')
-  async getJsonLd(@Param('type') type: string) {
-    return null;
-    // const context = await this.service.getContextBuilder(type);
-    //
-    // return {
-    //   jsonLd: context.toJsonLdContext(),
-    //   forms: context.toJsonSchema(),
-    // };
+    return context?.jsonLd;
   }
 }

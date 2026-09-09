@@ -7,22 +7,21 @@ import {
 } from 'vue';
 import {
   type AnnotationDefConfig,
-  type AnnotationJsonConfig,
+  type AnnotationJsonResource,
   type AnnotationResource,
   type AnnotationResource as CoreAnnotationDefinition,
   type ContextBuilderFactory,
+  type KeyLabel,
+  type UIAnnotationDefinition,
+  UIAnnotationDefinitionSchema,
 } from '@ghentcdh/annotation-core';
 import { createHighlightStyle } from '@ghentcdh/annotated-text';
 import { type AxiosInstance } from 'axios';
-import { type ViewConfig } from '@ghentcdh/crouton-core';
-import {
-  type KeyLabel,
-  type VueAnnotationDefinition,
-} from '../types/annotation-vue.types';
 import { AnnotationDefinitionService } from '../service/annotation-definition.service';
 import {
   type DefinitionsFetchFn,
   type GlobModules,
+  loadAnnotationDefFromResourceUris,
   loadAnnotationDefinitionsFromConfigs,
   loadAnnotationDefinitionsFromGlob,
   loadAnnotationDefinitionsFromUrls,
@@ -30,14 +29,18 @@ import {
 
 export type AnnotationDefinitionsState = {
   configuration: AnnotationDefConfig;
-  definitions: VueAnnotationDefinition[];
-  definitionsMap: Record<string, VueAnnotationDefinition>;
-  getDefinitionById: (id: string) => VueAnnotationDefinition | undefined;
+  definitions: UIAnnotationDefinition[];
+  definitionsMap: Record<string, UIAnnotationDefinition>;
+  getDefinitionById: (id: string) => UIAnnotationDefinition | undefined;
   loadFromGlob: (modules: GlobModules) => void;
-  loadFromConfigs: (configs: AnnotationJsonConfig[]) => void;
+  loadFromConfigs: (configs: AnnotationJsonResource[]) => void;
   loadFromDefinitions: (defs: CoreAnnotationDefinition[]) => void;
   loadFromUrl: (url: string, fetchFn?: DefinitionsFetchFn) => Promise<void>;
   loadFromUrls: (urls: string[], fetchFn?: DefinitionsFetchFn) => Promise<void>;
+  loadFromResourceUris: (
+    urls: string[],
+    fetchFn?: DefinitionsFetchFn,
+  ) => Promise<void>;
   loading: boolean;
   error: Error | null;
   service: AnnotationDefinitionService;
@@ -52,6 +55,7 @@ export type ProvideAnnotationDefinitionsOptions = {
   factory?: ContextBuilderFactory;
   definitionsUrl?: string;
   definitionsUrls?: string[];
+  resourceUrls?: string[];
   fetchFn?: DefinitionsFetchFn;
 };
 
@@ -80,28 +84,23 @@ const toVueDefinition = (
   grouped: Record<string, AnnotationResource>,
   createStyle: typeof createHighlightStyle,
   activeStyle: typeof createHighlightStyle,
-): VueAnnotationDefinition => {
-  const style = def.annotation!;
+): UIAnnotationDefinition => {
+  const style = def.annotation! ?? {};
 
-  return {
-    id: def.id,
-    name: def.name,
-    label: def.name,
-    color: style.color,
-    style: {
-      default: createStyle(style.color),
-      active: activeStyle(style.color),
-    },
-    schemas: def.schemas as Record<string, ViewConfig>,
+  const parsed = UIAnnotationDefinitionSchema.safeParse({
+    ...def,
     allowedChildren: resolveKeyLabels(style.allowedChildren, grouped),
     allowedLinks: resolveKeyLabels(style.allowedLinks, grouped),
-    isRoot: style.isRoot ?? true,
-    icon: style.icon,
-    type: style.type,
-    target: style.target,
-    context: def.context as VueAnnotationDefinition['context'],
-    _core: def,
-  };
+    style: {
+      default: createStyle(style.color!),
+      active: activeStyle(style.color!),
+    },
+  });
+  if (parsed.error) {
+    console.error('for def', def);
+    console.error(parsed.error);
+  }
+  return parsed.success ? parsed.data : (def as UIAnnotationDefinition);
 };
 
 const buildVueDefinitions = (
@@ -109,15 +108,15 @@ const buildVueDefinitions = (
   grouped: Record<string, CoreAnnotationDefinition>,
   createStyle: typeof createHighlightStyle,
   activeStyle: typeof createHighlightStyle,
-): VueAnnotationDefinition[] =>
+): UIAnnotationDefinition[] =>
   coreDefs.map((def) =>
     toVueDefinition(def, grouped, createStyle, activeStyle as any),
   );
 
 const buildDefinitionsMap = (
-  definitions: VueAnnotationDefinition[],
-): Record<string, VueAnnotationDefinition> =>
-  definitions.reduce((acc: Record<string, VueAnnotationDefinition>, def) => {
+  definitions: UIAnnotationDefinition[],
+): Record<string, UIAnnotationDefinition> =>
+  definitions.reduce((acc: Record<string, UIAnnotationDefinition>, def) => {
     acc[def.id] = def;
     return acc;
   }, {});
@@ -145,13 +144,13 @@ export const createAnnotationDefinitionsState = (
 
   const state: AnnotationDefinitionsState = shallowReactive({
     configuration: config,
-    definitions: [] as VueAnnotationDefinition[],
-    definitionsMap: {} as Record<string, VueAnnotationDefinition>,
+    definitions: [] as UIAnnotationDefinition[],
+    definitionsMap: {} as Record<string, UIAnnotationDefinition>,
     loading: false,
     error: null as Error | null,
     service,
 
-    getDefinitionById(id: string): VueAnnotationDefinition | undefined {
+    getDefinitionById(id: string): UIAnnotationDefinition | undefined {
       return state.definitionsMap[id];
     },
 
@@ -164,7 +163,7 @@ export const createAnnotationDefinitionsState = (
       updateDefinitions(defs);
     },
 
-    loadFromConfigs(configs: AnnotationJsonConfig[]) {
+    loadFromConfigs(configs: AnnotationJsonResource[]) {
       const defs = loadAnnotationDefinitionsFromConfigs(
         configs,
         config,
@@ -178,6 +177,19 @@ export const createAnnotationDefinitionsState = (
       state.error = null;
       try {
         const defs = await loadAnnotationDefinitionsFromUrls(urls);
+        updateDefinitions(defs);
+      } catch (e) {
+        console.error(e);
+        state.error = e instanceof Error ? e : new Error(String(e));
+      } finally {
+        state.loading = false;
+      }
+    },
+    async loadFromResourceUris(urls: string[], fetchFn?: DefinitionsFetchFn) {
+      state.loading = true;
+      state.error = null;
+      try {
+        const defs = await loadAnnotationDefFromResourceUris(urls);
         updateDefinitions(defs);
       } catch (e) {
         console.error(e);
@@ -231,6 +243,9 @@ export const provideAnnotationDefinitions = (
 
   if (options.definitionsUrls) {
     state.loadFromUrls(options.definitionsUrls, options.fetchFn);
+  }
+  if (options.resourceUrls) {
+    state.loadFromResourceUris(options.resourceUrls, options.fetchFn);
   }
 
   provide(ANNOTATION_DEFINITIONS_KEY, state);

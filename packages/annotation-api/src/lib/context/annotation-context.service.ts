@@ -30,10 +30,9 @@ export class AnnotationContextService {
         resource,
       );
 
-      const prefix = `${this.annotationDefConfig.prefix}:${resource.annotation.type}/`;
       this.contextConfigMap.set(resource.id, context);
 
-      this.prefixMap.set(prefix, resource.id);
+      this.prefixMap.set(context.prefix, resource.id);
     });
   }
 

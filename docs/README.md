@@ -8,15 +8,17 @@
 
 # Annotation Editor
 
-Monorepo for W3C-compliant annotation editing. Provides a NestJS API module for serving annotation definitions, a shared core library for types and validation, and a Vue 3 editor component for creating and managing annotations on text sources.
+Monorepo for W3C-compliant annotation editing. Provides a NestJS API module for serving annotation definitions, a shared
+core library for types and validation, and a Vue 3 editor component for creating and managing annotations on text
+sources.
 
 ## Packages
 
-| Package | Description |
-|---|---|
-| `@ghentcdh/annotation-core` | Shared types, Zod schemas, and configuration utilities |
-| `@ghentcdh/annotation-editor` | Vue 3 annotation editor component |
-| `@ghentcdh/annotation-api` | NestJS module for annotation definition services |
+| Package                       | Description                                            |
+|-------------------------------|--------------------------------------------------------|
+| `@ghentcdh/annotation-core`   | Shared types, Zod schemas, and configuration utilities |
+| `@ghentcdh/annotation-editor` | Vue 3 annotation editor component                      |
+| `@ghentcdh/annotation-api`    | NestJS module for annotation definition services       |
 
 ## Requirements
 
@@ -64,11 +66,11 @@ const resolved = resolveConfig(config);
 
 **Defaults:**
 
-| Property | Default |
-|---|---|
+| Property  | Default                  |
+|-----------|--------------------------|
 | `baseUrl` | `http://localhost:3000/` |
-| `app` | `annotation-app` |
-| `prefix` | `annotation` |
+| `app`     | `annotation-app`         |
+| `prefix`  | `annotation`             |
 
 #### AnnotationStyle
 
@@ -110,15 +112,16 @@ import { AnnotationApiModule } from '@ghentcdh/annotation-api';
     ),
   ],
 })
-export class AppModule {}
+export class AppModule {
+}
 ```
 
 **Parameters:**
 
-| Parameter | Description |
-|---|---|
+| Parameter | Description                                                   |
+|-----------|---------------------------------------------------------------|
 | `dirPath` | Path to directory containing annotation definition JSON files |
-| `config` | `AnnotationDefConfig` with optional `isDev` and `cacheTTLms` |
+| `config`  | `AnnotationDefConfig` with optional `isDev` and `cacheTTLms`  |
 
 The module registers globally and provides:
 
@@ -191,17 +194,17 @@ Place JSON files in the annotations directory:
 
 **Top-level fields:**
 
-| Field | Type | Default | Description |
-|---|---|---|---|
-| `id` | `string` | — | Unique identifier for the annotation type |
-| `name` | `string` | — | Display name |
-| `color` | `string` | — | Hex color for styling |
-| `isRoot` | `boolean` | `true` | Whether this type appears as a top-level annotation option |
-| `allowedChildren` | `string[]` | — | IDs of annotation types allowed as children |
-| `allowedLinks` | `string[]` | — | IDs of annotation types that can be linked |
-| `icon` | `string` | — | SVG string for custom icon |
-| `type` | `string` | — | Optional type classifier |
-| `target` | `string` | — | `gutter`, `underline`, or `highlight` |
+| Field             | Type       | Default | Description                                                |
+|-------------------|------------|---------|------------------------------------------------------------|
+| `id`              | `string`   | —       | Unique identifier for the annotation type                  |
+| `name`            | `string`   | —       | Display name                                               |
+| `color`           | `string`   | —       | Hex color for styling                                      |
+| `isRoot`          | `boolean`  | `true`  | Whether this type appears as a top-level annotation option |
+| `allowedChildren` | `string[]` | —       | IDs of annotation types allowed as children                |
+| `allowedLinks`    | `string[]` | —       | IDs of annotation types that can be linked                 |
+| `icon`            | `string`   | —       | SVG string for custom icon                                 |
+| `type`            | `string`   | —       | Optional type classifier                                   |
+| `target`          | `string`   | —       | `gutter`, `underline`, or `highlight`                      |
 
 **Supported `fieldInput.type` values:** `text`, `select`, `autocomplete`
 
@@ -222,11 +225,12 @@ annotations/
     └── places.json
 ```
 
-Each `resource.json` contains an `AnnotationJsonConfig` object.
+Each `resource.json` contains an `AnnotationJsonResource` object.
 
 #### Frontend-Only Usage (No Backend)
 
-Annotation definitions can be built entirely client-side using `@ghentcdh/annotation-core`, without running `@ghentcdh/annotation-api`.
+Annotation definitions can be built entirely client-side using `@ghentcdh/annotation-core`, without running
+`@ghentcdh/annotation-api`.
 
 **Static imports:**
 
@@ -310,11 +314,13 @@ Then pass result to `<AnnotationEditor :annotation-definitions="definitions" />`
 
 ### @ghentcdh/annotation-editor
 
-Vue 3 component for annotating text sources. Renders sources in collapsible panels with inline annotation creation, editing, linking, and deletion.
+Vue 3 component for annotating text sources. Renders sources in collapsible panels with inline annotation creation,
+editing, linking, and deletion.
 
 #### Basic Usage
 
 ```vue
+
 <template>
   <AnnotationEditor
     :configuration="configuration"
@@ -330,103 +336,103 @@ Vue 3 component for annotating text sources. Renders sources in collapsible pane
   />
 </template>
 <script setup lang="ts">
-import { computed } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { AnnotationEditor } from '@ghentcdh/annotation-editor';
-import { type AnnotationDefConfig } from '@ghentcdh/annotation-core';
-import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-import type { SourceModel } from '@ghentcdh/annotation-editor';
+  import { computed } from 'vue';
+  import { useRoute, useRouter } from 'vue-router';
+  import { AnnotationEditor } from '@ghentcdh/annotation-editor';
+  import { type AnnotationDefConfig } from '@ghentcdh/annotation-core';
+  import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
+  import type { SourceModel } from '@ghentcdh/annotation-editor';
 
-const route = useRoute();
-const router = useRouter();
+  const route = useRoute();
+  const router = useRouter();
 
-const configuration: AnnotationDefConfig = {
-  baseUrl: import.meta.env.VITE_ANNOTATION_BASE_URL,
-  app: import.meta.env.VITE_ANNOTATION_APP ?? 'my-app',
-  prefix: import.meta.env.VITE_ANNOTATION_PREFIX ?? 'my-prefix',
-};
+  const configuration: AnnotationDefConfig = {
+    baseUrl: import.meta.env.VITE_ANNOTATION_BASE_URL,
+    app: import.meta.env.VITE_ANNOTATION_APP ?? 'my-app',
+    prefix: import.meta.env.VITE_ANNOTATION_PREFIX ?? 'my-prefix',
+  };
 
-// Sources to annotate
-const sources: SourceModel[] = [
-  {
-    id: 'source-1',
-    uri: 'https://example.com/text/1',
-    type: 'text',
-    content: {
-      text: 'The text content to annotate.',
-      label: 'Source Document',
-      textDirection: 'ltr',
-      processingLanguage: 'en',
+  // Sources to annotate
+  const sources: SourceModel[] = [
+    {
+      id: 'source-1',
+      uri: 'https://example.com/text/1',
+      type: 'text',
+      content: {
+        text: 'The text content to annotate.',
+        label: 'Source Document',
+        textDirection: 'ltr',
+        processingLanguage: 'en',
+      },
     },
-  },
-];
+  ];
 
-// Annotations loaded from your API
-const annotations: W3CAnnotation[] = [];
+  // Annotations loaded from your API
+  const annotations: W3CAnnotation[] = [];
 
-// Annotation type definitions loaded from your API
-const definitions = [];
+  // Annotation type definitions loaded from your API
+  const definitions = [];
 
-// URL-based annotation selection
-const selectedAnnotationId = computed(
-  () => route.query.annotationId as string | undefined,
-);
-const selectedAnnotationAction = computed(
-  () => route.query.action as string | undefined,
-);
+  // URL-based annotation selection
+  const selectedAnnotationId = computed(
+    () => route.query.annotationId as string | undefined,
+  );
+  const selectedAnnotationAction = computed(
+    () => route.query.action as string | undefined,
+  );
 
-// Event handlers — should call your API and return the updated annotation
-const onCreate = (annotation: W3CAnnotation) => {
-  // POST to your API, return the created annotation
-};
-const onUpdate = (annotation: W3CAnnotation) => {
-  // PUT to your API, return the updated annotation
-};
-const onDelete = (annotation: W3CAnnotation) => {
-  // DELETE from your API, return the deleted annotation
-};
+  // Event handlers — should call your API and return the updated annotation
+  const onCreate = (annotation: W3CAnnotation) => {
+    // POST to your API, return the created annotation
+  };
+  const onUpdate = (annotation: W3CAnnotation) => {
+    // PUT to your API, return the updated annotation
+  };
+  const onDelete = (annotation: W3CAnnotation) => {
+    // DELETE from your API, return the deleted annotation
+  };
 
-// Sync selection state to URL
-const onSelect = (
-  annotation: W3CAnnotation | null,
-  action: string | null,
-) => {
-  const query = { ...route.query };
-  if (annotation) {
-    query.annotationId = annotation.id;
-  } else {
-    delete query.annotationId;
-  }
-  if (action) {
-    query.action = action;
-  } else {
-    delete query.action;
-  }
-  router.replace({ query });
-};
+  // Sync selection state to URL
+  const onSelect = (
+    annotation: W3CAnnotation | null,
+    action: string | null,
+  ) => {
+    const query = { ...route.query };
+    if (annotation) {
+      query.annotationId = annotation.id;
+    } else {
+      delete query.annotationId;
+    }
+    if (action) {
+      query.action = action;
+    } else {
+      delete query.action;
+    }
+    router.replace({ query });
+  };
 </script>
 ```
 
 #### Props
 
-| Prop | Type | Required | Default | Description |
-|---|---|---|---|---|
-| `configuration` | `AnnotationDefConfig` | yes | — | API connection configuration |
-| `sources` | `SourceModel[]` | yes | — | Text sources to display and annotate |
-| `annotations` | `W3CAnnotation[]` | yes | — | Existing annotations to render |
-| `annotationDefinitions` | `AnnotationDefinition[]` | yes | — | Available annotation type definitions |
-| `cols` | `number` | no | `2` | Number of source columns in the grid layout |
-| `selectedAnnotationId` | `string` | no | — | ID of the currently selected annotation |
-| `selectedAnnotationAction` | `string` | no | — | Action for selected annotation (`show` or `edit`) |
+| Prop                       | Type                     | Required | Default | Description                                       |
+|----------------------------|--------------------------|----------|---------|---------------------------------------------------|
+| `configuration`            | `AnnotationDefConfig`    | yes      | —       | API connection configuration                      |
+| `sources`                  | `SourceModel[]`          | yes      | —       | Text sources to display and annotate              |
+| `annotations`              | `W3CAnnotation[]`        | yes      | —       | Existing annotations to render                    |
+| `annotationDefinitions`    | `AnnotationDefinition[]` | yes      | —       | Available annotation type definitions             |
+| `cols`                     | `number`                 | no       | `2`     | Number of source columns in the grid layout       |
+| `selectedAnnotationId`     | `string`                 | no       | —       | ID of the currently selected annotation           |
+| `selectedAnnotationAction` | `string`                 | no       | —       | Action for selected annotation (`show` or `edit`) |
 
 #### Events
 
-| Event | Payload | Description |
-|---|---|---|
-| `create:annotation` | `W3CAnnotation` | User created an annotation. Should return the persisted annotation. |
-| `update:annotation` | `W3CAnnotation` | User updated an annotation. Should return the persisted annotation. |
-| `delete:annotation` | `W3CAnnotation` | User deleted an annotation. Should return the deleted annotation. |
-| `select:annotation` | `(annotation \| null, action \| null)` | Selection changed. Use to sync with URL or external state. |
+| Event               | Payload                                | Description                                                         |
+|---------------------|----------------------------------------|---------------------------------------------------------------------|
+| `create:annotation` | `W3CAnnotation`                        | User created an annotation. Should return the persisted annotation. |
+| `update:annotation` | `W3CAnnotation`                        | User updated an annotation. Should return the persisted annotation. |
+| `delete:annotation` | `W3CAnnotation`                        | User deleted an annotation. Should return the deleted annotation.   |
+| `select:annotation` | `(annotation \| null, action \| null)` | Selection changed. Use to sync with URL or external state.          |
 
 #### SourceModel
 
@@ -465,7 +471,8 @@ type SourceModel = {
 
 - **annotation-core** is the shared dependency used by both frontend and backend
 - **annotation-api** loads annotation definitions from JSON files and serves them via REST
-- **annotation-editor** renders sources, annotations, and provides CRUD UI using W3C annotation standard via `@ghentcdh/w3c-utils`
+- **annotation-editor** renders sources, annotations, and provides CRUD UI using W3C annotation standard via
+  `@ghentcdh/w3c-utils`
 
 ## Development
 
@@ -490,6 +497,7 @@ This project is licensed under the **MIT License**. See the [LICENSE](./LICENSE)
 
 Bo Vandersteene, Ghent University.
 
-Development by [Ghent Centre for Digital Humanities - Ghent University](https://www.ghentcdh.ugent.be/). Funded by the [GhentCDH research projects](https://www.ghentcdh.ugent.be/projects).
+Development by [Ghent Centre for Digital Humanities - Ghent University](https://www.ghentcdh.ugent.be/). Funded by
+the [GhentCDH research projects](https://www.ghentcdh.ugent.be/projects).
 
 <img src="https://www.ghentcdh.ugent.be/ghentcdh_logo_blue_text_transparent_bg_landscape.svg" alt="GhentCDH" width="500">

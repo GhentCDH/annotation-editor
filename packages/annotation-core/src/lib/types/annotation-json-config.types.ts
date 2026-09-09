@@ -39,4 +39,6 @@ export const AnnotationJsonResourceSchema = AnnotationJsonResourceShape
     return { schemaVersion, title, ...obj };
   });
 
-export type AnnotationJsonConfig = z.infer<typeof AnnotationJsonResourceSchema>;
+export type AnnotationJsonResource = z.infer<
+  typeof AnnotationJsonResourceSchema
+>;

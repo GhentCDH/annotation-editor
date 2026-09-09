@@ -49,7 +49,7 @@ export const createAnnotationConfiguration = (
     UIAnnotationDefinition
   >;
   const rootTypes = definitions
-    .filter((d) => d.isRoot)
+    .filter((d) => d.annotation.isRoot)
     .map((d) => ({ key: d.id, label: d.label }));
   const styles = groupById(definitions, 'style') as Record<
     string,

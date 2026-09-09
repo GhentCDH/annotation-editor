@@ -1,10 +1,10 @@
 import {
-  type AnnotationJsonConfig,
   type AnnotationDefConfig,
+  type AnnotationJsonResource,
 } from '@ghentcdh/annotation-core';
 import {
-  loadAnnotationDefinitionsFromGlob,
   loadAnnotationDefinitionsFromConfigs,
+  loadAnnotationDefinitionsFromGlob,
 } from '../annotation-definition.loader';
 
 const mockConfig: AnnotationDefConfig = {
@@ -23,7 +23,7 @@ const mockFactory = (id: string) => ({
 const createJsonConfig = (
   id: string,
   name: string,
-): AnnotationJsonConfig => ({
+): AnnotationJsonResource => ({
   id,
   name,
   color: '#ff0000',
@@ -81,7 +81,7 @@ describe('loadAnnotationDefinitionsFromConfigs', () => {
   });
 
   it('should preserve config properties in definitions', () => {
-    const configs: AnnotationJsonConfig[] = [
+    const configs: AnnotationJsonResource[] = [
       {
         id: 'test',
         name: 'Test',

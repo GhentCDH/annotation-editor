@@ -1,6 +1,8 @@
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-import type { AnnotationConfiguration, type AnnotationModalConfig  } from '@ghentcdh/annotation-ui';
-
+import type {
+  AnnotationConfiguration,
+  AnnotationModalConfig,
+} from '@ghentcdh/annotation-ui';
 
 type EditorStatus = 'show' | 'create' | 'edit' | 'link' | null;
 

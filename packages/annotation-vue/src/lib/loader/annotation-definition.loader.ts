@@ -1,16 +1,18 @@
 import {
+  AnnotationConfigSchema,
   type AnnotationDefConfig,
-  type AnnotationJsonConfig,
+  type AnnotationJsonResource,
   type AnnotationResource,
   buildAnnotationDefinitions,
   type ContextBuilderFactory,
 } from '@ghentcdh/annotation-core';
+import { parseSchema } from '@ghentcdh/crouton-vue';
 
-type GlobModule = { default: AnnotationJsonConfig } | AnnotationJsonConfig;
+type GlobModule = { default: AnnotationJsonResource } | AnnotationJsonResource;
 
 export type GlobModules = Record<string, GlobModule>;
 
-const extractConfig = (mod: GlobModule): AnnotationJsonConfig => {
+const extractConfig = (mod: GlobModule): AnnotationJsonResource => {
   if ('default' in mod) return mod.default;
   return mod;
 };
@@ -25,7 +27,7 @@ export const loadAnnotationDefinitionsFromGlob = (
 };
 
 export const loadAnnotationDefinitionsFromConfigs = (
-  configs: AnnotationJsonConfig[],
+  configs: AnnotationJsonResource[],
   config: AnnotationDefConfig,
   factory?: ContextBuilderFactory,
 ): AnnotationResource[] => {
@@ -34,12 +36,29 @@ export const loadAnnotationDefinitionsFromConfigs = (
 
 export type DefinitionsFetchFn = (
   url: string,
-) => Promise<AnnotationJsonConfig[]>;
+) => Promise<AnnotationJsonResource[]>;
 
 export const loadAnnotationDefinitionsFromUrls = async (urls: string[]) => {
   return Promise.all(
     urls.map((a) => {
       return fetch(a).then((r) => r.json());
+    }),
+  );
+};
+
+export const loadAnnotationDefFromResourceUris = async (urls: string[]) => {
+  return Promise.all(
+    urls.map((a) => {
+      return fetch(a)
+        .then((r) => r.json())
+        .then((def) =>
+          parseSchema(def, {
+            baseUrl: '',
+            extensions: {
+              annotation: AnnotationConfigSchema,
+            },
+          }),
+        );
     }),
   );
 };

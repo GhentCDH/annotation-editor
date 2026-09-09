@@ -4,21 +4,33 @@ import {
   type CustomAnnotationStyle,
 } from '@ghentcdh/annotated-text';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-import { type ViewConfig } from '@ghentcdh/crouton-core';
-import { type KeyLabel } from './key-label.type';
+import { z } from 'zod';
+import { type KeyLabel, KeyLabelSchema } from './key-label.type';
 import { type SourceModel } from './source.model';
-import { type ViewDef } from './annotation-definition.type';
+import { AnnotationResourceSchema } from './annotation-definition.type';
 
-// TODO why map this to this and not AnnotationResource & {style: CustomAnnotationStyle}
-export type UIAnnotationDefinition = {
-  id: string;
-  label: string;
-  style: CustomAnnotationStyle;
-  allowedChildren: Array<KeyLabel>;
-  allowedLinks: Array<KeyLabel>;
-  isRoot?: boolean;
-  schemas: Record<ViewDef, ViewConfig>;
-};
+export const UIAnnotationDefinitionSchema = AnnotationResourceSchema.extend({
+  style: z.custom<CustomAnnotationStyle>().optional(),
+  allowedChildren: z.array(KeyLabelSchema),
+  allowedLinks: z.array(KeyLabelSchema),
+}).transform((data) => ({
+  label: data.name,
+  ...data,
+}));
+
+export type UIAnnotationDefinition = z.infer<
+  typeof UIAnnotationDefinitionSchema
+>;
+
+//   AnnotationResource & {
+//   id: string;
+//   label: string;
+//   style: CustomAnnotationStyle;
+//   allowedChildren: Array<KeyLabel>;
+//   allowedLinks: Array<KeyLabel>;
+//   isRoot?: boolean;
+//   schemas: Record<ViewDef, ViewConfig>;
+// };
 
 export type AllowedChildrenPerType = Record<string, Array<KeyLabel>>;
 

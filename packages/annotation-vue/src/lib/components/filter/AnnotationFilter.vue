@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import { computed, type PropType } from 'vue';
 import { Filter } from '@ghentcdh/ui';
-import { useAnnotationDefinitions } from '@ghentcdh/annotation-vue';
+import { useAnnotationDefinitions } from '../../composables/useAnnotationDefinitions';
 
 const annotationDefinitions = useAnnotationDefinitions();
 const model = defineModel<string[]>();
@@ -26,7 +26,7 @@ const items = computed(() => {
     return {
       id: def.id,
       label: def.label,
-      color: def.style.default?.backgroundColor,
+      color: def.style?.default?.backgroundColor,
       count: props.count?.[def.id]?.length ?? 0,
     };
   });

@@ -7,12 +7,11 @@ import {
 } from './annotation-json-config.types';
 
 const viewDefList = ['table', 'view', 'form'] as const;
-export const ViewDefEnum = z.enum(viewDefList);
 export type ViewDef = (typeof viewDefList)[number];
 
 export const annotationColumnDefinition = z.custom<any>();
 
-const _annotationResource = AnnotationJsonResourceShape.pick({
+export const AnnotationResourceSchema = AnnotationJsonResourceShape.pick({
   id: true,
   name: true,
   title: true,
@@ -20,10 +19,11 @@ const _annotationResource = AnnotationJsonResourceShape.pick({
   annotation: true,
 }).extend({
   annotation: AnnotationConfigSchema,
-  context: z.instanceof(ContextBuilder).optional(),
-  views: z.record(ViewDefEnum, ViewConfigSchema).optional(),
+  context: z.instanceof(ContextBuilder).optional().nullish(),
+  schemas: z
+    .record(z.string(), ViewConfigSchema.partial())
+    .optional()
+    .nullish(),
 });
 
-export type AnnotationResource = z.infer<typeof _annotationResource>;
-export const annotationResource: z.ZodType<AnnotationResource> =
-  _annotationResource;
+export type AnnotationResource = z.infer<typeof AnnotationResourceSchema>;

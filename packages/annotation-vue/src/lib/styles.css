@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+@import '@ghentcdh/ui/index.css';
+@import '../../../annotation-editor/src/lib/styles.css';
+@import '../../../annotation-preview/src/lib/styles.css';
+
+@source "../";

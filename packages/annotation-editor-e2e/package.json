@@ -1,9 +1,0 @@
-{
-  "name": "@ghentcdh/annotation-editor-e2e",
-  "version": "0.0.0",
-  "private": true,
-  "dependencies": {},
-  "devDependencies": {
-    "@ghentcdh/annotation-editor": "workspace:*"
-  }
-}

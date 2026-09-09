@@ -9,7 +9,6 @@ import { CroutonApiModule } from '@ghentcdh/crouton-api';
 import { registerResourceExtensions } from '@ghentcdh/crouton-core';
 import { AnnotationNamespaceController } from './annotation-namespace.controller';
 import { ANNOTATION_DEF_CONFIG_TOKEN } from './utils/annotation.context-builder';
-import { annotationSchemaEnricher } from './schemaEnricher';
 import { SCHEMA_PREFIX } from './prefix';
 import { AnnotationContextService } from './context/annotation-context.service';
 
@@ -29,12 +28,13 @@ registerResourceExtensions({
 })
 export class AnnotationApiModule {
   static async forResourceDir(
-    dirPath: string,
+    resourcePath: string,
+    datasourcePath: string,
     config: AnnotationDefConfig,
   ): Promise<DynamicModule> {
     const crouton = await CroutonApiModule.forResourceDir(
-      dirPath,
-      dirPath,
+      resourcePath,
+      datasourcePath,
       // resolve(__dirname, 'data-sources'),
       {
         baseUrl: '',
@@ -42,7 +42,6 @@ export class AnnotationApiModule {
         extensions: {
           annotation: AnnotationConfigSchema,
         },
-        schemaEnricher: annotationSchemaEnricher,
       },
     );
 

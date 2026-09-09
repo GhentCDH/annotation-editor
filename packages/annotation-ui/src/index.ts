@@ -19,4 +19,3 @@ export * from './lib/modals/info/useAnnotationInfo';
 export { default as MetadataTable } from './lib/modals/info/Metadata.vue';
 export { default as AnnotationInfoCardBase } from './lib/modals/info/AnnotationInfoCardBase.vue';
 export { default as AnnotationTextCell } from './lib/modals/info/AnnotationTextCell.vue';
-export { default as AnnotationFilter } from './lib/filter/AnnotationFilter.vue';

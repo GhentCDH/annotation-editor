@@ -49,7 +49,6 @@ export default defineConfig(() => ({
     rolldownOptions: {
       external: [
         '@ghentcdh/annotated-text',
-        '@ghentcdh/annotation-vue',
         '@ghentcdh/crouton-vue',
         '@ghentcdh/ui',
         '@ghentcdh/w3c-utils',

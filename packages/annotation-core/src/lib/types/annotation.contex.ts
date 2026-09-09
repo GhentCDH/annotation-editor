@@ -7,41 +7,29 @@ import {
 
 export const AnnotationMetadataType = 'AnnotationMetadata';
 
-export type AnnotationContextWithContext = {
+export type AnnotationContext = {
   id: string;
   styling: AnnotationStyle;
-  hasContext: true;
+  prefix: string;
+  jsonLd: string;
+  hasContext: boolean;
   uri: string;
   safeParse: (data: unknown) => { data: boolean; success: boolean };
   toAnnotationBody: () => unknown;
 };
-export type AnnotationContextNoContext = {
-  id: string;
-  styling: AnnotationStyle;
-  hasContext: false;
-};
 
-export type AnnotationContext =
-  AnnotationContextWithContext | AnnotationContextNoContext;
-
-export const createAnnotationContext: AnnotationContext = (
+export const createAnnotationContext = (
   annotationDefConfig: AnnotationDefConfig,
   resource: AnnotationResource,
 ): AnnotationContext => {
-  const formView = resource.views?.form;
-  let context = {};
+  const formView = resource.schemas?.['form'];
+
+  const builder = baseContextBuilder(resource.id, annotationDefConfig);
   if (formView) {
-    const builder = baseContextBuilder(resource.id, annotationDefConfig);
     builder.parseJsonSchema(formView.json_schema);
-    context = {
-      uri: builder.uri,
-      safeParse: builder.safeParse.bind(builder),
-      toAnnotationBody: builder.toAnnotationBody.bind(builder),
-    };
   }
 
   return {
-    ...context,
     id: resource.id,
     styling: {
       name: resource.name,
@@ -50,5 +38,17 @@ export const createAnnotationContext: AnnotationContext = (
       color: resource.annotation.color,
     },
     hasContext: !!formView,
+    prefix: buildPrefix(annotationDefConfig, resource),
+    uri: (builder as any).uri,
+    jsonLd: builder.toJsonLdContext(),
+    safeParse: builder.safeParse.bind(builder),
+    toAnnotationBody: builder.toAnnotationBody.bind(builder),
   } as unknown as AnnotationContext;
+};
+
+export const buildPrefix = (
+  annotationDefConfig: AnnotationDefConfig,
+  resource: AnnotationResource,
+) => {
+  return `${annotationDefConfig.prefix}:${resource.annotation.type}/`;
 };

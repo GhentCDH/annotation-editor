@@ -1,6 +1,3 @@
-export { useApi } from './lib/service/useApi';
-
-export * from './lib/types/annotation-vue.types';
 export { AnnotationDefinitionService } from './lib/service/annotation-definition.service';
 export {
   type DefinitionsFetchFn,
@@ -16,16 +13,11 @@ export {
   useAnnotationDefinitions,
   createAnnotationDefinitionsState,
 } from './lib/composables/useAnnotationDefinitions';
-export {
-  type AnnotationNamespaceRoutePaths,
-  createAnnotationNamespacePaths,
-  createAnnotationNamespaceRoutes,
-  NAMESPACE_ROUTE_META,
-} from './lib/router/annotation-namespace.routes';
-export {
-  type AnnotationNamespacePluginOptions,
-  type AnnotationPluginOptions,
-  installAnnotationNamespaceRoutes,
-  AnnotationNamespacePlugin,
-  AnnotationPlugin,
-} from './lib/router/annotation-namespace.plugin';
+export { AnnotationPlugin } from './lib/annotation.plugin';
+export * from '@ghentcdh/annotation-preview';
+export * from '@ghentcdh/annotation-core';
+export * from '@ghentcdh/annotation-editor';
+
+import './lib/styles.css';
+
+export { default as AnnotationFilter } from './lib/components/filter/AnnotationFilter.vue';
