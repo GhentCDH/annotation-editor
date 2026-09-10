@@ -136,3 +136,11 @@ createMenu('demo');
 
 // ── root README → docs home ───────────────────────────────────────────────────
 copyMd('', '', { depth: 1, readmeOnly: true });
+
+// ── JSON schemas → public (served at /schema/v1/*.json) ──────────────────────
+const schemaPublicDir = 'docs/.vuepress/public/schema/v1';
+if (!fs.existsSync(schemaPublicDir)) fs.mkdirSync(schemaPublicDir, { recursive: true });
+fs.copyFileSync(
+  'packages/annotation-core/src/lib/types/resource.schema.json',
+  `${schemaPublicDir}/resource.schema.json`,
+);
