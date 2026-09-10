@@ -1,6 +1,8 @@
 {
+  "$schema": "https://ghentcdh.github.io/crouton/schema/v1/resource.schema.json",
   "id": "animals",
   "name": "Animals",
+  "kind": "custom",
   "annotation": {
     "color": "#65a378",
     "target": "highlight",

@@ -1,6 +1,7 @@
 {
   "id": "paragraph",
   "name": "paragraph",
+  "kind": "custom",
   "annotation": {
     "color": "#1e55cf",
     "target": "gutter",
