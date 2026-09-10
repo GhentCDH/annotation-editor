@@ -22,13 +22,6 @@ jobs:
       contents: write
       id-token: write # needed for provenance data generation
     steps:
-      - name: Verify NPM token
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
-          npm whoami
-          npm token list
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Checkout code
         uses: actions/checkout@v7
 
