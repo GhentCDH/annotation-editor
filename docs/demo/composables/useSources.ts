@@ -27,7 +27,6 @@ export const useSources = () => {
       const json = await res.json();
       content.value = JSON.stringify(json, null, 2);
       sources.value = json;
-      console.table(sources.value);
     } catch (e) {
       fetchError.value = e instanceof Error ? e.message : String(e);
     }

@@ -151,7 +151,8 @@
               class="border-t border-gray-200 px-3 pb-3"
             >
               <p class="text-xs text-gray-500 mt-2 mb-2">
-                Paste a JSON array of <code>{ "start", "end", "type", ...fields }</code> objects.
+                Paste a JSON array of
+                <code>{ "start", "end", "type", ...fields }</code> objects.
               </p>
               <select
                 v-model="parserSource"
@@ -172,12 +173,18 @@
                 <button
                   @click="runParser('append')"
                   class="border border-gray-300 rounded px-3 py-1 text-xs bg-white hover:bg-gray-100"
-                >Convert &amp; append</button>
+                >
+                  Convert &amp; append
+                </button>
                 <button
                   @click="runParser('replace')"
                   class="border border-gray-300 rounded px-3 py-1 text-xs bg-white hover:bg-gray-100"
-                >Convert &amp; replace</button>
-                <p v-if="parserError" class="text-xs text-red-500">{{ parserError }}</p>
+                >
+                  Convert &amp; replace
+                </button>
+                <p v-if="parserError" class="text-xs text-red-500">
+                  {{ parserError }}
+                </p>
               </div>
             </div>
           </div>
@@ -247,10 +254,26 @@
                 Paste plain text to convert it to a source entry.
               </p>
               <div class="grid grid-cols-2 gap-2 mb-2">
-                <input v-model="spId" placeholder="id (auto)" class="border border-gray-300 rounded px-2 py-1 text-xs bg-white" />
-                <input v-model="spLabel" placeholder="Label" class="border border-gray-300 rounded px-2 py-1 text-xs bg-white" />
-                <input v-model="spUri" placeholder="URI (auto)" class="border border-gray-300 rounded px-2 py-1 text-xs bg-white" />
-                <input v-model="spLang" placeholder="Language (en)" class="border border-gray-300 rounded px-2 py-1 text-xs bg-white" />
+                <input
+                  v-model="spId"
+                  placeholder="id (auto)"
+                  class="border border-gray-300 rounded px-2 py-1 text-xs bg-white"
+                />
+                <input
+                  v-model="spLabel"
+                  placeholder="Label"
+                  class="border border-gray-300 rounded px-2 py-1 text-xs bg-white"
+                />
+                <input
+                  v-model="spUri"
+                  placeholder="URI (auto)"
+                  class="border border-gray-300 rounded px-2 py-1 text-xs bg-white"
+                />
+                <input
+                  v-model="spLang"
+                  placeholder="Language (en)"
+                  class="border border-gray-300 rounded px-2 py-1 text-xs bg-white"
+                />
               </div>
               <div class="flex gap-2 mb-2">
                 <label class="flex items-center gap-1 text-xs">
@@ -271,12 +294,18 @@
                 <button
                   @click="runSourceParser('append')"
                   class="border border-gray-300 rounded px-3 py-1 text-xs bg-white hover:bg-gray-100"
-                >Convert &amp; append</button>
+                >
+                  Convert &amp; append
+                </button>
                 <button
                   @click="runSourceParser('replace')"
                   class="border border-gray-300 rounded px-3 py-1 text-xs bg-white hover:bg-gray-100"
-                >Convert &amp; replace</button>
-                <p v-if="sourceParserError" class="text-xs text-red-500">{{ sourceParserError }}</p>
+                >
+                  Convert &amp; replace
+                </button>
+                <p v-if="sourceParserError" class="text-xs text-red-500">
+                  {{ sourceParserError }}
+                </p>
               </div>
             </div>
           </div>
@@ -294,7 +323,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { watch } from 'vue';
 import { AnnotationEditor } from '@ghentcdh/annotation-editor';
 import { config, useResources } from '@demo/composables/useResources';
 import { useAnnotations } from '@demo/composables/useAnnotations';
@@ -341,14 +370,19 @@ const {
   parse,
 } = useAnnotationParser();
 
-watch(sources, (s) => {
-  if (!parserSource.value && s.length) parserSource.value = s[0].uri;
-}, { immediate: true });
+watch(
+  sources,
+  (s) => {
+    if (!parserSource.value && s.length) parserSource.value = s[0].uri;
+  },
+  { immediate: true },
+);
 
 const runParser = (mode: 'append' | 'replace') => {
-  const parsed = parse(definitions, sources.value);
+  const parsed = parse(definitions.value, sources.value);
   if (parsed) {
-    annotations.value = mode === 'replace' ? parsed : [...annotations.value, ...parsed];
+    annotations.value =
+      mode === 'replace' ? parsed : [...annotations.value, ...parsed];
   }
 };
 

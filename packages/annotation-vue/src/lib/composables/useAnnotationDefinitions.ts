@@ -130,6 +130,7 @@ export const createAnnotationDefinitionsState = (
       createStyle,
       activeStyle,
     );
+    console.table(state.definitions);
     state.definitionsMap = buildDefinitionsMap(state.definitions);
   };
 

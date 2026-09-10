@@ -1,4 +1,4 @@
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import {
   AnnotationDefConfig,
   provideAnnotationDefinitions,
@@ -93,7 +93,7 @@ export const useResources = () => {
     resources,
     newUrl,
     newName,
-    definitions: state.definitions,
+    definitions: computed(() => state.definitions),
     add,
     remove,
     onEdit,

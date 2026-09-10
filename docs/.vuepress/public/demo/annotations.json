@@ -15,8 +15,8 @@
           "type": "AnnotationStyle",
           "purpose": "styling",
           "name": "KeyConcepts",
-          "color": "#712793",
-          "target": "highlight"
+          "_color": "#712793",
+          "_target": "highlight"
         },
         {
           "type": "TextualBody",

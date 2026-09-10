@@ -1574,10 +1574,9 @@
   },
   "required": [
     "name",
-    "route",
-    "tag",
     "id"
   ],
+  "additionalProperties": {},
   "definitions": {
     "__schema0": {
       "type": "object",

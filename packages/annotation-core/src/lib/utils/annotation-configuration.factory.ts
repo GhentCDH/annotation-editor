@@ -51,10 +51,15 @@ export const createAnnotationConfiguration = (
   const rootTypes = definitions
     .filter((d) => d.annotation.isRoot)
     .map((d) => ({ key: d.id, label: d.label }));
+
+  console.table(definitions);
+
   const styles = groupById(definitions, 'style') as Record<
     string,
     CustomAnnotationStyle
   >;
+
+  console.table(styles);
 
   if (!styles['default']) {
     styles['default'] = {
