@@ -1,6 +1,7 @@
 {
   "id": "emotion",
   "name": "Emotion",
+  "kind": "custom",
   "annotation": {
     "color": "#f3ff4d",
     "target": "highlight"

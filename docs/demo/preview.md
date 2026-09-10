@@ -1,21 +1,12 @@
 # Preview
 
-<div>
- <AnnotationPreview
-    :configuration="config"
-    :sources="sourcesPlainTxt"
-    :annotations="annotations"
-    :layout="layout"
-    :annotation-definitions="definitions"
-  />
-</div>
+<Preview />
 
 
 
 
 <script setup>
 //
-import {layout, sourcesPlainTxt, annotations, definitions, config} from '@demo/demo-text';
-import { AnnotationPreview } from '@ghentcdh/annotation-preview';
+import Preview from '@demo/preview.vue';
 
 </script>

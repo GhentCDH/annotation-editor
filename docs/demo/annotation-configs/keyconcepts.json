@@ -1,6 +1,7 @@
 {
   "id": "keyconcepts",
   "name": "Key Concepts",
+  "kind": "custom",
   "annotation": {
     "color": "#712793",
     "target": "highlight"

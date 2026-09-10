@@ -16,5 +16,5 @@ const properties = defineProps<{
   definition: UIAnnotationDefinition;
 }>();
 
-const views = computed(() => properties.definition.schemas as any);
+const views = computed(() => properties.definition?.schemas as any);
 </script>

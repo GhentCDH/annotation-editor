@@ -13,6 +13,7 @@
         <slot name="header-actions" />
       </div>
       <MetadataTable
+        v-if="annotationDef"
         :data="metadata"
         :definition="annotationDef"
       />

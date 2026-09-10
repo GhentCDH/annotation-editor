@@ -1,6 +1,5 @@
 import {
   AnnotationDefConfig,
-  configureApi,
   type GridLayout,
   provideAnnotationDefinitions,
   SourceModel,
@@ -115,9 +114,6 @@ export const sourcesPlainTxt = createSources(
 );
 
 export const annotations = collection.items;
-
-// provideHttpClient(fetch);
-configureApi(fetch);
 
 const resourceFolder = import.meta.glob('./annotation-configs/*.json', {
   eager: true,
