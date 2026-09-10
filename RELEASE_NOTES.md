@@ -1,3 +1,14 @@
+## 0.0.1-alpha.12 (2026-09-10)
+
+### 🩹 Fixes
+
+- annotation load in playground ([17c1789d](https://github.com/GhentCDH/annotation-editor/commit/17c1789d))
+- annotation load in playground ([f816ffb2](https://github.com/GhentCDH/annotation-editor/commit/f816ffb2))
+
+### ❤️ Thank You
+
+- Bo Vandersteene
+
 ## 0.0.1-alpha.11 (2026-09-10)
 
 ### 🚀 Features
