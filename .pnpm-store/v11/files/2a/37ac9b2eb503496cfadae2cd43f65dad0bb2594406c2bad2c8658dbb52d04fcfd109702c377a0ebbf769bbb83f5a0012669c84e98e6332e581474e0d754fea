@@ -1,4 +1,0 @@
-include:
-{{#if postgres}}  - path: compose.infra.yml
-    env_file: .env.infra
-{{/if}}  - compose.app.{{appName}}.yml

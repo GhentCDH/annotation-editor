@@ -1,8 +1,0 @@
-export declare const isIntersection: (a: {
-    start: number;
-    end: number;
-}, b: {
-    start: number;
-    end: number;
-}) => boolean;
-//# sourceMappingURL=intersect.d.ts.map

@@ -1,3 +1,0 @@
-export * from './CreateAnnotations.model';
-export * from './createAnnotatedText';
-//# sourceMappingURL=index.d.ts.map

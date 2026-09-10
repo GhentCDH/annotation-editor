@@ -1,4 +1,0 @@
-import { AnnotationModule } from '../../../di/annotation.module';
-import { BaseAnnotation } from '../../../model';
-export declare const createNewBlock: <ANNOTATION extends BaseAnnotation>(annotationModule: AnnotationModule) => void;
-//# sourceMappingURL=create.d.ts.map

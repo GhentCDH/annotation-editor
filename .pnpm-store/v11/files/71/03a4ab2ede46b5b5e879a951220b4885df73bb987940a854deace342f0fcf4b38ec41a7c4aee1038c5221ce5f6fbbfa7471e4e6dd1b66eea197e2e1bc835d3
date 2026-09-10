@@ -1,5 +1,0 @@
-export declare const getMinMaxBy: <T>(elements: T[], by: (element: T) => number) => {
-    min: T;
-    max: T;
-};
-//# sourceMappingURL=min-max.by.d.ts.map

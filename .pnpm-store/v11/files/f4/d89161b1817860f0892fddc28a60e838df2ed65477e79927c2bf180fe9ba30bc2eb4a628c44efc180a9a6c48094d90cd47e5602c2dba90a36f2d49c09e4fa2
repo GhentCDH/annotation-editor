@@ -1,3 +1,0 @@
-import { AnnotationAdapter, TextAdapter } from '../../../adapter';
-export declare const drawText: (textElement: HTMLDivElement, textAdapter: TextAdapter, annotationAdapter: AnnotationAdapter<any>) => void;
-//# sourceMappingURL=text.d.ts.map

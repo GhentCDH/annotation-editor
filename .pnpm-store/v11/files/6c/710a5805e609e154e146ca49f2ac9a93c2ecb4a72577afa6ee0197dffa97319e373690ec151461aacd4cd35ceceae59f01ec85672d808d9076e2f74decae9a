@@ -1,1 +1,0 @@
-import{t as e}from"../../GitChangelog-CqgHB4v-.js";export{e as GitChangelog};

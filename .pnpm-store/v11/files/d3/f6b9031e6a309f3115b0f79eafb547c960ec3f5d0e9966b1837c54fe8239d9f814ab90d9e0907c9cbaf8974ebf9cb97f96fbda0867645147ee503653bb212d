@@ -1,3 +1,0 @@
-import { TextAnnotation, TextLine } from '../../model';
-export declare const calculateGutterAnnotationWeightsAndEnrich: (lines: TextLine[], annotations: TextAnnotation[]) => number;
-//# sourceMappingURL=weights.d.ts.map
