@@ -117,7 +117,15 @@
               >
                 {{ annotationsExpanded ? '▲' : '▼' }} edit
               </button>
+              <button
+                @click="parserExpanded = !parserExpanded"
+                class="text-xs text-gray-500 hover:text-gray-800 px-1 flex-shrink-0"
+              >
+                {{ parserExpanded ? '▲' : '▼' }} parse
+              </button>
             </div>
+
+            <!-- W3C edit panel -->
             <div
               v-if="annotationsExpanded"
               class="border-t border-gray-200 px-3 pb-3"
@@ -135,6 +143,42 @@
               <p v-if="annotationsParseError" class="text-xs text-red-500 mt-1">
                 {{ annotationsParseError }}
               </p>
+            </div>
+
+            <!-- Parser panel -->
+            <div
+              v-if="parserExpanded"
+              class="border-t border-gray-200 px-3 pb-3"
+            >
+              <p class="text-xs text-gray-500 mt-2 mb-2">
+                Paste a JSON array of <code>{ "start", "end", "type", ...fields }</code> objects.
+              </p>
+              <select
+                v-model="parserSource"
+                class="border border-gray-300 rounded px-2 py-1 text-xs bg-white w-full mb-2"
+              >
+                <option value="" disabled>Source text…</option>
+                <option v-for="s in sources" :key="s.uri" :value="s.uri">
+                  {{ s.content?.label ?? s.id }}
+                </option>
+              </select>
+              <textarea
+                v-model="parserInput"
+                rows="8"
+                spellcheck="false"
+                class="w-full font-mono text-xs border border-gray-200 rounded p-2 bg-gray-50 resize-y"
+              />
+              <div class="flex items-center gap-2 mt-2">
+                <button
+                  @click="runParser('append')"
+                  class="border border-gray-300 rounded px-3 py-1 text-xs bg-white hover:bg-gray-100"
+                >Convert &amp; append</button>
+                <button
+                  @click="runParser('replace')"
+                  class="border border-gray-300 rounded px-3 py-1 text-xs bg-white hover:bg-gray-100"
+                >Convert &amp; replace</button>
+                <p v-if="parserError" class="text-xs text-red-500">{{ parserError }}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -166,7 +210,15 @@
               >
                 {{ sourcesExpanded ? '▲' : '▼' }} edit
               </button>
+              <button
+                @click="sourceParserExpanded = !sourceParserExpanded"
+                class="text-xs text-gray-500 hover:text-gray-800 px-1 flex-shrink-0"
+              >
+                {{ sourceParserExpanded ? '▲' : '▼' }} parse
+              </button>
             </div>
+
+            <!-- Source JSON edit panel -->
             <div
               v-if="sourcesExpanded"
               class="border-t border-gray-200 px-3 pb-3"
@@ -185,6 +237,48 @@
                 {{ sourcesParseError }}
               </p>
             </div>
+
+            <!-- Source parser panel -->
+            <div
+              v-if="sourceParserExpanded"
+              class="border-t border-gray-200 px-3 pb-3"
+            >
+              <p class="text-xs text-gray-500 mt-2 mb-2">
+                Paste plain text to convert it to a source entry.
+              </p>
+              <div class="grid grid-cols-2 gap-2 mb-2">
+                <input v-model="spId" placeholder="id (auto)" class="border border-gray-300 rounded px-2 py-1 text-xs bg-white" />
+                <input v-model="spLabel" placeholder="Label" class="border border-gray-300 rounded px-2 py-1 text-xs bg-white" />
+                <input v-model="spUri" placeholder="URI (auto)" class="border border-gray-300 rounded px-2 py-1 text-xs bg-white" />
+                <input v-model="spLang" placeholder="Language (en)" class="border border-gray-300 rounded px-2 py-1 text-xs bg-white" />
+              </div>
+              <div class="flex gap-2 mb-2">
+                <label class="flex items-center gap-1 text-xs">
+                  <input type="radio" v-model="spDir" value="ltr" /> LTR
+                </label>
+                <label class="flex items-center gap-1 text-xs">
+                  <input type="radio" v-model="spDir" value="rtl" /> RTL
+                </label>
+              </div>
+              <textarea
+                v-model="spText"
+                rows="8"
+                spellcheck="false"
+                placeholder="Paste plain text here…"
+                class="w-full font-mono text-xs border border-gray-200 rounded p-2 bg-gray-50 resize-y"
+              />
+              <div class="flex items-center gap-2 mt-2">
+                <button
+                  @click="runSourceParser('append')"
+                  class="border border-gray-300 rounded px-3 py-1 text-xs bg-white hover:bg-gray-100"
+                >Convert &amp; append</button>
+                <button
+                  @click="runSourceParser('replace')"
+                  class="border border-gray-300 rounded px-3 py-1 text-xs bg-white hover:bg-gray-100"
+                >Convert &amp; replace</button>
+                <p v-if="sourceParserError" class="text-xs text-red-500">{{ sourceParserError }}</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -200,10 +294,13 @@
 </template>
 
 <script setup lang="ts">
+import { ref, watch } from 'vue';
 import { AnnotationEditor } from '@ghentcdh/annotation-editor';
 import { config, useResources } from '@demo/composables/useResources';
 import { useAnnotations } from '@demo/composables/useAnnotations';
 import { useSources } from '@demo/composables/useSources';
+import { useAnnotationParser } from '@demo/composables/useAnnotationParser';
+import { useSourceParser } from '@demo/composables/useSourceParser';
 import type { GridLayout } from '@ghentcdh/annotation-core';
 
 const layout: GridLayout = {
@@ -235,4 +332,42 @@ const {
   load: loadSources,
   rebuild: rebuildSources,
 } = useSources();
+
+const {
+  input: parserInput,
+  sourceUri: parserSource,
+  parseError: parserError,
+  expanded: parserExpanded,
+  parse,
+} = useAnnotationParser();
+
+watch(sources, (s) => {
+  if (!parserSource.value && s.length) parserSource.value = s[0].uri;
+}, { immediate: true });
+
+const runParser = (mode: 'append' | 'replace') => {
+  const parsed = parse(definitions, sources.value);
+  if (parsed) {
+    annotations.value = mode === 'replace' ? parsed : [...annotations.value, ...parsed];
+  }
+};
+
+const {
+  text: spText,
+  label: spLabel,
+  id: spId,
+  uri: spUri,
+  textDirection: spDir,
+  processingLanguage: spLang,
+  parseError: sourceParserError,
+  expanded: sourceParserExpanded,
+  parse: parseSource,
+} = useSourceParser();
+
+const runSourceParser = (mode: 'append' | 'replace') => {
+  const parsed = parseSource();
+  if (parsed) {
+    sources.value = mode === 'replace' ? [parsed] : [...sources.value, parsed];
+  }
+};
 </script>
