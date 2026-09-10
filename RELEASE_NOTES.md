@@ -1,3 +1,42 @@
+## 0.0.1-alpha.11 (2026-09-10)
+
+### 🚀 Features
+
+- add annotation filter ([ad30fe94](https://github.com/GhentCDH/annotation-editor/commit/ad30fe94))
+- refactor schema generation ([fab81eeb](https://github.com/GhentCDH/annotation-editor/commit/fab81eeb))
+- refactor schema generation ([7fa1914c](https://github.com/GhentCDH/annotation-editor/commit/7fa1914c))
+- align with crouton resources ([41d93fde](https://github.com/GhentCDH/annotation-editor/commit/41d93fde))
+- align with crouton resources ([f6504ccf](https://github.com/GhentCDH/annotation-editor/commit/f6504ccf))
+- align with crouton resources ([f19a4732](https://github.com/GhentCDH/annotation-editor/commit/f19a4732))
+- use crouton features ([90607a1c](https://github.com/GhentCDH/annotation-editor/commit/90607a1c))
+- use crouton features ([7186dca6](https://github.com/GhentCDH/annotation-editor/commit/7186dca6))
+- use crouton features ([0751cd19](https://github.com/GhentCDH/annotation-editor/commit/0751cd19))
+- move to crouton logic ([5e35ac34](https://github.com/GhentCDH/annotation-editor/commit/5e35ac34))
+- move to crouton ([3fc8ca27](https://github.com/GhentCDH/annotation-editor/commit/3fc8ca27))
+- move to crouton ([eb173ef3](https://github.com/GhentCDH/annotation-editor/commit/eb173ef3))
+- refactor to crouton ([dd593e71](https://github.com/GhentCDH/annotation-editor/commit/dd593e71))
+- move to crouton models ([41f0dd47](https://github.com/GhentCDH/annotation-editor/commit/41f0dd47))
+- move to crouton models ([e074f519](https://github.com/GhentCDH/annotation-editor/commit/e074f519))
+- move to crouton models ([a82f7adb](https://github.com/GhentCDH/annotation-editor/commit/a82f7adb))
+- create playground ([6df24674](https://github.com/GhentCDH/annotation-editor/commit/6df24674))
+- create playground ([09942507](https://github.com/GhentCDH/annotation-editor/commit/09942507))
+
+### 🩹 Fixes
+
+- typings ([15da54e1](https://github.com/GhentCDH/annotation-editor/commit/15da54e1))
+- linting ([d0706e58](https://github.com/GhentCDH/annotation-editor/commit/d0706e58))
+- load only when div is on the screen ([84c95ecc](https://github.com/GhentCDH/annotation-editor/commit/84c95ecc))
+- anntotation adapter configuration ([68825bea](https://github.com/GhentCDH/annotation-editor/commit/68825bea))
+- update nx deprecated issues ([a2285d82](https://github.com/GhentCDH/annotation-editor/commit/a2285d82))
+- build config ([56843c50](https://github.com/GhentCDH/annotation-editor/commit/56843c50))
+- install deps ([7bce4c96](https://github.com/GhentCDH/annotation-editor/commit/7bce4c96))
+- **e2e:** import test harnesses from @ghentcdh/ui/testing subpath ([12b2ca63](https://github.com/GhentCDH/annotation-editor/commit/12b2ca63))
+
+### ❤️ Thank You
+
+- Bo Vandersteene
+- Claude Opus 4.8
+
 ## 0.0.1-alpha.10 (2026-07-10)
 
 ### 🩹 Fixes
