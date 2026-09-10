@@ -12,16 +12,8 @@
         <div><strong>Type:</strong> {{ purposeLabel }}</div>
         <slot name="header-actions" />
       </div>
-      {{ metadata }}
-      <MetadataTable
-        v-if="metadata"
-        :data="metadata"
-        :definition="annotationDef"
-      />
-      <slot
-        name="links"
-        :annotation="annotation!"
-      />
+      <MetadataTable :data="metadata" :definition="annotationDef" />
+      <slot name="links" :annotation="annotation!" />
       <slot name="actions" />
     </div>
   </div>
@@ -50,7 +42,7 @@ const purposeLabel = computed(
 );
 
 const metadata = computed(() => {
-  return properties.utils.getMetadata(properties.annotation);
+  return properties.utils.getMetadata(properties.annotation) ?? {};
 });
 
 const cardRef = ref<HTMLElement>();

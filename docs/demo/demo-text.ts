@@ -1,6 +1,7 @@
 import {
   AnnotationDefConfig,
   configureApi,
+  type GridLayout,
   provideAnnotationDefinitions,
   SourceModel,
 } from '@ghentcdh/annotation-vue';
@@ -127,3 +128,16 @@ const defs = provideAnnotationDefinitions({
 });
 
 export const definitions = defs.definitions;
+
+export const layout: GridLayout = {
+  areas: [
+    ['original', 'translation'],
+    ['commentary', 'commentary'],
+  ],
+  columns: '1fr 1fr',
+  panes: [
+    { sourceId: 'original', area: 'original' },
+    { sourceId: 'translation', area: 'translation' },
+    { sourceId: 'commentary', area: 'commentary' },
+  ],
+};

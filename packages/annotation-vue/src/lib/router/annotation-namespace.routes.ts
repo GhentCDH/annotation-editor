@@ -4,7 +4,6 @@ import {
   type AnnotationDefConfig,
   AnnotationStyleContextBuilder,
   AnnotationStyleType,
-  createAnnotationContext,
 } from '@ghentcdh/annotation-core';
 import { type ContextBuilder } from '@ghentcdh/w3c-utils';
 import { type AnnotationDefinitionService } from '../service/annotation-definition.service';
@@ -184,8 +183,6 @@ export const createAnnotationNamespaceRoutes = (
       props: (route) => {
         const id = route.params['id'] as string;
 
-        const context = createAnnotationContext();
-
         if (id === AnnotationStyleType && config) {
           return {
             title: `${id}.jsonld`,
@@ -193,7 +190,7 @@ export const createAnnotationNamespaceRoutes = (
           };
         }
         const def = service.findById(id);
-        return { title: `${id}.jsonld`, data: def?.json_ld ?? null };
+        return { title: `${id}.jsonld`, data: def?.context?.toJsonLdContext() ?? null };
       },
     },
     {

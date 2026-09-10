@@ -13,6 +13,7 @@ export {
   createAnnotationDefinitionsState,
 } from './lib/composables/useAnnotationDefinitions';
 export { AnnotationPlugin } from './lib/annotation.plugin';
+export { configureApi } from './lib/service/useApi';
 export * from '@ghentcdh/annotation-preview';
 export * from '@ghentcdh/annotation-core';
 export * from '@ghentcdh/annotation-editor';

@@ -43,11 +43,11 @@ export const AnnotationPlugin: Plugin<[AnnotationPluginOptions]> = {
     }
 
     if (options.definitionsUrl) {
-      state.loadFromUrl(options.definitionsUrl, options.fetchFn);
+      state.loadFromUrl(options.definitionsUrl);
     }
 
     if (options.definitionsUrls) {
-      state.loadFromUrls(options.definitionsUrls, options.fetchFn);
+      state.loadFromUrls(options.definitionsUrls);
     }
 
     app.provide(ANNOTATION_DEFINITIONS_KEY, state);

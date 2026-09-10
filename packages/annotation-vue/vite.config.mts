@@ -1,5 +1,6 @@
 /// <reference types='vitest' />
 import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
 import dts from 'vite-plugin-dts';
 import { copyPackageJson } from '../../tools/vite/copy-package-json.mts';
 import * as path from 'path';
@@ -11,6 +12,7 @@ export default defineConfig(() => ({
     tsconfigPaths: true,
   },
   plugins: [
+    vue(),
     dts({
       entryRoot: 'src',
       tsconfigPath: path.join(import.meta.dirname, 'tsconfig.lib.json'),
@@ -35,6 +37,10 @@ export default defineConfig(() => ({
     rollupOptions: {
       external: [
         '@ghentcdh/annotated-text',
+        '@ghentcdh/annotation-core',
+        '@ghentcdh/annotation-editor',
+        '@ghentcdh/annotation-preview',
+        '@ghentcdh/annotation-ui',
         '@ghentcdh/w3c-utils',
         'vue',
         '@vue/runtime-dom',

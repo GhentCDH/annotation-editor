@@ -10,7 +10,6 @@ import {
   type AnnotationJsonResource,
   type AnnotationResource,
   type AnnotationResource as CoreAnnotationDefinition,
-  type ContextBuilderFactory,
   type KeyLabel,
   type UIAnnotationDefinition,
   UIAnnotationDefinitionSchema,
@@ -48,7 +47,6 @@ export type ProvideAnnotationDefinitionsOptions = {
   resourceFolder?: GlobModules;
   createHighlightStyle?: typeof createHighlightStyle;
   activeHighlightStyle?: typeof createHighlightStyle;
-  factory?: ContextBuilderFactory;
   definitionsUrl?: string;
   definitionsUrls?: string[];
   resourceUrls?: string[];
@@ -119,7 +117,7 @@ const buildDefinitionsMap = (
 export const createAnnotationDefinitionsState = (
   options: ProvideAnnotationDefinitionsOptions,
 ): AnnotationDefinitionsState => {
-  const { config, factory } = options;
+  const { config } = options;
   const createStyle = options.createHighlightStyle ?? createHighlightStyle;
   const activeStyle = options.activeHighlightStyle ?? createStyle;
 
@@ -180,7 +178,9 @@ export const createAnnotationDefinitionsState = (
       state.loading = true;
       state.error = null;
       try {
-        const defs = await loadAnnotationDefFromResourceUris(urls);
+        const defs = (await loadAnnotationDefFromResourceUris(urls)).filter(
+          (d): d is AnnotationResource => d !== null,
+        );
         updateDefinitions(defs);
       } catch (e) {
         console.error(e);
@@ -200,7 +200,9 @@ export const createAnnotationDefinitionsState = (
           );
         }
         const configuration = await response.json();
-        const urls = configuration.annotations.map((a) => a.schemas);
+        const urls = configuration.annotations.map(
+          (a: { schemas: string }) => a.schemas,
+        );
         const defs = await loadAnnotationDefinitionsFromUrls(urls);
         updateDefinitions(defs);
       } catch (e) {

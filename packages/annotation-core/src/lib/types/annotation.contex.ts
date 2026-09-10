@@ -22,7 +22,7 @@ export const createAnnotationContext = (
   annotationDefConfig: AnnotationDefConfig,
   resource: AnnotationResource,
 ): AnnotationContext => {
-  const formView = resource.schemas?.['form'];
+  const formView = (resource as any).views?.['form'];
 
   const builder = baseContextBuilder(resource.id, annotationDefConfig);
   if (formView) {
@@ -38,6 +38,8 @@ export const createAnnotationContext = (
       color: resource.annotation.color,
     },
     hasContext: !!formView,
+    schemas: resource.schemas,
+    formView,
     prefix: buildPrefix(annotationDefConfig, resource),
     uri: (builder as any).uri,
     jsonLd: builder.toJsonLdContext(),

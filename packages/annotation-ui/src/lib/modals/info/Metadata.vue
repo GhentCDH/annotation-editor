@@ -1,5 +1,4 @@
 <template>
-  metadata table
   <CroutonForm
     :id="`annotation-selection-modal`"
     :data="data"
