@@ -10,6 +10,8 @@ type GlobModule = { default: AnnotationJsonResource } | AnnotationJsonResource;
 
 export type GlobModules = Record<string, GlobModule>;
 
+export type DefinitionsFetchFn = (url: string) => Promise<AnnotationJsonResource[]>;
+
 export const buildAnnotationDefFromJson = (
   resource: AnnotationJsonResource,
 ): AnnotationResource | null => {
@@ -41,6 +43,8 @@ const extractConfig = (mod: GlobModule): AnnotationJsonResource => {
 
 export const loadAnnotationDefinitionsFromGlob = (
   modules: GlobModules,
+  _config?: unknown,
+  _factory?: unknown,
 ): AnnotationResource[] => {
   const resources = Object.values(modules).map(extractConfig);
   return loadAnnotationDefinitionsFromConfigs(resources);
@@ -48,6 +52,8 @@ export const loadAnnotationDefinitionsFromGlob = (
 
 export const loadAnnotationDefinitionsFromConfigs = (
   resources: AnnotationJsonResource[],
+  _config?: unknown,
+  _factory?: unknown,
 ): AnnotationResource[] => {
   return resources.map(buildAnnotationDefFromJson).filter((def) => !!def);
 };

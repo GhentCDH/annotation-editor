@@ -15,6 +15,7 @@ export type UIAnnotationDefinition = AnnotationResource & {
   style?: CustomAnnotationStyle;
   allowedChildren: Array<KeyLabel>;
   allowedLinks: Array<KeyLabel>;
+  _core?: AnnotationResource;
 };
 
 export const UIAnnotationDefinitionSchema: z.ZodType<UIAnnotationDefinition> =

@@ -19,6 +19,8 @@ export const AnnotationConfigSchema = z.object({
 });
 
 export const AnnotationJsonResourceShape = ResourceJsonShape.extend({
+  route: z.string().optional(),
+  tag: z.string().optional(),
   // schemaVersion: z.number().optional().default(BASELINE_RESOURCE_VERSION),
   operations: JsonOperationsSchema.optional().default(
     JsonOperationsSchema.parse({}),
@@ -28,7 +30,7 @@ export const AnnotationJsonResourceShape = ResourceJsonShape.extend({
   annotation: AnnotationConfigSchema.optional().default(
     AnnotationConfigSchema.parse({}),
   ),
-});
+}).passthrough();
 
 export const AnnotationJsonResourceSchema = AnnotationJsonResourceShape
   // .superRefine(refineByKind)

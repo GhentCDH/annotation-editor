@@ -214,6 +214,28 @@ export const createAnnotationNamespaceRoutes = (
       },
     },
     {
+      path: `${base}/:type/anno.jsonld`,
+      name: 'annotation-ns-type-jsonld',
+      component: JsonView,
+      meta,
+      props: (route) => {
+        const type = route.params['type'] as string;
+        const def = service.findById(type);
+        return { title: `${type}/anno.jsonld`, data: def?.context?.toJsonLdContext() ?? null };
+      },
+    },
+    {
+      path: `${base}/:id`,
+      name: 'annotation-ns-by-id',
+      component: JsonView,
+      meta,
+      props: (route) => {
+        const id = route.params['id'] as string;
+        const def = service.findById(id);
+        return { title: id, data: def ?? null };
+      },
+    },
+    {
       path: base,
       name: 'annotation-ns-all',
       component: JsonView,

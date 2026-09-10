@@ -12,12 +12,12 @@ import {
   type AnnotationResource as CoreAnnotationDefinition,
   type KeyLabel,
   type UIAnnotationDefinition,
-  UIAnnotationDefinitionSchema,
 } from '@ghentcdh/annotation-core';
 import { createHighlightStyle } from '@ghentcdh/annotated-text';
 import { type AxiosInstance } from 'axios';
 import { AnnotationDefinitionService } from '../service/annotation-definition.service';
 import {
+  type DefinitionsFetchFn,
   type GlobModules,
   loadAnnotationDefFromResourceUris,
   loadAnnotationDefinitionsFromConfigs,
@@ -33,7 +33,7 @@ export type AnnotationDefinitionsState = {
   loadFromGlob: (modules: GlobModules) => void;
   loadFromConfigs: (configs: AnnotationJsonResource[]) => void;
   loadFromDefinitions: (defs: CoreAnnotationDefinition[]) => void;
-  loadFromUrl: (url: string) => Promise<void>;
+  loadFromUrl: (url: string, fetchFn?: DefinitionsFetchFn) => Promise<void>;
   loadFromUrls: (urls: string[]) => Promise<void>;
   loadFromResourceUris: (urls: string[]) => Promise<void>;
   loading: boolean;
@@ -42,14 +42,16 @@ export type AnnotationDefinitionsState = {
 };
 
 export type ProvideAnnotationDefinitionsOptions = {
-  api: AxiosInstance;
+  api?: AxiosInstance;
   config: AnnotationDefConfig;
   resourceFolder?: GlobModules;
+  factory?: (id: string) => unknown;
   createHighlightStyle?: typeof createHighlightStyle;
   activeHighlightStyle?: typeof createHighlightStyle;
   definitionsUrl?: string;
   definitionsUrls?: string[];
   resourceUrls?: string[];
+  fetchFn?: DefinitionsFetchFn;
 };
 
 export const ANNOTATION_DEFINITIONS_KEY: InjectionKey<AnnotationDefinitionsState> =
@@ -78,22 +80,18 @@ const toVueDefinition = (
   createStyle: typeof createHighlightStyle,
   activeStyle: typeof createHighlightStyle,
 ): UIAnnotationDefinition => {
-  const style = def.annotation! ?? {};
-
-  const parsed = UIAnnotationDefinitionSchema.safeParse({
+  const style = def.annotation ?? {};
+  return {
     ...def,
+    label: def.name,
     allowedChildren: resolveKeyLabels(style.allowedChildren, grouped),
     allowedLinks: resolveKeyLabels(style.allowedLinks, grouped),
     style: {
       default: createStyle(style.color!),
       active: activeStyle(style.color!),
     },
-  });
-  if (parsed.error) {
-    console.error('for def', def);
-    console.error(parsed.error);
-  }
-  return parsed.success ? parsed.data : (def as UIAnnotationDefinition);
+    _core: def,
+  } as UIAnnotationDefinition;
 };
 
 const buildVueDefinitions = (
@@ -189,21 +187,29 @@ export const createAnnotationDefinitionsState = (
         state.loading = false;
       }
     },
-    async loadFromUrl(url: string) {
+    async loadFromUrl(url: string, fetchFn?: DefinitionsFetchFn) {
       state.loading = true;
       state.error = null;
       try {
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error(
-            `Failed to fetch annotation definitions: ${response.status} ${response.statusText}`,
+        let defs: AnnotationResource[];
+        if (fetchFn) {
+          const resources = await fetchFn(url);
+          defs = loadAnnotationDefinitionsFromConfigs(
+            resources as AnnotationJsonResource[],
           );
+        } else {
+          const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error(
+              `Failed to fetch annotation definitions: ${response.status} ${response.statusText}`,
+            );
+          }
+          const configuration = await response.json();
+          const urls = configuration.annotations.map(
+            (a: { schemas: string }) => a.schemas,
+          );
+          defs = await loadAnnotationDefinitionsFromUrls(urls);
         }
-        const configuration = await response.json();
-        const urls = configuration.annotations.map(
-          (a: { schemas: string }) => a.schemas,
-        );
-        const defs = await loadAnnotationDefinitionsFromUrls(urls);
         updateDefinitions(defs);
       } catch (e) {
         console.error(e);
@@ -231,7 +237,7 @@ export const provideAnnotationDefinitions = (
   }
 
   if (options.definitionsUrl) {
-    state.loadFromUrl(options.definitionsUrl);
+    state.loadFromUrl(options.definitionsUrl, options.fetchFn);
   }
 
   if (options.definitionsUrls) {

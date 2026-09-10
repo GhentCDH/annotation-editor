@@ -13,7 +13,6 @@ export {
   createAnnotationStyleBodyUnsafe,
 } from './lib/annotation.style';
 export * from './lib/utils/annotation.context-builder';
-export * from './lib/utils/context-builder.factory';
 export * from './lib/utils/annotation-utils';
 export * from './lib/utils/annotation-render.style';
 export * from './lib/utils/annotation-configuration.factory';
