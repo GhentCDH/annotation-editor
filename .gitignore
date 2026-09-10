@@ -54,3 +54,4 @@ _tmp**
 # scratch/temp files
 _tmp_*
 .pnpm-store
+docs/.vuepress/public/schema/
