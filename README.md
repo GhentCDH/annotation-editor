@@ -5,12 +5,15 @@
 [![annotation-api](https://img.shields.io/npm/v/@ghentcdh/annotation-api.svg?label=annotation-api)](https://www.npmjs.com/package/@ghentcdh/annotation-api)
 [![annotation-vue](https://img.shields.io/npm/v/@ghentcdh/annotation-vue.svg?label=annotation-vue)](https://www.npmjs.com/package/@ghentcdh/annotation-vue)
 [![annotation-preview](https://img.shields.io/npm/v/@ghentcdh/annotation-preview.svg?label=annotation-preview)](https://www.npmjs.com/package/@ghentcdh/annotation-preview)
+[![Docs](https://img.shields.io/badge/docs-ghentcdh.github.io-blue)](https://ghentcdh.github.io/annotation-editor/)
 
 # Annotation Editor
 
 Monorepo for W3C-compliant annotation editing. Provides a NestJS API module for serving annotation definitions, a shared
 core library for types and validation, and a Vue 3 editor component for creating and managing annotations on text
 sources.
+
+**Documentation:** https://ghentcdh.github.io/annotation-editor/
 
 ## Packages
 
