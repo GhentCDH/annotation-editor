@@ -6,9 +6,7 @@ import {
   type AnnotationAdapter,
   type TextAdapter,
 } from '@ghentcdh/annotated-text';
-import type { GridLayout } from '@ghentcdh/annotation-ui';
-import type { AnnotationDefinition } from './types/AnnotationConfiguration.model';
-import type { SourceModel } from './types/source.model';
+import type { GridLayout, AnnotationDefinition , SourceModel  } from '@ghentcdh/annotation-ui';
 
 export const AnnotationEditorProperties = {
   modalView: { type: Boolean, required: false as const, default: true },
@@ -17,11 +15,11 @@ export const AnnotationEditorProperties = {
     required: true as const,
   },
   textAdapter: {
-    type: Object as PropType<() => TextAdapter>,
+    type: Function as PropType<() => TextAdapter>,
     required: false as const,
   },
   annotationAdapter: {
-    type: Object as PropType<AnnotationAdapter<W3CAnnotation>>,
+    type: Function as PropType<() => AnnotationAdapter<W3CAnnotation>>,
     required: false as const,
   },
   sources: { type: Array as PropType<SourceModel[]>, required: true as const },

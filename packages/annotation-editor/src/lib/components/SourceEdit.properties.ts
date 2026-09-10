@@ -1,6 +1,6 @@
 import type { ExtractPublicPropTypes, PropType } from 'vue';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-import type { SourceModel } from '../types/source.model';
+import type { SourceModel } from '@ghentcdh/annotation-ui';
 
 
 export const SourceEditProperties = {

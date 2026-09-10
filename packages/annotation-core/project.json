@@ -3,14 +3,24 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/annotation-core/src",
   "projectType": "library",
-  "tags": ["scope:annotation", "type:util"],
+  "tags": [
+    "scope:annotation",
+    "type:util"
+  ],
   "targets": {
-"build": {
-      "executor": "@nx/vite:build",
-      "outputs": ["{options.outputPath}"],
+    "nx-release-publish": {
       "options": {
-        "outputPath": "dist/packages/annotation-core",
-        "configFile": "packages/annotation-core/vite.config.mts"
+        "packageRoot": "dist/{projectRoot}"
+      }
+    },
+    "build": {
+      "outputs": [
+        "{projectRoot}/{options.outDir}",
+        "{workspaceRoot}/dist/packages/annotation-core"
+      ],
+      "options": {
+        "config": "./vite.config.mts",
+        "outDir": "../../dist/packages/annotation-core"
       },
       "configurations": {
         "production": {
@@ -23,13 +33,15 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
+      "outputs": [
+        "{options.outputFile}"
+      ]
     },
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{projectRoot}/coverage/unit"]
+      "outputs": [
+        "{projectRoot}/coverage/unit"
+      ]
     }
   }
 }
-
-

@@ -1,17 +1,25 @@
-import { type DynamicModule, Module, type Type } from '@nestjs/common';
+import { type DynamicModule, Module } from '@nestjs/common';
 
-import { annotationContextBuilderFactory, type AnnotationDefConfig } from '@ghentcdh/annotation-core';
-import { AnnotationDefinitionService } from './service/annotation-definition.service';
-import { AnnotationDefinitionFromFilesService } from './service/annotation-definition-from-files.service';
-import { loadAnnotationDefinitionsFromDir } from './service/annotation-definition.loader';
+import {
+  AnnotationConfigSchema,
+  type AnnotationDefConfig,
+  resolveConfig,
+} from '@ghentcdh/annotation-core';
+import { CroutonApiModule } from '@ghentcdh/crouton-api';
+import { registerResourceExtensions } from '@ghentcdh/crouton-core';
 import { AnnotationNamespaceController } from './annotation-namespace.controller';
 import { ANNOTATION_DEF_CONFIG_TOKEN } from './utils/annotation.context-builder';
-import { loadAnnotationResourcesFromDir } from './resource/annotation-resource.loader';
-import { AnnotationResourceDefinitionService } from './resource/annotation-resource-definition.service';
+import { SCHEMA_PREFIX } from './prefix';
+import { AnnotationContextService } from './context/annotation-context.service';
 
-type AnnotationApiConfig = {
-  annotationDefinitionService: Type<AnnotationDefinitionService>;
-};
+// type AnnotationApiConfig = {
+//   annotationDefinitionService: Type<AnnotationDefinitionService>;
+// };
+
+registerResourceExtensions({
+  annotation: AnnotationConfigSchema,
+  // context: ContextSchema,
+});
 
 @Module({
   controllers: [],
@@ -19,60 +27,36 @@ type AnnotationApiConfig = {
   exports: [],
 })
 export class AnnotationApiModule {
-  static forService(config: AnnotationApiConfig): DynamicModule {
-    return {
-      module: AnnotationApiModule,
-      global: true,
-      controllers: [AnnotationNamespaceController],
-      providers: [
-        {
-          provide: AnnotationDefinitionService,
-          useClass: config.annotationDefinitionService,
-        },
-      ],
-      exports: [AnnotationDefinitionService],
-    };
-  }
-
   static async forResourceDir(
-    dirPath: string,
+    resourcePath: string,
+    datasourcePath: string,
     config: AnnotationDefConfig,
   ): Promise<DynamicModule> {
-    const loaderFn = () =>
-      loadAnnotationDefinitionsFromDir(
-        dirPath,
-        config,
-        annotationContextBuilderFactory,
-      );
-
-    const definitions = loaderFn();
-    const service = new AnnotationDefinitionFromFilesService(
-      config,
-      definitions as any,
-      loaderFn as any,
+    const crouton = await CroutonApiModule.forResourceDir(
+      resourcePath,
+      datasourcePath,
+      // resolve(__dirname, 'data-sources'),
+      {
+        baseUrl: '',
+        prefix: SCHEMA_PREFIX,
+        extensions: {
+          annotation: AnnotationConfigSchema,
+        },
+      },
     );
 
-    const resourceDefs = loadAnnotationResourcesFromDir(dirPath, config);
-    const resourceDefService = new AnnotationResourceDefinitionService(
-      resourceDefs,
-    );
+    const _config = resolveConfig(config);
 
     return {
       module: AnnotationApiModule,
       global: true,
+      imports: [crouton],
       controllers: [AnnotationNamespaceController],
       providers: [
-        { provide: ANNOTATION_DEF_CONFIG_TOKEN, useValue: config },
-        { provide: AnnotationDefinitionService, useValue: service },
-        {
-          provide: AnnotationResourceDefinitionService,
-          useValue: resourceDefService,
-        },
+        AnnotationContextService,
+        { provide: ANNOTATION_DEF_CONFIG_TOKEN, useValue: _config },
       ],
-      exports: [
-        AnnotationDefinitionService,
-        AnnotationResourceDefinitionService,
-      ],
+      exports: [AnnotationContextService],
     };
   }
 }

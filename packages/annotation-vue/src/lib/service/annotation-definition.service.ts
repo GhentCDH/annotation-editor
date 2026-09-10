@@ -1,19 +1,19 @@
-import { type AnnotationDefinition } from '@ghentcdh/annotation-core';
+import { type AnnotationResource } from '@ghentcdh/annotation-core';
 
 export class AnnotationDefinitionService {
-  private definitions: AnnotationDefinition[] = [];
-  private groupedDefinitions: Record<string, AnnotationDefinition> = {};
+  private definitions: AnnotationResource[] = [];
+  private groupedDefinitions: Record<string, AnnotationResource> = {};
 
-  constructor(definitions: AnnotationDefinition[] = []) {
+  constructor(definitions: AnnotationResource[] = []) {
     if (definitions.length) {
       this.setDefinitions(definitions);
     }
   }
 
-  setDefinitions(definitions: AnnotationDefinition[]): void {
+  setDefinitions(definitions: AnnotationResource[]): void {
     this.definitions = definitions;
-    this.groupedDefinitions = definitions.reduce(
-      (acc: Record<string, AnnotationDefinition>, current) => {
+this.groupedDefinitions = this.definitions.reduce(
+      (acc: Record<string, AnnotationResource>, current) => {
         acc[current.id] = current;
         return acc;
       },
@@ -21,15 +21,15 @@ export class AnnotationDefinitionService {
     );
   }
 
-  findAll(): AnnotationDefinition[] {
+  findAll(): AnnotationResource[] {
     return this.definitions;
   }
 
-  findById(id: string): AnnotationDefinition | undefined {
+  findById(id: string): AnnotationResource | undefined {
     return this.groupedDefinitions[id];
   }
 
-  findAllGrouped(): Record<string, AnnotationDefinition> {
+  findAllGrouped(): Record<string, AnnotationResource> {
     return this.groupedDefinitions;
   }
 

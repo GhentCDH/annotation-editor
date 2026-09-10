@@ -1,22 +1,25 @@
 /// <reference types='vitest' />
 import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
 import dts from 'vite-plugin-dts';
+import { copyPackageJson } from '../../tools/vite/copy-package-json.mts';
 import * as path from 'path';
-import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
-import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
 
 export default defineConfig(() => ({
   root: import.meta.dirname,
   cacheDir: '../../node_modules/.vite/annotation-vue',
+  resolve: {
+    tsconfigPaths: true,
+  },
   plugins: [
-    nxViteTsPaths(),
-    nxCopyAssetsPlugin(['*.md']),
+    vue(),
     dts({
       entryRoot: 'src',
       tsconfigPath: path.join(import.meta.dirname, 'tsconfig.lib.json'),
       pathsToAliases: false,
       bundledPackages: ['@ghentcdh/annotation-core'],
     }),
+    copyPackageJson(),
   ],
   build: {
     outDir: '../../dist/packages/annotation-vue',
@@ -34,7 +37,10 @@ export default defineConfig(() => ({
     rollupOptions: {
       external: [
         '@ghentcdh/annotated-text',
-        '@ghentcdh/crouton-forms-vue',
+        '@ghentcdh/annotation-core',
+        '@ghentcdh/annotation-editor',
+        '@ghentcdh/annotation-preview',
+        '@ghentcdh/annotation-ui',
         '@ghentcdh/w3c-utils',
         'vue',
         '@vue/runtime-dom',

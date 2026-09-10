@@ -182,6 +182,7 @@ export const createAnnotationNamespaceRoutes = (
       meta,
       props: (route) => {
         const id = route.params['id'] as string;
+
         if (id === AnnotationStyleType && config) {
           return {
             title: `${id}.jsonld`,
@@ -189,26 +190,7 @@ export const createAnnotationNamespaceRoutes = (
           };
         }
         const def = service.findById(id);
-        return { title: `${id}.jsonld`, data: def?.json_ld ?? null };
-      },
-    },
-    {
-      path: `${base}/:type/anno.jsonld`,
-      name: 'annotation-ns-type-jsonld',
-      component: JsonView,
-      meta,
-      props: (route) => {
-        const type = route.params['type'] as string;
-        const context = service.getContextBuilder(type) as
-          ContextBuilder | undefined;
-        if (!context) return { title: type, data: null };
-        return {
-          title: `${type}/anno.jsonld`,
-          data: {
-            jsonLd: context.toJsonLdContext(),
-            forms: context.toJsonSchema(),
-          },
-        };
+        return { title: `${id}.jsonld`, data: def?.context?.toJsonLdContext() ?? null };
       },
     },
     {
@@ -219,22 +201,27 @@ export const createAnnotationNamespaceRoutes = (
       props: (route) => {
         const id = route.params['id'] as string;
         const def = service.findById(id);
-        if (!def) return { title: id, data: null };
-        return {
-          title: `${id}/schemas`,
-          data: {
-            id: def.id,
-            name: def.name,
-            views: def.views,
-            columns: def.columns,
-            isRoot: def.isRoot,
-            allowedChildren: def.allowedChildren,
-            allowedLinks: def.allowedLinks,
-            type: def.type,
-            icon: def.icon,
-            target: def.target,
-          },
-        };
+        // if (!def) return { title: id, data: null };
+        //
+        // return parseSchema(def, {
+        //   baseUrl: '',
+        //   extensions: {
+        //     annotation: AnnotationConfigSchema,
+        //   },
+        // });
+
+        return def;
+      },
+    },
+    {
+      path: `${base}/:type/anno.jsonld`,
+      name: 'annotation-ns-type-jsonld',
+      component: JsonView,
+      meta,
+      props: (route) => {
+        const type = route.params['type'] as string;
+        const def = service.findById(type);
+        return { title: `${type}/anno.jsonld`, data: def?.context?.toJsonLdContext() ?? null };
       },
     },
     {
@@ -244,10 +231,8 @@ export const createAnnotationNamespaceRoutes = (
       meta,
       props: (route) => {
         const id = route.params['id'] as string;
-        return {
-          title: id,
-          data: service.findById(id) ?? null,
-        };
+        const def = service.findById(id);
+        return { title: id, data: def ?? null };
       },
     },
     {

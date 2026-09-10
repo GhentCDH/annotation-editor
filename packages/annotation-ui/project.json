@@ -5,29 +5,10 @@
   "projectType": "library",
   "tags": ["scope:annotation", "type:ui", "tech:vue"],
   "targets": {
-"build": {
-      "executor": "@nx/vite:build",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/packages/annotation-ui",
-        "configFile": "packages/annotation-ui/vite.config.mts"
-      },
-      "configurations": {
-        "production": { "mode": "production" },
-        "development": { "mode": "development" }
-      }
-    },
     "watch": {
-      "executor": "@nx/vite:build",
-      "outputs": ["{options.outputPath}"],
+      "command": "vite build --watch --sourcemap",
       "options": {
-        "outputPath": "dist/packages/annotation-ui",
-        "configFile": "packages/annotation-ui/vite.config.mts",
-        "watch": true,
-        "sourcemap": true
-      },
-      "configurations": {
-        "development": { "mode": "development" }
+        "cwd": "packages/annotation-ui"
       }
     },
     "lint": {

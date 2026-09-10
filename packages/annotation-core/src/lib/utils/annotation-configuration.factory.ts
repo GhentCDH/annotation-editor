@@ -41,7 +41,7 @@ export const createAnnotationConfiguration = (
   annotationDefinitions: UIAnnotationDefinition[] | undefined,
   utils: AnnotationUtils,
   textAdapter: (() => TextAdapter) | undefined,
-  annotationAdapter: AnnotationAdapter<W3CAnnotation> | undefined,
+  annotationAdapter: (() => AnnotationAdapter<W3CAnnotation>) | undefined,
 ): UIAnnotationConfiguration => {
   const definitions = annotationDefinitions ?? ([] as UIAnnotationDefinition[]);
   const definitionsMap = groupById(definitions) as Record<
@@ -49,7 +49,7 @@ export const createAnnotationConfiguration = (
     UIAnnotationDefinition
   >;
   const rootTypes = definitions
-    .filter((d) => d.isRoot)
+    .filter((d) => d.annotation.isRoot)
     .map((d) => ({ key: d.id, label: d.label }));
   const styles = groupById(definitions, 'style') as Record<
     string,
@@ -66,7 +66,6 @@ export const createAnnotationConfiguration = (
       views: {},
     } as unknown as CustomAnnotationStyle;
   }
-
   const listStyles = Object.keys(styles);
 
   const allowedChildrenPerType = groupById(
@@ -82,14 +81,16 @@ export const createAnnotationConfiguration = (
 
   const _createAnnotatedText = (id: string, sourceModel?: SourceModel) => {
     const _textAdapter = textAdapter?.() ?? PlainTextAdapter();
+    const _annotationAdapter =
+      annotationAdapter?.() ?? defaultAnnotationAdapter(sourceModel);
 
-    const annotatedText = createAnnotatedText<W3CAnnotation>(id);
+    const annotatedText = createAnnotatedText<W3CAnnotation>(id, {
+      annotationAdapter: _annotationAdapter,
+      textAdapter: _textAdapter,
+    });
+
     annotatedText
       .setSnapper(new WordSnapper())
-      .setAnnotationAdapter(
-        annotationAdapter ?? defaultAnnotationAdapter(sourceModel),
-      )
-      .setTextAdapter(_textAdapter)
       .setRenderParams(renderParams())
       .setStyleParams(styleParams())
       .registerStyles(styles);
@@ -98,7 +99,7 @@ export const createAnnotationConfiguration = (
       const { content } = sourceModel;
       annotatedText
         .setText(content.text)
-        .setTextAdapter({ textDirection: content.textDirection });
+        .setTextAdapterParams({ textDirection: content.textDirection });
     }
 
     return annotatedText;

@@ -1,9 +1,11 @@
 import { type ContextBuilder, contextBuilder } from '@ghentcdh/w3c-utils';
 import { z } from 'zod';
 import { Debugger } from '@ghentcdh/annotated-text';
-import { type AnnotationDefConfig, resolveConfig } from './utils/annotation.context-builder';
-import { type AnnotationContext } from './types/annotation.contex';
-import { type AnnotationDefinition } from './types/annotation-definition.type';
+import {
+  type AnnotationDefConfig,
+  resolveConfig,
+} from './utils/annotation.context-builder';
+import { type AnnotationResource } from './types/annotation-definition.type';
 
 const CONTEXT = 'annotation.style';
 
@@ -33,11 +35,12 @@ export const AnnotationStyleContextBuilder = (
 
 export const createAnnotationStyleBodyUnsafe = (
   annotationConfig: Partial<AnnotationDefConfig> | undefined,
-  style: Partial<AnnotationDefinition> & Pick<AnnotationContext, 'id' | 'name'>,
+  style: Partial<AnnotationResource>,
 ) => {
+  const resource = { ...style, ...style.annotation };
   const parsed =
     AnnotationStyleContextBuilder(annotationConfig).toAnnotationBodyUnsafe(
-      style,
+      resource,
     );
 
   if (!parsed.success) {

@@ -1,7 +1,7 @@
 {
   "name": "@ghentcdh/annotation-core",
   "version": "0.0.1-alpha",
-  "private": true,
+  "private": false,
   "repository": {
     "type": "git",
     "url": "https://github.com/GhentCDH/annotation-editor"
@@ -10,9 +10,9 @@
   "main": "./index.js",
   "types": "./index.d.ts",
   "dependencies": {
-    "@ghentcdh/annotated-text": "^1.0.9",
-    "@ghentcdh/w3c-utils": "^1.0.10",
+    "@ghentcdh/annotated-text": "^1.0.11",
+    "@ghentcdh/w3c-utils": "^1.0.11",
     "zod": "^4.3.6",
-    "@ghentcdh/crouton-core": "0.0.1-alpha.38"
+    "@ghentcdh/crouton-core": "0.0.1-alpha.47"
   }
 }

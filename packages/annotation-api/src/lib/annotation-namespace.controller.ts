@@ -1,76 +1,41 @@
 import { Controller, Get, Inject, Param } from '@nestjs/common';
-import {
-  type AnnotationDefConfig,
-  AnnotationStyleContextBuilder,
-  AnnotationStyleType,
-} from '@ghentcdh/annotation-core';
+import { type AnnotationJsonResource } from '@ghentcdh/annotation-core';
 import { ApiTags } from '@nestjs/swagger';
+import { ResourceConfigRegistry } from '@ghentcdh/crouton-api';
+import { type AnnotationContextService } from './annotation-api.module';
 import { ANNOTATION_DEF_CONFIG_TOKEN } from './utils/annotation.context-builder';
-import { AnnotationDefinitionService } from './service/annotation-definition.service';
+import { SCHEMA_PREFIX } from './prefix';
 
 @Controller('ns')
 @ApiTags('Annotations NS')
 export class AnnotationNamespaceController {
   constructor(
-    @Inject(AnnotationDefinitionService)
-    private readonly service: AnnotationDefinitionService,
+    @Inject(ResourceConfigRegistry)
+    private readonly service: ResourceConfigRegistry<AnnotationJsonResource>,
     @Inject(ANNOTATION_DEF_CONFIG_TOKEN)
-    private readonly annotationDefConfig: AnnotationDefConfig,
+    private readonly annotationContextService: AnnotationContextService,
   ) {}
 
   @Get()
-  getAll() {
-    return this.service.findAll();
+  async listNames() {
+    const basePath = process.env['API_URL'] ?? '';
+    const base = basePath.endsWith('/') ? basePath.slice(0, -1) : basePath;
+    const all = await this.service.getAll();
+
+    return {
+      annotations: all.map((a) => ({
+        id: a.id,
+        name: a.name,
+        schemas: `${base}/${SCHEMA_PREFIX}/${a.id}/schemas`,
+        jsonld: `${base}/ns/${a.id}.jsonld`,
+      })),
+    };
   }
+
   @Get(':id.jsonld')
   async getJsonLd_(@Param('id') id: string) {
-    if (id === AnnotationStyleType)
-      return AnnotationStyleContextBuilder(
-        this.annotationDefConfig,
-      ).toJsonLdContext();
+    const context = await this.annotationContextService.findById(id);
 
-    const build = await this.service.findById(id);
-
-    return build?.json_ld;
-  }
-
-  @Get(':id/schemas')
-  async getSchemas(@Param('id') id: string) {
-    const definition = await this.service.findById(id);
-
-    return {
-      id: definition.id,
-      name: definition.name,
-      columns: definition.columns,
-      isRoot: definition.isRoot,
-      allowedChildren: definition.allowedChildren,
-      allowedLinks: definition.allowedLinks,
-      type: definition.type,
-      icon: definition.icon,
-      target: definition.target,
-      views: definition.views,
-    };
-  }
-
-  @Get(':id')
-  async getById(@Param('id') id: string) {
-    const fromDb = await this.service.findById(id);
-    return fromDb;
-  }
-
-  @Get('anno.jsonld')
-  async getFullJsonLd() {
-    const allBuildser = await this.service.getAllContextBuilders();
-    return allBuildser.map((b) => b.toJsonLdContext());
-  }
-
-  @Get(':type/anno.jsonld')
-  async getJsonLd(@Param('type') type: string) {
-    const context = await this.service.getContextBuilder(type);
-
-    return {
-      jsonLd: context.toJsonLdContext(),
-      forms: context.toJsonSchema(),
-    };
+    return context?.jsonLd;
   }
 }

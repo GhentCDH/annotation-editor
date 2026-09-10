@@ -1,5 +1,5 @@
 <template>
-  <FormComponent
+  <CroutonForm
     v-if="formDef"
     :id="`annotation-selection-modal`"
     ref="formRef"
@@ -7,17 +7,14 @@
     :error-mode="errorMode"
     :schema="formDef.json_schema"
     :ui-schema="formDef.ui_schema"
-    :http="useApi()"
     @errors="onErrors"
     @change="onChange"
-    @valid="onValid"
   />
 </template>
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
-import { FormComponent } from '@ghentcdh/crouton-forms-vue';
+import { CroutonForm } from '@ghentcdh/crouton-vue';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-import { useApi } from '@ghentcdh/annotation-vue';
 import { useEditorState } from '../../composables/useEditorState';
 
 const formData = defineModel<any>();
@@ -40,7 +37,7 @@ const annotationDef = computed(() =>
   config.annotation.getDefinition(properties.annotationType),
 );
 
-const formDef = computed(() => annotationDef.value?.views?.form);
+const formDef = computed(() => annotationDef.value?.schemas?.form);
 const errorMode = 'onBlur';
 
 onMounted(() => {

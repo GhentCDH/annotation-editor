@@ -6,7 +6,10 @@ type Position = { x: number; y: number };
 
 export const AnnotationInfoCardProperties = {
   position: { type: Object as PropType<Position>, required: true as const },
-  annotation: { type: Object as PropType<W3CAnnotation>, required: false },
+  annotation: {
+    type: Object as PropType<W3CAnnotation>,
+    required: true as const,
+  },
   source: { type: Object as PropType<SourceModel>, required: true as const },
 };
 

@@ -1,55 +1,77 @@
 import {
-  type AnnotationJsonConfig,
-  type AnnotationDefConfig,
-  type AnnotationDefinition,
-  type ContextBuilderFactory,
-  buildAnnotationDefinitions,
+  AnnotationConfigSchema,
+  type AnnotationJsonResource,
+  AnnotationJsonResourceSchema,
+  type AnnotationResource,
 } from '@ghentcdh/annotation-core';
+import { parseSchema } from '@ghentcdh/crouton-core';
 
-type GlobModule =
-  | { default: AnnotationJsonConfig }
-  | AnnotationJsonConfig;
+type GlobModule = { default: AnnotationJsonResource } | AnnotationJsonResource;
 
 export type GlobModules = Record<string, GlobModule>;
 
-const extractConfig = (mod: GlobModule): AnnotationJsonConfig => {
+export type DefinitionsFetchFn = (url: string) => Promise<AnnotationJsonResource[]>;
+
+export const buildAnnotationDefFromJson = (
+  resource: AnnotationJsonResource,
+): AnnotationResource | null => {
+  try {
+    const parsed = AnnotationJsonResourceSchema.safeParse(resource);
+    if (!parsed.success) {
+      console.error('Resource cannot be parsed:', parsed.error.message);
+      return null;
+    }
+
+    // Compile columns → table/form/view schemas via crouton.
+    // Returns undefined when resource has no columns/views.
+    const compiled = parseSchema(resource, {
+      baseUrl: '',
+      extensions: { annotation: AnnotationConfigSchema },
+    });
+
+    return { ...parsed.data, ...(compiled ?? {}) } as unknown as AnnotationResource;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+const extractConfig = (mod: GlobModule): AnnotationJsonResource => {
   if ('default' in mod) return mod.default;
   return mod;
 };
 
 export const loadAnnotationDefinitionsFromGlob = (
   modules: GlobModules,
-  config: AnnotationDefConfig,
-  factory?: ContextBuilderFactory,
-): AnnotationDefinition[] => {
-  const configs = Object.values(modules).map(extractConfig);
-  return loadAnnotationDefinitionsFromConfigs(configs, config, factory);
+  _config?: unknown,
+  _factory?: unknown,
+): AnnotationResource[] => {
+  const resources = Object.values(modules).map(extractConfig);
+  return loadAnnotationDefinitionsFromConfigs(resources);
 };
 
 export const loadAnnotationDefinitionsFromConfigs = (
-  configs: AnnotationJsonConfig[],
-  config: AnnotationDefConfig,
-  factory?: ContextBuilderFactory,
-): AnnotationDefinition[] => {
-  return buildAnnotationDefinitions(configs, config, factory);
+  resources: AnnotationJsonResource[],
+  _config?: unknown,
+  _factory?: unknown,
+): AnnotationResource[] => {
+  return resources.map(buildAnnotationDefFromJson).filter((def) => !!def);
 };
 
-export type DefinitionsFetchFn = (url: string) => Promise<AnnotationJsonConfig[]>;
-
-const defaultFetchFn: DefinitionsFetchFn = async (url: string) => {
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch annotation definitions: ${response.status} ${response.statusText}`);
-  }
-  return response.json();
+export const loadAnnotationDefinitionsFromUrls = async (urls: string[]) => {
+  return Promise.all(
+    urls.map((a) => {
+      return fetch(a).then((r) => r.json());
+    }),
+  );
 };
 
-export const loadAnnotationDefinitionsFromUrl = async (
-  url: string,
-  config: AnnotationDefConfig,
-  factory?: ContextBuilderFactory,
-  fetchFn: DefinitionsFetchFn = defaultFetchFn,
-): Promise<AnnotationDefinition[]> => {
-  const configs = await fetchFn(url);
-  return loadAnnotationDefinitionsFromConfigs(configs, config, factory);
+export const loadAnnotationDefFromResourceUris = async (urls: string[]) => {
+  return Promise.all(
+    urls.map((a) => {
+      return fetch(a)
+        .then((r) => r.json())
+        .then(buildAnnotationDefFromJson);
+    }),
+  );
 };

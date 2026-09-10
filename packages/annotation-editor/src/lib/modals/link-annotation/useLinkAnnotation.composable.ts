@@ -1,23 +1,23 @@
+import { AnnotationModal } from '@ghentcdh/annotation-ui';
 import {
   type LinkAnnotaitonCloseEvent,
   type LinkAnnotationProps,
   type LinkAnnotationShow,
 } from './link-annotation.properties';
-import { AnnotationModal } from '../AnnotationModal.definition';
 
 export class LinkAnnotation extends AnnotationModal<
   LinkAnnotationProps,
   LinkAnnotationShow,
   LinkAnnotaitonCloseEvent
 > {
-  private type: string;
+  private _type = '';
 
   startLink(type: string) {
-    this.type = type;
+    this._type = type;
   }
 
   override show(data: LinkAnnotationShow) {
-    return super._show({ ...data, type: this.type });
+    return super._show({ ...data, type: this._type });
   }
 }
 

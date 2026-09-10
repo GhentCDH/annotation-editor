@@ -1,20 +1,54 @@
-import { type ContextBuilder } from '@ghentcdh/w3c-utils';
+import { type AnnotationResource } from './annotation-definition.type';
+import { type AnnotationStyle } from '../annotation.style';
+import {
+  type AnnotationDefConfig,
+  baseContextBuilder,
+} from '../utils/annotation.context-builder';
 
 export const AnnotationMetadataType = 'AnnotationMetadata';
+
 export type AnnotationContext = {
   id: string;
-  name: string;
-  json_schema?: any | undefined;
-  ui_schema?: any | undefined;
-  metadata_schema?: any | undefined;
-  color: string;
-  type?: string;
-  icon?: string;
-  isRoot: boolean;
-  allowedChildren?: string[];
-  allowedLinks?: string[];
-  created_at: Date;
-  updated_at: Date;
-  context: ContextBuilder;
-  target?: 'gutter' | 'underline' | 'highlight';
+  styling: AnnotationStyle;
+  prefix: string;
+  jsonLd: string;
+  hasContext: boolean;
+  uri: string;
+  safeParse: (data: unknown) => { data: boolean; success: boolean };
+  toAnnotationBody: () => unknown;
+};
+
+export const createAnnotationContext = (
+  annotationDefConfig: AnnotationDefConfig,
+  resource: AnnotationResource,
+): AnnotationContext => {
+  const formView = (resource as any).views?.['form'];
+
+  const builder = baseContextBuilder(resource.id, annotationDefConfig);
+  if (formView) {
+    builder.parseJsonSchema(formView.json_schema);
+  }
+
+  return {
+    id: resource.id,
+    styling: {
+      name: resource.name,
+      id: resource.id,
+      target: resource.annotation.target,
+      color: resource.annotation.color,
+    },
+    hasContext: !!formView,
+    prefix: buildPrefix(annotationDefConfig, resource),
+    uri: (builder as any).uri,
+    jsonLd: builder.toJsonLdContext(),
+    safeParse: builder.safeParse.bind(builder),
+    toAnnotationBody: builder.toAnnotationBody.bind(builder),
+  } as unknown as AnnotationContext;
+};
+
+export const buildPrefix = (
+  annotationDefConfig: AnnotationDefConfig,
+  resource: AnnotationResource,
+) => {
+  return `${annotationDefConfig.prefix}:${resource.annotation.type}/`;
 };

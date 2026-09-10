@@ -1,9 +1,11 @@
-import { AnnotationDefConfig } from '@ghentcdh/annotation-core';
-import { AnnotationDefinition, SourceModel } from '@ghentcdh/annotation-ui';
-import { PreviewLayout } from '@ghentcdh/annotation-preview';
+import {
+  AnnotationDefConfig,
+  configureApi,
+  type GridLayout,
+  provideAnnotationDefinitions,
+  SourceModel,
+} from '@ghentcdh/annotation-vue';
 import { collection } from './annotations';
-import { provideAnnotationDefinitions } from '@ghentcdh/annotation-vue';
-import { provideHttpClient } from '@ghentcdh/crouton-forms-vue';
 
 const text = `Feathers & Fur
 An unlikely friendship bloomed between a colorful parrot and a gentle dog. One spoke in squawks and mimicked laughter, the other communicated through tail wags and soft brown eyes. Yet somehow, without sharing a common language, they understood each other perfectly.
@@ -83,8 +85,6 @@ export const config: AnnotationDefConfig = {
   prefix: 'my-prefix',
 };
 
-const _sources: SourceModel[] = [DemoText1, DemoText2, DemoText3];
-
 const createSources = (original, translation, extra) => {
   return [
     {
@@ -116,60 +116,20 @@ export const sourcesPlainTxt = createSources(
 
 export const annotations = collection.items;
 
-export const _definitions: AnnotationDefinition[] = [
-  {
-    id: 'keyconcepts',
-    label: 'Key Concepts',
-    style: {
-      color: '#712793',
-      target: 'highlight',
-    },
-    views: {},
-    allowedChildren: [],
-    allowedLinks: [
-      { key: 'animals', label: 'Animals' },
-      { key: 'emotion', label: 'Emotion' },
-    ],
-    isRoot: true,
-    context: {
-      motivation: 'tagging',
-      purpose: 'tagging',
-    },
-  },
-  {
-    id: 'animals',
-    label: 'Animals',
-    style: {
-      color: '#65a378',
-      target: 'highlight',
-    },
-    views: {},
-    allowedChildren: [],
-    allowedLinks: [{ key: 'keyconcepts', label: 'Key Concepts' }],
-    isRoot: false,
-    context: {
-      motivation: 'tagging',
-      purpose: 'tagging',
-    },
-  },
-  {
-    id: 'emotion',
-    label: 'Emotion',
-    style: {
-      color: '#f3ff4d',
-      target: 'highlight',
-    },
-    views: {},
-    allowedChildren: [],
-    allowedLinks: [{ key: 'keyconcepts', label: 'Key Concepts' }],
-    isRoot: false,
-    context: {
-      motivation: 'tagging',
-      purpose: 'tagging',
-    },
-  },
-];
-export const layout: PreviewLayout = {
+// provideHttpClient(fetch);
+configureApi(fetch);
+
+const resourceFolder = import.meta.glob('./annotation-configs/*.json', {
+  eager: true,
+});
+const defs = provideAnnotationDefinitions({
+  config,
+  resourceFolder,
+});
+
+export const definitions = defs.definitions;
+
+export const layout: GridLayout = {
   areas: [
     ['original', 'translation'],
     ['commentary', 'commentary'],
@@ -181,15 +141,3 @@ export const layout: PreviewLayout = {
     { sourceId: 'commentary', area: 'commentary' },
   ],
 };
-
-provideHttpClient(fetch);
-
-const resourceFolder = import.meta.glob('./annotation-configs/*.json', {
-  eager: true,
-});
-const defs = provideAnnotationDefinitions({
-  config,
-  resourceFolder,
-});
-
-export const definitions = defs.definitions;

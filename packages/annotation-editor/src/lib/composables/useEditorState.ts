@@ -9,7 +9,13 @@ import {
   type TemplateRef,
   watch,
 } from 'vue';
-import { createAnnotationConfiguration } from './annotationConfiguration';
+import {
+  type AnnotationUtils,
+  annotationUtils,
+  createAnnotationConfiguration,
+  createModalConfig,
+  type SourceModel,
+} from '@ghentcdh/annotation-ui';
 import {
   type AnnotationEvents,
   sendAnnotationEvent,
@@ -19,13 +25,7 @@ import {
   type AnnotationEditorEmitsFn,
   type AnnotationEditorProps,
 } from '../AnnotationEditor.properties';
-import { createModalConfig } from '../modals/annotationModal.composable';
-import {
-  type AnnotationUtils,
-  annotationUtils,
-} from '../utils/annotation-utils';
 import { annotationModalDefaults } from '../modals/AnnotationModal.defaults';
-import { type SourceModel } from '../types/source.model';
 import { selectAnnotationById } from '../modals/open-modal';
 
 export type EditorState = {
@@ -86,10 +86,11 @@ export const useProvideEditorState = (
   });
 
   watch(
-    () =>
-      props.annotationDefinitions &&
-      props.textAdapter &&
-      props.annotationAdapter,
+    [
+      () => props.annotationDefinitions,
+      () => props.textAdapter,
+      () => props.annotationAdapter,
+    ],
     () => {
       config.annotation = createAnnotationConfiguration(
         props.annotationDefinitions,

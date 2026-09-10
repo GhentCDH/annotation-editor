@@ -13,9 +13,8 @@
         <slot name="header-actions" />
       </div>
       <MetadataTable
-        v-if="metadata && viewDef"
         :data="metadata"
-        :view="viewDef"
+        :definition="annotationDef"
       />
       <slot
         name="links"
@@ -40,9 +39,8 @@ const purpose = computed(() => {
   if (!properties.annotation) return 'default';
   return properties.utils.getAnnotationType(properties.annotation);
 });
-const viewDef = computed(() => annotationDef?.value?.views?.view);
-const annotationDef = computed(() =>
-  properties.config.getDefinition(purpose.value),
+const annotationDef = computed(
+  () => properties.config.getDefinition(purpose.value) as any,
 );
 
 const purposeLabel = computed(
@@ -50,8 +48,7 @@ const purposeLabel = computed(
 );
 
 const metadata = computed(() => {
-  if (!properties.annotation || !viewDef.value) return null;
-  return properties.utils.getMetadata(properties.annotation);
+  return properties.utils.getMetadata(properties.annotation) ?? {};
 });
 
 const cardRef = ref<HTMLElement>();

@@ -1,21 +1,32 @@
 /// <reference types='vitest' />
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
+import { copyPackageJson } from '../../tools/vite/copy-package-json.mts';
 import * as path from 'path';
-import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
-import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
+import { execSync } from 'node:child_process';
 
 export default defineConfig(() => ({
   root: import.meta.dirname,
   cacheDir: '../../node_modules/.vite/annotation-core',
+  resolve: {
+    tsconfigPaths: true,
+  },
   plugins: [
-    nxViteTsPaths(),
-    nxCopyAssetsPlugin(['*.md']),
     dts({
       entryRoot: 'src',
       tsconfigPath: path.join(import.meta.dirname, 'tsconfig.lib.json'),
       pathsToAliases: false,
     }),
+    copyPackageJson(),
+    {
+      name: 'gen-resource-schema',
+      closeBundle() {
+        execSync('node scripts/gen-resource-schema.mjs', {
+          cwd: import.meta.dirname,
+          stdio: 'inherit',
+        });
+      },
+    },
   ],
   build: {
     outDir: '../../dist/packages/annotation-core',
@@ -31,7 +42,12 @@ export default defineConfig(() => ({
       format: ['cjs', 'esm', 'es'],
     },
     rollupOptions: {
-      external: ['@ghentcdh/w3c-utils', '@ghentcdh/crouton-forms-vue', '@ghentcdh/annotated-text', 'zod'],
+      external: [
+        '@ghentcdh/w3c-utils',
+        '@ghentcdh/crouton-vue',
+        '@ghentcdh/annotated-text',
+        'zod',
+      ],
     },
   },
   test: {

@@ -1,4 +1,4 @@
-import { type ModalDefinition, type ModalTypeConfig } from './AnnotationModal.definition';
+import { type ModalDefinition, type ModalTypeConfig } from '@ghentcdh/annotation-ui';
 import { useToast } from './toast/useToast.composable';
 import ToastComponent from './toast/Toast.vue';
 import AnnotationInfoCardComponent from './info/AnnotationInfoCard.vue';

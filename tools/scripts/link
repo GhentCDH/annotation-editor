@@ -1,0 +1,114 @@
+#!/usr/bin/env bash
+# Link packages listed in link.config.json for local development.
+#
+# Reads link.config.json and for each entry:
+#   1. Adds pnpm override in pnpm-workspace.yaml  (symlink to local path)
+#   2. Runs pnpm install to activate symlinks
+#   3. Fixes nested node_modules in linked packages
+#
+# Vite picks up linked packages automatically via linkedPackagesConfig()
+# in tools/vite/linked-packages.mts (reads overrides from pnpm-workspace.yaml).
+#
+# To revert: run tools/scripts/unlink
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+CONFIG_FILE="$SCRIPT_DIR/link.config.json"
+
+WORKSPACE_FILE="$PROJECT_ROOT/pnpm-workspace.yaml"
+
+if [ ! -f "$CONFIG_FILE" ]; then
+  echo "ERROR: $CONFIG_FILE not found"
+  exit 1
+fi
+
+# --- 0. Clean slate: unlink everything first ---
+echo "=== Cleaning previous links ==="
+"$SCRIPT_DIR/unlink" --no-install
+
+# Parse config with node, skip entries with skip: true
+PACKAGES=$(node -e "
+  const cfg = require('$CONFIG_FILE');
+  cfg.filter(p => !p.skip).forEach(p => console.log([p.name, p.path].join('|')));
+")
+
+if [ -z "$PACKAGES" ]; then
+  echo "No packages to link (all skipped or config empty)"
+  exit 0
+fi
+
+echo ""
+echo "=== Linking packages for local dev ==="
+
+# --- 1. Add pnpm overrides ---
+OVERRIDE_LINES=""
+while IFS='|' read -r name pkg_path; do
+  OVERRIDE_LINES+="  '${name}': link:${pkg_path}"$'\n'
+done <<< "$PACKAGES"
+
+if grep -q "^overrides:" "$WORKSPACE_FILE" 2>/dev/null; then
+  echo "[skip] pnpm overrides block already present — verify entries manually"
+else
+  echo "[add] pnpm overrides"
+  printf "\noverrides:\n%s" "$OVERRIDE_LINES" >> "$WORKSPACE_FILE"
+fi
+
+# Remove empty patchedDependencies block if no entries remain
+if grep -q "^patchedDependencies:" "$WORKSPACE_FILE" 2>/dev/null; then
+  remaining=$(sed -n '/^patchedDependencies:/,/^[^ ]/{/^patchedDependencies:/d;/^[^ ]/d;/^$/d;p;}' "$WORKSPACE_FILE")
+  if [ -z "$remaining" ]; then
+    echo "[remove] empty patchedDependencies block"
+    sed -i '' '/^patchedDependencies:/d' "$WORKSPACE_FILE"
+  fi
+fi
+
+# --- 2. Install to activate symlinks ---
+echo "[run] pnpm install"
+cd "$PROJECT_ROOT" && pnpm install
+
+# --- 3. Fix nested node_modules in linked packages ---
+echo ""
+echo "=== Fixing nested node_modules ==="
+while IFS='|' read -r name pkg_path; do
+  abs_pkg_path=$(cd "$PROJECT_ROOT" && realpath "$pkg_path" 2>/dev/null || echo "")
+  [ -z "$abs_pkg_path" ] && continue
+
+  # Walk up to find repo root
+  repo_root="$abs_pkg_path"
+  while [ "$repo_root" != "/" ]; do
+    if [ -d "$repo_root/node_modules" ] && [ -f "$repo_root/package.json" ]; then
+      if [ -f "$repo_root/pnpm-workspace.yaml" ] || [ -d "$repo_root/.git" ]; then
+        break
+      fi
+    fi
+    repo_root="$(dirname "$repo_root")"
+  done
+
+  [ "$repo_root" = "/" ] && continue
+  [ ! -d "$repo_root/node_modules" ] && continue
+
+  # For each OTHER linked package, fix nested node_modules
+  while IFS='|' read -r other_name other_path; do
+    [ "$other_name" = "$name" ] && continue
+    nested="$repo_root/node_modules/$other_name"
+    if [ -e "$nested" ] && [ ! -L "$nested" ]; then
+      abs_other=$(cd "$PROJECT_ROOT" && realpath "$other_path" 2>/dev/null || echo "")
+      [ -z "$abs_other" ] && continue
+      echo "[fix] $other_name in $repo_root/node_modules → $abs_other"
+      rm -rf "$nested"
+      ln -sf "$abs_other" "$nested"
+    fi
+  done <<< "$PACKAGES"
+done <<< "$PACKAGES"
+
+echo ""
+echo "=== Done! Packages linked for local dev ==="
+echo ""
+echo "Linked:"
+while IFS='|' read -r name pkg_path; do
+  echo "  $name → $pkg_path"
+done <<< "$PACKAGES"
+echo ""
+echo "Vite dev server will auto-detect linked packages (no config changes needed)."

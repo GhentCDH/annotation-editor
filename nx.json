@@ -2,9 +2,16 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "analytics": false,
   "namedInputs": {
-    "default": ["{projectRoot}/**/*", "sharedGlobals"],
-    "production": ["default"],
-    "sharedGlobals": ["{workspaceRoot}/.github/workflows/ci.yml"]
+    "default": [
+      "{projectRoot}/**/*",
+      "sharedGlobals"
+    ],
+    "production": [
+      "default"
+    ],
+    "sharedGlobals": [
+      "{workspaceRoot}/.github/workflows/ci.yml"
+    ]
   },
   "plugins": [
     {
@@ -20,13 +27,44 @@
           "watchDepsName": "watch-deps"
         }
       }
+    },
+    {
+      "plugin": "@nx/vite/plugin",
+      "options": {
+        "buildTargetName": "watch",
+        "serveTargetName": "serve",
+        "previewTargetName": "preview",
+        "serveStaticTargetName": "serve-static",
+        "devTargetName": "dev",
+        "typecheckTargetName": "typecheck"
+      },
+      "include": [
+        "packages/annotation-ui/**/*",
+        "packages/annotation-preview/**/*"
+      ]
+    },
+    {
+      "plugin": "@nx/vite/plugin",
+      "options": {
+        "buildTargetName": "build",
+        "serveTargetName": "serve",
+        "previewTargetName": "preview",
+        "serveStaticTargetName": "serve-static",
+        "devTargetName": "dev",
+        "typecheckTargetName": "typecheck"
+      },
+      "include": [
+        "packages/annotation-editor/**/*",
+        "packages/annotation-core/**/*",
+        "packages/annotation-vue/**/*",
+        "packages/annotation-api/**/*"
+      ]
     }
   ],
   "release": {
     "projects": [
       "annotation-api",
-      "annotation-editor",
-      "annotation-preview",
+      "annotation-core",
       "annotation-vue"
     ],
     "version": {
@@ -40,5 +78,8 @@
         "file": "RELEASE_NOTES.md"
       }
     }
+  },
+  "migrate": {
+    "agentic": false
   }
 }
