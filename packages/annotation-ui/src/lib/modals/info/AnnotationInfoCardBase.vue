@@ -12,8 +12,14 @@
         <div><strong>Type:</strong> {{ purposeLabel }}</div>
         <slot name="header-actions" />
       </div>
-      <MetadataTable :data="metadata" :definition="annotationDef" />
-      <slot name="links" :annotation="annotation!" />
+      <MetadataTable
+        :data="metadata"
+        :definition="annotationDef"
+      />
+      <slot
+        name="links"
+        :annotation="annotation!"
+      />
       <slot name="actions" />
     </div>
   </div>

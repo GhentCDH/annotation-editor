@@ -38,8 +38,6 @@ export const createAnnotationContext = (
       color: resource.annotation.color,
     },
     hasContext: !!formView,
-    schemas: resource.schemas,
-    formView,
     prefix: buildPrefix(annotationDefConfig, resource),
     uri: (builder as any).uri,
     jsonLd: builder.toJsonLdContext(),
