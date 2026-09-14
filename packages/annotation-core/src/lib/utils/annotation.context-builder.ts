@@ -12,7 +12,7 @@ export type AnnotationDefConfig = {
 
 const defaultConfig = {
   baseUrl: 'http://localhost:3333/',
-  crudController: `annotation/annotation`,
+  crudController: 'annotation/annotation',
   app: 'ghentcdh',
   prefix: 'ghentcdh',
   isDev: false,
