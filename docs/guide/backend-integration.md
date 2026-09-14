@@ -1,6 +1,8 @@
 # Backend Integration (NestJS)
 
-`@ghentcdh/annotation-api` ships a NestJS dynamic module — `AnnotationApiModule` — that wires the W3C annotation REST API into your NestJS app. You provide two classes that tell the module how to persist and map annotations; the module registers the controllers and dependency-injection tokens automatically.
+`@ghentcdh/annotation-api` ships a NestJS dynamic module — `AnnotationApiModule` — that wires the W3C annotation REST
+API into your NestJS app. You provide two classes that tell the module how to persist and map annotations; the module
+registers the controllers and dependency-injection tokens automatically.
 
 ## `AnnotationRepositoryConfig<ANNOTATION>`
 
@@ -11,12 +13,13 @@ type AnnotationRepositoryConfig<ANNOTATION> = {
 };
 ```
 
-| Field | What to pass |
-|---|---|
-| `repository` | A NestJS `@Injectable()` class that extends `AnnotationCrudRepository<ANNOTATION>` and implements `create`, `update`, `delete`, `findOne` |
-| `mapper` | A NestJS `@Injectable()` class that extends `AnnotationW3cMapperService<ANNOTATION>` and implements `mapToW3CAnnotation` / `mapFromW3CAnnotation` |
+| Field        | What to pass                                                                                                                                      |
+|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| `repository` | A NestJS `@Injectable()` class that extends `AnnotationCrudRepository<ANNOTATION>` and implements `create`, `update`, `delete`, `findOne`         |
+| `mapper`     | A NestJS `@Injectable()` class that extends `AnnotationW3cMapperService<ANNOTATION>` and implements `mapToW3CAnnotation` / `mapFromW3CAnnotation` |
 
-`ANNOTATION` is your domain model — the type your repository stores and returns (typically the Prisma-generated `AnnotationWithRelations` or an equivalent).
+`ANNOTATION` is your domain model — the type your repository stores and returns (typically the Prisma-generated
+`AnnotationWithRelations` or an equivalent).
 
 ## Implementing the repository
 
@@ -28,8 +31,7 @@ import type { AnnotationWithRelations } from '@my-app/generated-types';
 
 @Injectable()
 export class AnnotationRepository
-  extends AnnotationCrudRepository<AnnotationWithRelations>
-{
+  extends AnnotationCrudRepository<AnnotationWithRelations> {
   constructor(@Inject(PrismaClient) private prisma: PrismaClient) {
     super();
   }
@@ -64,8 +66,7 @@ import type { AnnotationWithRelations } from '@my-app/generated-types';
 
 @Injectable()
 export class AnnotationMapperService
-  extends AnnotationW3cMapperService<AnnotationWithRelations>
-{
+  extends AnnotationW3cMapperService<AnnotationWithRelations> {
   override mapToW3CAnnotation(
     context: AnnotationContext | undefined | null,
     annotation: AnnotationWithRelations,
@@ -84,7 +85,8 @@ export class AnnotationMapperService
 
 ## Registering the module
 
-Pass the config as the fourth argument to `AnnotationApiModule.forResourceDir`. The module registers itself as `global: true`, so its exports are available app-wide without additional imports.
+Pass the config as the fourth argument to `AnnotationApiModule.forResourceDir`. The module registers itself as
+`global: true`, so its exports are available app-wide without additional imports.
 
 ```ts
 import { Module } from '@nestjs/common';
@@ -106,23 +108,23 @@ import { AnnotationMapperService } from './annotation/annotation-mapper.service'
       {
         repository: AnnotationRepository,
         mapper: AnnotationMapperService,
-        // Make repository/mapper providers available to NestJS DI:
-        imports: [],
-        providers: [AnnotationRepository, AnnotationMapperService],
       },
     ),
   ],
 })
-export class AppModule {}
+export class AppModule {
+}
 ```
 
 ::: tip Global module
-`AnnotationApiModule` registers as a global NestJS module. If your repository or mapper depend on other providers (e.g. `PrismaClient`), provide them either in `AppModule` or in a shared global module — they will be resolved automatically.
+`AnnotationApiModule` registers as a global NestJS module. If your repository or mapper depend on other providers (e.g.
+`PrismaClient`), provide them either in `AppModule` or in a shared global module — they will be resolved automatically.
 :::
 
 ## Without a custom repository
 
-Omit the fourth argument to register only the namespace controller (JSON-LD context endpoints) without the annotation CRUD API:
+Omit the fourth argument to register only the namespace controller (JSON-LD context endpoints) without the annotation
+CRUD API:
 
 ```ts
 AnnotationApiModule.forResourceDir(resourcePath, datasourcePath, config)
