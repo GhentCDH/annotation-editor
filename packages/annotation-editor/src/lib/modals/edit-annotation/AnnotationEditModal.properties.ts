@@ -18,6 +18,8 @@ export type AnnotationEditModal = ExtractPublicPropTypes<
 
 export type AnnotationEditModalEvent = {
   annotation: W3CAnnotation;
+  rawData: any;
+  selector: { start: number; end: number };
 };
 export const AnnotationEditEmits = {
   close: (event: AnnotationEditModalEvent | null) => true,

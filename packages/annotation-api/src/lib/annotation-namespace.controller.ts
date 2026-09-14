@@ -2,7 +2,7 @@ import { Controller, Get, Inject, Param } from '@nestjs/common';
 import { type AnnotationJsonResource } from '@ghentcdh/annotation-core';
 import { ApiTags } from '@nestjs/swagger';
 import { ResourceConfigRegistry } from '@ghentcdh/crouton-api';
-import { type AnnotationContextService } from './annotation-api.module';
+import { type AnnotationContextService } from './context/annotation-context.service';
 import { ANNOTATION_DEF_CONFIG_TOKEN } from './utils/annotation.context-builder';
 import { SCHEMA_PREFIX } from './prefix';
 

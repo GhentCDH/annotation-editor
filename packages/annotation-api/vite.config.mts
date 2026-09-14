@@ -28,6 +28,7 @@ export default defineConfig({
     outDir: '../../dist/packages/annotation-api',
     emptyOutDir: true,
     reportCompressedSize: true,
+    minify: false,
 
     target: 'node18',
 

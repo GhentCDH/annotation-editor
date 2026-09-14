@@ -12,21 +12,19 @@
         v-if="annotationDef"
         layout="rows"
         :data="metadata"
+        :resourceApi="useResourceApi"
         :views="annotationDef.schemas"
         :format-before-save="formatBeforeSave"
         form-max-width="w-max max-w-lg"
-        @click="onCancel"
+        :save-id="annotation?.id"
         @save="save"
+        @cancel="onCancel"
       >
         <template #content-before>
           <div class="flex-grow">
             <Collapse :title="label.selectLabel">
               <div :id="editId" />
-              <Btn
-                :outline="true"
-                class="mt-2"
-                @click="selectAll"
-              >
+              <Btn :outline="true" class="mt-2" @click="selectAll">
                 Select all text
               </Btn>
             </Collapse>
@@ -37,7 +35,7 @@
   </Modal>
 </template>
 <script lang="ts" setup>
-import { CroutonForm } from '@ghentcdh/crouton-vue';
+import { CroutonForm, resourceApi } from '@ghentcdh/crouton-vue';
 import { Btn, Collapse, Modal } from '@ghentcdh/ui';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { type AnnotatedText } from '@ghentcdh/annotated-text';
@@ -61,6 +59,12 @@ const editId = `edit-select-annotation-${Date.now()}--`;
 
 const { annotationDef, metadata } = useMetadata(props);
 
+const useResourceApi = computed(() => {
+  if (!annotationDef.operations.create || !annotationDef.operations.update) {
+    return null;
+  }
+  return resourceApi(annotationDef, {});
+});
 const label = computed(() => {
   const _label = annotationDef?.label ?? props.type;
 
@@ -72,9 +76,11 @@ const label = computed(() => {
   };
 });
 
+const rawData = ref(metadata);
+
 const formatBeforeSave = (formData: any) => {
   let updatedAnnotation = annotationSelector.value;
-
+  rawData.value = formData;
   let extraTextPositionSelector: Selector | undefined;
 
   if (textPositionSelector.value && updatedAnnotation) {
@@ -107,7 +113,15 @@ const formatBeforeSave = (formData: any) => {
 };
 
 const save = (annotation: any) => {
-  emits('close', { annotation });
+  const currentTextPositionSelector = w3cAnnotation(
+    annotationSelector.value,
+  ).getTextPositionSelector(props.source!.uri)[0];
+
+  emits('close', {
+    annotation,
+    rawData: rawData.value,
+    selector: currentTextPositionSelector,
+  });
 };
 
 const selectAll = () => {
