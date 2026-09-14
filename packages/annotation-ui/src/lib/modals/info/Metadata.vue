@@ -1,5 +1,6 @@
 <template>
   <CroutonForm
+    v-if="show"
     :id="`annotation-selection-modal`"
     :data="data"
     :readonly="true"
@@ -16,5 +17,6 @@ const properties = defineProps<{
   definition: UIAnnotationDefinition;
 }>();
 
-const views = computed(() => properties.definition?.schemas as any);
+const views = computed(() => properties.definition?.schemas);
+const show = computed(() => views.value?.view?.ui?.elements?.length > 0);
 </script>
