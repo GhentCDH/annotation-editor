@@ -28,8 +28,6 @@ registerResourceExtensions({
 type AnnotationRepositoryConfig<ANNOTATION> = {
   repository: new (...args: any[]) => AnnotationCrudRepository<ANNOTATION>;
   mapper: new (...args: any[]) => AnnotationW3cMapperService<ANNOTATION>;
-  imports?: any[];
-  providers?: any[];
 };
 
 @Module({
@@ -63,10 +61,9 @@ export class AnnotationApiModule {
       return {
         module: AnnotationApiModule,
         global: true,
-        imports: [crouton, ...(annotation.imports ?? [])],
+        imports: [crouton],
         controllers: [AnnotationNamespaceController, AnnotationController],
         providers: [
-          ...(annotation.providers ?? []),
           AnnotationContextService,
           { provide: ANNOTATION_DEF_CONFIG_TOKEN, useValue: _config },
           {

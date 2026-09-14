@@ -12,7 +12,7 @@
         v-if="annotationDef"
         layout="rows"
         :data="metadata"
-        :resourceApi="useResourceApi"
+        :resource-api="useResourceApi"
         :views="annotationDef.schemas"
         :format-before-save="formatBeforeSave"
         form-max-width="w-max max-w-lg"
@@ -24,7 +24,11 @@
           <div class="flex-grow">
             <Collapse :title="label.selectLabel">
               <div :id="editId" />
-              <Btn :outline="true" class="mt-2" @click="selectAll">
+              <Btn
+                :outline="true"
+                class="mt-2"
+                @click="selectAll"
+              >
                 Select all text
               </Btn>
             </Collapse>
