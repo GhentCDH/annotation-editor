@@ -12,7 +12,7 @@ export const useMetadata = (properties: MetadataProperties) => {
   if (!properties.annotation) {
     return {};
   }
-  const metadata = utils.getMetadata(properties.annotation);
+  const metadata = utils.getMetadata(properties.annotation) ?? {};
   const annotationDef = config.annotation.getDefinition(properties.type);
 
   const resource = annotationDef ? resourceApi(annotationDef, {}) : null;

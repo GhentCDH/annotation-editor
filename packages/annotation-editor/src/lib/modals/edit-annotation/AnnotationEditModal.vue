@@ -18,17 +18,14 @@
         form-max-width="w-max max-w-lg"
         :save-id="annotation?.id"
         @save="save"
+        @onSaveSuccess="save"
         @cancel="onCancel"
       >
         <template #content-before>
           <div class="flex-grow">
             <Collapse :title="label.selectLabel">
               <div :id="editId" />
-              <Btn
-                :outline="true"
-                class="mt-2"
-                @click="selectAll"
-              >
+              <Btn :outline="true" class="mt-2" @click="selectAll">
                 Select all text
               </Btn>
             </Collapse>
@@ -39,7 +36,7 @@
   </Modal>
 </template>
 <script lang="ts" setup>
-import { CroutonForm, resourceApi } from '@ghentcdh/crouton-vue';
+import { CroutonForm } from '@ghentcdh/crouton-vue';
 import { Btn, Collapse, Modal } from '@ghentcdh/ui';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { type AnnotatedText } from '@ghentcdh/annotated-text';
@@ -61,13 +58,13 @@ const emits = defineEmits(AnnotationEditEmits);
 
 const editId = `edit-select-annotation-${Date.now()}--`;
 
-const { annotationDef, metadata } = useMetadata(props);
+const { annotationDef, metadata, resource } = useMetadata(props);
 
 const useResourceApi = computed(() => {
   if (!annotationDef.operations.create || !annotationDef.operations.update) {
     return null;
   }
-  return resourceApi(annotationDef, {});
+  return resource;
 });
 const label = computed(() => {
   const _label = annotationDef?.label ?? props.type;
