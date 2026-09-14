@@ -16,13 +16,8 @@ import { AnnotationCrudRepository } from './annotation/annotation.repository';
 import { AnnotationW3cMapperService } from './annotation/annotation.mapper.service';
 import { createSchemaEnricher } from './utils/schemaEnricher.utils';
 
-// type AnnotationApiConfig = {
-//   annotationDefinitionService: Type<AnnotationDefinitionService>;
-// };
-
 registerResourceExtensions({
   annotation: AnnotationConfigSchema,
-  // context: ContextSchema,
 });
 
 type AnnotationRepositoryConfig<ANNOTATION> = {
