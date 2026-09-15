@@ -101,4 +101,13 @@ export class AnnotationController<ANNOTATION extends { id: string }> {
     const _id = this.contextService.getResourceIdFromUri(id) ?? id;
     return this.annotationRepository.delete(_id);
   }
+
+  @Delete(':type/:id')
+  @ApiOperation({ summary: 'Delete an annotation' })
+  @ApiParam({ name: 'id', type: 'string' })
+  @ApiResponse({ status: 200, description: 'Annotation deleted' })
+  async deleteType(@Param('id') id: string) {
+    const _id = this.contextService.getResourceIdFromUri(id) ?? id;
+    return this.annotationRepository.delete(_id);
+  }
 }

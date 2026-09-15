@@ -18,14 +18,18 @@
         form-max-width="w-max max-w-lg"
         :save-id="annotation?.id"
         @save="save"
-        @onSaveSuccess="save"
+        @on-save-success="save"
         @cancel="onCancel"
       >
         <template #content-before>
           <div class="flex-grow">
             <Collapse :title="label.selectLabel">
               <div :id="editId" />
-              <Btn :outline="true" class="mt-2" @click="selectAll">
+              <Btn
+                :outline="true"
+                class="mt-2"
+                @click="selectAll"
+              >
                 Select all text
               </Btn>
             </Collapse>

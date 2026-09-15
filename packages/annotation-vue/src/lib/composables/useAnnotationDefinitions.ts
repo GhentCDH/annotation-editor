@@ -24,6 +24,7 @@ import {
   loadAnnotationDefinitionsFromGlob,
   loadAnnotationDefinitionsFromUrls,
 } from '../loader/annotation-definition.loader';
+import { resourceApi } from '@ghentcdh/crouton-vue';
 
 export type AnnotationDefinitionsState = {
   configuration: AnnotationDefConfig;
@@ -91,6 +92,7 @@ const toVueDefinition = (
       active: activeStyle(style.color!),
     },
     _core: def,
+    resource: def.operations ? resourceApi(def, {}) : null,
   } as UIAnnotationDefinition;
 };
 

@@ -120,7 +120,10 @@ const actions = computed(() => {
       label: 'Delete',
       disabled: editorState.disableEdits,
       action: () => {
-        sendAnnotationEvent('delete', { annotation: properties.annotation! });
+        sendAnnotationEvent('delete', {
+          annotation: properties.annotation!,
+          definition: definition,
+        });
       },
     },
   ]
