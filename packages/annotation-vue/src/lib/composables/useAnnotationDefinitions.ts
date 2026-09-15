@@ -15,6 +15,7 @@ import {
 } from '@ghentcdh/annotation-core';
 import { createHighlightStyle } from '@ghentcdh/annotated-text';
 import { type AxiosInstance } from 'axios';
+import { resourceApi } from '@ghentcdh/crouton-vue';
 import { AnnotationDefinitionService } from '../service/annotation-definition.service';
 import {
   type DefinitionsFetchFn,
@@ -91,6 +92,7 @@ const toVueDefinition = (
       active: activeStyle(style.color!),
     },
     _core: def,
+    resource: def.operations ? resourceApi(def, {}) : null,
   } as UIAnnotationDefinition;
 };
 

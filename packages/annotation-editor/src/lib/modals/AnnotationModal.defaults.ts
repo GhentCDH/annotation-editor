@@ -1,10 +1,13 @@
-import { type ModalDefinition, type ModalTypeConfig } from '@ghentcdh/annotation-ui';
+import {
+  type ModalDefinition,
+  type ModalTypeConfig,
+} from '@ghentcdh/annotation-ui';
 import { useToast } from './toast/useToast.composable';
 import ToastComponent from './toast/Toast.vue';
 import AnnotationInfoCardComponent from './info/AnnotationInfoCard.vue';
 import {
-  type AnnotationInfoCardProp,
   type AnnotationInfoCardEvent,
+  type AnnotationInfoCardProp,
   type AnnotationInfoCardShow,
 } from './info/AnnotationInfoCard.properties';
 import { useAnnotationInfo } from './info/useAnnotationInfo';
@@ -16,14 +19,17 @@ import {
   type AnnotationEditModalShow,
 } from './edit-annotation/AnnotationEditModal.properties';
 import { useLinkAnnotation } from './link-annotation/useLinkAnnotation.composable';
-import { type ConfirmCloseEvent, type ConfirmProps } from './confirm/confirm.properties';
+import {
+  type ConfirmCloseEvent,
+  type ConfirmProps,
+} from './confirm/confirm.properties';
 import { type EditToast } from './toast/toast.properties';
 
 import ConfirmModal from './confirm/ConfirmModal.vue';
 import { useConfirm } from './confirm/useConfirm.composable';
 import LinkAnnotationModal from './link-annotation/LinkAnnotationModal.vue';
 import {
-  type LinkAnnotaitonCloseEvent,
+  type LinkAnnotationCloseEvent,
   type LinkAnnotationProps,
   type LinkAnnotationShow,
 } from './link-annotation/link-annotation.properties';
@@ -43,7 +49,7 @@ export type AnnotationModalActionMap = {
   'link-annotation': ModalTypeConfig<
     LinkAnnotationProps,
     LinkAnnotationShow,
-    LinkAnnotaitonCloseEvent
+    LinkAnnotationCloseEvent
   >;
   confirm: ModalTypeConfig<ConfirmProps, ConfirmProps, ConfirmCloseEvent>;
 };

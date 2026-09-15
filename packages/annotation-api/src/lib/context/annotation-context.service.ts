@@ -36,7 +36,7 @@ export class AnnotationContextService {
     });
   }
 
-  async findById(annotationId: string): AnnotationContext | null {
+  async findById(annotationId: string): Promise<AnnotationContext | null> {
     const find = this.contextConfigMap.get(annotationId);
     if (find) return find;
 

@@ -5,12 +5,15 @@
 [![annotation-api](https://img.shields.io/npm/v/@ghentcdh/annotation-api.svg?label=annotation-api)](https://www.npmjs.com/package/@ghentcdh/annotation-api)
 [![annotation-vue](https://img.shields.io/npm/v/@ghentcdh/annotation-vue.svg?label=annotation-vue)](https://www.npmjs.com/package/@ghentcdh/annotation-vue)
 [![annotation-preview](https://img.shields.io/npm/v/@ghentcdh/annotation-preview.svg?label=annotation-preview)](https://www.npmjs.com/package/@ghentcdh/annotation-preview)
+[![Docs](https://img.shields.io/badge/docs-ghentcdh.github.io-blue)](https://ghentcdh.github.io/annotation-editor/)
 
 # Annotation Editor
 
 Monorepo for W3C-compliant annotation editing. Provides a NestJS API module for serving annotation definitions, a shared
 core library for types and validation, and a Vue 3 editor component for creating and managing annotations on text
 sources.
+
+**Documentation:** https://ghentcdh.github.io/annotation-editor/
 
 ## Packages
 
@@ -54,6 +57,9 @@ const config: AnnotationDefConfig = {
   baseUrl: 'https://api.example.com/',
   app: 'my-app',
   prefix: 'my-prefix',
+  crudController: 'annotation',
+  isDev: false,
+  cacheTTLms: 20 * 60 * 1000,
 };
 
 // resolveConfig normalizes the config and generates contextUrl
@@ -64,18 +70,21 @@ const resolved = resolveConfig(config);
 // resolved.prefix      → 'my-prefix'
 ```
 
-**Defaults:**
+**Defaults (via `resolveConfig`):**
 
-| Property  | Default                  |
-|-----------|--------------------------|
-| `baseUrl` | `http://localhost:3000/` |
-| `app`     | `annotation-app`         |
-| `prefix`  | `annotation`             |
+| Property         | Default                  |
+|------------------|--------------------------|
+| `baseUrl`        | `http://localhost:3000/` |
+| `app`            | `ghentcdh`               |
+| `prefix`         | `ghentcdh`               |
+| `crudController` | `annotation`             |
+| `isDev`          | `false`                  |
+| `cacheTTLms`     | `1200000` (20 min)       |
 
 #### AnnotationStyle
 
 ```ts
-import { type AnnotationStyle, AnnotationStyleSchema } from '@ghentcdh/annotation-core';
+import { type AnnotationStyle } from '@ghentcdh/annotation-core';
 
 const style: AnnotationStyle = {
   id: 'highlight-red',
@@ -102,12 +111,14 @@ import { AnnotationApiModule } from '@ghentcdh/annotation-api';
   imports: [
     AnnotationApiModule.forResourceDir(
       resolve(import.meta.dirname, 'annotations'),
+      resolve(import.meta.dirname, 'data-sources'),
       {
         baseUrl: process.env.ANNOTATION_BASE_URL,
         cacheTTLms: 0,
         isDev: false,
         app: process.env.ANNOTATION_APP ?? 'my-app',
         prefix: process.env.ANNOTATION_PREFIX ?? 'my-prefix',
+        crudController: 'annotation',
       },
     ),
   ],
@@ -118,10 +129,11 @@ export class AppModule {
 
 **Parameters:**
 
-| Parameter | Description                                                   |
-|-----------|---------------------------------------------------------------|
-| `dirPath` | Path to directory containing annotation definition JSON files |
-| `config`  | `AnnotationDefConfig` with optional `isDev` and `cacheTTLms`  |
+| Parameter        | Description                                            |
+|------------------|--------------------------------------------------------|
+| `resourcePath`   | Path to directory containing annotation JSON files     |
+| `datasourcePath` | Path to directory containing data source definitions   |
+| `config`         | `AnnotationDefConfig`                                  |
 
 The module registers globally and provides:
 
@@ -229,51 +241,24 @@ Each `resource.json` contains an `AnnotationJsonResource` object.
 
 #### Frontend-Only Usage (No Backend)
 
-Annotation definitions can be built entirely client-side using `@ghentcdh/annotation-core`, without running
-`@ghentcdh/annotation-api`.
-
-**Static imports:**
+Annotation definitions can be loaded entirely client-side using `@ghentcdh/annotation-vue`, without running
+`@ghentcdh/annotation-api`. Use `provideAnnotationDefinitions` in a parent component and pass a Vite glob of your JSON config files.
 
 ```ts
-import {
-  buildAnnotationDefinitions,
-  type AnnotationJsonConfig,
-  type AnnotationDefConfig,
-} from '@ghentcdh/annotation-core';
-
-import personConfig from './annotations/person/resource.json';
-import placeConfig from './annotations/place/resource.json';
-
-const configs: AnnotationJsonConfig[] = [personConfig, placeConfig];
+import { provideAnnotationDefinitions } from '@ghentcdh/annotation-vue';
+import { type AnnotationDefConfig } from '@ghentcdh/annotation-core';
 
 const defConfig: AnnotationDefConfig = {
   baseUrl: 'https://example.org',
   app: 'myapp',
   prefix: 'ann',
+  crudController: 'annotation',
   isDev: true,
+  cacheTTLms: 0,
 };
 
-const definitions = buildAnnotationDefinitions(configs, defConfig);
-```
-
-**Dynamic loading with Vite:**
-
-Auto-discover all annotation configs without manual imports:
-
-```ts
-import {
-  buildAnnotationDefinitions,
-  type AnnotationJsonConfig,
-  type AnnotationDefConfig,
-} from '@ghentcdh/annotation-core';
-
-const modules = import.meta.glob('./annotations/*/resource.json', {
-  eager: true,
-  import: 'default',
-});
-
-const configs = Object.values(modules) as AnnotationJsonConfig[];
-const definitions = buildAnnotationDefinitions(configs, defConfig);
+const resourceFolder = import.meta.glob('./annotations/**/*.json', { eager: true });
+const { definitions } = provideAnnotationDefinitions({ config: defConfig, resourceFolder });
 ```
 
 **Example project structure:**
@@ -281,34 +266,12 @@ const definitions = buildAnnotationDefinitions(configs, defConfig);
 ```
 src/
 └── annotations/
-    ├── person/
-    │   └── resource.json
-    ├── place/
-    │   └── resource.json
-    └── index.ts            # collect & build all definitions
+    ├── person.json
+    ├── place.json
+    └── event.json
 ```
 
-`annotations/index.ts`:
-
-```ts
-import {
-  buildAnnotationDefinitions,
-  type AnnotationJsonConfig,
-  type AnnotationDefConfig,
-} from '@ghentcdh/annotation-core';
-
-const modules = import.meta.glob('./**/resource.json', {
-  eager: true,
-  import: 'default',
-});
-
-const configs = Object.values(modules) as AnnotationJsonConfig[];
-
-export const loadDefinitions = (defConfig: AnnotationDefConfig) =>
-  buildAnnotationDefinitions(configs, defConfig);
-```
-
-Then pass result to `<AnnotationEditor :annotation-definitions="definitions" />`.
+Then pass `definitions` to `<AnnotationEditor :annotation-definitions="definitions" />`.
 
 ---
 
@@ -339,9 +302,8 @@ editing, linking, and deletion.
   import { computed } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
   import { AnnotationEditor } from '@ghentcdh/annotation-editor';
-  import { type AnnotationDefConfig } from '@ghentcdh/annotation-core';
+  import { type AnnotationDefConfig, type SourceModel } from '@ghentcdh/annotation-core';
   import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-  import type { SourceModel } from '@ghentcdh/annotation-editor';
 
   const route = useRoute();
   const router = useRouter();
