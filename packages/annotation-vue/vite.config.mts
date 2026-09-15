@@ -41,6 +41,8 @@ export default defineConfig(() => ({
         '@ghentcdh/annotation-editor',
         '@ghentcdh/annotation-preview',
         '@ghentcdh/annotation-ui',
+        '@ghentcdh/crouton-core',
+        '@ghentcdh/crouton-vue',
         '@ghentcdh/w3c-utils',
         'vue',
         '@vue/runtime-dom',
