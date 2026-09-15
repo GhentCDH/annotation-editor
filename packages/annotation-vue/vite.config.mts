@@ -31,8 +31,8 @@ export default defineConfig(() => ({
     lib: {
       entry: 'src/index.ts',
       name: 'annotation-vue',
-      fileName: 'index',
-      format: ['cjs', 'esm', 'es'],
+      fileName: () => 'index.mjs',
+      format: ['es'],
     },
     rollupOptions: {
       external: [

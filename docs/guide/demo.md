@@ -118,6 +118,7 @@ import { AnnotationApiModule } from '@ghentcdh/annotation-api';
         isDev: false,
         app: process.env.ANNOTATION_APP ?? 'my-app',
         prefix: process.env.ANNOTATION_PREFIX ?? 'my-prefix',
+        crudController: 'annotation',
       },
     ),
   ],
@@ -128,11 +129,11 @@ export class AppModule {
 
 **Parameters:**
 
-| Parameter        | Description                                          |
-|------------------|------------------------------------------------------|
-| `resourcePath`   | Path to directory containing annotation JSON files   |
-| `datasourcePath` | Path to directory containing data source definitions |
-| `config`         | `AnnotationDefConfig`                                |
+| Parameter        | Description                                            |
+|------------------|--------------------------------------------------------|
+| `resourcePath`   | Path to directory containing annotation JSON files     |
+| `datasourcePath` | Path to directory containing data source definitions   |
+| `config`         | `AnnotationDefConfig`                                  |
 
 The module registers globally and provides:
 
@@ -153,12 +154,8 @@ Place JSON files in the annotations directory:
     {
       "id": "text",
       "label": "Comment text",
-      "type": {
-        "type": "string"
-      },
-      "fieldInput": {
-        "type": "text"
-      }
+      "type": { "type": "string" },
+      "fieldInput": { "type": "text" }
     }
   ]
 }
@@ -172,12 +169,8 @@ Place JSON files in the annotations directory:
   "name": "Lemma",
   "color": "#7a8800",
   "isRoot": false,
-  "allowedChildren": [
-    "link_bucket"
-  ],
-  "allowedLinks": [
-    "lemma"
-  ],
+  "allowedChildren": ["link_bucket"],
+  "allowedLinks": ["lemma"],
   "icon": "<svg>...</svg>",
   "columns": [
     {
@@ -193,12 +186,8 @@ Place JSON files in the annotations directory:
       "type": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string"
-          },
-          "label": {
-            "type": "string"
-          }
+          "id": { "type": "string" },
+          "label": { "type": "string" }
         }
       },
       "fieldInput": {
@@ -253,8 +242,7 @@ Each `resource.json` contains an `AnnotationJsonResource` object.
 #### Frontend-Only Usage (No Backend)
 
 Annotation definitions can be loaded entirely client-side using `@ghentcdh/annotation-vue`, without running
-`@ghentcdh/annotation-api`. Use `provideAnnotationDefinitions` in a parent component and pass a Vite glob of your JSON
-config files.
+`@ghentcdh/annotation-api`. Use `provideAnnotationDefinitions` in a parent component and pass a Vite glob of your JSON config files.
 
 ```ts
 import { provideAnnotationDefinitions } from '@ghentcdh/annotation-vue';
@@ -278,31 +266,9 @@ const { definitions } = provideAnnotationDefinitions({ config: defConfig, resour
 ```
 src/
 └── annotations/
-    ├── person/
-    │   └── resource.json
-    ├── place/
-    │   └── resource.json
-    └── index.ts            # collect & build all definitions
-```
-
-`annotations/index.ts`:
-
-```ts
-import {
-  buildAnnotationDefinitions,
-  type AnnotationJsonConfig,
-  type AnnotationDefConfig,
-} from '@ghentcdh/annotation-core';
-
-const modules = import.meta.glob('./**/resource.json', {
-  eager: true,
-  import: 'default',
-});
-
-const configs = Object.values(modules) as AnnotationJsonConfig[];
-
-export const loadDefinitions = (defConfig: AnnotationDefConfig) =>
-  buildAnnotationDefinitions(configs, defConfig);
+    ├── person.json
+    ├── place.json
+    └── event.json
 ```
 
 Then pass `definitions` to `<AnnotationEditor :annotation-definitions="definitions" />`.

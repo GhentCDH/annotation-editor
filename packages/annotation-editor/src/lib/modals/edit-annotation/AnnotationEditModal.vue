@@ -5,7 +5,7 @@
     :disable-close="false"
     width="xl"
     role="dialog"
-    @close-modal="onCancel"
+    @close-modal="cancel"
   >
     <template #content>
       <CroutonForm
@@ -24,18 +24,13 @@
           <div class="flex-grow">
             <Collapse :title="label.selectLabel">
               <div :id="editId" />
-              <Btn
-                :outline="true"
-                class="mt-2"
-                @click="selectAll"
-              >
+              <Btn :outline="true" class="mt-2" @click="selectAll">
                 Select all text
               </Btn>
             </Collapse>
           </div>
         </template>
         <template #message-buttons>
-          A small message here
           <FormMessage v-bind="message" />
         </template>
       </CroutonForm>
