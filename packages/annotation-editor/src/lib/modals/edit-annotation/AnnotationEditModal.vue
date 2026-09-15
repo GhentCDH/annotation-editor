@@ -85,38 +85,6 @@ const label = computed(() => {
 });
 
 const formatBeforeSave = (formData: any) => {
-  // let updatedAnnotation = annotationSelector.value;
-  // rawData.value = formData;
-  // let extraTextPositionSelector: Selector | undefined;
-  //
-  // if (textPositionSelector.value && updatedAnnotation) {
-  //   const currentTextPositionSelector = w3cAnnotation(
-  //     updatedAnnotation,
-  //   ).getTextPositionSelector(props.source!.uri)[0];
-  //
-  //   const length =
-  //     currentTextPositionSelector.end - currentTextPositionSelector.start;
-  //   const start =
-  //     textPositionSelector.value.start - currentTextPositionSelector.start;
-  //   const end = start + length;
-  //   extraTextPositionSelector = {
-  //     start,
-  //     end,
-  //     source: props.parentAnnotation!.id,
-  //   } as Selector;
-  // }
-  // const result = utils.createAnnotation(
-  //   updatedAnnotation,
-  //   annotationDef,
-  //   formData,
-  //   extraTextPositionSelector,
-  // );
-  //
-  // // Submit it to the parent so if needed it can be saved to the server
-  // (result as any).id = props.annotation?.id ?? null;
-  //
-  // return result;
-
   return onChangeValue({ metadata: formData });
 };
 
