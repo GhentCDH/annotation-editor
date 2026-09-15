@@ -6,10 +6,10 @@ import type {
   SourceModel,
   UIAnnotationDefinition,
 } from '@ghentcdh/annotation-ui';
+import { NotificationService } from '@ghentcdh/ui';
 import { type EditorConfig, type EditorState_ } from './editorState';
 import { type AnnotationEditModalShow } from '../modals/edit-annotation/AnnotationEditModal.properties';
 import { type AnnotationEditorEmitsFn } from '../AnnotationEditor.properties';
-import { NotificationService } from '@ghentcdh/ui';
 
 type SelectAnnotationData = {
   annotation: W3CAnnotation;

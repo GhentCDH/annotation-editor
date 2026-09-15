@@ -4,10 +4,10 @@ import {
   type CustomAnnotationStyle,
 } from '@ghentcdh/annotated-text';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
+import { type UseResource } from '@ghentcdh/crouton-vue'; // Explicit type avoids TS2883 from complex Zod v4 schema chains in .d.ts output.
 import { type KeyLabel } from './key-label.type';
 import { type SourceModel } from './source.model';
 import { type AnnotationResource } from './annotation-definition.type';
-import { UseResource } from '@ghentcdh/crouton-vue'; // Explicit type avoids TS2883 from complex Zod v4 schema chains in .d.ts output.
 
 // Explicit type avoids TS2883 from complex Zod v4 schema chains in .d.ts output.
 export type UIAnnotationDefinition = AnnotationResource & {

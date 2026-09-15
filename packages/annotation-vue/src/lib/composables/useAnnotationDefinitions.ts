@@ -15,6 +15,7 @@ import {
 } from '@ghentcdh/annotation-core';
 import { createHighlightStyle } from '@ghentcdh/annotated-text';
 import { type AxiosInstance } from 'axios';
+import { resourceApi } from '@ghentcdh/crouton-vue';
 import { AnnotationDefinitionService } from '../service/annotation-definition.service';
 import {
   type DefinitionsFetchFn,
@@ -24,7 +25,6 @@ import {
   loadAnnotationDefinitionsFromGlob,
   loadAnnotationDefinitionsFromUrls,
 } from '../loader/annotation-definition.loader';
-import { resourceApi } from '@ghentcdh/crouton-vue';
 
 export type AnnotationDefinitionsState = {
   configuration: AnnotationDefConfig;
