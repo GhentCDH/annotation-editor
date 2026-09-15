@@ -1,6 +1,6 @@
-import { Selector, SourceModel } from '@ghentcdh/annotation-core';
-import { w3cAnnotation, W3CAnnotation } from '@ghentcdh/w3c-utils';
-import { W3CSpecificResource } from '@ghentcdh/w3c-utils/lib/annotation/annotation.schema';
+import { type Selector, type SourceModel } from '@ghentcdh/annotation-core';
+import { w3cAnnotation, type W3CAnnotation } from '@ghentcdh/w3c-utils';
+import { type W3CSpecificResource } from '@ghentcdh/w3c-utils/lib/annotation/annotation.schema';
 
 const createSelector = (selector: W3CSpecificResource): Selector => {
   let result = { source: selector.source } as Selector;

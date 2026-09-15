@@ -1,14 +1,14 @@
-import {
-  AnnotationEditEmits,
-  type AnnotationEditModal,
-} from './AnnotationEditModal.properties';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { type EmitFn, ref } from 'vue';
-import { useEditorState } from '../../composables/useEditorState';
 import { NotificationService } from '@ghentcdh/ui';
-import { getTextSelector } from './utils';
-import { Selector } from '@ghentcdh/annotation-core';
+import { type Selector } from '@ghentcdh/annotation-core';
 import { type FormMessageProps, resourceApi } from '@ghentcdh/crouton-vue';
+import { getTextSelector } from './utils';
+import {
+  type AnnotationEditEmits,
+  type AnnotationEditModal,
+} from './AnnotationEditModal.properties';
+import { useEditorState } from '../../composables/useEditorState';
 
 export const UseAnnotationEdit = (
   props: AnnotationEditModal,
