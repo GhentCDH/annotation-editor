@@ -1,6 +1,6 @@
 import type { ExtractPublicPropTypes, PropType } from 'vue';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-import type { SourceModel } from '@ghentcdh/annotation-ui';
+import type { Selector, SourceModel } from '@ghentcdh/annotation-ui';
 
 export const AnnotationEditModalProperties = {
   type: { type: String, required: true as const },
@@ -19,7 +19,7 @@ export type AnnotationEditModal = ExtractPublicPropTypes<
 export type AnnotationEditModalEvent = {
   annotation: W3CAnnotation;
   rawData: any;
-  selector: { start: number; end: number };
+  selectors: Selector[];
 };
 export const AnnotationEditEmits = {
   close: (event: AnnotationEditModalEvent | null) => true,

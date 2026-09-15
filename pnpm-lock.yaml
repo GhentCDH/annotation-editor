@@ -207,6 +207,9 @@ importers:
       '@ghentcdh/crouton-core':
         specifier: 0.0.1-alpha.47
         version: 0.0.1-alpha.47(@jsonforms/core@3.8.0)(zod@4.5.4)
+      '@ghentcdh/crouton-vue':
+        specifier: 0.0.1-alpha.52
+        version: 0.0.1-alpha.52(@ghentcdh/ui@3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.31.3)(@tiptap/starter-kit@3.31.3)(@tiptap/vue-3@3.31.3(@floating-ui/dom@1.8.0)(@tiptap/core@3.31.3(@tiptap/pm@3.31.3))(@tiptap/pm@3.31.3)(vue@3.5.41(typescript@6.0.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.31.3(@tiptap/pm@3.31.3)))(vue-router@5.2.0(@vue/compiler-sfc@3.5.42)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.1)(vite@8.1.1(@types/node@26.5.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3)))(@jsonforms/core@3.8.0)(axios@1.20.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1))(vue-router@5.2.0(@vue/compiler-sfc@3.5.42)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.1)(vite@8.1.1(@types/node@26.5.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3))(zod@4.5.4)
       '@ghentcdh/w3c-utils':
         specifier: ^1.0.11
         version: 1.0.11(@types/debug@4.1.13)(@types/node@26.5.0)(jiti@2.7.0)(jsdom@29.1.1)(lightningcss@1.33.0)(sass-embedded@1.100.0)(sass@1.100.0)(supports-color@8.1.1)(yaml@2.9.0)
@@ -242,6 +245,9 @@ importers:
       '@ghentcdh/crouton-core':
         specifier: 0.0.1-alpha.54
         version: 0.0.1-alpha.54(@jsonforms/core@3.8.0)(zod@4.5.4)
+      '@ghentcdh/crouton-vue':
+        specifier: 0.0.1-alpha.52
+        version: 0.0.1-alpha.52(@ghentcdh/ui@3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.31.3)(@tiptap/starter-kit@3.31.3)(@tiptap/vue-3@3.31.3(@floating-ui/dom@1.8.0)(@tiptap/core@3.31.3(@tiptap/pm@3.31.3))(@tiptap/pm@3.31.3)(vue@3.5.41(typescript@6.0.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.31.3(@tiptap/pm@3.31.3)))(vue-router@5.2.0(@vue/compiler-sfc@3.5.42)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.1)(vite@8.1.1(@types/node@26.5.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3)))(@jsonforms/core@3.8.0)(axios@1.20.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1))(vue-router@5.2.0(@vue/compiler-sfc@3.5.42)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.1)(vite@8.1.1(@types/node@26.5.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3))(zod@4.5.4)
       '@ghentcdh/ui':
         specifier: ^3.0.6
         version: 3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.31.3)(@tiptap/starter-kit@3.31.3)(@tiptap/vue-3@3.31.3(@floating-ui/dom@1.8.0)(@tiptap/core@3.31.3(@tiptap/pm@3.31.3))(@tiptap/pm@3.31.3)(vue@3.5.41(typescript@6.0.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.31.3(@tiptap/pm@3.31.3)))(vue-router@5.2.0(@vue/compiler-sfc@3.5.42)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.1)(vite@8.1.1(@types/node@26.5.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3))
@@ -8041,6 +8047,16 @@ snapshots:
       '@ghentcdh/ui': 3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.31.3)(@tiptap/starter-kit@3.31.3)(@tiptap/vue-3@3.31.3(@floating-ui/dom@1.8.0)(@tiptap/core@3.31.3(@tiptap/pm@3.31.3))(@tiptap/pm@3.31.3)(vue@3.5.41(typescript@6.0.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.31.3(@tiptap/pm@3.31.3)))(vue-router@5.2.0(@vue/compiler-sfc@3.5.42)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.1)(vite@8.1.1(@types/node@26.5.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3))
       '@jsonforms/core': 3.8.0
       axios: 1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+      lodash-es: 4.18.1
+      vue: 3.5.41(typescript@6.0.3)
+      vue-router: 5.2.0(@vue/compiler-sfc@3.5.42)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.1)(vite@8.1.1(@types/node@26.5.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.41(typescript@6.0.3))
+      zod: 4.5.4
+
+  '@ghentcdh/crouton-vue@0.0.1-alpha.52(@ghentcdh/ui@3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.31.3)(@tiptap/starter-kit@3.31.3)(@tiptap/vue-3@3.31.3(@floating-ui/dom@1.8.0)(@tiptap/core@3.31.3(@tiptap/pm@3.31.3))(@tiptap/pm@3.31.3)(vue@3.5.41(typescript@6.0.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.31.3(@tiptap/pm@3.31.3)))(vue-router@5.2.0(@vue/compiler-sfc@3.5.42)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.1)(vite@8.1.1(@types/node@26.5.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3)))(@jsonforms/core@3.8.0)(axios@1.20.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1))(vue-router@5.2.0(@vue/compiler-sfc@3.5.42)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.1)(vite@8.1.1(@types/node@26.5.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3))(zod@4.5.4)':
+    dependencies:
+      '@ghentcdh/ui': 3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.31.3)(@tiptap/starter-kit@3.31.3)(@tiptap/vue-3@3.31.3(@floating-ui/dom@1.8.0)(@tiptap/core@3.31.3(@tiptap/pm@3.31.3))(@tiptap/pm@3.31.3)(vue@3.5.41(typescript@6.0.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.31.3(@tiptap/pm@3.31.3)))(vue-router@5.2.0(@vue/compiler-sfc@3.5.42)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.1)(vite@8.1.1(@types/node@26.5.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3))
+      '@jsonforms/core': 3.8.0
+      axios: 1.20.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1)
       lodash-es: 4.18.1
       vue: 3.5.41(typescript@6.0.3)
       vue-router: 5.2.0(@vue/compiler-sfc@3.5.42)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.1)(vite@8.1.1(@types/node@26.5.0)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.41(typescript@6.0.3))

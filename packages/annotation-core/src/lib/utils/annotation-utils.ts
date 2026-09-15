@@ -117,7 +117,14 @@ const createId = () => {
   return `mela:new-annotation:${Date.now()}`;
 };
 
-export type Selector = { source: string; start: number; end: number };
+export type Selector = {
+  source: string;
+  start: number;
+  end: number;
+  suffix: string;
+  prefix: string;
+  exact: string;
+};
 const updateSelector = (builder: W3CAnnotationBuilder, selector: Selector) => {
   if (!builder.getSpecificResourceTargets(selector.source).length) {
     builder.addTarget({
@@ -127,6 +134,10 @@ const updateSelector = (builder: W3CAnnotationBuilder, selector: Selector) => {
   }
   builder.updateTextPositionSelector(
     { start: selector.start, end: selector.end },
+    selector.source,
+  );
+  builder.updateTextQuoteSelector(
+    { prefix: selector.prefix, suffix: selector.suffix, exact: selector.exact },
     selector.source,
   );
 
@@ -248,7 +259,7 @@ class AnnotationUtilsImpl {
     fromAnnotation: W3CAnnotation | null,
     type: UIAnnotationDefinition,
     data: any | null,
-    extraTextPositionSelector?: Selector,
+    selectors: Selector[],
   ) {
     // Add the style
     const styleBody = AnnotationStyleContextBuilder(
@@ -269,9 +280,13 @@ class AnnotationUtilsImpl {
       builder.updateBodyByType(data.type, data);
     }
 
+    for (const selector of selectors) {
+      updateSelector(builder, selector);
+    }
+
     // Additional positionselector
-    if (extraTextPositionSelector)
-      updateSelector(builder, extraTextPositionSelector);
+    // if (extraTextPositionSelector)
+    //   updateSelector(builder, extraTextPositionSelector);
 
     return builder.build();
   }
