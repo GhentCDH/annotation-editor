@@ -1,16 +1,10 @@
 <template>
   <table class="border border-gray-300 table table-zebra table-sm">
     <tbody>
-      <tr
-        v-for="link in links"
-        :key="link.annotation.id"
-      >
-        <th>{{ link.purpose }}</th>
+      <tr v-for="link in links" :key="link.annotation.id">
+        <th>{{ link.label }}</th>
         <td class="max-w-[300px]">
-          <AnnotationText
-            :annotation="link.relation"
-            :max-characters="25"
-          />
+          <AnnotationText :annotation="link.relation" :max-characters="25" />
         </td>
         <td>
           <Navbar :actions="actions(link as any)" />
@@ -23,7 +17,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { IconEnum } from '@ghentcdh/ui';
-import { type W3CAnnotation } from '@ghentcdh/w3c-utils';;
+import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { type AnnotationLink } from '@ghentcdh/annotation-ui';
 import AnnotationText from './Annotation-text.vue';
 import Navbar from '../../components/navbar.vue';
@@ -44,12 +38,11 @@ const links = computed<LinkDisplay[]>(() => {
     .getLinks(props.annotation)
     .map((link: AnnotationLink) => {
       const purpose = link.purpose;
-      const relation = link.relations.find(
-        (r) => r.id !== props.annotation.id,
-      );
+      const relation = link.relations.find((r) => r.id !== props.annotation.id);
       const def = config.annotation.getDefinition(purpose);
       return {
-        purpose: def?.label,
+        purpose: def?.id,
+        label: def?.label ?? def?.name,
         annotation: link.annotation,
         relation,
       };
@@ -58,13 +51,17 @@ const links = computed<LinkDisplay[]>(() => {
 });
 
 const actions = (link: AnnotationLink) => {
+  const definition = config.annotation.getDefinition(link.purpose);
   return [
     {
       icon: IconEnum.Delete,
       label: 'Delete',
       disabled: editorState.disableEdits,
       action: () => {
-        sendAnnotationEvent('delete', { annotation: link.annotation });
+        sendAnnotationEvent('delete', {
+          annotation: link.annotation,
+          definition,
+        });
       },
     },
   ];

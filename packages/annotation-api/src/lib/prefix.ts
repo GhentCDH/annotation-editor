@@ -1,1 +1,1 @@
-export const SCHEMA_PREFIX = 'testje';
+export const SCHEMA_PREFIX = 'annotation-editor';

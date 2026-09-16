@@ -4,7 +4,9 @@ import type {
   AnnotationUtils,
   KeyLabel,
   SourceModel,
+  UIAnnotationDefinition,
 } from '@ghentcdh/annotation-ui';
+import { NotificationService } from '@ghentcdh/ui';
 import { type EditorConfig, type EditorState_ } from './editorState';
 import { type AnnotationEditModalShow } from '../modals/edit-annotation/AnnotationEditModal.properties';
 import { type AnnotationEditorEmitsFn } from '../AnnotationEditor.properties';
@@ -32,6 +34,7 @@ type EditAnnotationData = Pick<
 
 type DeleteAnnotationData = {
   annotation: W3CAnnotation;
+  definition: UIAnnotationDefinition;
 };
 
 type LinkData = {
@@ -99,16 +102,30 @@ const deleteAnnotation = (
   state: EditorState_,
   emits: AnnotationEditorEmitsFn,
 ) => {
-  const { annotation } = data;
+  const { annotation, definition } = data;
   config.modal
     .show('confirm', {
-      title: 'Delete link',
+      title: 'Delete',
       message: 'Are you sure to delete this annotation?',
     })
     .then((result) => {
       if (!result?.confirmed) return;
+      if (!definition.resource.delete) {
+        emits('delete:annotation', annotation);
+        return;
+      }
 
-      emits('delete:annotation', annotation);
+      try {
+        definition.resource.delete(annotation);
+      } catch (error) {
+        console.error('Something went wrong while deleting annotation');
+        console.error(error);
+
+        NotificationService.error(
+          'Something went wrong while deleting annotation',
+        );
+      }
+
       if (state.selectedAnnotation?.id === annotation.id) {
         state.selectedAnnotation = null;
         state.editorState = null;
