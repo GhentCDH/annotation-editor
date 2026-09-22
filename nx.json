@@ -2,16 +2,9 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "analytics": false,
   "namedInputs": {
-    "default": [
-      "{projectRoot}/**/*",
-      "sharedGlobals"
-    ],
-    "production": [
-      "default"
-    ],
-    "sharedGlobals": [
-      "{workspaceRoot}/.github/workflows/ci.yml"
-    ]
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "production": ["default"],
+    "sharedGlobals": ["{workspaceRoot}/.github/workflows/ci.yml"]
   },
   "plugins": [
     {
@@ -62,11 +55,7 @@
     }
   ],
   "release": {
-    "projects": [
-      "annotation-api",
-      "annotation-core",
-      "annotation-vue"
-    ],
+    "projects": ["annotation-api", "annotation-vue"],
     "version": {
       "conventionalCommits": true,
       "preVersionCommand": "npx nx run-many -t build"
