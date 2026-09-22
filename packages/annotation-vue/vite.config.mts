@@ -17,7 +17,11 @@ export default defineConfig(() => ({
       entryRoot: 'src',
       tsconfigPath: path.join(import.meta.dirname, 'tsconfig.lib.json'),
       pathsToAliases: false,
-      bundledPackages: ['@ghentcdh/annotation-core'],
+      bundledPackages: [
+        '@ghentcdh/annotation-core',
+        '@ghentcdh/annotation-editor',
+        '@ghentcdh/annotation-preview',
+      ],
     }),
     copyPackageJson(),
   ],
@@ -38,9 +42,6 @@ export default defineConfig(() => ({
       external: [
         '@ghentcdh/annotated-text',
         '@ghentcdh/annotation-core',
-        '@ghentcdh/annotation-editor',
-        '@ghentcdh/annotation-preview',
-        '@ghentcdh/annotation-ui',
         '@ghentcdh/crouton-core',
         '@ghentcdh/crouton-vue',
         '@ghentcdh/w3c-utils',
