@@ -1,3 +1,16 @@
+## 0.0.1-alpha.14 (2026-09-22)
+
+### 🩹 Fixes
+
+- build ([f2fb4161](https://github.com/GhentCDH/annotation-editor/commit/f2fb4161))
+- build ([a8fc0853](https://github.com/GhentCDH/annotation-editor/commit/a8fc0853))
+- build ([1de93483](https://github.com/GhentCDH/annotation-editor/commit/1de93483))
+- build ([51e53465](https://github.com/GhentCDH/annotation-editor/commit/51e53465))
+
+### ❤️ Thank You
+
+- Bo Vandersteene
+
 ## 0.0.1-alpha.13 (2026-09-22)
 
 ### 🚀 Features
