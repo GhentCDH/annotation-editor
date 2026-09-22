@@ -1,3 +1,37 @@
+## 0.0.1-alpha.13 (2026-09-22)
+
+### 🚀 Features
+
+- use general annotation controller ([81db44ec](https://github.com/GhentCDH/annotation-editor/commit/81db44ec))
+- use general annotation controller ([07959bff](https://github.com/GhentCDH/annotation-editor/commit/07959bff))
+- use general annotation controller ([556b3d7f](https://github.com/GhentCDH/annotation-editor/commit/556b3d7f))
+- use general annotation controller ([5fa26cb1](https://github.com/GhentCDH/annotation-editor/commit/5fa26cb1))
+- use general annotation controller ([0006f977](https://github.com/GhentCDH/annotation-editor/commit/0006f977))
+- use general annotation controller ([b18cf0e0](https://github.com/GhentCDH/annotation-editor/commit/b18cf0e0))
+- use resource jsons to create/update/delete annotations ([380b2370](https://github.com/GhentCDH/annotation-editor/commit/380b2370))
+- use resource jsons to create/update/delete annotations ([e08c8945](https://github.com/GhentCDH/annotation-editor/commit/e08c8945))
+- use resource jsons to create/update/delete annotations ([52bd4c32](https://github.com/GhentCDH/annotation-editor/commit/52bd4c32))
+- use resource jsons to create/update/delete annotations ([66c9cb5e](https://github.com/GhentCDH/annotation-editor/commit/66c9cb5e))
+- use resource jsons to create/update/delete annotations ([28adaa8e](https://github.com/GhentCDH/annotation-editor/commit/28adaa8e))
+- use resource jsons to create/update/delete annotations ([0913d8ee](https://github.com/GhentCDH/annotation-editor/commit/0913d8ee))
+- use resource jsons to create/update/delete annotations ([228cb08a](https://github.com/GhentCDH/annotation-editor/commit/228cb08a))
+- use resource jsons to create/update/delete annotations ([f5e13235](https://github.com/GhentCDH/annotation-editor/commit/f5e13235))
+- use resource jsons to create/update/delete annotations ([3d9d4a03](https://github.com/GhentCDH/annotation-editor/commit/3d9d4a03))
+- use resource jsons to create/update/delete annotations ([e985b170](https://github.com/GhentCDH/annotation-editor/commit/e985b170))
+- use resource jsons to create/update/delete annotations ([ec6679cf](https://github.com/GhentCDH/annotation-editor/commit/ec6679cf))
+- use resource jsons to create/update/delete annotations ([9772c2d1](https://github.com/GhentCDH/annotation-editor/commit/9772c2d1))
+- use resource jsons to create/update/delete annotations ([58409f8a](https://github.com/GhentCDH/annotation-editor/commit/58409f8a))
+- update nx.json ([d79db1b0](https://github.com/GhentCDH/annotation-editor/commit/d79db1b0))
+
+### 🩹 Fixes
+
+- annotation load in playground ([74260934](https://github.com/GhentCDH/annotation-editor/commit/74260934))
+- show only annotation data if displayed ([939f15d1](https://github.com/GhentCDH/annotation-editor/commit/939f15d1))
+
+### ❤️ Thank You
+
+- Bo Vandersteene
+
 ## 0.0.1-alpha.12 (2026-09-10)
 
 ### 🩹 Fixes
