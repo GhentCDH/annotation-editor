@@ -32,7 +32,7 @@ export const buildAnnotationDefFromJson = (
     });
 
     return {
-      // ...parsed.data,
+      ...parsed.data,
       ...(compiled ?? {}),
     } as unknown as AnnotationResource;
   } catch (error) {
