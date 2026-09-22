@@ -1,10 +1,16 @@
 <template>
   <table class="border border-gray-300 table table-zebra table-sm">
     <tbody>
-      <tr v-for="link in links" :key="link.annotation.id">
+      <tr
+        v-for="link in links"
+        :key="link.annotation.id"
+      >
         <th>{{ link.label }}</th>
         <td class="max-w-[300px]">
-          <AnnotationText :annotation="link.relation" :max-characters="25" />
+          <AnnotationText
+            :annotation="link.relation"
+            :max-characters="25"
+          />
         </td>
         <td>
           <Navbar :actions="actions(link as any)" />

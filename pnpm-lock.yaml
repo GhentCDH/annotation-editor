@@ -190,8 +190,8 @@ importers:
   packages/annotation-api:
     dependencies:
       '@ghentcdh/crouton-api':
-        specifier: 0.0.1-alpha.55
-        version: 0.0.1-alpha.55(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.0.4(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/swagger@12.0.1(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.0.4(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2))(@prisma/client@7.10.0(typescript@6.0.3))(nestjs-zod@5.5.0(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/swagger@12.0.1(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.0.4(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2))(rxjs@7.8.2)(zod@4.6.5))(zod@4.6.5)
+        specifier: 0.0.1-alpha.71
+        version: 0.0.1-alpha.71(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.0.4(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/swagger@12.0.1(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.0.4(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2))(@prisma/client@7.10.0(typescript@6.0.3))(nestjs-zod@5.5.0(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/swagger@12.0.1(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.0.4(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2))(rxjs@7.8.2)(zod@4.6.5))(zod@4.6.5)
       '@ghentcdh/w3c-utils':
         specifier: ^1.0.11
         version: 1.0.11(@types/debug@4.1.13)(@types/node@26.6.2)(jiti@2.7.0)(jsdom@29.1.1)(lightningcss@1.33.0)(sass-embedded@1.100.0)(sass@1.100.0)(supports-color@8.1.1)(yaml@2.9.1)
@@ -205,11 +205,11 @@ importers:
         specifier: ^1.0.11
         version: 1.0.11(@types/debug@4.1.13)(@types/node@26.6.2)(jiti@2.7.0)(jsdom@29.1.1)(lightningcss@1.33.0)(sass-embedded@1.100.0)(sass@1.100.0)(supports-color@8.1.1)(yaml@2.9.1)
       '@ghentcdh/crouton-core':
-        specifier: 0.0.1-alpha.55
-        version: 0.0.1-alpha.55(@jsonforms/core@3.8.0)(zod@4.6.5)
+        specifier: 0.0.1-alpha.71
+        version: 0.0.1-alpha.71(@jsonforms/core@3.8.0)(zod@4.6.5)
       '@ghentcdh/crouton-vue':
-        specifier: 0.0.1-alpha.55
-        version: 0.0.1-alpha.55(@ghentcdh/ui@3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.31.3)(@tiptap/starter-kit@3.31.3)(@tiptap/vue-3@3.31.3(@floating-ui/dom@1.8.0)(@tiptap/core@3.31.3(@tiptap/pm@3.31.3))(@tiptap/pm@3.31.3)(vue@3.5.41(typescript@6.0.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.31.3(@tiptap/pm@3.31.3)))(vue-router@5.2.0(@vue/compiler-sfc@3.5.43)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.4)(vite@8.1.1(@types/node@26.6.2)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.1))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3)))(@jsonforms/core@3.8.0)(axios@1.20.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1))(vue-router@5.2.0(@vue/compiler-sfc@3.5.43)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.4)(vite@8.1.1(@types/node@26.6.2)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.1))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3))(zod@4.6.5)
+        specifier: 0.0.1-alpha.71
+        version: 0.0.1-alpha.71(@ghentcdh/ui@3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.31.3)(@tiptap/starter-kit@3.31.3)(@tiptap/vue-3@3.31.3(@floating-ui/dom@1.8.0)(@tiptap/core@3.31.3(@tiptap/pm@3.31.3))(@tiptap/pm@3.31.3)(vue@3.5.41(typescript@6.0.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.31.3(@tiptap/pm@3.31.3)))(vue-router@5.2.0(@vue/compiler-sfc@3.5.43)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.4)(vite@8.1.1(@types/node@26.6.2)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.1))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3)))(@jsonforms/core@3.8.0)(axios@1.20.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1))(vue-router@5.2.0(@vue/compiler-sfc@3.5.43)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.4)(vite@8.1.1(@types/node@26.6.2)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.1))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3))(zod@4.6.5)
       '@ghentcdh/w3c-utils':
         specifier: ^1.0.11
         version: 1.0.11(@types/debug@4.1.13)(@types/node@26.6.2)(jiti@2.7.0)(jsdom@29.1.1)(lightningcss@1.33.0)(sass-embedded@1.100.0)(sass@1.100.0)(supports-color@8.1.1)(yaml@2.9.1)
@@ -236,6 +236,9 @@ importers:
       '@ghentcdh/annotated-text':
         specifier: ^1.0.11
         version: 1.0.11(@types/debug@4.1.13)(@types/node@26.6.2)(jiti@2.7.0)(jsdom@29.1.1)(lightningcss@1.33.0)(sass-embedded@1.100.0)(sass@1.100.0)(supports-color@8.1.1)(yaml@2.9.1)
+      '@ghentcdh/annotation-core':
+        specifier: ^0.0.1-alpha.12
+        version: link:../annotation-core
       '@ghentcdh/annotation-editor':
         specifier: 0.0.1-alpha.10
         version: link:../annotation-editor
@@ -243,11 +246,11 @@ importers:
         specifier: 0.0.1-alpha.10
         version: link:../annotation-preview
       '@ghentcdh/crouton-core':
-        specifier: 0.0.1-alpha.55
-        version: 0.0.1-alpha.55(@jsonforms/core@3.8.0)(zod@4.6.5)
+        specifier: 0.0.1-alpha.71
+        version: 0.0.1-alpha.71(@jsonforms/core@3.8.0)(zod@4.6.5)
       '@ghentcdh/crouton-vue':
-        specifier: 0.0.1-alpha.55
-        version: 0.0.1-alpha.55(@ghentcdh/ui@3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.31.3)(@tiptap/starter-kit@3.31.3)(@tiptap/vue-3@3.31.3(@floating-ui/dom@1.8.0)(@tiptap/core@3.31.3(@tiptap/pm@3.31.3))(@tiptap/pm@3.31.3)(vue@3.5.41(typescript@6.0.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.31.3(@tiptap/pm@3.31.3)))(vue-router@5.2.0(@vue/compiler-sfc@3.5.43)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.4)(vite@8.1.1(@types/node@26.6.2)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.1))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3)))(@jsonforms/core@3.8.0)(axios@1.20.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1))(vue-router@5.2.0(@vue/compiler-sfc@3.5.43)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.4)(vite@8.1.1(@types/node@26.6.2)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.1))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3))(zod@4.6.5)
+        specifier: 0.0.1-alpha.71
+        version: 0.0.1-alpha.71(@ghentcdh/ui@3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.31.3)(@tiptap/starter-kit@3.31.3)(@tiptap/vue-3@3.31.3(@floating-ui/dom@1.8.0)(@tiptap/core@3.31.3(@tiptap/pm@3.31.3))(@tiptap/pm@3.31.3)(vue@3.5.41(typescript@6.0.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.31.3(@tiptap/pm@3.31.3)))(vue-router@5.2.0(@vue/compiler-sfc@3.5.43)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.4)(vite@8.1.1(@types/node@26.6.2)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.1))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3)))(@jsonforms/core@3.8.0)(axios@1.20.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1))(vue-router@5.2.0(@vue/compiler-sfc@3.5.43)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.4)(vite@8.1.1(@types/node@26.6.2)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.1))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3))(zod@4.6.5)
       '@ghentcdh/ui':
         specifier: ^3.0.6
         version: 3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.31.3)(@tiptap/starter-kit@3.31.3)(@tiptap/vue-3@3.31.3(@floating-ui/dom@1.8.0)(@tiptap/core@3.31.3(@tiptap/pm@3.31.3))(@tiptap/pm@3.31.3)(vue@3.5.41(typescript@6.0.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.31.3(@tiptap/pm@3.31.3)))(vue-router@5.2.0(@vue/compiler-sfc@3.5.43)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.4)(vite@8.1.1(@types/node@26.6.2)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.1))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3))
@@ -1285,8 +1288,8 @@ packages:
     resolution: {integrity: sha512-IkO+/KEUvwbVpiURZg+P7zF74z5Jxe0UgJxVni+RtoHQ6IZieXaO02kmadomap/q+l6bc/jdPGGqTjhuZnuz1Q==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
-  '@exodus/bytes@1.15.1':
-    resolution: {integrity: sha512-S6mL0yNB/Abt9Ei4tq8gDhcczc4S3+vQ4ra7vxnAf+YHC02srtqxKKZghx2Dq6p0e66THKwR6r8N6P95wEty7Q==}
+  '@exodus/bytes@1.15.2':
+    resolution: {integrity: sha512-ctkytT+9TXtv6uiVj6Y7IjKh1+PdBGAD34xd0PpQ/qF+R7O/hoEQbZmN89OaCEaZn5I1A9+ZoPxD03unuFhyhQ==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0}
     peerDependencies:
       '@noble/hashes': ^1.8.0 || ^2.0.0
@@ -1306,8 +1309,8 @@ packages:
   '@ghentcdh/annotated-text@1.0.11':
     resolution: {integrity: sha512-FAKRfGlREUuXWRVR3T30ISzmEcaeZ0MNxAhEq9zFcWjzvHqVXpR3KCzy62WvF+uUbDMIh8BbcRhIP+jiiy9srA==}
 
-  '@ghentcdh/crouton-api@0.0.1-alpha.55':
-    resolution: {integrity: sha512-WVeuP7XtJuJfGV7adJL0sSyxvutjBm0DmpLWpq7tOs1vRXv6XcKulAjLatfAEIp7s5Qgb99v6OVkXI7Wz5C9jw==}
+  '@ghentcdh/crouton-api@0.0.1-alpha.71':
+    resolution: {integrity: sha512-EBkrSpImRP16g8Jo6sSiYXBOWQvyyjElo1d3HEOCVk21w95EbFus9SWv0gxFeujA1QTqrY71puI6aeDaZsaEaw==}
     peerDependencies:
       '@nestjs/common': '>=10.0.0'
       '@nestjs/core': '>=10.0.0'
@@ -1320,27 +1323,10 @@ packages:
       '@prisma/internals':
         optional: true
 
-  '@ghentcdh/crouton-core@0.0.1-alpha.55':
-    resolution: {integrity: sha512-0T+bawVimmao3nJnl0nthsO5jGcbXiJFxNH6kZ0S1pnX48JYpMOMzPp5Fp7JAL9ZtV9W8v4CtEdpKLJGHKfqHQ==}
-    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
-    peerDependencies:
-      '@jsonforms/core': ^3.0.0
-      zod: ^4.0.0
-
   '@ghentcdh/crouton-core@0.0.1-alpha.71':
     resolution: {integrity: sha512-wsbtVlNogitJZ8DMaAJ4+bNBPx0ifIMvc7dPjibsF3leRZ6Ht8JLzWfrNeKB/4g6F50PTrtB2UTVmtBJcioxXQ==}
     peerDependencies:
       '@jsonforms/core': ^3.0.0
-      zod: ^4.0.0
-
-  '@ghentcdh/crouton-vue@0.0.1-alpha.55':
-    resolution: {integrity: sha512-msBaLvCiFZzPw6dT0j1j3uFziI1rZWk/AJ1toM8A8tEmnuhK/kw4BYcCo1N9wux9Y3RCPcxf6tiNjDtKiGMSdQ==}
-    peerDependencies:
-      '@ghentcdh/ui': ^3.0.6
-      '@jsonforms/core': '>=3.0.0'
-      axios: '>=1.0.0'
-      vue: '>=3.0.0'
-      vue-router: '>=4.0.0'
       zod: ^4.0.0
 
   '@ghentcdh/crouton-vue@0.0.1-alpha.71':
@@ -7977,7 +7963,7 @@ snapshots:
       '@eslint/core': 1.2.1
       levn: 0.4.1
 
-  '@exodus/bytes@1.15.1': {}
+  '@exodus/bytes@1.15.2': {}
 
   '@floating-ui/core@1.8.0':
     dependencies:
@@ -8050,7 +8036,7 @@ snapshots:
       - tsx
       - yaml
 
-  '@ghentcdh/crouton-api@0.0.1-alpha.55(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.0.4(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/swagger@12.0.1(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.0.4(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2))(@prisma/client@7.10.0(typescript@6.0.3))(nestjs-zod@5.5.0(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/swagger@12.0.1(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.0.4(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2))(rxjs@7.8.2)(zod@4.6.5))(zod@4.6.5)':
+  '@ghentcdh/crouton-api@0.0.1-alpha.71(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.0.4(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/swagger@12.0.1(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.0.4(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2))(@prisma/client@7.10.0(typescript@6.0.3))(nestjs-zod@5.5.0(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/swagger@12.0.1(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.0.4(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2))(rxjs@7.8.2)(zod@4.6.5))(zod@4.6.5)':
     dependencies:
       '@nestjs/common': 11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1)
       '@nestjs/core': 12.0.4(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2)
@@ -8059,25 +8045,9 @@ snapshots:
       nestjs-zod: 5.5.0(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/swagger@12.0.1(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.0.4(@nestjs/common@11.2.5(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(reflect-metadata@0.2.2))(rxjs@7.8.2)(zod@4.6.5)
       zod: 4.6.5
 
-  '@ghentcdh/crouton-core@0.0.1-alpha.55(@jsonforms/core@3.8.0)(zod@4.6.5)':
-    dependencies:
-      '@jsonforms/core': 3.8.0
-      zod: 4.6.5
-
   '@ghentcdh/crouton-core@0.0.1-alpha.71(@jsonforms/core@3.8.0)(zod@4.6.5)':
     dependencies:
       '@jsonforms/core': 3.8.0
-      zod: 4.6.5
-
-  '@ghentcdh/crouton-vue@0.0.1-alpha.55(@ghentcdh/ui@3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.31.3)(@tiptap/starter-kit@3.31.3)(@tiptap/vue-3@3.31.3(@floating-ui/dom@1.8.0)(@tiptap/core@3.31.3(@tiptap/pm@3.31.3))(@tiptap/pm@3.31.3)(vue@3.5.41(typescript@6.0.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.31.3(@tiptap/pm@3.31.3)))(vue-router@5.2.0(@vue/compiler-sfc@3.5.43)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.4)(vite@8.1.1(@types/node@26.6.2)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.1))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3)))(@jsonforms/core@3.8.0)(axios@1.20.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1))(vue-router@5.2.0(@vue/compiler-sfc@3.5.43)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.4)(vite@8.1.1(@types/node@26.6.2)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.1))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3))(zod@4.6.5)':
-    dependencies:
-      '@ghentcdh/ui': 3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.31.3)(@tiptap/starter-kit@3.31.3)(@tiptap/vue-3@3.31.3(@floating-ui/dom@1.8.0)(@tiptap/core@3.31.3(@tiptap/pm@3.31.3))(@tiptap/pm@3.31.3)(vue@3.5.41(typescript@6.0.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.31.3(@tiptap/pm@3.31.3)))(vue-router@5.2.0(@vue/compiler-sfc@3.5.43)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.4)(vite@8.1.1(@types/node@26.6.2)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.1))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3))
-      '@jsonforms/core': 3.8.0
-      axios: 1.20.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1)
-      lodash-es: 4.18.1
-      vee-validate: 5.0.0-beta.1(vue@3.5.41(typescript@6.0.3))
-      vue: 3.5.41(typescript@6.0.3)
-      vue-router: 5.2.0(@vue/compiler-sfc@3.5.43)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.4)(vite@8.1.1(@types/node@26.6.2)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.1))(vue@3.5.41(typescript@6.0.3))
       zod: 4.6.5
 
   '@ghentcdh/crouton-vue@0.0.1-alpha.71(@ghentcdh/ui@3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.31.3)(@tiptap/starter-kit@3.31.3)(@tiptap/vue-3@3.31.3(@floating-ui/dom@1.8.0)(@tiptap/core@3.31.3(@tiptap/pm@3.31.3))(@tiptap/pm@3.31.3)(vue@3.5.41(typescript@6.0.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.31.3(@tiptap/pm@3.31.3)))(vue-router@5.2.0(@vue/compiler-sfc@3.5.43)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.4)(vite@8.1.1(@types/node@26.6.2)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.1))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3)))(@jsonforms/core@3.8.0)(axios@1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0))(vue-router@5.2.0(@vue/compiler-sfc@3.5.43)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.4)(vite@8.1.1(@types/node@26.6.2)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.1))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3))(zod@4.6.5)':
@@ -8085,6 +8055,17 @@ snapshots:
       '@ghentcdh/ui': 3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.31.3)(@tiptap/starter-kit@3.31.3)(@tiptap/vue-3@3.31.3(@floating-ui/dom@1.8.0)(@tiptap/core@3.31.3(@tiptap/pm@3.31.3))(@tiptap/pm@3.31.3)(vue@3.5.41(typescript@6.0.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.31.3(@tiptap/pm@3.31.3)))(vue-router@5.2.0(@vue/compiler-sfc@3.5.43)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.4)(vite@8.1.1(@types/node@26.6.2)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.1))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3))
       '@jsonforms/core': 3.8.0
       axios: 1.20.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+      lodash-es: 4.18.1
+      vee-validate: 5.0.0-beta.1(vue@3.5.41(typescript@6.0.3))
+      vue: 3.5.41(typescript@6.0.3)
+      vue-router: 5.2.0(@vue/compiler-sfc@3.5.43)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.4)(vite@8.1.1(@types/node@26.6.2)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.1))(vue@3.5.41(typescript@6.0.3))
+      zod: 4.6.5
+
+  '@ghentcdh/crouton-vue@0.0.1-alpha.71(@ghentcdh/ui@3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.31.3)(@tiptap/starter-kit@3.31.3)(@tiptap/vue-3@3.31.3(@floating-ui/dom@1.8.0)(@tiptap/core@3.31.3(@tiptap/pm@3.31.3))(@tiptap/pm@3.31.3)(vue@3.5.41(typescript@6.0.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.31.3(@tiptap/pm@3.31.3)))(vue-router@5.2.0(@vue/compiler-sfc@3.5.43)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.4)(vite@8.1.1(@types/node@26.6.2)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.1))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3)))(@jsonforms/core@3.8.0)(axios@1.20.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1))(vue-router@5.2.0(@vue/compiler-sfc@3.5.43)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.4)(vite@8.1.1(@types/node@26.6.2)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.1))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3))(zod@4.6.5)':
+    dependencies:
+      '@ghentcdh/ui': 3.0.6(@playwright/test@1.61.1)(@tiptap/pm@3.31.3)(@tiptap/starter-kit@3.31.3)(@tiptap/vue-3@3.31.3(@floating-ui/dom@1.8.0)(@tiptap/core@3.31.3(@tiptap/pm@3.31.3))(@tiptap/pm@3.31.3)(vue@3.5.41(typescript@6.0.3)))(tiptap-markdown@0.9.0(@tiptap/core@3.31.3(@tiptap/pm@3.31.3)))(vue-router@5.2.0(@vue/compiler-sfc@3.5.43)(esbuild@0.28.2)(rolldown@1.1.5)(rollup@4.63.4)(vite@8.1.1(@types/node@26.6.2)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.1))(vue@3.5.41(typescript@6.0.3)))(vue@3.5.41(typescript@6.0.3))
+      '@jsonforms/core': 3.8.0
+      axios: 1.20.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1)
       lodash-es: 4.18.1
       vee-validate: 5.0.0-beta.1(vue@3.5.41(typescript@6.0.3))
       vue: 3.5.41(typescript@6.0.3)
@@ -11861,7 +11842,7 @@ snapshots:
 
   html-encoding-sniffer@6.0.0:
     dependencies:
-      '@exodus/bytes': 1.15.1
+      '@exodus/bytes': 1.15.2
     transitivePeerDependencies:
       - '@noble/hashes'
 
@@ -12017,7 +11998,7 @@ snapshots:
       '@asamuzakjp/dom-selector': 7.1.1
       '@bramus/specificity': 2.4.2
       '@csstools/css-syntax-patches-for-csstree': 1.1.14(css-tree@3.2.1)
-      '@exodus/bytes': 1.15.1
+      '@exodus/bytes': 1.15.2
       css-tree: 3.2.1
       data-urls: 7.0.0
       decimal.js: 10.6.0
@@ -14000,7 +13981,7 @@ snapshots:
 
   whatwg-url@16.0.1:
     dependencies:
-      '@exodus/bytes': 1.15.1
+      '@exodus/bytes': 1.15.2
       tr46: 6.0.0
       webidl-conversions: 8.0.1
     transitivePeerDependencies:
