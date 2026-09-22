@@ -10,6 +10,11 @@ export default defineConfig(() => ({
   cacheDir: '../../node_modules/.vite/annotation-vue',
   resolve: {
     tsconfigPaths: true,
+    alias: {
+      '@ghentcdh/annotation-editor': path.resolve(import.meta.dirname, '../../packages/annotation-editor/src/index.ts'),
+      '@ghentcdh/annotation-preview': path.resolve(import.meta.dirname, '../../packages/annotation-preview/src/index.ts'),
+      '@ghentcdh/annotation-ui': path.resolve(import.meta.dirname, '../../packages/annotation-ui/src/index.ts'),
+    },
   },
   plugins: [
     vue(),

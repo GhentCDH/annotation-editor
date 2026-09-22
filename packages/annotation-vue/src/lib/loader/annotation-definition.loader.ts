@@ -1,7 +1,6 @@
 import {
   AnnotationConfigSchema,
   type AnnotationJsonResource,
-  AnnotationJsonResourceSchema,
   type AnnotationResource,
 } from '@ghentcdh/annotation-core';
 import { parseSchema } from '@ghentcdh/crouton-core';
@@ -10,17 +9,19 @@ type GlobModule = { default: AnnotationJsonResource } | AnnotationJsonResource;
 
 export type GlobModules = Record<string, GlobModule>;
 
-export type DefinitionsFetchFn = (url: string) => Promise<AnnotationJsonResource[]>;
+export type DefinitionsFetchFn = (
+  url: string,
+) => Promise<AnnotationJsonResource[]>;
 
 export const buildAnnotationDefFromJson = (
   resource: AnnotationJsonResource,
 ): AnnotationResource | null => {
   try {
-    const parsed = AnnotationJsonResourceSchema.safeParse(resource);
-    if (!parsed.success) {
-      console.error('Resource cannot be parsed:', parsed.error.message);
-      return null;
-    }
+    // const parsed = AnnotationJsonResourceSchema.safeParse(resource);
+    // if (!parsed.success) {
+    //   console.error('Resource cannot be parsed:', parsed.error.message);
+    //   return null;
+    // }
 
     // Compile columns → table/form/view schemas via crouton.
     // Returns undefined when resource has no columns/views.
@@ -29,7 +30,10 @@ export const buildAnnotationDefFromJson = (
       extensions: { annotation: AnnotationConfigSchema },
     });
 
-    return { ...parsed.data, ...(compiled ?? {}) } as unknown as AnnotationResource;
+    return {
+      // ...parsed.data,
+      ...(compiled ?? {}),
+    } as unknown as AnnotationResource;
   } catch (error) {
     console.error(error);
     return null;
@@ -71,6 +75,9 @@ export const loadAnnotationDefFromResourceUris = async (urls: string[]) => {
     urls.map((a) => {
       return fetch(a)
         .then((r) => r.json())
+        .then((r) => {
+          return r;
+        })
         .then(buildAnnotationDefFromJson);
     }),
   );
