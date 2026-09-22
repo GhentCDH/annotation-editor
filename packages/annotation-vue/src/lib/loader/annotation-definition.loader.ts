@@ -1,6 +1,7 @@
 import {
   AnnotationConfigSchema,
   type AnnotationJsonResource,
+  AnnotationJsonResourceSchema,
   type AnnotationResource,
 } from '@ghentcdh/annotation-core';
 import { parseSchema } from '@ghentcdh/crouton-core';
@@ -17,11 +18,11 @@ export const buildAnnotationDefFromJson = (
   resource: AnnotationJsonResource,
 ): AnnotationResource | null => {
   try {
-    // const parsed = AnnotationJsonResourceSchema.safeParse(resource);
-    // if (!parsed.success) {
-    //   console.error('Resource cannot be parsed:', parsed.error.message);
-    //   return null;
-    // }
+    const parsed = AnnotationJsonResourceSchema.safeParse(resource);
+    if (!parsed.success) {
+      console.error('Resource cannot be parsed:', parsed.error.message);
+      return null;
+    }
 
     // Compile columns → table/form/view schemas via crouton.
     // Returns undefined when resource has no columns/views.
