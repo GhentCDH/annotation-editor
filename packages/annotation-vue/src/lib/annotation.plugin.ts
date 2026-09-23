@@ -6,7 +6,7 @@ import { type AnnotationDefinitionService } from './service/annotation-definitio
 import {
   ANNOTATION_DEFINITIONS_KEY,
   type AnnotationDefinitionsState,
-  createAnnotationDefinitionsState,
+  createAndLoadDefinitionsState,
   type ProvideAnnotationDefinitionsOptions,
 } from './composables/useAnnotationDefinitions';
 
@@ -33,25 +33,11 @@ export const AnnotationPlugin: Plugin<[AnnotationPluginOptions]> = {
     app: App,
     options: AnnotationPluginOptions,
   ): AnnotationDefinitionsState {
-    const state = createAnnotationDefinitionsState(options);
-
-    // configureApi(options.api);
-    // TODO check if we need to set it in crouton?
-
-    if (options.resourceFolder) {
-      state.loadFromGlob(options.resourceFolder);
-    }
-
-    if (options.definitionsUrl) {
-      state.loadFromUrl(options.definitionsUrl);
-    }
-
-    if (options.definitionsUrls) {
-      state.loadFromUrls(options.definitionsUrls);
-    }
+    const state = createAndLoadDefinitionsState(options);
 
     app.provide(ANNOTATION_DEFINITIONS_KEY, state);
-
     return state;
+
+    // return state;
   },
 };

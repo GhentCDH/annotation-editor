@@ -41,6 +41,26 @@ export const buildAnnotationDefFromJson = (
   }
 };
 
+export const buildAnnotationDefFromResourceJson = (
+  resource: AnnotationJsonResource,
+): AnnotationResource | null => {
+  try {
+    const normalized = {
+      ...resource,
+      annotation: { color: '#c1d344', ...resource.annotation, isRoot: true },
+    };
+    const compiled = parseSchema(normalized, {
+      baseUrl: '',
+      extensions: { annotation: AnnotationConfigSchema },
+    });
+
+    return { ...(compiled ?? {}) } as unknown as AnnotationResource;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
 const extractConfig = (mod: GlobModule): AnnotationJsonResource => {
   if ('default' in mod) return mod.default;
   return mod;
@@ -79,7 +99,7 @@ export const loadAnnotationDefFromResourceUris = async (urls: string[]) => {
         .then((r) => {
           return r;
         })
-        .then(buildAnnotationDefFromJson);
+        .then(buildAnnotationDefFromResourceJson);
     }),
   );
 };

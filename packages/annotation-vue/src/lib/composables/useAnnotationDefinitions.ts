@@ -225,13 +225,9 @@ export const createAnnotationDefinitionsState = (
   return state;
 };
 
-/**
- * Called once at root — creates state, provides to descendants.
- * If `resourceFolder` given, loads definitions immediately.
- */
-export const provideAnnotationDefinitions = (
+export const createAndLoadDefinitionsState = (
   options: ProvideAnnotationDefinitionsOptions,
-): AnnotationDefinitionsState => {
+) => {
   const state = createAnnotationDefinitionsState(options);
 
   if (options.resourceFolder) {
@@ -248,6 +244,16 @@ export const provideAnnotationDefinitions = (
   if (options.resourceUrls) {
     state.loadFromResourceUris(options.resourceUrls);
   }
+  return state;
+};
+/**
+ * Called once at root — creates state, provides to descendants.
+ * If `resourceFolder` given, loads definitions immediately.
+ */
+export const provideAnnotationDefinitions = (
+  options: ProvideAnnotationDefinitionsOptions,
+): AnnotationDefinitionsState => {
+  const state = createAndLoadDefinitionsState(options);
 
   provide(ANNOTATION_DEFINITIONS_KEY, state);
   return state;

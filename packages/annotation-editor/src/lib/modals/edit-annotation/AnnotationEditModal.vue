@@ -14,21 +14,17 @@
         :data="metadata"
         :views="annotationDef.schemas"
         :format-before-save="formatBeforeSave"
-        form-max-width="w-max max-w-lg"
+        form-max-width="w-max max-w-lg form-scroll min-w-[1/2]"
         :save-id="annotation?.id"
         @save="save"
         @on-save-success="save"
         @cancel="cancel"
       >
         <template #content-before>
-          <div class="flex-grow">
-            <Collapse :title="label.selectLabel">
+          <div class="flex-grow before-scroll">
+            <Collapse :title="label.selectLabel" :scrollable="true">
               <div :id="editId" />
-              <Btn
-                :outline="true"
-                class="mt-2"
-                @click="selectAll"
-              >
+              <Btn :outline="true" class="mt-2" @click="selectAll">
                 Select all text
               </Btn>
             </Collapse>
@@ -168,3 +164,17 @@ onUnmounted(() => {
   annotatedText?.destroy();
 });
 </script>
+
+<style scoped>
+/* collapse section: capped height, scrolls independently */
+.before-scroll {
+  max-height: calc(90vh - 12rem);
+  overflow-y: auto;
+}
+
+/* form section: capped height, scrolls independently */
+:deep(.form-scroll) {
+  max-height: calc(90vh - 12rem);
+  overflow-y: auto;
+}
+</style>
