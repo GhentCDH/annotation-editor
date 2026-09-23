@@ -14,6 +14,6 @@
     "@ghentcdh/w3c-utils": "^1.0.11",
     "zod": "^4.3.6",
     "@ghentcdh/crouton-core": "0.0.1-alpha.71",
-    "@ghentcdh/crouton-vue": "0.0.1-alpha.71"
+    "@ghentcdh/crouton-vue": "0.0.1-alpha.74"
   }
 }
