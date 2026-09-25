@@ -14,7 +14,6 @@ import {
   createModalConfig,
   EditorAnnotation,
   type SourceModel,
-  W3cTransformAnnotationAdapter,
 } from '@ghentcdh/annotation-ui';
 import {
   type AnnotationEvents,
@@ -48,11 +47,10 @@ export const useProvideEditorState = (
   emits: AnnotationEditorEmitsFn,
   containerRef: TemplateRef<HTMLElement>,
 ) => {
-  let transformer =
-    props.annotationTransformer ?? new W3cTransformAnnotationAdapter();
-
   const parsedAnnotations = computed(() => {
-    return props.annotations?.map((a) => transformer.parse(a)) ?? [];
+    return (
+      props.annotations?.map((a) => props.annotationTransformer.parse(a)) ?? []
+    );
   });
 
   const config = shallowReactive<EditorConfig>({
@@ -60,7 +58,7 @@ export const useProvideEditorState = (
     annotation: createAnnotationConfiguration(
       props.annotationDefinitions,
       props.textAdapter,
-      transformer,
+      props.annotationTransformer,
     ),
   });
 
@@ -91,12 +89,10 @@ export const useProvideEditorState = (
       () => props.annotationTransformer,
     ],
     () => {
-      transformer =
-        props.annotationTransformer ?? new W3cTransformAnnotationAdapter();
       config.annotation = createAnnotationConfiguration(
         props.annotationDefinitions,
         props.textAdapter,
-        transformer,
+        props.annotationTransformer,
       );
     },
   );

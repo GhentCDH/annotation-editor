@@ -8,32 +8,22 @@ import {
   type AnnotationEditEmits,
   type AnnotationEditModal,
 } from './AnnotationEditModal.properties';
+import { EditorAnnotation } from '@ghentcdh/annotation-ui';
 
 export const UseAnnotationEdit = (
   props: AnnotationEditModal,
   emits: EmitFn<typeof AnnotationEditEmits>,
 ) => {
   const metadata = props.annotation.metadata ?? {};
-  const maxRange = {
-    start: 0,
-    end: props.source!.content.text.length + 1,
-  };
-  const parent = props.annotation.parent;
-  if (parent) {
-    const selector = parent.getSelector(props.source.uri);
-    if (selector) {
-      maxRange.start = selector.start;
-      maxRange.end = selector.end;
-    }
-  }
-  // const annotationDef = config.annotation.getDefinition(props.type);
 
   const resource = resourceApi(props.annotation.definition, {});
 
   let selectors: Selector[] | null = null;
   const message = ref<FormMessageProps>({ status: 'idle' });
 
-  const editedAnnotation = ref<W3CAnnotation | null>(props.annotation ?? null);
+  const editedAnnotation = ref<EditorAnnotation | null>(
+    props.annotation ?? null,
+  );
 
   if (props.annotation) {
     // TODO init it
@@ -41,7 +31,7 @@ export const UseAnnotationEdit = (
 
   let rawData = {};
 
-  const annotationSelector = ref<W3CAnnotation | null>(null);
+  const annotationSelector = ref<EditorAnnotation | null>(null);
 
   const cancel = () => {
     // utils.cancel();
@@ -128,5 +118,6 @@ export const UseAnnotationEdit = (
     editedAnnotation,
     onChangeValue,
     message,
+    selectFull: () => selectFull(props.source, props.annotation),
   };
 };

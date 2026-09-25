@@ -7,6 +7,9 @@ export const Selector = z.object({
   uri: z.string(),
   start: z.number(),
   end: z.number(),
+  exact: z.string().optional(),
+  prefix: z.string().optional(),
+  suffix: z.string().optional(),
 });
 
 // TODO need to implement

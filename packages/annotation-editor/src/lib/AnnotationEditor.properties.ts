@@ -1,16 +1,14 @@
 import type { EmitFn, ExtractPublicPropTypes, PropType } from 'vue';
 
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-import {
-  type AnnotationDefConfig,
-  type Selector,
-} from '@ghentcdh/annotation-core';
+import { type AnnotationDefConfig } from '@ghentcdh/annotation-core';
 import { type TextAdapter } from '@ghentcdh/annotated-text';
 import {
   AnnotationDefinition,
   GridLayout,
   SourceModel,
   TransformAnnotationAdapter,
+  W3cTransformAnnotationAdapter,
 } from '@ghentcdh/annotation-ui';
 
 export const AnnotationEditorProperties = {
@@ -26,6 +24,7 @@ export const AnnotationEditorProperties = {
   annotationTransformer: {
     type: Object as PropType<TransformAnnotationAdapter<W3CAnnotation>>,
     required: false as const,
+    default: new W3cTransformAnnotationAdapter(),
   },
   sources: { type: Array as PropType<SourceModel[]>, required: true as const },
   annotations: {
@@ -47,12 +46,6 @@ export const AnnotationEditorProperties = {
     type: String,
     required: false,
     default: undefined,
-  },
-  mapBeforeSave: {
-    type: Function as PropType<
-      (annotation: W3CAnnotation, data: any, selector: Selector) => any
-    >,
-    default: (annotation: W3CAnnotation) => annotation,
   },
 };
 

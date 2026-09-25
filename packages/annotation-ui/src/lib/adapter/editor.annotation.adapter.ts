@@ -15,6 +15,62 @@ import { Selector } from './editor.annotation';
 type SourceModel = any;
 type Params = AnnotationAdapterParams & { sourceModel: SourceModel };
 
+type StartEnd = { start: number; end: number };
+const updateSelector = (
+  sourceUri: string,
+  startEnd: StartEnd,
+  text: {
+    fullFlatText: string;
+    startOffset: number;
+  },
+  originalAnnotation: EditorAnnotation,
+) => {
+  const textSelection = !text.fullFlatText
+    ? selectText(
+        text.fullFlatText,
+        startEnd.start,
+        startEnd.end,
+        text.startOffset,
+      )
+    : {};
+
+  const selector = Selector.parse({
+    ...startEnd,
+    uri: sourceUri,
+    ...textSelection,
+  });
+
+  let selectors = originalAnnotation.selectors.filter(
+    (s) => s.uri !== sourceUri,
+  );
+  selectors.push(selector);
+
+  return selectors;
+};
+
+export const updateAnnotation = (
+  sourceUri: string,
+  startEnd: StartEnd,
+  text: {
+    fullFlatText: string;
+    startOffset: number;
+  },
+  originalAnnotation: EditorAnnotation,
+) => {
+  return editorAnnotationSchema.parse({
+    ...originalAnnotation,
+    selectors: updateSelector(
+      sourceUri,
+      startEnd,
+      {
+        fullFlatText: text.fullFlatText,
+        startOffset: text.startOffset,
+      },
+      originalAnnotation,
+    ),
+  });
+};
+
 export class AnnotationEditorAnnotationAdapter extends AnnotationAdapter<
   EditorAnnotation,
   Params
@@ -24,7 +80,7 @@ export class AnnotationEditorAnnotationAdapter extends AnnotationAdapter<
   }
 
   name = 'AnnotationEditorAnnotationAdapter';
-  private sourceUri?: string;
+  private sourceUri: string;
   override setParams(params: Params) {
     this.sourceUri = params.sourceModel?.uri ?? this.sourceUri;
     super.setParams(params);
@@ -61,29 +117,17 @@ export class AnnotationEditorAnnotationAdapter extends AnnotationAdapter<
       throw new Error('annotation id is required');
     }
 
-    const textSelection = selectText(
-      this.textAdapter.fullFlatText,
-      annotation.start,
-      annotation.end,
-      this.startOffset,
+    const editorAnnotation = updateAnnotation(
+      this.sourceUri,
+      annotation,
+      {
+        fullFlatText: this.textAdapter.fullFlatText,
+        startOffset: this.startOffset,
+      },
+      originalAnnotation,
     );
 
-    const selector = Selector.parse({
-      ...annotation,
-      uri: this.sourceUri,
-      ...textSelection,
-    });
-
-    let selectors = originalAnnotation.selectors.filter(
-      (s) => s.uri !== this.sourceUri,
-    );
-    selectors.push(selector);
-
-    const editorAnnotation = editorAnnotationSchema.parse({
-      ...originalAnnotation,
-      selectors,
-    });
-
+    this.addAnnotation(annotation.id, editorAnnotation, annotation);
     return editorAnnotation;
   }
 }

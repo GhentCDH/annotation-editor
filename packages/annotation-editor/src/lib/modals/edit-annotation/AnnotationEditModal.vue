@@ -42,15 +42,15 @@ import { CroutonForm, FormMessage } from '@ghentcdh/crouton-vue';
 import { Btn, Collapse, Modal } from '@ghentcdh/ui';
 import { computed, onMounted, onUnmounted } from 'vue';
 import { type AnnotatedText } from '@ghentcdh/annotated-text';
-import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import {
   AnnotationEditEmits,
   AnnotationEditModalProperties,
 } from './AnnotationEditModal.properties';
 import { UseAnnotationEdit } from './UseAnnotationEdit';
 import { useEditorState } from '../../composables/useEditorState';
+import { EditorAnnotation, updateAnnotation } from '@ghentcdh/annotation-ui';
 
-let annotatedText: AnnotatedText<W3CAnnotation>;
+let annotatedText: AnnotatedText<EditorAnnotation>;
 const props = defineProps(AnnotationEditModalProperties);
 
 const { config } = useEditorState();
@@ -77,37 +77,49 @@ const formatBeforeSave = (formData: any) => {
   return onChangeValue({ metadata: formData });
 };
 
-const selectAll = () => {
-  const source = props.source!;
-  const selec = textPositionSelector?.value ?? {
+const selectFull = () => {
+  const { source, annotation } = props;
+  const maxRange = {
     start: 0,
     end: source!.content.text.length + 1,
   };
+  const parent = annotation.parent;
+  if (parent) {
+    const selector = parent.getSelector(source.uri);
+    if (selector) {
+      maxRange.start = selector.start;
+      maxRange.end = selector.end;
+    }
+  }
 
-  const selector = {
-    ...selec,
-    source: source.uri,
+  const original = {
+    id: `NEW_ANNOTATION`,
+    metadata,
+    selectors: [],
+    ...annotation,
   };
 
-  // annotationSelector.value = utils.createAnnotationFromSelector(
-  //   annotationDef,
-  //   null,
-  //   selector,
-  // );
+  return updateAnnotation(
+    source.uri,
+    maxRange,
+    {
+      fullFlatText: '', //TODO implement it
+      startOffset: 0, // TODO implement it
+      // fullFlatText: textAdapter.fullFlatText,
+      // startOffset: startOffset,
+    },
+    original,
+  );
+};
+
+const selectAll = () => {
+  const annotation = selectFull();
 
   annotatedText
     .setAnnotationAdapterParams({ create: false, edit: true })
-    .setAnnotations([annotationSelector.value]);
+    .setAnnotations([annotation]);
+  annotationSelector.value = annotation;
 };
-const textPositionSelector = computed(() => {
-  if (!props.parentAnnotation || !props.source) {
-    return null;
-  }
-  return config.annotation.annotationEditorAdapter.getTextPosition(
-    props.parentAnnotation,
-    props.source,
-  );
-});
 
 onMounted(() => {
   if (!props.source) return;
@@ -146,11 +158,12 @@ onMounted(() => {
       annotatedText.setAnnotations([annotationSelector.value]);
     });
 
-  // if (textPositionSelector.value) {
-  //   annotatedText.setTextAdapterParams({
-  //     limit: { ...textPositionSelector.value, ignoreLines: true },
-  //   });
-  // }
+  const selector = props.annotation.parent?.getSelector(props.source.uri);
+  if (selector) {
+    annotatedText.setTextAdapterParams({
+      limit: { ...selector, ignoreLines: true },
+    });
+  }
 });
 
 onUnmounted(() => {
