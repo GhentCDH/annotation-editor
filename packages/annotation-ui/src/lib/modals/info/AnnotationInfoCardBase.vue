@@ -17,10 +17,7 @@
         :data="metadata"
         :definition="annotationDef"
       />
-      <slot
-        name="links"
-        :annotation="annotation!"
-      />
+      <slot name="links" :annotation="annotation!" />
       <slot name="actions" />
     </div>
   </div>
@@ -36,20 +33,15 @@ import {
 const properties = defineProps(AnnotationInfoCardBaseProperties);
 const emit = defineEmits(AnnotationInfoCardBaseEmits);
 
-const purpose = computed(() => {
-  if (!properties.annotation) return 'default';
-  return properties.utils.getAnnotationType(properties.annotation);
-});
 const annotationDef = computed(
-  () => properties.config.getDefinition(purpose.value) as any,
+  () =>
+    properties.config.getDefinitionForAnnotation(properties.annotation) as any,
 );
 
-const purposeLabel = computed(
-  () => annotationDef.value?.label || purpose.value,
-);
+const purposeLabel = computed(() => annotationDef.value?.label);
 
 const metadata = computed(() => {
-  return properties.utils.getMetadata(properties.annotation) ?? {};
+  return properties.config.getMetadata(properties.annotation) ?? {};
 });
 
 const cardRef = ref<HTMLElement>();

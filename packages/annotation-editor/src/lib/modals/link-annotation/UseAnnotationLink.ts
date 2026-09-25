@@ -2,14 +2,17 @@ import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { type EmitFn, ref } from 'vue';
 import { NotificationService } from '@ghentcdh/ui';
 import { type FormMessageProps, resourceApi } from '@ghentcdh/crouton-vue';
-import { type LinkAnnotationProps, type LinkEmits } from './link-annotation.properties';
+import {
+  type LinkAnnotationProps,
+  type LinkEmits,
+} from './link-annotation.properties';
 import { useEditorState } from '../../composables/useEditorState';
 
 export const useAnnotationLink = (
   props: LinkAnnotationProps,
   emits: EmitFn<typeof LinkEmits>,
 ) => {
-  const { utils, config } = useEditorState();
+  const { config } = useEditorState();
 
   const metadata = {};
   const annotationDef = config.annotation.getDefinition(props.type);
@@ -21,7 +24,6 @@ export const useAnnotationLink = (
   let rawData = {};
 
   const cancel = () => {
-    utils.cancel();
     emits('close', null);
   };
 
@@ -38,7 +40,7 @@ export const useAnnotationLink = (
   const save = () => {
     message.value = { status: 'saving' };
 
-    const result = utils.createLinkAnnotation(
+    const result = config.annotation.annotationAdapter.createLinkAnnotation(
       props.sourceAnnotation!,
       props.targetAnnotation,
       annotationDef!,

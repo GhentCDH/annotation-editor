@@ -1,27 +1,26 @@
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { createHighlightStyle, Debugger } from '@ghentcdh/annotated-text';
-import { type AnnotationUtils } from './annotation-utils';
 
 export const defaultRender =
-  (utils: AnnotationUtils) =>
+  (adapter: AnnotationEditorAdapter<any>) =>
   (annotation: W3CAnnotation): string | null => {
-    const style = utils?.getAnnotationStyle(annotation);
-    return style?.target ?? 'default';
+    const style = adapter?.getDefinition(annotation);
+    return style?.annotation.target ?? 'default';
   };
 
 export const styleFn =
-  (listStyles: string[], utils: AnnotationUtils) =>
+  (listStyles: string[], adapter: AnnotationEditorAdapter) =>
   (annotation: W3CAnnotation) => {
-    const style = utils?.getAnnotationStyle(annotation);
-    if (!style) return 'default';
+    const definition = adapter?.getDefinition(annotation);
+    if (!definition) return 'default';
 
-    const styleId = style?.id ?? 'default';
+    const styleId = definition?.id ?? 'default';
 
     if (!listStyles.includes(styleId)) {
       Debugger.debug('styleFn', `No style found for ${styleId}`);
 
-      if (style.color) {
-        return { default: createHighlightStyle(style.color) };
+      if (definition.color) {
+        return { default: createHighlightStyle(definition.color) };
       }
 
       return 'default';

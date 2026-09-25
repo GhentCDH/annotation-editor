@@ -1,21 +1,12 @@
 <template>
-  <div
-    class="relative"
-    @mouseenter="showFullText"
-    @mouseleave="hideFullText"
-  >
+  <div class="relative" @mouseenter="showFullText" @mouseleave="hideFullText">
     <component
       :is="showSource ? Collapse : 'div'"
       v-bind="showSource ? { title: textData?.text.content.label ?? '-' } : {}"
     >
       <div class="flex flex-row items-center gap-2">
-        <div
-          :id="annotationTextId"
-          class="flex-1"
-        />
-        <div v-if="showHover">
-          ...
-        </div>
+        <div :id="annotationTextId" class="flex-1" />
+        <div v-if="showHover">...</div>
       </div>
     </component>
     <div
@@ -46,12 +37,14 @@ const showHover = ref(false);
 let annotatedText: AnnotatedText<W3CAnnotation>;
 let annotatedTextFull: AnnotatedText<W3CAnnotation>;
 
-const { config, utils, sources } = useEditorState();
+const { config, sources } = useEditorState();
 
 const textData = computed(() => {
-  const { textPositionSelector, sourceUri } = utils.getSourceUri(
+  const annotationEditorAdapter = config.annotation.annotationEditorAdapter;
+  const sourceUri = annotationEditorAdapter.getSourceUri(properties.annotation);
+  const textPositionSelector = annotationEditorAdapter.getTextPosition(
     properties.annotation,
-  )!;
+  );
 
   const source = sources.value.find((source) => source.uri === sourceUri);
   if (!source) {
@@ -81,7 +74,7 @@ onMounted(() => {
 
   annotatedText = config.annotation
     .createAnnotatedText(annotationTextId, text)
-    .setTextAdapter({
+    .setTextAdapterParams({
       limit: {
         start: textPositionSelector.start,
         end: end,
@@ -104,7 +97,7 @@ watch(
     showHover.value = textPositionSelector.end > end;
 
     annotatedText
-      .setTextAdapter({
+      .setTextAdapterParams({
         limit: {
           start: textPositionSelector.start,
           end: end,
@@ -130,7 +123,7 @@ const renderFullText = () => {
 
   annotatedTextFull = config.annotation
     .createAnnotatedText(annotationTextFullId, text)
-    .setTextAdapter({
+    .setTextAdapterParams({
       limit: {
         start: textPositionSelector.start,
         end: textPositionSelector.end,

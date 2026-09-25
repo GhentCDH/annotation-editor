@@ -9,10 +9,10 @@
   >
     <template #content>
       <CroutonForm
-        v-if="annotationDef"
+        v-if="definition"
         layout="rows"
         :data="metadata"
-        :views="annotationDef.schemas"
+        :views="definition.schemas"
         :format-before-save="formatBeforeSave"
         form-max-width="w-max max-w-lg form-scroll min-w-[1/2]"
         :save-id="annotation?.id"
@@ -22,16 +22,9 @@
       >
         <template #content-before>
           <div class="flex-grow before-scroll">
-            <Collapse
-              :title="label.selectLabel"
-              :scrollable="true"
-            >
+            <Collapse :title="label.selectLabel" :scrollable="true">
               <div :id="editId" />
-              <Btn
-                :outline="true"
-                class="mt-2"
-                @click="selectAll"
-              >
+              <Btn :outline="true" class="mt-2" @click="selectAll">
                 Select all text
               </Btn>
             </Collapse>
@@ -60,24 +53,18 @@ import { useEditorState } from '../../composables/useEditorState';
 let annotatedText: AnnotatedText<W3CAnnotation>;
 const props = defineProps(AnnotationEditModalProperties);
 
-const { config, utils } = useEditorState();
+const { config } = useEditorState();
 
 const emits = defineEmits(AnnotationEditEmits);
+console.table(props);
 
-const {
-  save,
-  cancel,
-  metadata,
-  annotationSelector,
-  annotationDef,
-  message,
-  onChangeValue,
-} = UseAnnotationEdit(props, emits);
+const { save, cancel, metadata, annotationSelector, message, onChangeValue } =
+  UseAnnotationEdit(props, emits);
 
 const editId = `edit-select-annotation-${Date.now()}--`;
 
 const label = computed(() => {
-  const _label = annotationDef?.label ?? props.type;
+  const _label = props.definition.label;
 
   return {
     title: props.annotation ? `Edit ${_label}` : `Create ${_label}`,
@@ -102,11 +89,11 @@ const selectAll = () => {
     source: source.uri,
   };
 
-  annotationSelector.value = utils.createAnnotationFromSelector(
-    annotationDef,
-    null,
-    selector,
-  );
+  // annotationSelector.value = utils.createAnnotationFromSelector(
+  //   annotationDef,
+  //   null,
+  //   selector,
+  // );
 
   annotatedText
     .setAnnotationAdapterParams({ create: false, edit: true })
@@ -116,10 +103,9 @@ const textPositionSelector = computed(() => {
   if (!props.parentAnnotation || !props.source) {
     return null;
   }
-
-  return utils.getTextPositionSelector(
+  return config.annotation.annotationEditorAdapter.getTextPosition(
     props.parentAnnotation,
-    props.source.uri,
+    props.source,
   );
 });
 
@@ -129,11 +115,11 @@ onMounted(() => {
   const annotations = props.annotation ? [props.annotation] : [];
 
   if (props.annotation) {
-    annotationSelector.value = utils.createAnnotationFromSelector(
-      annotationDef,
-      props.annotation,
-      null,
-    );
+    // annotationSelector.value = utils.createAnnotationFromSelector(
+    //   annotationDef,
+    //   props.annotation,
+    //   null,
+    // );
   }
   annotatedText = config.annotation
     .createAnnotatedText(editId, props.source)
@@ -160,11 +146,11 @@ onMounted(() => {
       annotatedText.setAnnotations([annotationSelector.value]);
     });
 
-  if (textPositionSelector.value) {
-    annotatedText.setTextAdapterParams({
-      limit: { ...textPositionSelector.value, ignoreLines: true },
-    });
-  }
+  // if (textPositionSelector.value) {
+  //   annotatedText.setTextAdapterParams({
+  //     limit: { ...textPositionSelector.value, ignoreLines: true },
+  //   });
+  // }
 });
 
 onUnmounted(() => {

@@ -1,3 +1,5 @@
+export { AnnotationEditorAdapter } from '@ghentcdh/annotation-ui';
+
 export { AnnotationDefinitionService } from './lib/service/annotation-definition.service';
 export {
   type GlobModules,

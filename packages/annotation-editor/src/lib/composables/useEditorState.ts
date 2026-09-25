@@ -10,11 +10,13 @@ import {
   watch,
 } from 'vue';
 import {
+  AnnotationEditorAdapter,
   type AnnotationUtils,
   annotationUtils,
   createAnnotationConfiguration,
   createModalConfig,
   type SourceModel,
+  W3cAnnotationEditorAdapter,
 } from '@ghentcdh/annotation-ui';
 import {
   type AnnotationEvents,
@@ -26,7 +28,8 @@ import {
   type AnnotationEditorProps,
 } from '../AnnotationEditor.properties';
 import { annotationModalDefaults } from '../modals/AnnotationModal.defaults';
-import { selectAnnotationById } from '../modals/open-modal';
+import { selectAnnotationById, SelectByIdContext } from '../modals/open-modal';
+import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 
 export type EditorState = {
   sources: ComputedRef<Readonly<SourceModel[]>>;
@@ -38,6 +41,7 @@ export type EditorState = {
     callback?: (response: any) => void,
   ) => void;
   utils: AnnotationUtils;
+  mapBeforeSave: (annotation: W3CAnnotation, metadata: any, selection) => any;
 };
 
 const EDITOR_KEY: InjectionKey<EditorState> = Symbol('editor');
@@ -49,20 +53,27 @@ export const useProvideEditorState = (
   containerRef: TemplateRef<HTMLElement>,
 ) => {
   const utils = annotationUtils(props.configuration);
+  const annotationEditorAdapter: AnnotationEditorAdapter<any> =
+    props.annotationAdapter ?? new W3cAnnotationEditorAdapter();
 
   const config = shallowReactive<EditorConfig>({
     modal: createModalConfig(annotationModalDefaults),
     annotation: createAnnotationConfiguration(
       props.annotationDefinitions,
-      utils,
       props.textAdapter,
-      props.annotationAdapter,
+      annotationEditorAdapter,
     ),
   });
 
-  utils.setAnnotations(
-    props.annotations ?? [],
-    config.annotation.allowedChildrenPerType,
+  watch(
+    () => props.annotations,
+    () => {
+      utils.setAnnotations(
+        props.annotations ?? [],
+        config.annotation.allowedChildrenPerType,
+      );
+    },
+    { immediate: true },
   );
 
   const sources = computed(() => props.sources ?? []);
@@ -94,19 +105,8 @@ export const useProvideEditorState = (
     () => {
       config.annotation = createAnnotationConfiguration(
         props.annotationDefinitions,
-        utils,
         props.textAdapter,
-        props.annotationAdapter,
-      );
-    },
-  );
-
-  watch(
-    () => props.annotations,
-    () => {
-      utils.setAnnotations(
-        props.annotations ?? [],
-        config.annotation.allowedChildrenPerType,
+        annotationEditorAdapter,
       );
     },
   );
@@ -117,15 +117,15 @@ export const useProvideEditorState = (
     );
     if (!annotation) return null;
 
-    const sourceUri = utils.getSourceUri(annotation)?.sourceUri;
+    const sourceUri = annotationEditorAdapter.getSourceUri(annotation);
     const source = (props.sources ?? []).find((s) => s.uri === sourceUri);
     return { annotation, source };
   };
 
-  const selectByIdCtx = {
+  const selectByIdCtx: SelectByIdContext = {
     config,
     editorState,
-    utils,
+    annotationEditorAdapter,
     emits,
     findAnnotationData,
   };
@@ -157,10 +157,11 @@ export const useProvideEditorState = (
     sendAnnotationEvent: sendAnnotationEvent(
       config,
       editorState,
-      utils,
+      annotationEditorAdapter,
       emits,
       containerRef,
     ),
+    mapBeforeSave: props.mapBeforeSave,
   });
 };
 

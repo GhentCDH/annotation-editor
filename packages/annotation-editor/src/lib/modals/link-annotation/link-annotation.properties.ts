@@ -1,5 +1,6 @@
 import type { ExtractPublicPropTypes, PropType } from 'vue';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
+import { AnnotationDefinition } from '@ghentcdh/annotation-ui';
 
 export const LinkAnnotationProperties = {
   sourceAnnotation: {
@@ -10,7 +11,10 @@ export const LinkAnnotationProperties = {
     type: Object as PropType<W3CAnnotation>,
     required: true as const,
   },
-  type: { type: String, required: true as const },
+  definition: {
+    type: Object as PropType<AnnotationDefinition>,
+    required: false,
+  },
 };
 
 export type LinkAnnotationProps = ExtractPublicPropTypes<

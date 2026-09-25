@@ -14,14 +14,15 @@ export const UseAnnotationEdit = (
   props: AnnotationEditModal,
   emits: EmitFn<typeof AnnotationEditEmits>,
 ) => {
-  const { utils, config } = useEditorState();
+  const { config, mapBeforeSave } = useEditorState();
+  const { annotationEditorAdapter } = config.annotation;
 
   const metadata = props.annotation
-    ? (utils.getMetadata(props.annotation) ?? {})
+    ? (annotationEditorAdapter.getMetadata(props.annotation) ?? {})
     : {};
-  const annotationDef = config.annotation.getDefinition(props.type);
+  // const annotationDef = config.annotation.getDefinition(props.type);
 
-  const resource = annotationDef ? resourceApi(annotationDef, {}) : null;
+  const resource = resourceApi(props.definition, {});
 
   let selectors: Selector[] | null = null;
   const message = ref<FormMessageProps>({ status: 'idle' });
@@ -37,25 +38,28 @@ export const UseAnnotationEdit = (
   const annotationSelector = ref<W3CAnnotation | null>(null);
 
   const cancel = () => {
-    utils.cancel();
+    // utils.cancel();
     emits('close', null);
   };
 
   const saveToBackend = async () => {
     const originalAnnotation = props.annotation;
     // check if resource can handle backend requests
-    if (!originalAnnotation && !annotationDef.operations.create) return;
-    if (originalAnnotation && !annotationDef.operations.update) return;
+    if (!originalAnnotation && !props.definition.operations.create) return;
+    if (originalAnnotation && !props.definition.operations.update) return;
 
+    const dataToSave = mapBeforeSave(
+      editedAnnotation.value,
+      rawData,
+      selectors[0],
+    );
     if (originalAnnotation) {
-      return resource
-        .save(originalAnnotation.id, editedAnnotation.value)
-        .then(() => {
-          message.value = { status: 'saved' };
-          NotificationService.success('Annotation saved successfully.');
-        });
+      return resource.save(originalAnnotation.id, dataToSave).then(() => {
+        message.value = { status: 'saved' };
+        NotificationService.success('Annotation saved successfully.');
+      });
     } else {
-      return resource.create(editedAnnotation.value).then(() => {
+      return resource.create(dataToSave).then(() => {
         message.value = { status: 'saved' };
         NotificationService.success('Annotation saved successfully.');
       });
@@ -102,13 +106,13 @@ export const UseAnnotationEdit = (
       rawData = _metadata;
     }
 
-    if (selectors)
-      editedAnnotation.value = utils.createAnnotation(
-        props.annotation,
-        annotationDef,
-        metadata,
-        selectors,
-      );
+    // if (selectors)
+    //   editedAnnotation.value = utils.createAnnotation(
+    //     props.annotation,
+    //     annotationDef,
+    //     metadata,
+    //     selectors,
+    //   );
 
     return editedAnnotation.value;
   };
@@ -118,7 +122,6 @@ export const UseAnnotationEdit = (
     cancel,
     rawData,
     metadata,
-    annotationDef,
     annotationSelector,
     editedAnnotation,
     onChangeValue,

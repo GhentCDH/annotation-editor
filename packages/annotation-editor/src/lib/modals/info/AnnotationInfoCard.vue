@@ -3,7 +3,6 @@
     ref="baseRef"
     v-bind="$props"
     :config="config.annotation"
-    :utils="utils"
     :disable-close="editorState.disableEdits"
     @close="close"
   >
@@ -36,15 +35,12 @@ import { type NavbarAction } from '../../components/navbar.properties';
 const properties = defineProps(AnnotationInfoCardProperties);
 
 const baseRef = ref<InstanceType<typeof AnnotationInfoCardBase>>();
-const { config, editorState, sendAnnotationEvent, utils } = useEditorState();
-
-const purpose = computed(() => {
-  if (!properties.annotation) return 'default';
-  return utils.getAnnotationType(properties.annotation);
-});
+const { config, editorState, sendAnnotationEvent } = useEditorState();
 
 const annotationDef = computed(() =>
-  config.annotation.getDefinition(purpose.value),
+  config.annotation.annotationEditorAdapter.getDefinition(
+    properties.annotation,
+  ),
 );
 
 const close = () => {

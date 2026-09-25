@@ -54,7 +54,6 @@ export const useProvidePreviewState = (
     modal: createModalConfig(previewModalDefaults),
     annotation: createAnnotationConfiguration(
       props.annotationDefinitions,
-      utils,
       props.textAdapter,
       props.annotationAdapter,
     ),
@@ -81,7 +80,6 @@ export const useProvidePreviewState = (
     () => {
       config.annotation = createAnnotationConfiguration(
         props.annotationDefinitions,
-        utils,
         props.textAdapter,
         props.annotationAdapter,
       );

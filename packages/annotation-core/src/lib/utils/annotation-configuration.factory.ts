@@ -1,21 +1,19 @@
 import {
-  type AnnotationAdapter,
   createAnnotatedText,
   createHighlightStyle,
   type CustomAnnotationStyle,
   PlainTextAdapter,
   type TextAdapter,
-  W3CAnnotationAdapter,
   WordSnapper,
 } from '@ghentcdh/annotated-text';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { defaultRender, styleFn } from './annotation-render.style';
-import { type AnnotationUtils } from './annotation-utils';
 import {
-  type AllowedChildrenPerType,
+  AllowedChildrenPerType,
+  AnnotationEditorAdapter,
   type UIAnnotationConfiguration,
   type UIAnnotationDefinition,
-} from '../types/ui-annotation-definition.type';
+} from '@ghentcdh/annotation-ui';
 import { type SourceModel } from '../types/source.model';
 
 const groupById = <KEY extends keyof UIAnnotationDefinition>(
@@ -39,9 +37,8 @@ const groupById = <KEY extends keyof UIAnnotationDefinition>(
 
 export const createAnnotationConfiguration = (
   annotationDefinitions: UIAnnotationDefinition[] | undefined,
-  utils: AnnotationUtils,
   textAdapter: (() => TextAdapter) | undefined,
-  annotationAdapter: (() => AnnotationAdapter<W3CAnnotation>) | undefined,
+  annotationEditorAdapter: AnnotationEditorAdapter<any>,
 ): UIAnnotationConfiguration => {
   const definitions = annotationDefinitions ?? ([] as UIAnnotationDefinition[]);
   const definitionsMap = groupById(definitions) as Record<
@@ -73,16 +70,18 @@ export const createAnnotationConfiguration = (
     'allowedChildren',
   ) as AllowedChildrenPerType;
 
-  const defaultAnnotationAdapter = (source?: SourceModel) =>
-    W3CAnnotationAdapter(source ? { sourceUri: source.uri } : {});
-
-  const renderParams = () => ({ renderFn: defaultRender(utils) });
-  const styleParams = () => ({ styleFn: styleFn(listStyles, utils) });
-
   const _createAnnotatedText = (id: string, sourceModel?: SourceModel) => {
     const _textAdapter = textAdapter?.() ?? PlainTextAdapter();
-    const _annotationAdapter =
-      annotationAdapter?.() ?? defaultAnnotationAdapter(sourceModel);
+    const _annotationAdapter = annotationEditorAdapter.createAnnotationAdapter({
+      sourceModel,
+    } as any);
+
+    const renderParams = () => ({
+      renderFn: defaultRender(annotationEditorAdapter),
+    });
+    const styleParams = () => ({
+      styleFn: styleFn(listStyles, annotationEditorAdapter),
+    });
 
     const annotatedText = createAnnotatedText<W3CAnnotation>(id, {
       annotationAdapter: _annotationAdapter,
@@ -106,12 +105,17 @@ export const createAnnotationConfiguration = (
   };
 
   return {
+    annotationEditorAdapter,
     allowedChildrenPerType,
     definitions,
     getDefinition: (id) => {
       const def = definitionsMap[id] ?? undefined;
       return def;
     },
+    getMetadata: (annotation) =>
+      annotationEditorAdapter.getMetadata(annotation),
+    getDefinitionForAnnotation: (annotation) =>
+      annotationEditorAdapter.getDefinition(annotation),
     rootTypes,
     createAnnotatedText: _createAnnotatedText,
   };

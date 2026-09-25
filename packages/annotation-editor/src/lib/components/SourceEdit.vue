@@ -1,14 +1,7 @@
 <template>
-  <SourceNavbar
-    v-bind="properties"
-    @create-annotation="createAnnotation"
-  />
+  <SourceNavbar v-bind="properties" @create-annotation="createAnnotation" />
   <div class="overflow-y-auto flex-1 min-h-0">
-    <div
-      :id="textUuid"
-      ref="mainEl"
-      :dir="source.content.textDirection"
-    />
+    <div :id="textUuid" ref="mainEl" :dir="source.content.textDirection" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -22,7 +15,7 @@ import { useEditorState } from '../composables/useEditorState';
 
 const properties = defineProps(SourceEditProperties);
 
-const { config, sendAnnotationEvent, editorState, utils } = useEditorState();
+const { config, sendAnnotationEvent, editorState } = useEditorState();
 
 const textUuid = `text-content-${uuid()}`;
 
@@ -71,8 +64,8 @@ const drawTextAnnotation = () => {
   textAnnotation = config.annotation
     .createAnnotatedText(textUuid, properties.source)
     .setTagLabelFn((annotation: W3CAnnotation) => {
-      const style = utils.getAnnotationStyle(annotation);
-      return style?.name ?? style?.id ?? 'default';
+      const def = config.annotation.getDefinitionForAnnotation(annotation);
+      return def.name;
     })
     .on('click', ({ mouseEvent, event, data }) => {
       sendAnnotationEvent('select', {

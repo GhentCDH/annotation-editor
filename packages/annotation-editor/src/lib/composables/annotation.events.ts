@@ -1,7 +1,7 @@
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { type TemplateRef } from 'vue';
-import type {
-  AnnotationUtils,
+import {
+  AnnotationEditorAdapter,
   KeyLabel,
   SourceModel,
   UIAnnotationDefinition,
@@ -49,10 +49,11 @@ export type AnnotationEvents = {
   link: LinkData;
 };
 
-const createAnnotation = (
+export const createAnnotation = (
   data: CreateAnnotationData,
   config: EditorConfig,
   state: EditorState_,
+  annotationEditorAdapter: AnnotationEditorAdapter<any>,
   emits: AnnotationEditorEmitsFn,
 ) => {
   if (state.disableEdits) return;
@@ -60,19 +61,25 @@ const createAnnotation = (
   state.disableEdits = true;
   state.editorState = 'create';
 
-  config.modal.show('edit-annotation', data).then((result) => {
-    state.show();
+  config.modal
+    .show('edit-annotation', {
+      source: data.source,
+      parentAnnotation: data.parentAnnotation,
+      definition: annotationEditorAdapter.getDefinition(data.type),
+    })
+    .then((result) => {
+      state.show();
 
-    if (!result?.annotation) return;
-    emits('create:annotation', result.annotation);
-  });
+      if (!result?.annotation) return;
+      emits('create:annotation', result.annotation);
+    });
 };
 
-const editAnnotation = (
+export const editAnnotation = (
   data: EditAnnotationData,
   config: EditorConfig,
   state: EditorState_,
-  utils: AnnotationUtils,
+  annotationEditorAdapter: AnnotationEditorAdapter<any>,
   emits: AnnotationEditorEmitsFn,
 ) => {
   if (state.disableEdits) return;
@@ -80,12 +87,15 @@ const editAnnotation = (
   state.disableEdits = true;
   state.editorState = 'edit';
   emits('select:annotation', data.annotation, 'edit');
+  console.log('def', annotationEditorAdapter.getDefinition(data.annotation));
+  console.log(data.annotation);
+  console.log('----');
   config.modal
     .show('edit-annotation', {
       source: data.source,
       annotation: data.annotation,
-      parentAnnotation: utils.getParent(data.annotation),
-      type: utils.getAnnotationType(data.annotation),
+      parentAnnotation: annotationEditorAdapter.getParent(data.annotation),
+      definition: annotationEditorAdapter.getDefinition(data.annotation),
     })
     .then((result) => {
       state.show();
@@ -197,7 +207,7 @@ const endLink = (
     });
 };
 
-const handleSelectAnnotation = (
+export const handleSelectAnnotation = (
   data: SelectAnnotationData | null,
   config: EditorConfig,
   state: EditorState_,
@@ -231,7 +241,7 @@ export const sendAnnotationEvent =
   (
     config: EditorConfig,
     editorState: EditorState_,
-    utils: AnnotationUtils,
+    annotationEditorAdapter: AnnotationEditorAdapter<any>,
     emits: AnnotationEditorEmitsFn,
     containerRef: TemplateRef<HTMLElement>,
   ) =>
@@ -253,7 +263,7 @@ export const sendAnnotationEvent =
           data as AnnotationEvents['edit'],
           config,
           editorState,
-          utils,
+          annotationEditorAdapter,
           emits,
         );
       case 'create':
@@ -261,6 +271,7 @@ export const sendAnnotationEvent =
           data as AnnotationEvents['create'],
           config,
           editorState,
+          annotationEditorAdapter,
           emits,
         );
       case 'delete':

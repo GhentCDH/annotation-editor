@@ -1,16 +1,10 @@
 <template>
   <table class="border border-gray-300 table table-zebra table-sm">
     <tbody>
-      <tr
-        v-for="link in links"
-        :key="link.annotation.id"
-      >
+      <tr v-for="link in links" :key="link.annotation.id">
         <th>{{ link.label }}</th>
         <td class="max-w-[300px]">
-          <AnnotationText
-            :annotation="link.relation"
-            :max-characters="25"
-          />
+          <AnnotationText :annotation="link.relation" :max-characters="25" />
         </td>
         <td>
           <Navbar :actions="actions(link as any)" />
@@ -31,7 +25,7 @@ import { useEditorState } from '../../composables/useEditorState';
 
 const props = defineProps<{ annotation: W3CAnnotation }>();
 
-const { config, editorState, utils, sendAnnotationEvent } = useEditorState();
+const { config, editorState, sendAnnotationEvent } = useEditorState();
 
 type LinkDisplay = {
   purpose: string | undefined;
@@ -40,7 +34,7 @@ type LinkDisplay = {
 };
 
 const links = computed<LinkDisplay[]>(() => {
-  return utils
+  return config.annotation.annotationEditorAdapter
     .getLinks(props.annotation)
     .map((link: AnnotationLink) => {
       const purpose = link.purpose;

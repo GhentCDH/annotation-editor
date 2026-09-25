@@ -13,7 +13,7 @@ import {
 import {
   type AllowedChildrenPerType,
   type UIAnnotationDefinition,
-} from '../types/ui-annotation-definition.type';
+} from '../../../../../../packages/annotation-ui/src/lib/types/ui-annotation-definition.type';
 import { type KeyLabel } from '../types/key-label.type';
 
 export type AnnotationLink = {
@@ -400,6 +400,10 @@ export type AnnotationUtils = Pick<
   | 'createAnnotationFromSelector'
 >;
 
+/**
+ * @deprecated should be replaced by AnnotationEditorAdapter logic
+ * @param annotationConfig
+ */
 export const annotationUtils = (annotationConfig: AnnotationDefConfig) => {
   return new AnnotationUtilsImpl(annotationConfig);
 };

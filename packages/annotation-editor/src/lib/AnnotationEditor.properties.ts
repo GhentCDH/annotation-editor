@@ -1,12 +1,17 @@
 import type { EmitFn, ExtractPublicPropTypes, PropType } from 'vue';
 
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-import { type AnnotationDefConfig } from '@ghentcdh/annotation-core';
 import {
-  type AnnotationAdapter,
-  type TextAdapter,
-} from '@ghentcdh/annotated-text';
-import type { GridLayout, AnnotationDefinition , SourceModel  } from '@ghentcdh/annotation-ui';
+  type AnnotationDefConfig,
+  type Selector,
+} from '@ghentcdh/annotation-core';
+import { type TextAdapter } from '@ghentcdh/annotated-text';
+import {
+  AnnotationDefinition,
+  AnnotationEditorAdapter,
+  GridLayout,
+  SourceModel,
+} from '@ghentcdh/annotation-ui';
 
 export const AnnotationEditorProperties = {
   modalView: { type: Boolean, required: false as const, default: true },
@@ -19,7 +24,7 @@ export const AnnotationEditorProperties = {
     required: false as const,
   },
   annotationAdapter: {
-    type: Function as PropType<() => AnnotationAdapter<W3CAnnotation>>,
+    type: Object as PropType<AnnotationEditorAdapter<W3CAnnotation>>,
     required: false as const,
   },
   sources: { type: Array as PropType<SourceModel[]>, required: true as const },
@@ -42,6 +47,12 @@ export const AnnotationEditorProperties = {
     type: String,
     required: false,
     default: undefined,
+  },
+  mapBeforeSave: {
+    type: Function as PropType<
+      (annotation: W3CAnnotation, data: any, selector: Selector) => any
+    >,
+    default: (annotation: W3CAnnotation) => annotation,
   },
 };
 

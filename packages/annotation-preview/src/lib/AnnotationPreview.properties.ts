@@ -5,12 +5,10 @@ import {
   type AnnotationDefConfig,
   type GridLayout,
 } from '@ghentcdh/annotation-core';
+import { type TextAdapter } from '@ghentcdh/annotated-text';
 import {
-  type AnnotationAdapter,
-  type TextAdapter,
-} from '@ghentcdh/annotated-text';
-import type {
   AnnotationDefinition,
+  AnnotationEditorAdapter,
   SourceModel,
 } from '@ghentcdh/annotation-ui';
 
@@ -26,7 +24,7 @@ export const AnnotationPreviewProperties = {
     required: false as const,
   },
   annotationAdapter: {
-    type: Function as PropType<() => AnnotationAdapter<W3CAnnotation>>,
+    type: Object as PropType<AnnotationEditorAdapter<W3CAnnotation>>,
     required: false as const,
   },
   sources: { type: Array as PropType<SourceModel[]>, required: true as const },
