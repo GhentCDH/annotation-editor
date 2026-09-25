@@ -8,15 +8,24 @@ import {
   type AnnotationEditEmits,
   type AnnotationEditModal,
 } from './AnnotationEditModal.properties';
-import { useEditorState } from '../../composables/useEditorState';
 
 export const UseAnnotationEdit = (
   props: AnnotationEditModal,
   emits: EmitFn<typeof AnnotationEditEmits>,
 ) => {
-  const { config } = useEditorState();
-
   const metadata = props.annotation.metadata ?? {};
+  const maxRange = {
+    start: 0,
+    end: props.source!.content.text.length + 1,
+  };
+  const parent = props.annotation.parent;
+  if (parent) {
+    const selector = parent.getSelector(props.source.uri);
+    if (selector) {
+      maxRange.start = selector.start;
+      maxRange.end = selector.end;
+    }
+  }
   // const annotationDef = config.annotation.getDefinition(props.type);
 
   const resource = resourceApi(props.annotation.definition, {});
@@ -91,7 +100,7 @@ export const UseAnnotationEdit = (
     if (_annotation) {
       selectors = getTextSelector({
         source: props.source,
-        parent: props.parentAnnotation,
+        parent: props.parent,
         annotation: _annotation,
       });
     }

@@ -102,15 +102,17 @@ export const useProvideEditorState = (
   );
 
   const findAnnotationData = (annotationId: string) => {
-    const annotation = (props.annotations ?? []).find(
+    const annotation = (parsedAnnotations.value ?? []).find(
       (a) => a.id === annotationId,
     );
     if (!annotation) return null;
 
-    // const sourceUri =annotation.s
-    // const source = (props.sources ?? []).find((s) => s.uri === sourceUri);
-    // return { annotation, source };
-    return null;
+    const sourceUri = annotation.selectors?.[0]?.uri;
+
+    if (!sourceUri) return null;
+
+    const source = (props.sources ?? []).find((s) => s.uri === sourceUri);
+    return { annotation, source };
   };
 
   const selectByIdCtx: SelectByIdContext = {
@@ -124,7 +126,7 @@ export const useProvideEditorState = (
     [
       () => props.selectedAnnotationId,
       () => props.selectedAnnotationAction,
-      () => props.annotations,
+      () => parsedAnnotations.value,
     ],
     ([id, action]) =>
       selectAnnotationById(containerRef, id, action, selectByIdCtx),

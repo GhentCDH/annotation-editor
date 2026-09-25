@@ -1,6 +1,5 @@
 import type { ExtractPublicPropTypes, PropType } from 'vue';
 import {
-  AnnotationDefinition,
   EditorAnnotation,
   Selector,
   SourceModel,

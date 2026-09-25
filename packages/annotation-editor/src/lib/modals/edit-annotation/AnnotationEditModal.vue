@@ -56,7 +56,6 @@ const props = defineProps(AnnotationEditModalProperties);
 const { config } = useEditorState();
 
 const emits = defineEmits(AnnotationEditEmits);
-console.table(props);
 
 const { save, cancel, metadata, annotationSelector, message, onChangeValue } =
   UseAnnotationEdit(props, emits);
@@ -84,6 +83,7 @@ const selectAll = () => {
     start: 0,
     end: source!.content.text.length + 1,
   };
+
   const selector = {
     ...selec,
     source: source.uri,
