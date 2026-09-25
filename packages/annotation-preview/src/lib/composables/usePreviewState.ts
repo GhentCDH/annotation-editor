@@ -55,7 +55,7 @@ export const useProvidePreviewState = (
     annotation: createAnnotationConfiguration(
       props.annotationDefinitions,
       props.textAdapter,
-      props.annotationAdapter,
+      props.annotationTransformer,
     ),
   });
 
@@ -75,13 +75,13 @@ export const useProvidePreviewState = (
     () => ({
       annotationDefinitions: props.annotationDefinitions,
       textAdapter: props.textAdapter,
-      annotationAdapter: props.annotationAdapter,
+      annotationAdapter: props.annotationTransformer,
     }),
     () => {
       config.annotation = createAnnotationConfiguration(
         props.annotationDefinitions,
         props.textAdapter,
-        props.annotationAdapter,
+        props.annotationTransformer,
       );
     },
   );

@@ -10,6 +10,7 @@ import {
   AnnotationDefinition,
   SourceModel,
   TransformAnnotationAdapter,
+  W3cTransformAnnotationAdapter,
 } from '@ghentcdh/annotation-ui';
 
 export type { PaneConfig } from './types/preview-layout.types';
@@ -26,6 +27,7 @@ export const AnnotationPreviewProperties = {
   annotationTransformer: {
     type: Object as PropType<TransformAnnotationAdapter<W3CAnnotation>>,
     required: false as const,
+    default: new W3cTransformAnnotationAdapter(),
   },
   sources: { type: Array as PropType<SourceModel[]>, required: true as const },
   annotations: {
