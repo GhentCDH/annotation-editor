@@ -14,15 +14,12 @@ export const UseAnnotationEdit = (
   props: AnnotationEditModal,
   emits: EmitFn<typeof AnnotationEditEmits>,
 ) => {
-  const { config, mapBeforeSave } = useEditorState();
-  const { annotationEditorAdapter } = config.annotation;
+  const { config } = useEditorState();
 
-  const metadata = props.annotation
-    ? (annotationEditorAdapter.getMetadata(props.annotation) ?? {})
-    : {};
+  const metadata = props.annotation.metadata ?? {};
   // const annotationDef = config.annotation.getDefinition(props.type);
 
-  const resource = resourceApi(props.definition, {});
+  const resource = resourceApi(props.annotation.definition, {});
 
   let selectors: Selector[] | null = null;
   const message = ref<FormMessageProps>({ status: 'idle' });
@@ -44,15 +41,11 @@ export const UseAnnotationEdit = (
 
   const saveToBackend = async () => {
     const originalAnnotation = props.annotation;
+    const operations = props.annotation.definition.operations ?? {};
     // check if resource can handle backend requests
-    if (!originalAnnotation && !props.definition.operations.create) return;
-    if (originalAnnotation && !props.definition.operations.update) return;
-
-    const dataToSave = mapBeforeSave(
-      editedAnnotation.value,
-      rawData,
-      selectors[0],
-    );
+    if (!originalAnnotation && !operations.create) return;
+    if (originalAnnotation && !operations.update) return;
+    // TODO call the transformer!
     if (originalAnnotation) {
       return resource.save(originalAnnotation.id, dataToSave).then(() => {
         message.value = { status: 'saved' };

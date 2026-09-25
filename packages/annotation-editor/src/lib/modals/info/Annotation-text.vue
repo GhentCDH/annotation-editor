@@ -40,11 +40,11 @@ let annotatedTextFull: AnnotatedText<W3CAnnotation>;
 const { config, sources } = useEditorState();
 
 const textData = computed(() => {
-  const annotationEditorAdapter = config.annotation.annotationEditorAdapter;
-  const sourceUri = annotationEditorAdapter.getSourceUri(properties.annotation);
-  const textPositionSelector = annotationEditorAdapter.getTextPosition(
-    properties.annotation,
-  );
+  const sourceUri = null; //annotationEditorAdapter.getSourceUri(properties.annotation);
+  const textPositionSelector = null;
+  // const textPositionSelector = annotationEditorAdapter.getTextPosition(
+  //   properties.annotation,
+  // );
 
   const source = sources.value.find((source) => source.uri === sourceUri);
   if (!source) {

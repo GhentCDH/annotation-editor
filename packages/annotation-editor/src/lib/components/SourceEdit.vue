@@ -12,10 +12,14 @@ import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { SourceEditProperties } from './SourceEdit.properties';
 import SourceNavbar from './SourceNavbar.vue';
 import { useEditorState } from '../composables/useEditorState';
+import {
+  EditorAnnotation,
+  UIAnnotationDefinition,
+} from '@ghentcdh/annotation-ui';
 
 const properties = defineProps(SourceEditProperties);
 
-const { config, sendAnnotationEvent, editorState } = useEditorState();
+const { config, sendAnnotationEvent, editorState, ...state } = useEditorState();
 
 const textUuid = `text-content-${uuid()}`;
 
@@ -32,9 +36,9 @@ watch(
 );
 
 watch(
-  () => properties.annotations,
+  () => state.annotations.value,
   () => {
-    textAnnotation?.setAnnotations(properties.annotations ?? []);
+    textAnnotation?.setAnnotations(state.annotations.value);
   },
 );
 
@@ -63,9 +67,8 @@ onMounted(() => {
 const drawTextAnnotation = () => {
   textAnnotation = config.annotation
     .createAnnotatedText(textUuid, properties.source)
-    .setTagLabelFn((annotation: W3CAnnotation) => {
-      const def = config.annotation.getDefinitionForAnnotation(annotation);
-      return def.name;
+    .setTagLabelFn((annotation: EditorAnnotation) => {
+      return annotation.label;
     })
     .on('click', ({ mouseEvent, event, data }) => {
       sendAnnotationEvent('select', {
@@ -75,7 +78,7 @@ const drawTextAnnotation = () => {
       });
     })
     .setText(properties.source?.content.text ?? '')
-    .setAnnotations(properties.annotations ?? []);
+    .setAnnotations(state.annotations.value ?? []);
 };
 
 onUnmounted(() => {
@@ -83,9 +86,9 @@ onUnmounted(() => {
   if (observer) observer.disconnect();
 });
 
-const createAnnotation = (annotationType: string) => {
+const createAnnotation = (definition: UIAnnotationDefinition) => {
   sendAnnotationEvent('create', {
-    type: annotationType,
+    definition: definition,
     source: properties.source,
   });
 };

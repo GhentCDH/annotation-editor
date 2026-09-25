@@ -2,10 +2,8 @@ import type { ExtractPublicPropTypes, PropType } from 'vue';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import type { SourceModel } from '@ghentcdh/annotation-ui';
 
-
 export const SourceEditProperties = {
   source: { type: Object as PropType<SourceModel>, required: true as const },
-  annotations: { type: Array as PropType<W3CAnnotation[]>, required: true as const },
 };
 
 export type SourceEditProps = ExtractPublicPropTypes<

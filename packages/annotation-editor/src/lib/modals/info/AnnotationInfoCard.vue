@@ -22,8 +22,8 @@
 <script lang="ts" setup>
 import { Alert, IconEnum } from '@ghentcdh/ui';
 import {
-  type AnnotationDefinition,
   AnnotationInfoCardBase,
+  UIAnnotationDefinition,
 } from '@ghentcdh/annotation-ui';
 import { computed, ref } from 'vue';
 import { AnnotationInfoCardProperties } from './AnnotationInfoCard.properties';
@@ -37,11 +37,7 @@ const properties = defineProps(AnnotationInfoCardProperties);
 const baseRef = ref<InstanceType<typeof AnnotationInfoCardBase>>();
 const { config, editorState, sendAnnotationEvent } = useEditorState();
 
-const annotationDef = computed(() =>
-  config.annotation.annotationEditorAdapter.getDefinition(
-    properties.annotation,
-  ),
-);
+const annotationDef = computed(() => properties.annotation.definition);
 
 const close = () => {
   sendAnnotationEvent('select', null);
@@ -57,7 +53,7 @@ const createAnnotation = (annotationType: string) => {
   });
 };
 
-const addActions = (definition: AnnotationDefinition) => {
+const addActions = (definition: UIAnnotationDefinition) => {
   const actions = definition?.allowedChildren ?? [];
 
   if (actions.length === 0) return null;
@@ -83,7 +79,7 @@ const addActions = (definition: AnnotationDefinition) => {
   };
 };
 
-const createActionLinks = (definition: AnnotationDefinition) => {
+const createActionLinks = (definition: UIAnnotationDefinition) => {
   return definition?.allowedLinks.map((link) => ({
     icon: link.icon ?? IconEnum.Link,
     label: `Add ${link.label}`,

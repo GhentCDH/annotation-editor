@@ -20,6 +20,7 @@ export type AnnotationLink = {
   purpose: string;
   annotation: W3CAnnotation;
   relations: W3CAnnotation[];
+  definition: UIAnnotationDefinition;
 };
 
 const mapRelationsToLinks = (

@@ -33,16 +33,11 @@ import {
 const properties = defineProps(AnnotationInfoCardBaseProperties);
 const emit = defineEmits(AnnotationInfoCardBaseEmits);
 
-const annotationDef = computed(
-  () =>
-    properties.config.getDefinitionForAnnotation(properties.annotation) as any,
-);
+const annotationDef = computed(() => properties.annotation?.definition);
 
 const purposeLabel = computed(() => annotationDef.value?.label);
 
-const metadata = computed(() => {
-  return properties.config.getMetadata(properties.annotation) ?? {};
-});
+const metadata = computed(() => properties.annotation?.metadata);
 
 const cardRef = ref<HTMLElement>();
 const closeNextClick = ref(true);

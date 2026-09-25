@@ -1,7 +1,6 @@
-import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { type TemplateRef } from 'vue';
 import {
-  AnnotationEditorAdapter,
+  EditorAnnotation,
   KeyLabel,
   SourceModel,
   UIAnnotationDefinition,
@@ -12,7 +11,7 @@ import { type AnnotationEditModalShow } from '../modals/edit-annotation/Annotati
 import { type AnnotationEditorEmitsFn } from '../AnnotationEditor.properties';
 
 type SelectAnnotationData = {
-  annotation: W3CAnnotation;
+  annotation: EditorAnnotation;
   source: SourceModel;
   mouseEvent: MouseEvent;
   containerRef?: HTMLElement;
@@ -22,19 +21,18 @@ type CreateAnnotationData = Pick<
   AnnotationEditModalShow,
   'source' | 'parentAnnotation'
 > & {
-  type: string;
+  definition: UIAnnotationDefinition;
 };
 
 type EditAnnotationData = Pick<
   AnnotationEditModalShow,
   'source' | 'parentAnnotation'
 > & {
-  annotation: W3CAnnotation;
+  annotation: EditorAnnotation;
 };
 
 type DeleteAnnotationData = {
-  annotation: W3CAnnotation;
-  definition: UIAnnotationDefinition;
+  annotation: EditorAnnotation;
 };
 
 type LinkData = {
@@ -53,7 +51,6 @@ export const createAnnotation = (
   data: CreateAnnotationData,
   config: EditorConfig,
   state: EditorState_,
-  annotationEditorAdapter: AnnotationEditorAdapter<any>,
   emits: AnnotationEditorEmitsFn,
 ) => {
   if (state.disableEdits) return;
@@ -64,8 +61,11 @@ export const createAnnotation = (
   config.modal
     .show('edit-annotation', {
       source: data.source,
-      parentAnnotation: data.parentAnnotation,
-      definition: annotationEditorAdapter.getDefinition(data.type),
+      annotation: {
+        definition: data.definition,
+        parentAnnotation: data.parentAnnotation,
+        selectors: [],
+      },
     })
     .then((result) => {
       state.show();
@@ -79,7 +79,6 @@ export const editAnnotation = (
   data: EditAnnotationData,
   config: EditorConfig,
   state: EditorState_,
-  annotationEditorAdapter: AnnotationEditorAdapter<any>,
   emits: AnnotationEditorEmitsFn,
 ) => {
   if (state.disableEdits) return;
@@ -87,15 +86,10 @@ export const editAnnotation = (
   state.disableEdits = true;
   state.editorState = 'edit';
   emits('select:annotation', data.annotation, 'edit');
-  console.log('def', annotationEditorAdapter.getDefinition(data.annotation));
-  console.log(data.annotation);
-  console.log('----');
   config.modal
     .show('edit-annotation', {
       source: data.source,
       annotation: data.annotation,
-      parentAnnotation: annotationEditorAdapter.getParent(data.annotation),
-      definition: annotationEditorAdapter.getDefinition(data.annotation),
     })
     .then((result) => {
       state.show();
@@ -112,7 +106,7 @@ const deleteAnnotation = (
   state: EditorState_,
   emits: AnnotationEditorEmitsFn,
 ) => {
-  const { annotation, definition } = data;
+  const { annotation } = data;
   config.modal
     .show('confirm', {
       title: 'Delete',
@@ -241,7 +235,6 @@ export const sendAnnotationEvent =
   (
     config: EditorConfig,
     editorState: EditorState_,
-    annotationEditorAdapter: AnnotationEditorAdapter<any>,
     emits: AnnotationEditorEmitsFn,
     containerRef: TemplateRef<HTMLElement>,
   ) =>
@@ -263,7 +256,6 @@ export const sendAnnotationEvent =
           data as AnnotationEvents['edit'],
           config,
           editorState,
-          annotationEditorAdapter,
           emits,
         );
       case 'create':
@@ -271,7 +263,6 @@ export const sendAnnotationEvent =
           data as AnnotationEvents['create'],
           config,
           editorState,
-          annotationEditorAdapter,
           emits,
         );
       case 'delete':

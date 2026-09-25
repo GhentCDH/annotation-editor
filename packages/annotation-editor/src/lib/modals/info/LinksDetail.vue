@@ -2,7 +2,7 @@
   <table class="border border-gray-300 table table-zebra table-sm">
     <tbody>
       <tr v-for="link in links" :key="link.annotation.id">
-        <th>{{ link.label }}</th>
+        <th>{{ link.name }}</th>
         <td class="max-w-[300px]">
           <AnnotationText :annotation="link.relation" :max-characters="25" />
         </td>
@@ -34,12 +34,10 @@ type LinkDisplay = {
 };
 
 const links = computed<LinkDisplay[]>(() => {
-  return config.annotation.annotationEditorAdapter
-    .getLinks(props.annotation)
-    .map((link: AnnotationLink) => {
-      const purpose = link.purpose;
+  return config.annotation.links
+    ?.map((link: AnnotationLink) => {
       const relation = link.relations.find((r) => r.id !== props.annotation.id);
-      const def = config.annotation.getDefinition(purpose);
+      const def = link.definition;
       return {
         purpose: def?.id,
         label: def?.label ?? def?.name,
@@ -51,7 +49,7 @@ const links = computed<LinkDisplay[]>(() => {
 });
 
 const actions = (link: AnnotationLink) => {
-  const definition = config.annotation.getDefinition(link.purpose);
+  const definition = config.annotation.definition;
   return [
     {
       icon: IconEnum.Delete,

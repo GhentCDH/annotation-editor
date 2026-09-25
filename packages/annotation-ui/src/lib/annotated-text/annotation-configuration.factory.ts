@@ -6,15 +6,16 @@ import {
   type TextAdapter,
   WordSnapper,
 } from '@ghentcdh/annotated-text';
-import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { defaultRender, styleFn } from './annotation-render.style';
+import { type SourceModel } from '@ghentcdh/annotation-core';
 import {
   AllowedChildrenPerType,
-  AnnotationEditorAdapter,
-  type UIAnnotationConfiguration,
-  type UIAnnotationDefinition,
+  EditorAnnotation,
+  TransformAnnotationAdapter,
+  UIAnnotationConfiguration,
+  UIAnnotationDefinition,
 } from '@ghentcdh/annotation-ui';
-import { type SourceModel } from '../types/source.model';
+import { AnnotationEditorAnnotationAdapter } from '../adapter/editor.annotation.adapter';
 
 const groupById = <KEY extends keyof UIAnnotationDefinition>(
   defs: UIAnnotationDefinition[],
@@ -38,9 +39,10 @@ const groupById = <KEY extends keyof UIAnnotationDefinition>(
 export const createAnnotationConfiguration = (
   annotationDefinitions: UIAnnotationDefinition[] | undefined,
   textAdapter: (() => TextAdapter) | undefined,
-  annotationEditorAdapter: AnnotationEditorAdapter<any>,
+  transformAnnotationAdapter: TransformAnnotationAdapter<any>,
 ): UIAnnotationConfiguration => {
   const definitions = annotationDefinitions ?? ([] as UIAnnotationDefinition[]);
+  transformAnnotationAdapter.setDefinitions(definitions);
   const definitionsMap = groupById(definitions) as Record<
     string,
     UIAnnotationDefinition
@@ -72,19 +74,19 @@ export const createAnnotationConfiguration = (
 
   const _createAnnotatedText = (id: string, sourceModel?: SourceModel) => {
     const _textAdapter = textAdapter?.() ?? PlainTextAdapter();
-    const _annotationAdapter = annotationEditorAdapter.createAnnotationAdapter({
-      sourceModel,
-    } as any);
 
     const renderParams = () => ({
-      renderFn: defaultRender(annotationEditorAdapter),
+      renderFn: defaultRender,
     });
     const styleParams = () => ({
-      styleFn: styleFn(listStyles, annotationEditorAdapter),
+      styleFn: styleFn(listStyles),
     });
 
-    const annotatedText = createAnnotatedText<W3CAnnotation>(id, {
-      annotationAdapter: _annotationAdapter,
+    const annotatedText = createAnnotatedText<EditorAnnotation>(id, {
+      annotationAdapter: new AnnotationEditorAnnotationAdapter({
+        ...transformAnnotationAdapter.defaultParams,
+        sourceModel,
+      }),
       textAdapter: _textAdapter,
     });
 
@@ -105,17 +107,12 @@ export const createAnnotationConfiguration = (
   };
 
   return {
-    annotationEditorAdapter,
     allowedChildrenPerType,
     definitions,
     getDefinition: (id) => {
       const def = definitionsMap[id] ?? undefined;
       return def;
     },
-    getMetadata: (annotation) =>
-      annotationEditorAdapter.getMetadata(annotation),
-    getDefinitionForAnnotation: (annotation) =>
-      annotationEditorAdapter.getDefinition(annotation),
     rootTypes,
     createAnnotatedText: _createAnnotatedText,
   };

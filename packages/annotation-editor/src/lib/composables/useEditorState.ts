@@ -10,13 +10,11 @@ import {
   watch,
 } from 'vue';
 import {
-  AnnotationEditorAdapter,
-  type AnnotationUtils,
-  annotationUtils,
   createAnnotationConfiguration,
   createModalConfig,
+  EditorAnnotation,
   type SourceModel,
-  W3cAnnotationEditorAdapter,
+  W3cTransformAnnotationAdapter,
 } from '@ghentcdh/annotation-ui';
 import {
   type AnnotationEvents,
@@ -29,7 +27,6 @@ import {
 } from '../AnnotationEditor.properties';
 import { annotationModalDefaults } from '../modals/AnnotationModal.defaults';
 import { selectAnnotationById, SelectByIdContext } from '../modals/open-modal';
-import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 
 export type EditorState = {
   sources: ComputedRef<Readonly<SourceModel[]>>;
@@ -40,8 +37,7 @@ export type EditorState = {
     data: AnnotationEvents[KEY],
     callback?: (response: any) => void,
   ) => void;
-  utils: AnnotationUtils;
-  mapBeforeSave: (annotation: W3CAnnotation, metadata: any, selection) => any;
+  annotations: ComputedRef<Readonly<EditorAnnotation[]>>;
 };
 
 const EDITOR_KEY: InjectionKey<EditorState> = Symbol('editor');
@@ -52,29 +48,21 @@ export const useProvideEditorState = (
   emits: AnnotationEditorEmitsFn,
   containerRef: TemplateRef<HTMLElement>,
 ) => {
-  const utils = annotationUtils(props.configuration);
-  const annotationEditorAdapter: AnnotationEditorAdapter<any> =
-    props.annotationAdapter ?? new W3cAnnotationEditorAdapter();
+  let transformer =
+    props.annotationTransformer ?? new W3cTransformAnnotationAdapter();
+
+  const parsedAnnotations = computed(() => {
+    return props.annotations?.map((a) => transformer.parse(a)) ?? [];
+  });
 
   const config = shallowReactive<EditorConfig>({
     modal: createModalConfig(annotationModalDefaults),
     annotation: createAnnotationConfiguration(
       props.annotationDefinitions,
       props.textAdapter,
-      annotationEditorAdapter,
+      transformer,
     ),
   });
-
-  watch(
-    () => props.annotations,
-    () => {
-      utils.setAnnotations(
-        props.annotations ?? [],
-        config.annotation.allowedChildrenPerType,
-      );
-    },
-    { immediate: true },
-  );
 
   const sources = computed(() => props.sources ?? []);
 
@@ -100,13 +88,15 @@ export const useProvideEditorState = (
     [
       () => props.annotationDefinitions,
       () => props.textAdapter,
-      () => props.annotationAdapter,
+      () => props.annotationTransformer,
     ],
     () => {
+      transformer =
+        props.annotationTransformer ?? new W3cTransformAnnotationAdapter();
       config.annotation = createAnnotationConfiguration(
         props.annotationDefinitions,
         props.textAdapter,
-        annotationEditorAdapter,
+        transformer,
       );
     },
   );
@@ -117,15 +107,15 @@ export const useProvideEditorState = (
     );
     if (!annotation) return null;
 
-    const sourceUri = annotationEditorAdapter.getSourceUri(annotation);
-    const source = (props.sources ?? []).find((s) => s.uri === sourceUri);
-    return { annotation, source };
+    // const sourceUri =annotation.s
+    // const source = (props.sources ?? []).find((s) => s.uri === sourceUri);
+    // return { annotation, source };
+    return null;
   };
 
   const selectByIdCtx: SelectByIdContext = {
     config,
     editorState,
-    annotationEditorAdapter,
     emits,
     findAnnotationData,
   };
@@ -153,15 +143,13 @@ export const useProvideEditorState = (
     sources,
     config: config as Readonly<EditorConfig>,
     editorState: editorState as Readonly<EditorState_>,
-    utils,
     sendAnnotationEvent: sendAnnotationEvent(
       config,
       editorState,
-      annotationEditorAdapter,
       emits,
       containerRef,
     ),
-    mapBeforeSave: props.mapBeforeSave,
+    annotations: parsedAnnotations,
   });
 };
 

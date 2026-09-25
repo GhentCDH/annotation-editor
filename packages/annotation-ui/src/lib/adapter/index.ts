@@ -1,2 +1,3 @@
-export * from './w3c.annotation-editor.adapter';
-export * from './annotation-editor.adapter';
+export * from './editor.annotation';
+export * from './transform.annotation.adapter';
+export * from './w3c.transform.annotation.adapter';

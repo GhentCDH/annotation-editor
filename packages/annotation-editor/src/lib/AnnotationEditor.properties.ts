@@ -8,9 +8,9 @@ import {
 import { type TextAdapter } from '@ghentcdh/annotated-text';
 import {
   AnnotationDefinition,
-  AnnotationEditorAdapter,
   GridLayout,
   SourceModel,
+  TransformAnnotationAdapter,
 } from '@ghentcdh/annotation-ui';
 
 export const AnnotationEditorProperties = {
@@ -23,8 +23,8 @@ export const AnnotationEditorProperties = {
     type: Function as PropType<() => TextAdapter>,
     required: false as const,
   },
-  annotationAdapter: {
-    type: Object as PropType<AnnotationEditorAdapter<W3CAnnotation>>,
+  annotationTransformer: {
+    type: Object as PropType<TransformAnnotationAdapter<W3CAnnotation>>,
     required: false as const,
   },
   sources: { type: Array as PropType<SourceModel[]>, required: true as const },

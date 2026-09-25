@@ -1,13 +1,13 @@
 import { type ExtractPublicPropTypes, type PropType } from 'vue';
-import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import type { SourceModel } from '../../types/source.model';
+import { EditorAnnotation } from '../../adapter';
 
 type Position = { x: number; y: number };
 
 export const AnnotationInfoCardProperties = {
   position: { type: Object as PropType<Position>, required: true as const },
   annotation: {
-    type: Object as PropType<W3CAnnotation>,
+    type: Object as PropType<EditorAnnotation>,
     required: true as const,
   },
   source: { type: Object as PropType<SourceModel>, required: true as const },
