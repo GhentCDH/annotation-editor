@@ -29,21 +29,9 @@ export default defineUserConfig({
               import.meta.url,
             ),
           ),
-          '@ghentcdh/annotation-preview/index.css': fileURLToPath(
-            new URL(
-              '../../packages/annotation-preview/src/lib/styles.css',
-              import.meta.url,
-            ),
-          ),
           '@ghentcdh/annotation-editor': fileURLToPath(
             new URL(
               '../../packages/annotation-editor/src/index.ts',
-              import.meta.url,
-            ),
-          ),
-          '@ghentcdh/annotation-preview': fileURLToPath(
-            new URL(
-              '../../packages/annotation-preview/src/index.ts',
               import.meta.url,
             ),
           ),

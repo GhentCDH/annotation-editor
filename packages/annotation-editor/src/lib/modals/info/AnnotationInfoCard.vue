@@ -1,43 +1,82 @@
 <template>
-  <AnnotationInfoCardBase
-    ref="baseRef"
-    v-bind="$props"
-    :config="config.annotation"
-    :disable-close="editorState.disableEdits"
-    @close="close"
+  <div
+    ref="cardRef"
+    class="card bg-base-100 shadow-xl absolute z-50"
+    :style="{
+      left: `${properties.position.x}px`,
+      top: `${properties.position.y}px`,
+    }"
   >
-    <template #links="{ annotation }">
-      <LinksDetail :annotation="annotation" />
-    </template>
-    <template #actions v-if="!editorState.readonly">
-      <Alert
-        v-if="editorState.info"
-        type="info"
-        :message="'Action: ' + editorState.info.short"
+    <div class="card-body p-2">
+      <div class="flex items-center justify-between gap-2">
+        <div><strong>Type:</strong> {{ purposeLabel }}</div>
+      </div>
+      <Metadata
+        v-if="annotationDef"
+        :data="metadata"
+        :definition="annotationDef"
       />
-      <Navbar :actions="actions" />
-    </template>
-  </AnnotationInfoCardBase>
+      <LinksDetail :annotation="properties.annotation" />
+      <template v-if="!editorState.readonly">
+        <Alert
+          v-if="editorState.info"
+          type="info"
+          :message="'Action: ' + editorState.info.short"
+        />
+        <Navbar :actions="actions" />
+      </template>
+    </div>
+  </div>
 </template>
 <script lang="ts" setup>
 import { Alert, IconEnum } from '@ghentcdh/ui';
-import {
-  AnnotationInfoCardBase,
-  type UIAnnotationDefinition,
-} from '@ghentcdh/annotation-ui';
-import { computed, ref } from 'vue';
+import { type UIAnnotationDefinition } from '@ghentcdh/annotation-ui';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { AnnotationInfoCardProperties } from './AnnotationInfoCard.properties';
 import LinksDetail from './LinksDetail.vue';
 import { useEditorState } from '../../composables/useEditorState';
 import Navbar from '../../components/navbar.vue';
 import { type NavbarAction } from '../../components/navbar.properties';
+import { default as Metadata } from './Metadata.vue';
 
 const properties = defineProps(AnnotationInfoCardProperties);
 
-const baseRef = ref<InstanceType<typeof AnnotationInfoCardBase>>();
-const { config, editorState, sendAnnotationEvent } = useEditorState();
+const { editorState, sendAnnotationEvent } = useEditorState();
 
 const annotationDef = computed(() => properties.annotation.definition);
+const purposeLabel = computed(() => annotationDef.value?.label);
+const metadata = computed(() => properties.annotation?.metadata);
+
+// Outside-click handling (inlined from AnnotationInfoCardBase)
+const cardRef = ref<HTMLElement>();
+const closeNextClick = ref(true);
+
+watch(
+  () => properties.annotation,
+  () => {
+    closeNextClick.value = true;
+  },
+);
+
+onMounted(() => document.addEventListener('click', handleOutsideClick));
+onUnmounted(() => document.removeEventListener('click', handleOutsideClick));
+
+const skipNextClose = () => {
+  closeNextClick.value = true;
+};
+
+function handleOutsideClick(e: MouseEvent) {
+  if (editorState.disableEdits) return;
+
+  if (closeNextClick.value) {
+    closeNextClick.value = false;
+    return;
+  }
+
+  if (cardRef.value && !cardRef.value.contains(e.target as Node)) {
+    close();
+  }
+}
 
 const close = () => {
   sendAnnotationEvent('select', null);
@@ -45,7 +84,7 @@ const close = () => {
 };
 
 const createAnnotation = (annotationType: string) => {
-  baseRef.value?.skipNextClose();
+  skipNextClose();
   sendAnnotationEvent('create', {
     type: annotationType,
     source: properties.source,
@@ -99,7 +138,7 @@ const actions = computed(() => {
       label: 'Edit',
       disabled: editorState.disableEdits,
       action: () => {
-        baseRef.value?.skipNextClose();
+        skipNextClose();
         sendAnnotationEvent('edit', {
           annotation: properties.annotation!,
           source: properties.source!,

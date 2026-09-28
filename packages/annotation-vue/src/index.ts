@@ -21,4 +21,4 @@ export * from '@ghentcdh/annotation-editor';
 
 import './lib/styles.css';
 
-export { default as AnnotationFilter } from './lib/components/filter/AnnotationFilter.vue';
+export { default as AnnotationFilter } from './lib/filter/AnnotationFilter.vue';

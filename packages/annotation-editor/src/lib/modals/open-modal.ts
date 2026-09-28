@@ -1,12 +1,12 @@
 import { nextTick, type TemplateRef } from 'vue';
 import {
   type EditorAnnotation,
-  getAnnotationElementCenter,
   type SourceModel,
 } from '@ghentcdh/annotation-ui';
 import type { AnnotationEditorEmitsFn } from '../AnnotationEditor.properties';
 import type { EditorConfig, EditorState_ } from '../composables/editorState';
 import { editAnnotation } from '../composables/annotation.events';
+import { getAnnotationElementCenter } from '../utils/mouse-events';
 
 type AnnotationData = {
   annotation: EditorAnnotation;

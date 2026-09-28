@@ -1,6 +1,5 @@
 import { type EmitFn, ref } from 'vue';
 import { NotificationService } from '@ghentcdh/ui';
-import { type Selector } from '@ghentcdh/annotation-core';
 import { type FormMessageProps, resourceApi } from '@ghentcdh/crouton-vue';
 import { type EditorAnnotation } from '@ghentcdh/annotation-ui';
 import { getTextSelector } from './utils';
@@ -118,6 +117,5 @@ export const UseAnnotationEdit = (
     editedAnnotation,
     onChangeValue,
     message,
-    selectFull: () => selectFull(props.source, props.annotation),
   };
 };

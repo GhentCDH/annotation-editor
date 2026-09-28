@@ -11,9 +11,14 @@ export default defineConfig(() => ({
   resolve: {
     tsconfigPaths: true,
     alias: {
-      '@ghentcdh/annotation-editor': path.resolve(import.meta.dirname, '../../packages/annotation-editor/src/index.ts'),
-      '@ghentcdh/annotation-preview': path.resolve(import.meta.dirname, '../../packages/annotation-preview/src/index.ts'),
-      '@ghentcdh/annotation-ui': path.resolve(import.meta.dirname, '../../packages/annotation-ui/src/index.ts'),
+      '@ghentcdh/annotation-editor': path.resolve(
+        import.meta.dirname,
+        '../../packages/annotation-editor/src/index.ts',
+      ),
+      '@ghentcdh/annotation-ui': path.resolve(
+        import.meta.dirname,
+        '../../packages/annotation-ui/src/index.ts',
+      ),
     },
   },
   plugins: [
@@ -25,7 +30,6 @@ export default defineConfig(() => ({
       bundledPackages: [
         '@ghentcdh/annotation-core',
         '@ghentcdh/annotation-editor',
-        '@ghentcdh/annotation-preview',
       ],
     }),
     copyPackageJson(),

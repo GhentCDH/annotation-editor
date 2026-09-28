@@ -11,7 +11,6 @@ import {
 } from 'vue';
 import {
   createAnnotationConfiguration,
-  createModalConfig,
   type EditorAnnotation,
   type SourceModel,
 } from '@ghentcdh/annotation-ui';
@@ -29,6 +28,7 @@ import {
   selectAnnotationById,
   type SelectByIdContext,
 } from '../modals/open-modal';
+import { createModalConfig } from '../modals/annotationModal.composable';
 
 export type EditorState = {
   sources: ComputedRef<Readonly<SourceModel[]>>;
