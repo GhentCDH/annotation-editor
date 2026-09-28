@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { type UIAnnotationDefinition } from '@ghentcdh/annotation-ui';
+import { type UIAnnotationDefinition } from '../types/ui-annotation-definition.type';
 
 const annotationIdSchema = z.union([z.string(), z.number()]);
 
@@ -15,7 +15,7 @@ export const Selector = z.object({
 // TODO need to implement
 export const Link = z.object({});
 
-export type EditorAnnotation = {
+export type _EditorAnnotation = {
   id: string | number;
   label?: string;
   definition: UIAnnotationDefinition;
@@ -26,7 +26,7 @@ export type EditorAnnotation = {
   parent?: EditorAnnotation;
 };
 
-export const editorAnnotationSchema: z.ZodType<EditorAnnotation> = z
+export const editorAnnotationSchema: z.ZodType<_EditorAnnotation> = z
   .lazy(() =>
     z.object({
       id: annotationIdSchema,
@@ -50,3 +50,5 @@ export const editorAnnotationSchema: z.ZodType<EditorAnnotation> = z
       getSelector,
     };
   });
+
+export type EditorAnnotation = z.infer<typeof editorAnnotationSchema>;

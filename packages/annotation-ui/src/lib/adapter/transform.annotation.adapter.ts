@@ -1,9 +1,9 @@
 import {
-  AnnotationAdapterParams,
-  BaseAnnotation,
+  type AnnotationAdapterParams,
+  type BaseAnnotation,
 } from '@ghentcdh/annotated-text';
-import { EditorAnnotation } from './editor.annotation';
-import { UIAnnotationDefinition } from '../types/ui-annotation-definition.type';
+import { type EditorAnnotation } from './editor.annotation';
+import { type UIAnnotationDefinition } from '../types/ui-annotation-definition.type';
 
 const groupById = <KEY extends keyof UIAnnotationDefinition>(
   defs: UIAnnotationDefinition[],

@@ -2,13 +2,13 @@ import { type App, type Plugin } from 'vue';
 import { type Router } from 'vue-router';
 import { type AnnotationDefConfig } from '@ghentcdh/annotation-core';
 import { createAnnotationNamespaceRoutes } from './router/annotation-namespace.routes';
-import { type AnnotationDefinitionService } from './service/annotation-definition.service';
+import { type AnnotationDefinitionService } from './definitions/annotation-definition.service';
 import {
   ANNOTATION_DEFINITIONS_KEY,
   type AnnotationDefinitionsState,
   createAndLoadDefinitionsState,
   type ProvideAnnotationDefinitionsOptions,
-} from './composables/useAnnotationDefinitions';
+} from './definitions/useAnnotationDefinitions';
 
 export type AnnotationPluginOptions = ProvideAnnotationDefinitionsOptions & {
   router: Router;

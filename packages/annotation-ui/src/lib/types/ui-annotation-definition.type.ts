@@ -8,7 +8,7 @@ import {
   type KeyLabel,
   type SourceModel,
 } from '@ghentcdh/annotation-core';
-import { EditorAnnotation } from '../adapter';
+import { type EditorAnnotation } from '../adapter';
 
 // Explicit type avoids TS2883 from complex Zod v4 schema chains in .d.ts output.
 export type UIAnnotationDefinition = AnnotationResource & {

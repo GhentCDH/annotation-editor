@@ -1,7 +1,7 @@
-import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { type EmitFn, ref } from 'vue';
 import { NotificationService } from '@ghentcdh/ui';
 import { type FormMessageProps, resourceApi } from '@ghentcdh/crouton-vue';
+import { type EditorAnnotation } from '@ghentcdh/annotation-ui';
 import {
   type LinkAnnotationProps,
   type LinkEmits,
@@ -27,7 +27,7 @@ export const useAnnotationLink = (
     emits('close', null);
   };
 
-  const saveToBackend = async (annotation: W3CAnnotation) => {
+  const saveToBackend = async (annotation: EditorAnnotation) => {
     // check if resource can handle backend requests
     if (!annotationDef.operations.create) return;
 

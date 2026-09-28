@@ -1,20 +1,20 @@
-import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { type EmitFn, ref } from 'vue';
 import { NotificationService } from '@ghentcdh/ui';
 import { type Selector } from '@ghentcdh/annotation-core';
 import { type FormMessageProps, resourceApi } from '@ghentcdh/crouton-vue';
+import { type EditorAnnotation } from '@ghentcdh/annotation-ui';
 import { getTextSelector } from './utils';
 import {
   type AnnotationEditEmits,
   type AnnotationEditModal,
 } from './AnnotationEditModal.properties';
-import { EditorAnnotation } from '@ghentcdh/annotation-ui';
 
 export const UseAnnotationEdit = (
   props: AnnotationEditModal,
   emits: EmitFn<typeof AnnotationEditEmits>,
 ) => {
   const metadata = props.annotation.metadata ?? {};
+  console.log(props.annotation);
 
   const resource = resourceApi(props.annotation.definition, {});
 
@@ -84,7 +84,7 @@ export const UseAnnotationEdit = (
     annotation: _annotation,
     metadata: _metadata,
   }: {
-    annotation?: W3CAnnotation | null;
+    annotation?: EditorAnnotation | null;
     metadata?: any;
   }) => {
     if (_annotation) {

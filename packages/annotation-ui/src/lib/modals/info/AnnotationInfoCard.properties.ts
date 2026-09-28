@@ -1,6 +1,6 @@
 import { type ExtractPublicPropTypes, type PropType } from 'vue';
 import type { SourceModel } from '../../types/source.model';
-import { EditorAnnotation } from '../../adapter';
+import { type EditorAnnotation } from '../../adapter';
 
 type Position = { x: number; y: number };
 

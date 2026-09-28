@@ -1,6 +1,6 @@
 import { type EmitFn, type ExtractPublicPropTypes, type PropType } from 'vue';
 import { AnnotationInfoCardProperties } from './AnnotationInfoCard.properties';
-import { UIAnnotationConfiguration } from '../../types/ui-annotation-definition.type';
+import { type UIAnnotationConfiguration } from '../../types/ui-annotation-definition.type';
 
 export const AnnotationInfoCardBaseProperties = {
   ...AnnotationInfoCardProperties,

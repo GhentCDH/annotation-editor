@@ -22,9 +22,16 @@
       >
         <template #content-before>
           <div class="flex-grow before-scroll">
-            <Collapse :title="label.selectLabel" :scrollable="true">
+            <Collapse
+              :title="label.selectLabel"
+              :scrollable="true"
+            >
               <div :id="editId" />
-              <Btn :outline="true" class="mt-2" @click="selectAll">
+              <Btn
+                :outline="true"
+                class="mt-2"
+                @click="selectAll"
+              >
                 Select all text
               </Btn>
             </Collapse>
@@ -42,13 +49,13 @@ import { CroutonForm, FormMessage } from '@ghentcdh/crouton-vue';
 import { Btn, Collapse, Modal } from '@ghentcdh/ui';
 import { computed, onMounted, onUnmounted } from 'vue';
 import { type AnnotatedText } from '@ghentcdh/annotated-text';
+import { type EditorAnnotation, updateAnnotation } from '@ghentcdh/annotation-ui';
 import {
   AnnotationEditEmits,
   AnnotationEditModalProperties,
 } from './AnnotationEditModal.properties';
 import { UseAnnotationEdit } from './UseAnnotationEdit';
 import { useEditorState } from '../../composables/useEditorState';
-import { EditorAnnotation, updateAnnotation } from '@ghentcdh/annotation-ui';
 
 let annotatedText: AnnotatedText<EditorAnnotation>;
 const props = defineProps(AnnotationEditModalProperties);
@@ -93,7 +100,7 @@ const selectFull = () => {
   }
 
   const original = {
-    id: `NEW_ANNOTATION`,
+    id: 'NEW_ANNOTATION',
     metadata,
     selectors: [],
     ...annotation,

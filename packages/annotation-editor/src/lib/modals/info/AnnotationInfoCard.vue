@@ -9,7 +9,7 @@
     <template #links="{ annotation }">
       <LinksDetail :annotation="annotation" />
     </template>
-    <template #actions>
+    <template #actions v-if="!editorState.readonly">
       <Alert
         v-if="editorState.info"
         type="info"
@@ -23,7 +23,7 @@
 import { Alert, IconEnum } from '@ghentcdh/ui';
 import {
   AnnotationInfoCardBase,
-  UIAnnotationDefinition,
+  type UIAnnotationDefinition,
 } from '@ghentcdh/annotation-ui';
 import { computed, ref } from 'vue';
 import { AnnotationInfoCardProperties } from './AnnotationInfoCard.properties';

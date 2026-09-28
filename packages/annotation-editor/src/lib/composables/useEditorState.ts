@@ -12,7 +12,7 @@ import {
 import {
   createAnnotationConfiguration,
   createModalConfig,
-  EditorAnnotation,
+  type EditorAnnotation,
   type SourceModel,
 } from '@ghentcdh/annotation-ui';
 import {
@@ -25,7 +25,10 @@ import {
   type AnnotationEditorProps,
 } from '../AnnotationEditor.properties';
 import { annotationModalDefaults } from '../modals/AnnotationModal.defaults';
-import { selectAnnotationById, SelectByIdContext } from '../modals/open-modal';
+import {
+  selectAnnotationById,
+  type SelectByIdContext,
+} from '../modals/open-modal';
 
 export type EditorState = {
   sources: ComputedRef<Readonly<SourceModel[]>>;
@@ -46,6 +49,7 @@ export const useProvideEditorState = (
   props: AnnotationEditorProps,
   emits: AnnotationEditorEmitsFn,
   containerRef: TemplateRef<HTMLElement>,
+  { readonly } = { readonly: false },
 ) => {
   const parsedAnnotations = computed(() => {
     return (
@@ -78,6 +82,7 @@ export const useProvideEditorState = (
     selectedAnnotation: null,
     disableEdits: false,
     info: null,
+    readonly,
     show: () => showEditorState(),
     reset: () => resetEditorState(),
   });

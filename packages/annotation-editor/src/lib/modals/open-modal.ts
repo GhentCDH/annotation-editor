@@ -1,8 +1,8 @@
 import { nextTick, type TemplateRef } from 'vue';
 import {
-  EditorAnnotation,
+  type EditorAnnotation,
   getAnnotationElementCenter,
-  SourceModel,
+  type SourceModel,
 } from '@ghentcdh/annotation-ui';
 import type { AnnotationEditorEmitsFn } from '../AnnotationEditor.properties';
 import type { EditorConfig, EditorState_ } from '../composables/editorState';

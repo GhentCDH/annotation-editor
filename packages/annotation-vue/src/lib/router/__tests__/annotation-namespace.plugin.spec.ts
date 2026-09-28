@@ -1,5 +1,5 @@
 import { type AnnotationResource } from '@ghentcdh/annotation-core';
-import { AnnotationDefinitionService } from '../../service/annotation-definition.service';
+import { AnnotationDefinitionService } from '../../definitions/annotation-definition.service';
 import {
   createAnnotationNamespacePaths,
   createAnnotationNamespaceRoutes,

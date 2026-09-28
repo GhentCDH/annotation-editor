@@ -11,12 +11,11 @@ import {
   type AnnotationResource,
   type AnnotationResource as CoreAnnotationDefinition,
   type KeyLabel,
-  type UIAnnotationDefinition,
 } from '@ghentcdh/annotation-core';
 import { createHighlightStyle } from '@ghentcdh/annotated-text';
 import { type AxiosInstance } from 'axios';
 import { resourceApi } from '@ghentcdh/crouton-vue';
-import { AnnotationDefinitionService } from '../service/annotation-definition.service';
+import { AnnotationDefinitionService } from './annotation-definition.service';
 import {
   type DefinitionsFetchFn,
   type GlobModules,
@@ -24,7 +23,8 @@ import {
   loadAnnotationDefinitionsFromConfigs,
   loadAnnotationDefinitionsFromGlob,
   loadAnnotationDefinitionsFromUrls,
-} from '../loader/annotation-definition.loader';
+} from './annotation-definition.loader';
+import { UIAnnotationDefinition } from '@ghentcdh/annotation-ui';
 
 export type AnnotationDefinitionsState = {
   configuration: AnnotationDefConfig;

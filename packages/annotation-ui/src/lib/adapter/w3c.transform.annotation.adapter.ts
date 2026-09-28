@@ -1,13 +1,13 @@
 import {
   w3cAnnotation,
-  W3CAnnotation,
-  W3CSpecificResource,
+  type W3CAnnotation,
+  type W3CSpecificResource,
 } from '@ghentcdh/w3c-utils';
-import { TransformAnnotationAdapter } from './transform.annotation.adapter';
 import {
-  EditorAnnotation,
+  type EditorAnnotation,
   editorAnnotationSchema,
 } from '@ghentcdh/annotation-ui';
+import { TransformAnnotationAdapter } from './transform.annotation.adapter';
 import { Selector } from './editor.annotation';
 import { getAnnotationStyle, getMetadata } from './w3c.utils';
 

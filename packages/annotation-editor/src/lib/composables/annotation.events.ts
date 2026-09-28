@@ -1,9 +1,9 @@
 import { type TemplateRef } from 'vue';
 import {
-  EditorAnnotation,
-  KeyLabel,
-  SourceModel,
-  UIAnnotationDefinition,
+  type EditorAnnotation,
+  type KeyLabel,
+  type SourceModel,
+  type UIAnnotationDefinition,
 } from '@ghentcdh/annotation-ui';
 import { NotificationService } from '@ghentcdh/ui';
 import { type EditorConfig, type EditorState_ } from './editorState';

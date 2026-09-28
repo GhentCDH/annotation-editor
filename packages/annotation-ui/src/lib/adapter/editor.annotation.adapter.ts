@@ -1,13 +1,13 @@
 import {
-  Annotation,
+  type Annotation,
   AnnotationAdapter,
-  AnnotationAdapterParams,
+  type AnnotationAdapterParams,
   annotationSchema,
   selectText,
-  TextAnnotation,
+  type TextAnnotation,
 } from '@ghentcdh/annotated-text';
 import {
-  EditorAnnotation,
+  type EditorAnnotation,
   editorAnnotationSchema,
 } from '@ghentcdh/annotation-ui';
 import { Selector } from './editor.annotation';
@@ -40,7 +40,7 @@ const updateSelector = (
     ...textSelection,
   });
 
-  let selectors = originalAnnotation.selectors.filter(
+  const selectors = originalAnnotation.selectors.filter(
     (s) => s.uri !== sourceUri,
   );
   selectors.push(selector);
@@ -88,7 +88,7 @@ export class AnnotationEditorAnnotationAdapter extends AnnotationAdapter<
 
   _parse(annotation: EditorAnnotation): Annotation | null {
     const parsed = annotation as EditorAnnotation;
-    const selector = parsed.selectors.find((t) => t.uri === this.sourceUri);
+    const selector = parsed?.selectors?.find((t) => t.uri === this.sourceUri);
     if (!selector) {
       return null;
     }

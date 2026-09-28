@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import { computed, type PropType } from 'vue';
 import { Filter } from '@ghentcdh/ui';
-import { useAnnotationDefinitions } from '../../composables/useAnnotationDefinitions';
+import { useAnnotationDefinitions } from '../../definitions/useAnnotationDefinitions';
 
 const annotationDefinitions = useAnnotationDefinitions();
 const model = defineModel<string[]>();

@@ -1,5 +1,9 @@
 <template>
-  <SourceNavbar v-bind="properties" @create-annotation="createAnnotation" />
+  <SourceNavbar
+    v-if="!editorState.readonly"
+    v-bind="properties"
+    @create-annotation="createAnnotation"
+  />
   <div class="overflow-y-auto flex-1 min-h-0">
     <div :id="textUuid" ref="mainEl" :dir="source.content.textDirection" />
   </div>
@@ -7,15 +11,14 @@
 <script lang="ts" setup>
 import { v4 as uuid } from 'uuid';
 import { type AnnotatedText } from '@ghentcdh/annotated-text';
-import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { onMounted, onUnmounted, ref, watch } from 'vue';
+import {
+  type EditorAnnotation,
+  type UIAnnotationDefinition,
+} from '@ghentcdh/annotation-ui';
 import { SourceEditProperties } from './SourceEdit.properties';
 import SourceNavbar from './SourceNavbar.vue';
 import { useEditorState } from '../composables/useEditorState';
-import {
-  EditorAnnotation,
-  UIAnnotationDefinition,
-} from '@ghentcdh/annotation-ui';
 
 const properties = defineProps(SourceEditProperties);
 
@@ -23,7 +26,7 @@ const { config, sendAnnotationEvent, editorState, ...state } = useEditorState();
 
 const textUuid = `text-content-${uuid()}`;
 
-let textAnnotation: AnnotatedText<W3CAnnotation> | undefined = undefined;
+let textAnnotation: AnnotatedText<EditorAnnotation> | undefined = undefined;
 
 const mainEl = ref(null);
 let observer: IntersectionObserver | null = null;

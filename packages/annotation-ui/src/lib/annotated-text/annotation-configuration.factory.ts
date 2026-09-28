@@ -6,16 +6,15 @@ import {
   type TextAdapter,
   WordSnapper,
 } from '@ghentcdh/annotated-text';
-import { defaultRender, styleFn } from './annotation-render.style';
 import { type SourceModel } from '@ghentcdh/annotation-core';
+import { defaultRender, styleFn } from './annotation-render.style';
 import {
-  AllowedChildrenPerType,
-  EditorAnnotation,
-  TransformAnnotationAdapter,
-  UIAnnotationConfiguration,
-  UIAnnotationDefinition,
-} from '@ghentcdh/annotation-ui';
+  type AllowedChildrenPerType,
+  type UIAnnotationConfiguration,
+  type UIAnnotationDefinition,
+} from '../types/ui-annotation-definition.type';
 import { AnnotationEditorAnnotationAdapter } from '../adapter/editor.annotation.adapter';
+import { EditorAnnotation, TransformAnnotationAdapter } from '../adapter';
 
 const groupById = <KEY extends keyof UIAnnotationDefinition>(
   defs: UIAnnotationDefinition[],

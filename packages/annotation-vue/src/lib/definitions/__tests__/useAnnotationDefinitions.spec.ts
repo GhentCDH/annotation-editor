@@ -4,7 +4,7 @@ import {
   type AnnotationDefConfig,
   type AnnotationResource,
 } from '@ghentcdh/annotation-core';
-import { type DefinitionsFetchFn } from '../../loader/annotation-definition.loader';
+import { type DefinitionsFetchFn } from '../annotation-definition.loader';
 import {
   type AnnotationDefinitionsState,
   provideAnnotationDefinitions,

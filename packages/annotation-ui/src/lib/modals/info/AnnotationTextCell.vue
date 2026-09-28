@@ -7,25 +7,22 @@
 </template>
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { w3cAnnotation, type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import type { SourceModel } from '../../types/source.model';
+import { type EditorAnnotation } from '../../adapter';
 
 const props = defineProps<{
-  annotation: W3CAnnotation;
+  annotation: EditorAnnotation;
   sources: SourceModel[];
   maxCharacters?: number;
 }>();
 
 const excerpt = computed(() => {
-  const builder = w3cAnnotation(props.annotation);
-  const sourceUri = builder.getSourceUri();
+  const selector = props.annotation.selectors.find((s) => s.uri);
+  const sourceUri = selector?.uri;
   if (!sourceUri) return null;
 
   const source = props.sources.find((s) => s.uri === sourceUri);
   if (!source) return null;
-
-  const selector = builder.getTextPositionSelector(sourceUri)[0];
-  if (!selector) return null;
 
   const max = props.maxCharacters ?? 50;
   const start = selector.start ?? 0;

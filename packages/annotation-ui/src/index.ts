@@ -5,7 +5,6 @@ export * from './lib/types/grid-layout.types';
 export * from './lib/types/ui-annotation-definition.type';
 
 // Utils
-export * from './lib/utils/annotation-utils';
 export * from './lib/utils/mouse-events';
 
 // Modal infrastructure

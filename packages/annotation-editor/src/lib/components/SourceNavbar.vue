@@ -21,7 +21,9 @@ const actions = computed(() => [
     label: 'Add',
     disabled: editorState.disableEdits,
     children: config.annotation.rootTypes.map((type) => ({
-      action: () => createAnnotation(type),
+      action: () => {
+        createAnnotation(config.annotation.getDefinition(type.key));
+      },
       label: type.label,
       disabled: properties.disabled,
     })),

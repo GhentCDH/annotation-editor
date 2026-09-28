@@ -1,22 +1,21 @@
 export { TransformAnnotationAdapter } from '@ghentcdh/annotation-ui';
 
-export { AnnotationDefinitionService } from './lib/service/annotation-definition.service';
+export { AnnotationDefinitionService } from './lib/definitions/annotation-definition.service';
 export {
   type GlobModules,
   loadAnnotationDefinitionsFromGlob,
   loadAnnotationDefinitionsFromConfigs,
   loadAnnotationDefinitionsFromUrls,
-} from './lib/loader/annotation-definition.loader';
+} from './lib/definitions/annotation-definition.loader';
 export {
   type AnnotationDefinitionsState,
   type ProvideAnnotationDefinitionsOptions,
   provideAnnotationDefinitions,
   useAnnotationDefinitions,
   createAnnotationDefinitionsState,
-} from './lib/composables/useAnnotationDefinitions';
+} from './lib/definitions/useAnnotationDefinitions';
 export { AnnotationPlugin } from './lib/annotation.plugin';
 export { configureApi } from './lib/service/useApi';
-export * from '@ghentcdh/annotation-preview';
 export * from '@ghentcdh/annotation-core';
 export * from '@ghentcdh/annotation-editor';
 
