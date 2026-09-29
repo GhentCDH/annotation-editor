@@ -1,34 +1,34 @@
 import { type EmitFn, ref } from 'vue';
 import { NotificationService } from '@ghentcdh/ui';
 import { type FormMessageProps, resourceApi } from '@ghentcdh/crouton-vue';
-import { type EditorAnnotation } from '@ghentcdh/annotation-ui';
-import { getTextSelector } from './utils';
+import {
+  type EditorAnnotation,
+  editorAnnotationSchema,
+  Selector,
+} from '@ghentcdh/annotation-ui';
 import {
   type AnnotationEditEmits,
   type AnnotationEditModal,
 } from './AnnotationEditModal.properties';
+import { useEditorState } from '../../composables/useEditorState';
 
 export const UseAnnotationEdit = (
   props: AnnotationEditModal,
   emits: EmitFn<typeof AnnotationEditEmits>,
 ) => {
-  const metadata = props.annotation.metadata ?? {};
+  const { editorState } = useEditorState();
   console.log(props.annotation);
 
   const resource = resourceApi(props.annotation.definition, {});
 
-  let selectors: Selector[] | null = null;
-  const message = ref<FormMessageProps>({ status: 'idle' });
-
-  const editedAnnotation = ref<EditorAnnotation | null>(
-    props.annotation ?? null,
+  let selector: Selector | null = props.annotation?.getSelector?.(
+    props.source.uri,
   );
+  let hasChanged = false;
 
-  if (props.annotation) {
-    // TODO init it
-  }
-
-  let rawData = {};
+  console.log(selector);
+  let metadata = ref(props.annotation.metadata ?? {});
+  const message = ref<FormMessageProps>({ status: 'idle' });
 
   const annotationSelector = ref<EditorAnnotation | null>(null);
 
@@ -38,13 +38,31 @@ export const UseAnnotationEdit = (
   };
 
   const saveToBackend = async () => {
-    const originalAnnotation = props.annotation;
-    const operations = props.annotation.definition.operations ?? {};
+    const originalAnnotation = props.annotation.id
+      ? props.annotation
+      : editorAnnotationSchema.parse({
+          id: 'NEW_ANNOTATION',
+          metadata: {},
+          definition: props.annotation.definition,
+          label: '',
+          links: [],
+          selectors: [selector],
+        });
+    const operations = originalAnnotation.definition.operations ?? {};
     // check if resource can handle backend requests
     if (!originalAnnotation && !operations.create) return;
     if (originalAnnotation && !operations.update) return;
-    // TODO call the transformer!
-    if (originalAnnotation) {
+
+    const cloned = originalAnnotation.clone({
+      metadata: metadata.value,
+    });
+    cloned.setSelector(selector);
+
+    const dataToSave = editorState.annotationTransformer.format(
+      cloned,
+      !originalAnnotation.id,
+    );
+    if (props.annotation.id) {
       return resource.save(originalAnnotation.id, dataToSave).then(() => {
         message.value = { status: 'saved' };
         NotificationService.success('Annotation saved successfully.');
@@ -58,7 +76,7 @@ export const UseAnnotationEdit = (
   };
 
   const save = () => {
-    if (!selectors || !editedAnnotation.value) {
+    if (!selector || !metadata) {
       message.value = { message: 'Select annotation first', status: 'error' };
       return;
     }
@@ -68,9 +86,7 @@ export const UseAnnotationEdit = (
     saveToBackend()
       .then((result) => {
         emits('close', {
-          annotation: editedAnnotation.value,
-          rawData,
-          selectors,
+          result,
         });
       })
       .catch((err) => {
@@ -86,17 +102,6 @@ export const UseAnnotationEdit = (
     annotation?: EditorAnnotation | null;
     metadata?: any;
   }) => {
-    if (_annotation) {
-      selectors = getTextSelector({
-        source: props.source,
-        parent: props.parent,
-        annotation: _annotation,
-      });
-    }
-    if (metadata) {
-      rawData = _metadata;
-    }
-
     // if (selectors)
     //   editedAnnotation.value = utils.createAnnotation(
     //     props.annotation,
@@ -104,18 +109,33 @@ export const UseAnnotationEdit = (
     //     metadata,
     //     selectors,
     //   );
+    hasChanged = true;
+    metadata.value = editorState.annotationTransformer.transformMetadata(
+      _metadata,
+      selector,
+    );
+    return metadata.value;
+  };
 
-    return editedAnnotation.value;
+  const updateSelector = (updatedSelector: Selector) => {
+    console.log('updatedSelector', updatedSelector);
+    selector = updatedSelector;
+    hasChanged = true;
+
+    selector = updatedSelector;
+    metadata.value = editorState.annotationTransformer.transformMetadata(
+      metadata.value,
+      updatedSelector,
+    );
   };
 
   return {
     save,
     cancel,
-    rawData,
     metadata,
     annotationSelector,
-    editedAnnotation,
     onChangeValue,
     message,
+    updateSelector,
   };
 };

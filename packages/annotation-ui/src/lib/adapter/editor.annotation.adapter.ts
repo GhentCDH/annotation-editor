@@ -9,8 +9,9 @@ import {
 import {
   type EditorAnnotation,
   editorAnnotationSchema,
+  UIAnnotationDefinition,
 } from '@ghentcdh/annotation-ui';
-import { Selector } from './editor.annotation';
+import { SelectorSchema } from './editor.annotation';
 
 type SourceModel = any;
 type Params = AnnotationAdapterParams & { sourceModel: SourceModel };
@@ -23,9 +24,9 @@ const updateSelector = (
     fullFlatText: string;
     startOffset: number;
   },
-  originalAnnotation: EditorAnnotation,
+  originalAnnotation?: EditorAnnotation,
 ) => {
-  const textSelection = !text.fullFlatText
+  const textSelection = text.fullFlatText
     ? selectText(
         text.fullFlatText,
         startEnd.start,
@@ -34,15 +35,14 @@ const updateSelector = (
       )
     : {};
 
-  const selector = Selector.parse({
+  const selector = SelectorSchema.parse({
     ...startEnd,
     uri: sourceUri,
     ...textSelection,
   });
 
-  const selectors = originalAnnotation.selectors.filter(
-    (s) => s.uri !== sourceUri,
-  );
+  const selectors =
+    originalAnnotation?.selectors?.filter((s) => s.uri !== sourceUri) ?? [];
   selectors.push(selector);
 
   return selectors;
@@ -68,6 +68,27 @@ export const updateAnnotation = (
       },
       originalAnnotation,
     ),
+  });
+};
+
+export const createAnnotation = (
+  sourceUri: string,
+  anno: StartEnd & { definition: UIAnnotationDefinition },
+  text: {
+    fullFlatText: string;
+    startOffset: number;
+  },
+) => {
+  return editorAnnotationSchema.parse({
+    id: 'NEW_ANNOTATION',
+    metadata: {},
+    definition: {},
+    label: '',
+    links: [],
+    selectors: updateSelector(sourceUri, anno, {
+      fullFlatText: text.fullFlatText,
+      startOffset: text.startOffset,
+    }),
   });
 };
 
@@ -117,15 +138,21 @@ export class AnnotationEditorAnnotationAdapter extends AnnotationAdapter<
       throw new Error('annotation id is required');
     }
 
-    const editorAnnotation = updateAnnotation(
-      this.sourceUri,
-      annotation,
-      {
-        fullFlatText: this.textAdapter.fullFlatText,
-        startOffset: this.startOffset,
-      },
-      originalAnnotation,
-    );
+    const editorAnnotation =
+      isNew || !originalAnnotation
+        ? createAnnotation(this.sourceUri, annotation, {
+            fullFlatText: this.textAdapter.fullFlatText,
+            startOffset: this.startOffset,
+          })
+        : updateAnnotation(
+            this.sourceUri,
+            annotation,
+            {
+              fullFlatText: this.textAdapter.fullFlatText,
+              startOffset: this.startOffset,
+            },
+            originalAnnotation,
+          );
 
     this.addAnnotation(annotation.id, editorAnnotation, annotation);
     return editorAnnotation;

@@ -2,7 +2,7 @@ import {
   type AnnotationAdapterParams,
   type BaseAnnotation,
 } from '@ghentcdh/annotated-text';
-import { type EditorAnnotation } from './editor.annotation';
+import { type EditorAnnotation, Selector } from './editor.annotation';
 import { type UIAnnotationDefinition } from '../types/ui-annotation-definition.type';
 
 const groupById = <KEY extends keyof UIAnnotationDefinition>(
@@ -35,11 +35,7 @@ export abstract class TransformAnnotationAdapter<
   abstract defaultParams: AnnotationAdapterParams;
 
   abstract parse(annotation: ANNOTATION): EditorAnnotation | null;
-  abstract format(
-    annotation: EditorAnnotation,
-    isNew: boolean,
-    hasChanged: boolean,
-  ): ANNOTATION;
+  abstract format(annotation: EditorAnnotation, isNew: boolean): ANNOTATION;
 
   private definitionsMap: Record<string, UIAnnotationDefinition> = {};
 
@@ -52,5 +48,9 @@ export abstract class TransformAnnotationAdapter<
 
   resolveDefinition(schemaUri: string) {
     return this.definitionsMap[schemaUri] ?? { name: 'default' };
+  }
+
+  transformMetadata(metadata: any, selector: Selector) {
+    return metadata;
   }
 }

@@ -3,7 +3,7 @@ import { type UIAnnotationDefinition } from '../types/ui-annotation-definition.t
 
 const annotationIdSchema = z.union([z.string(), z.number()]);
 
-export const Selector = z.object({
+export const SelectorSchema = z.object({
   uri: z.string(),
   start: z.number(),
   end: z.number(),
@@ -11,6 +11,8 @@ export const Selector = z.object({
   prefix: z.string().optional(),
   suffix: z.string().optional(),
 });
+
+export type Selector = z.infer<typeof SelectorSchema>;
 
 // TODO need to implement
 export const Link = z.object({});
@@ -34,7 +36,7 @@ export const editorAnnotationSchema: z.ZodType<_EditorAnnotation> = z
       definition: z.custom<UIAnnotationDefinition>(),
       metadata: z.any(),
       // TODO this will not work for linked annotations!!!!
-      selectors: z.array(Selector),
+      selectors: z.array(SelectorSchema),
       parentId: z.string().optional(),
       links: z.array(Link).default([]),
       parent: editorAnnotationSchema.optional(),
@@ -44,10 +46,23 @@ export const editorAnnotationSchema: z.ZodType<_EditorAnnotation> = z
     const getSelector = (sourceUri: string) => {
       return d.selectors?.find((s) => s.uri === sourceUri);
     };
+    const setSelector = (selector: Selector) => {
+      const selectors =
+        d.selectors?.filter((s) => s.uri !== selector.uri) ?? [];
+      selectors.push(selector);
+
+      return selector;
+    };
+
+    const clone = (annotation: Partial<EditorAnnotation>): EditorAnnotation => {
+      return editorAnnotationSchema.parse({ ...d, ...annotation });
+    };
 
     return {
       ...d,
       getSelector,
+      setSelector,
+      clone,
     };
   });
 

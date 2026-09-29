@@ -85,6 +85,7 @@ export const useProvideEditorState = (
     readonly,
     show: () => showEditorState(),
     reset: () => resetEditorState(),
+    annotationTransformer: props.annotationTransformer,
   });
 
   watch(

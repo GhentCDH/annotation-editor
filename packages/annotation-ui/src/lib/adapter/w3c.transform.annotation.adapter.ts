@@ -8,7 +8,7 @@ import {
   editorAnnotationSchema,
 } from '@ghentcdh/annotation-ui';
 import { TransformAnnotationAdapter } from './transform.annotation.adapter';
-import { Selector } from './editor.annotation';
+import { SelectorSchema } from './editor.annotation';
 import { getAnnotationStyle, getMetadata } from './w3c.utils';
 
 export class W3cTransformAnnotationAdapter extends TransformAnnotationAdapter<W3CAnnotation> {
@@ -28,7 +28,7 @@ export class W3cTransformAnnotationAdapter extends TransformAnnotationAdapter<W3
         ),
         uri: resource.source,
       };
-      const parsed = Selector.safeParse(obj);
+      const parsed = SelectorSchema.safeParse(obj);
 
       if (parsed.error) return null;
       return parsed.data;
