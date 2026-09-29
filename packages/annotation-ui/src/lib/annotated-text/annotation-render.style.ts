@@ -1,5 +1,5 @@
 import { createHighlightStyle, Debugger } from '@ghentcdh/annotated-text';
-import { type EditorAnnotation } from '@ghentcdh/annotation-ui';
+import { type EditorAnnotation } from '../adapter/editor.annotation';
 
 export const defaultRender = (annotation: EditorAnnotation): string | null => {
   const style = annotation.definition?.annotation;

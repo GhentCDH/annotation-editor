@@ -34,10 +34,10 @@ import { type UIAnnotationDefinition } from '@ghentcdh/annotation-ui';
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { AnnotationInfoCardProperties } from './AnnotationInfoCard.properties';
 import LinksDetail from './LinksDetail.vue';
+import { default as Metadata } from './Metadata.vue';
 import { useEditorState } from '../../composables/useEditorState';
 import Navbar from '../../components/navbar.vue';
 import { type NavbarAction } from '../../components/navbar.properties';
-import { default as Metadata } from './Metadata.vue';
 
 const properties = defineProps(AnnotationInfoCardProperties);
 

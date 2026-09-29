@@ -5,7 +5,7 @@ import {
 import {
   type EditorAnnotation,
   LinkSchema,
-  Selector,
+  type Selector,
 } from './editor.annotation';
 import { type UIAnnotationDefinition } from '../types/ui-annotation-definition.type';
 

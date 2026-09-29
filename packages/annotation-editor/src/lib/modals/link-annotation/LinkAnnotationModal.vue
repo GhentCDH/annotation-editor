@@ -21,6 +21,7 @@
           <div class="flex-grow flex flex-col gap-2">
             <AnnotationText
               v-for="a of annotations"
+              :key="a.id"
               :annotation="a"
               :show-source="true"
             />
@@ -51,7 +52,7 @@ const emits = defineEmits(LinkEmits);
 const { save, cancel, onChangeValue, message, annotations, metadata } =
   useAnnotationLink(props, emits);
 
-const formatBeforeSave = (formData: any) => {
+const formatBeforeSave = (formData: Record<string, unknown>) => {
   return onChangeValue({ metadata: formData });
 };
 

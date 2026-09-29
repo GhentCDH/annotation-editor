@@ -1,10 +1,9 @@
 import { type EmitFn } from 'vue';
-import { editorAnnotationSchema, Selector } from '@ghentcdh/annotation-ui';
+import { editorAnnotationSchema, type Selector } from '@ghentcdh/annotation-ui';
 import {
   type AnnotationEditEmits,
   type AnnotationEditModal,
 } from './AnnotationEditModal.properties';
-import { useEditorState } from '../../composables/useEditorState';
 import { useMetadataEdit } from '../../composables/useMetadataEdit';
 import metadata from '../info/Metadata.vue';
 
@@ -12,9 +11,6 @@ export const UseAnnotationEdit = (
   props: AnnotationEditModal,
   emits: EmitFn<typeof AnnotationEditEmits>,
 ) => {
-  const { editorState } = useEditorState();
-  console.log(props.annotation);
-
   let selector: Selector | null = props.annotation?.getSelector?.(
     props.source.uri,
   );

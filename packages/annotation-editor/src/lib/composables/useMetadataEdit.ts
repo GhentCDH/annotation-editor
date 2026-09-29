@@ -1,4 +1,4 @@
-import { EditorAnnotation, Selector } from '@ghentcdh/annotation-ui';
+import { type EditorAnnotation, type Selector } from '@ghentcdh/annotation-ui';
 import { ref } from 'vue';
 import { useEditorState } from './useEditorState';
 import { useAnnotationResource } from './useAnnotationResource';
@@ -7,8 +7,8 @@ export const useMetadataEdit = (annotation: EditorAnnotation) => {
   const { editorState } = useEditorState();
   const resource = useAnnotationResource(annotation);
 
-  let metadata = ref(annotation.metadata ?? {});
-  let hasChanged = ref(false);
+  const metadata = ref(annotation.metadata ?? {});
+  const hasChanged = ref(false);
 
   const onChangeValue = ({
     metadata: _metadata,

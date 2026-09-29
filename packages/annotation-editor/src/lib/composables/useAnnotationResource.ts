@@ -1,4 +1,4 @@
-import { EditorAnnotation } from '@ghentcdh/annotation-ui';
+import { type EditorAnnotation } from '@ghentcdh/annotation-ui';
 import { type FormMessageProps, resourceApi } from '@ghentcdh/crouton-vue';
 import { NotificationService } from '@ghentcdh/ui';
 import { type EmitFn, ref } from 'vue';

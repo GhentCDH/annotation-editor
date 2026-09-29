@@ -1,10 +1,16 @@
 <template>
   <table class="border border-gray-300 table table-zebra table-sm">
     <tbody>
-      <tr v-for="link in links" :key="link.annotation.id">
+      <tr
+        v-for="link in links"
+        :key="link.annotation.id"
+      >
         <th>{{ link.definition.label }}</th>
         <td class="max-w-[300px]">
-          <AnnotationText :annotation="link.relation" :max-characters="25" />
+          <AnnotationText
+            :annotation="link.relation"
+            :max-characters="25"
+          />
         </td>
         <td>
           <Navbar :actions="actions(link)" />
@@ -19,7 +25,7 @@ import { computed } from 'vue';
 import { IconEnum } from '@ghentcdh/ui';
 import {
   type EditorAnnotation,
-  UIAnnotationDefinition,
+  type UIAnnotationDefinition,
 } from '@ghentcdh/annotation-ui';
 import AnnotationText from './Annotation-text.vue';
 import Navbar from '../../components/navbar.vue';

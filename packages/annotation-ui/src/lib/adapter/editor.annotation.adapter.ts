@@ -9,9 +9,10 @@ import {
 import {
   type EditorAnnotation,
   editorAnnotationSchema,
-  UIAnnotationDefinition,
-} from '@ghentcdh/annotation-ui';
-import { SelectorSchema } from './editor.annotation';
+  SelectorSchema,
+  type Selector,
+} from './editor.annotation';
+import { type UIAnnotationDefinition } from '../types/ui-annotation-definition.type';
 
 type SourceModel = any;
 type Params = AnnotationAdapterParams & { sourceModel: SourceModel };
@@ -42,7 +43,7 @@ const updateSelector = (
   });
 
   const selectors =
-    originalAnnotation?.selectors?.filter((s) => s.uri !== sourceUri) ?? [];
+    originalAnnotation?.selectors?.filter((s: Selector) => s.uri !== sourceUri) ?? [];
   selectors.push(selector);
 
   return selectors;
@@ -73,7 +74,7 @@ export const updateAnnotation = (
 
 export const createAnnotation = (
   sourceUri: string,
-  anno: StartEnd & { definition: UIAnnotationDefinition },
+  anno: StartEnd & { definition?: UIAnnotationDefinition },
   text: {
     fullFlatText: string;
     startOffset: number;
@@ -109,7 +110,7 @@ export class AnnotationEditorAnnotationAdapter extends AnnotationAdapter<
 
   _parse(annotation: EditorAnnotation): Annotation | null {
     const parsed = annotation as EditorAnnotation;
-    const selector = parsed?.selectors?.find((t) => t.uri === this.sourceUri);
+    const selector = parsed?.selectors?.find((t: Selector) => t.uri === this.sourceUri);
     if (!selector) {
       return null;
     }

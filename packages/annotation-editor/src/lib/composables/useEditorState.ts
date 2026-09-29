@@ -10,7 +10,7 @@ import {
   watch,
 } from 'vue';
 import {
-  AnnotationId,
+  type AnnotationId,
   createAnnotationConfiguration,
   type EditorAnnotation,
   type SourceModel,

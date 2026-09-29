@@ -14,7 +14,7 @@ import {
   type UIAnnotationDefinition,
 } from '../types/ui-annotation-definition.type';
 import { AnnotationEditorAnnotationAdapter } from '../adapter/editor.annotation.adapter';
-import { EditorAnnotation, TransformAnnotationAdapter } from '../adapter';
+import { type EditorAnnotation, type TransformAnnotationAdapter } from '../adapter';
 
 const groupById = <KEY extends keyof UIAnnotationDefinition>(
   defs: UIAnnotationDefinition[],

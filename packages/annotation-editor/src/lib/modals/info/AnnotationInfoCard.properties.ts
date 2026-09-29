@@ -1,8 +1,8 @@
 import { type EmitFn, type ExtractPublicPropTypes, type PropType } from 'vue';
 import {
-  EditorAnnotation,
-  SourceModel,
-  UIAnnotationConfiguration,
+  type EditorAnnotation,
+  type SourceModel,
+  type UIAnnotationConfiguration,
 } from '@ghentcdh/annotation-ui';
 
 type Position = { x: number; y: number };

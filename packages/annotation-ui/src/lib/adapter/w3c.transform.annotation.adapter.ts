@@ -1,27 +1,29 @@
 import {
   w3cAnnotation,
   type W3CAnnotation,
+  type W3CSelector,
   type W3CSpecificResource,
 } from '@ghentcdh/w3c-utils';
 import {
+  type AnnotationLink,
   type EditorAnnotation,
   editorAnnotationSchema,
-  Link,
   LinkSchema,
-  Selector,
-} from '@ghentcdh/annotation-ui';
+  type Selector,
+  SelectorSchema,
+} from './editor.annotation';
 import { TransformAnnotationAdapter } from './transform.annotation.adapter';
-import { SelectorSchema } from './editor.annotation';
 import { getAnnotationStyle, getMetadata } from './w3c.utils';
 
 const createSelector = (resource: W3CSpecificResource) => {
-  let selector = resource.selector ?? [];
-  if (!Array.isArray(selector)) {
-    selector = [selector];
-  }
+  const selectorArr: W3CSelector[] = Array.isArray(resource.selector)
+    ? resource.selector
+    : resource.selector
+      ? [resource.selector]
+      : [];
   const obj = {
-    ...selector?.reduce(
-      (acc, { type: _, ...rest }) => ({ ...acc, ...rest }),
+    ...selectorArr.reduce(
+      (acc: Record<string, unknown>, { type: _, ...rest }) => ({ ...acc, ...rest }),
       {},
     ),
     uri: resource.source,
@@ -40,8 +42,8 @@ export class W3cTransformAnnotationAdapter extends TransformAnnotationAdapter<W3
     const builder = w3cAnnotation(annotation);
     const specificResourceTargets = builder.getSpecificResourceTargets();
     const selectors: Selector[] = [];
-    const links: Link[] = [];
-    for (let resource of specificResourceTargets) {
+    const links: AnnotationLink[] = [];
+    for (const resource of specificResourceTargets) {
       // check if it's an annotation
       if (!resource.selector) {
         // it is a link

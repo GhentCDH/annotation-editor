@@ -1,7 +1,7 @@
 import {
   type AnnotationModalConfig,
   type EditorAnnotation,
-  TransformAnnotationAdapter,
+  type TransformAnnotationAdapter,
   type UIAnnotationConfiguration,
 } from '@ghentcdh/annotation-ui';
 

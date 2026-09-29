@@ -28,8 +28,6 @@ export const selectAnnotationById = (
 ) => {
   const { config, editorState, emits, findAnnotationData } = ctx;
 
-  console.log('selectAnnotationById', container, annotationId);
-
   if (!annotationId) {
     if (editorState.selectedAnnotation) {
       config.modal.close('info-card');

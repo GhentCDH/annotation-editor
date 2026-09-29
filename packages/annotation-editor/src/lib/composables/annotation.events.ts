@@ -81,7 +81,6 @@ export const editAnnotation = (
   state: EditorState_,
   emits: AnnotationEditorEmitsFn,
 ) => {
-  console.log('editAnnotation', data.annotation);
   if (state.disableEdits) return;
 
   state.disableEdits = true;
