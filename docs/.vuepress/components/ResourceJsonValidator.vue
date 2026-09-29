@@ -5,10 +5,11 @@ import {
   buildResourceJsonSchema,
   runResourceMigrations,
 } from '@ghentcdh/crouton-core';
+import { buildAnnotationDefFromResourceJson } from '../../../packages/annotation-vue/src/lib/definitions/annotation-definition.loader';
 
 type ValidationState =
   | { status: 'idle' }
-  | { status: 'valid'; data: unknown }
+  | { status: 'valid'; data: unknown; schema: unknown }
   | { status: 'invalid'; message: string };
 
 const EXAMPLES = {
@@ -52,6 +53,24 @@ const EXAMPLES = {
 
 const input = ref('');
 const result = ref<ValidationState>({ status: 'idle' });
+const urlInput = ref('');
+const urlLoading = ref(false);
+const urlError = ref('');
+
+const fetchFromUrl = async () => {
+  if (!urlInput.value.trim()) return;
+  urlLoading.value = true;
+  urlError.value = '';
+  try {
+    const res = await fetch(urlInput.value.trim());
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    input.value = JSON.stringify(await res.json(), null, 2);
+  } catch (e) {
+    urlError.value = e instanceof Error ? e.message : String(e);
+  } finally {
+    urlLoading.value = false;
+  }
+};
 
 let timer: ReturnType<typeof setTimeout> | null = null;
 
@@ -73,7 +92,12 @@ const validate = (raw: string) => {
   const migrated = runResourceMigrations(parsed as Record<string, unknown>);
   const outcome = buildResourceJsonSchema().safeParse(migrated.raw);
   if (outcome.success) {
-    result.value = { status: 'valid', data: outcome.data };
+    const schema = buildAnnotationDefFromResourceJson(migrated.raw);
+    result.value = {
+      status: 'valid',
+      data: outcome.data,
+      schema: schema,
+    };
   } else {
     result.value = {
       status: 'invalid',
@@ -116,6 +140,24 @@ const loadExample = (key: keyof typeof EXAMPLES) => {
       </button>
     </div>
 
+    <div class="flex gap-2">
+      <input
+        v-model="urlInput"
+        type="url"
+        placeholder="https://…/api/model/schema"
+        class="flex-1 font-mono text-sm p-2 border border-gray-300 rounded-md bg-gray-50"
+        @keyup.enter="fetchFromUrl"
+      />
+      <button
+        class="text-sm px-3 py-1 border border-gray-300 rounded bg-gray-100 hover:bg-blue-50 cursor-pointer disabled:opacity-50"
+        :disabled="urlLoading"
+        @click="fetchFromUrl"
+      >
+        {{ urlLoading ? 'Loading…' : 'Fetch' }}
+      </button>
+    </div>
+    <div v-if="urlError" class="text-xs text-red-600">{{ urlError }}</div>
+
     <textarea
       v-model="input"
       placeholder="Paste your resource.json here…"
@@ -131,19 +173,30 @@ const loadExample = (key: keyof typeof EXAMPLES) => {
       Paste a <code>resource.json</code> above to validate it.
     </div>
 
-    <div
-      v-else-if="result.status === 'valid'"
-      class="px-4 py-3 rounded-md text-sm bg-green-50 border border-green-300 text-green-800"
-    >
-      <strong>✓ Valid</strong>
-      <details class="mt-1">
-        <summary class="cursor-pointer text-sm">Normalized output</summary>
-        <pre class="mt-2 text-xs whitespace-pre-wrap break-words">{{
-          JSON.stringify(result.data, null, 2)
-        }}</pre>
-      </details>
-    </div>
+    <template v-else-if="result.status === 'valid'">
+      <div
+        class="px-4 py-3 rounded-md text-sm bg-green-50 border border-green-300 text-green-800"
+      >
+        <strong>✓ Valid</strong>
+        <details class="mt-1">
+          <summary class="cursor-pointer text-sm">Normalized output</summary>
+          <pre class="mt-2 text-xs whitespace-pre-wrap break-words">{{
+            JSON.stringify(result.data, null, 2)
+          }}</pre>
+        </details>
+      </div>
 
+      <div
+        class="px-4 py-3 rounded-md text-sm bg-green-50 border border-green-300 text-green-800"
+      >
+        <details class="mt-1">
+          <summary class="cursor-pointer text-sm">Schema output</summary>
+          <pre class="mt-2 text-xs whitespace-pre-wrap break-words">{{
+            JSON.stringify(result.schema, null, 2)
+          }}</pre>
+        </details>
+      </div>
+    </template>
     <div
       v-else
       class="px-4 py-3 rounded-md text-sm bg-red-50 border border-red-300 text-red-800"

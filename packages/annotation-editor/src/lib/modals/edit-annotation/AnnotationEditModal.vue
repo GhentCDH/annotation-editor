@@ -56,19 +56,12 @@ import { useEditorState } from '../../composables/useEditorState';
 let annotatedText: AnnotatedText<EditorAnnotation>;
 const props = defineProps(AnnotationEditModalProperties);
 
-const { config } = useEditorState();
+const { config, findAnnotation } = useEditorState();
 
 const emits = defineEmits(AnnotationEditEmits);
 
-const {
-  save,
-  cancel,
-  metadata,
-  annotationSelector,
-  message,
-  onChangeValue,
-  updateSelector,
-} = UseAnnotationEdit(props, emits);
+const { save, cancel, metadata, message, onChangeValue, updateSelector } =
+  UseAnnotationEdit(props, emits);
 
 const editId = `edit-select-annotation-${Date.now()}--`;
 
@@ -93,8 +86,8 @@ const selectFull = () => {
     start: 0,
     end: source!.content.text.length + 1,
   };
-  const parent = annotation.parent;
-  if (parent) {
+  if (annotation.parentId) {
+    const parent = findAnnotation(annotation.parentId);
     const selector = parent.getSelector(source.uri);
     if (selector) {
       maxRange.start = selector.start;
@@ -129,7 +122,6 @@ const selectAll = () => {
     .setAnnotationAdapterParams({ create: false, edit: true })
     .setAnnotations([annotation]);
   updateSelector(annotation.getSelector(props.source.uri));
-  annotationSelector.value = annotation;
 };
 
 onMounted(() => {
@@ -150,12 +142,10 @@ onMounted(() => {
   annotatedText
     .setAnnotationAdapterParams({ edit: true, create: !props.annotation?.id })
     .on('annotation-create--end', ({ mouseEvent, event, data: _data }) => {
-      annotationSelector.value = _data.annotation;
       updateSelector(_data.annotation.getSelector(props.source.uri));
       annotatedText.setAnnotationAdapterParams({ create: false, edit: true });
     })
     .on('annotation-edit--end', ({ mouseEvent, event, data }) => {
-      annotationSelector.value = data.annotation;
       updateSelector(data.annotation.getSelector(props.source.uri));
     });
 

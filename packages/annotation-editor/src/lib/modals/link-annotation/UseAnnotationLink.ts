@@ -1,82 +1,45 @@
-import { type EmitFn, ref } from 'vue';
-import { NotificationService } from '@ghentcdh/ui';
-import { type FormMessageProps, resourceApi } from '@ghentcdh/crouton-vue';
-import { type EditorAnnotation } from '@ghentcdh/annotation-ui';
+import { type EmitFn } from 'vue';
 import {
   type LinkAnnotationProps,
   type LinkEmits,
 } from './link-annotation.properties';
 import { useEditorState } from '../../composables/useEditorState';
+import { useMetadataEdit } from '../../composables/useMetadataEdit';
 
 export const useAnnotationLink = (
   props: LinkAnnotationProps,
   emits: EmitFn<typeof LinkEmits>,
 ) => {
-  const { config } = useEditorState();
+  const { findAnnotation } = useEditorState();
 
   const metadata = {};
-  const annotationDef = config.annotation.getDefinition(props.type);
+  const annotations = props.annotation.links.map((l) => findAnnotation(l.uri));
 
-  const resource = annotationDef ? resourceApi(annotationDef, {}) : null;
-
-  const message = ref<FormMessageProps>({ status: 'idle' });
-
-  let rawData = {};
+  const metadataEdit = useMetadataEdit(props.annotation);
 
   const cancel = () => {
     emits('close', null);
   };
 
-  const saveToBackend = async (annotation: EditorAnnotation) => {
-    // check if resource can handle backend requests
-    if (!annotationDef.operations.create) return;
-
-    return resource.create(annotation).then(() => {
-      message.value = { status: 'saved' };
-      NotificationService.success('Annotation saved successfully.');
-    });
-  };
-
   const save = () => {
-    message.value = { status: 'saving' };
+    metadataEdit.message.value = { status: 'saving' };
 
-    const result = config.annotation.annotationAdapter.createLinkAnnotation(
-      props.sourceAnnotation!,
-      props.targetAnnotation,
-      annotationDef!,
-      rawData,
-    );
+    const originalAnnotation = originalAnnotation.clone({
+      metadata: metadataEdit.metadata.value,
+    });
 
-    saveToBackend(result)
-      .then((result) => {
-        emits('close', {
-          annotation: result,
-          rawData,
-          sourceAnnotation: props.sourceAnnotation,
-          targetAnnotation: props.targetAnnotation,
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-        message.value = { status: 'error' };
-      });
+    metadataEdit.save(originalAnnotation);
   };
-
   const onChangeValue = ({ metadata: _metadata }: { metadata?: any }) => {
-    if (metadata) {
-      rawData = _metadata;
-    }
-
-    return rawData;
+    return metadataEdit.onChangeValue({ metadata });
   };
 
   return {
     save,
     cancel,
-    rawData,
-    metadata,
-    annotationDef,
+    metadata: metadataEdit.metadata,
     onChangeValue,
-    message,
+    message: metadataEdit.message,
+    annotations,
   };
 };

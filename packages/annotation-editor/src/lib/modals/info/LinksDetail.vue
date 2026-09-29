@@ -1,19 +1,13 @@
 <template>
   <table class="border border-gray-300 table table-zebra table-sm">
     <tbody>
-      <tr
-        v-for="link in links"
-        :key="link.annotation.id"
-      >
-        <th>{{ link.name }}</th>
+      <tr v-for="link in links" :key="link.annotation.id">
+        <th>{{ link.definition.label }}</th>
         <td class="max-w-[300px]">
-          <AnnotationText
-            :annotation="link.relation"
-            :max-characters="25"
-          />
+          <AnnotationText :annotation="link.relation" :max-characters="25" />
         </td>
         <td>
-          <Navbar :actions="actions(link as any)" />
+          <Navbar :actions="actions(link)" />
         </td>
       </tr>
     </tbody>
@@ -23,39 +17,56 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { IconEnum } from '@ghentcdh/ui';
-import { type AnnotationLink, type EditorAnnotation } from '@ghentcdh/annotation-ui';
+import {
+  type EditorAnnotation,
+  UIAnnotationDefinition,
+} from '@ghentcdh/annotation-ui';
 import AnnotationText from './Annotation-text.vue';
 import Navbar from '../../components/navbar.vue';
 import { useEditorState } from '../../composables/useEditorState';
 
 const props = defineProps<{ annotation: EditorAnnotation }>();
 
-const { config, editorState, sendAnnotationEvent } = useEditorState();
+const { editorState, sendAnnotationEvent, findAnnotation } = useEditorState();
 
 type LinkDisplay = {
-  purpose: string | undefined;
+  definition: UIAnnotationDefinition;
   annotation: EditorAnnotation;
   relation: EditorAnnotation;
 };
 
 const links = computed<LinkDisplay[]>(() => {
-  return config.annotation.links
-    ?.map((link: AnnotationLink) => {
-      const relation = link.relations.find((r) => r.id !== props.annotation.id);
-      const def = link.definition;
-      return {
-        purpose: def?.id,
-        label: def?.label ?? def?.name,
-        annotation: link.annotation,
-        relation,
-      };
-    })
-    .filter((link): link is LinkDisplay => !!link.relation);
+  const _links = props.annotation.links.map((l) => {
+    const link = findAnnotation(l.uri);
+    const annotationId = link.links.find(
+      (li) => li.uri !== props.annotation.id,
+    )?.uri;
+    const relation = findAnnotation(annotationId);
+
+    return {
+      definition: link.definition,
+      annotation: link,
+      relation,
+    };
+  });
+
+  return _links;
 });
 
-const actions = (link: AnnotationLink) => {
-  const definition = config.annotation.definition;
+const actions = (link: LinkDisplay) => {
+  if (!link.definition.operations.delete) return [];
+
   return [
+    {
+      icon: IconEnum.Edit,
+      label: 'Edit',
+      disabled: editorState.disableEdits,
+      action: () => {
+        sendAnnotationEvent('edit', {
+          annotation: link.annotation,
+        });
+      },
+    },
     {
       icon: IconEnum.Delete,
       label: 'Delete',
@@ -63,7 +74,6 @@ const actions = (link: AnnotationLink) => {
       action: () => {
         sendAnnotationEvent('delete', {
           annotation: link.annotation,
-          definition,
         });
       },
     },

@@ -1,21 +1,12 @@
 <template>
-  <div
-    class="relative"
-    @mouseenter="showFullText"
-    @mouseleave="hideFullText"
-  >
+  <div class="relative" @mouseenter="showFullText" @mouseleave="hideFullText">
     <component
       :is="showSource ? Collapse : 'div'"
       v-bind="showSource ? { title: textData?.text.content.label ?? '-' } : {}"
     >
       <div class="flex flex-row items-center gap-2">
-        <div
-          :id="annotationTextId"
-          class="flex-1"
-        />
-        <div v-if="showHover">
-          ...
-        </div>
+        <div :id="annotationTextId" class="flex-1" />
+        <div v-if="showHover">...</div>
       </div>
     </component>
     <div
@@ -49,17 +40,17 @@ let annotatedTextFull: AnnotatedText<EditorAnnotation>;
 const { config, sources } = useEditorState();
 
 const textData = computed(() => {
-  const sourceUri = null; //annotationEditorAdapter.getSourceUri(properties.annotation);
-  const textPositionSelector = null;
-  // const textPositionSelector = annotationEditorAdapter.getTextPosition(
-  //   properties.annotation,
-  // );
+  const _sources = Object.fromEntries(sources.value.map((s) => [s.uri, s]));
+  const textPositionSelector = properties.annotation.selectors.find(
+    (s) => _sources[s.uri],
+  );
 
-  const source = sources.value.find((source) => source.uri === sourceUri);
-  if (!source) {
-    console.warn(`Source not found for uri: ${sourceUri}`);
+  if (!textPositionSelector) {
+    console.warn(`Source not found for`, properties.annotation);
     return null;
   }
+
+  const source = _sources[textPositionSelector.uri];
 
   const end = properties.maxCharacters
     ? Math.min(

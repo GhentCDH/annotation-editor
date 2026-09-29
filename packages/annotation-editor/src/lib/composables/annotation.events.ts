@@ -81,13 +81,17 @@ export const editAnnotation = (
   state: EditorState_,
   emits: AnnotationEditorEmitsFn,
 ) => {
+  console.log('editAnnotation', data.annotation);
   if (state.disableEdits) return;
 
   state.disableEdits = true;
   state.editorState = 'edit';
   emits('select:annotation', data.annotation, 'edit');
+
+  const isLink = data.annotation.definition.annotation.type === 'link';
+
   config.modal
-    .show('edit-annotation', {
+    .show(isLink ? 'link-annotation' : 'edit-annotation', {
       source: data.source,
       annotation: data.annotation,
     })

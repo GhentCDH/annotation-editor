@@ -10,6 +10,7 @@ import {
   watch,
 } from 'vue';
 import {
+  AnnotationId,
   createAnnotationConfiguration,
   type EditorAnnotation,
   type SourceModel,
@@ -40,6 +41,7 @@ export type EditorState = {
     callback?: (response: any) => void,
   ) => void;
   annotations: ComputedRef<Readonly<EditorAnnotation[]>>;
+  findAnnotation: (uri: AnnotationId) => EditorAnnotation | null;
 };
 
 const EDITOR_KEY: InjectionKey<EditorState> = Symbol('editor');
@@ -52,9 +54,7 @@ export const useProvideEditorState = (
   { readonly } = { readonly: false },
 ) => {
   const parsedAnnotations = computed(() => {
-    return (
-      props.annotations?.map((a) => props.annotationTransformer.parse(a)) ?? []
-    );
+    return props.annotationTransformer.setAnnotations(props.annotations);
   });
 
   const config = shallowReactive<EditorConfig>({
@@ -111,7 +111,7 @@ export const useProvideEditorState = (
 
     const sourceUri = annotation.selectors?.[0]?.uri;
 
-    if (!sourceUri) return null;
+    if (!sourceUri) return { annotation };
 
     const source = (props.sources ?? []).find((s) => s.uri === sourceUri);
     return { annotation, source };
@@ -143,6 +143,10 @@ export const useProvideEditorState = (
     editorState.info = null;
   };
 
+  const findAnnotation = (uri: AnnotationId) => {
+    return parsedAnnotations.value?.find((a) => a.id === uri) ?? null;
+  };
+
   provide(EDITOR_KEY, {
     sources,
     config: config as Readonly<EditorConfig>,
@@ -154,6 +158,7 @@ export const useProvideEditorState = (
       containerRef,
     ),
     annotations: parsedAnnotations,
+    findAnnotation,
   });
 };
 

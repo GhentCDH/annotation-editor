@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { type UIAnnotationDefinition } from '../types/ui-annotation-definition.type';
 
 const annotationIdSchema = z.union([z.string(), z.number()]);
-
+export type AnnotationId = z.infer<typeof annotationIdSchema>;
 export const SelectorSchema = z.object({
   uri: z.string(),
   start: z.number(),
@@ -14,18 +14,17 @@ export const SelectorSchema = z.object({
 
 export type Selector = z.infer<typeof SelectorSchema>;
 
-// TODO need to implement
-export const Link = z.object({});
+export const LinkSchema = z.object({ uri: z.string() });
+export type AnnotationLink = z.infer<typeof LinkSchema>;
 
 export type _EditorAnnotation = {
-  id: string | number;
+  id: AnnotationId;
   label?: string;
   definition: UIAnnotationDefinition;
   metadata: any;
   selectors: Array<{ uri: string; start: number; end: number }>;
-  parentId?: string;
+  parentId?: AnnotationId;
   links: any[];
-  parent?: EditorAnnotation;
 };
 
 export const editorAnnotationSchema: z.ZodType<_EditorAnnotation> = z
@@ -35,11 +34,9 @@ export const editorAnnotationSchema: z.ZodType<_EditorAnnotation> = z
       label: z.string().optional(),
       definition: z.custom<UIAnnotationDefinition>(),
       metadata: z.any(),
-      // TODO this will not work for linked annotations!!!!
       selectors: z.array(SelectorSchema),
-      parentId: z.string().optional(),
-      links: z.array(Link).default([]),
-      parent: editorAnnotationSchema.optional(),
+      links: z.array(LinkSchema).default([]),
+      parentId: annotationIdSchema.optional(),
     }),
   )
   .transform((d) => {

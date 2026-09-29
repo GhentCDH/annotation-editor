@@ -8,10 +8,9 @@
   >
     <template #content>
       <CroutonForm
-        v-if="annotationDef"
         layout="rows"
-        :data="formData"
-        :views="annotationDef.schemas"
+        :data="metadata"
+        :views="annotation.definition.schemas"
         :format-before-save="formatBeforeSave"
         form-max-width="w-max max-w-lg"
         @save="save"
@@ -21,11 +20,8 @@
         <template #content-before>
           <div class="flex-grow flex flex-col gap-2">
             <AnnotationText
-              :annotation="sourceAnnotation"
-              :show-source="true"
-            />
-            <AnnotationText
-              :annotation="targetAnnotation"
+              v-for="a of annotations"
+              :annotation="a"
               :show-source="true"
             />
           </div>
@@ -39,7 +35,7 @@
 </template>
 <script setup lang="ts">
 import { Modal } from '@ghentcdh/ui';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { CroutonForm, FormMessage } from '@ghentcdh/crouton-vue';
 import {
   LinkAnnotationProperties,
@@ -52,17 +48,15 @@ import AnnotationText from '../info/Annotation-text.vue';
 const props = defineProps(LinkAnnotationProperties);
 const emits = defineEmits(LinkEmits);
 
-const { annotationDef, save, cancel, onChangeValue, message } =
+const { save, cancel, onChangeValue, message, annotations, metadata } =
   useAnnotationLink(props, emits);
-
-const formData = ref(null);
 
 const formatBeforeSave = (formData: any) => {
   return onChangeValue({ metadata: formData });
 };
 
 const label = computed(() => {
-  const _label = annotationDef?.label ?? props.type;
+  const _label = props.annotation.definition.label;
 
   return {
     title: `Create ${_label} link`,
