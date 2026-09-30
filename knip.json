@@ -38,8 +38,6 @@
     "packages/annotation-core": { "entry": ["src/index.ts"], "project": ["src/**/*.{ts,vue}"] },
     "packages/annotation-ui": { "entry": ["src/index.ts"], "project": ["src/**/*.{ts,vue}"] },
     "packages/annotation-vue": { "entry": ["src/index.ts", "src/**/*.spec.ts"], "project": ["src/**/*.{ts,vue}"] },
-    "packages/annotation-preview": { "entry": ["src/index.ts"], "project": ["src/**/*.{ts,vue}"] },
-    "packages/annotation-api": { "entry": ["src/index.ts"], "project": ["src/**/*.{ts,vue}"] },
-    "packages/annotation-editor-e2e": { "entry": ["src/**/main.ts", "src/**/*.spec.ts", "playwright.config.ts"], "project": ["src/**/*.{ts,vue}"] }
+    "packages/annotation-api": { "entry": ["src/index.ts"], "project": ["src/**/*.{ts,vue}"] }
   }
 }

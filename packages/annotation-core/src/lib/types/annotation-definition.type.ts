@@ -1,5 +1,9 @@
 import { z } from 'zod';
-import { type JsonResourceOperations, type ViewConfig, ViewConfigSchema } from '@ghentcdh/crouton-core';
+import {
+  type JsonResourceOperations,
+  type ViewConfig,
+  ViewConfigSchema,
+} from '@ghentcdh/crouton-core';
 import { ContextBuilder } from '@ghentcdh/w3c-utils';
 import {
   AnnotationConfigSchema,
@@ -23,18 +27,17 @@ export type AnnotationResource = {
   schemas?: Record<string, Partial<ViewConfig>> | null;
 };
 
-export const AnnotationResourceSchema: z.ZodType<AnnotationResource> =
-  AnnotationJsonResourceShape.pick({
-    id: true,
-    name: true,
-    title: true,
-    operations: true,
-    annotation: true,
-  }).extend({
-    annotation: AnnotationConfigSchema,
-    context: z.instanceof(ContextBuilder).optional().nullish(),
-    schemas: z
-      .record(z.string(), ViewConfigSchema.partial())
-      .optional()
-      .nullish(),
-  }) as z.ZodType<AnnotationResource>;
+export const AnnotationResourceSchema = AnnotationJsonResourceShape.pick({
+  id: true,
+  name: true,
+  title: true,
+  operations: true,
+  annotation: true,
+}).extend({
+  annotation: AnnotationConfigSchema,
+  context: z.instanceof(ContextBuilder).optional().nullish(),
+  schemas: z
+    .record(z.string(), ViewConfigSchema.partial())
+    .optional()
+    .nullish(),
+});

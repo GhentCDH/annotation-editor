@@ -3,26 +3,41 @@ import {
   type CustomAnnotationStyle,
   type TextAdapter,
 } from '@ghentcdh/annotated-text';
-import { type UseResource } from '@ghentcdh/crouton-vue'; // Explicit type avoids TS2883 from complex Zod v4 schema chains in .d.ts output.
 import {
-  type AnnotationResource,
-  type KeyLabel,
+  AnnotationResourceSchema,
   type SourceModel,
 } from '@ghentcdh/annotation-core';
+import { z } from 'zod';
+import { resourceApi } from '@ghentcdh/crouton-vue';
 import {
   type AnnotationEditorAnnotationAdapter,
   type EditorAnnotation,
 } from '../adapter';
 
-// Explicit type avoids TS2883 from complex Zod v4 schema chains in .d.ts output.
-export type UIAnnotationDefinition = AnnotationResource & {
+export type KeyLabel<KEY = string> = {
+  key: KEY;
   label: string;
-  style?: CustomAnnotationStyle;
-  allowedChildren: Array<KeyLabel>;
-  allowedLinks: Array<KeyLabel>;
-  _core?: AnnotationResource;
-  resource?: UseResource | null;
+  icon?: string;
 };
+
+export const KeyLabelSchema = z.object<KeyLabel>();
+
+export const UiAnnotionDefinitionSchema = AnnotationResourceSchema.extend({
+  style: z.custom<CustomAnnotationStyle>().optional(),
+  allowedChildren: z.array(KeyLabelSchema).optional().default([]),
+  allowedLinks: z.array(KeyLabelSchema).optional().default([]),
+}).transform((def) => {
+  return {
+    ...def,
+    label: def.name,
+    canEdit: !!def.operations.patch,
+    canDelete: !!def.operations.delete,
+    canCreate: !!def.operations.create,
+    resource: resourceApi(def, {}),
+  };
+});
+
+export type UIAnnotationDefinition = z.infer<typeof UiAnnotionDefinitionSchema>;
 
 export type AllowedChildrenPerType = Record<string, Array<KeyLabel>>;
 

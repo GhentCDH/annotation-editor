@@ -5,9 +5,11 @@
     :style="{
       left: `${properties.position.x}px`,
       top: `${properties.position.y}px`,
+      maxHeight: `calc(100vh - ${properties.position.y}px - 16px)`,
+      minHeight: '100px',
     }"
   >
-    <div class="card-body p-2">
+    <div class="card-body p-2 overflow-y-auto">
       <div class="flex items-center justify-between gap-2">
         <div><strong>Type:</strong> {{ purposeLabel }}</div>
       </div>
@@ -131,32 +133,36 @@ const createActionLinks = (definition: UIAnnotationDefinition) => {
 
 const actions = computed(() => {
   const definition = annotationDef.value!;
+
   return [
     addActions(definition),
-    {
-      icon: IconEnum.Edit,
-      label: 'Edit',
-      disabled: editorState.disableEdits,
-      action: () => {
-        skipNextClose();
-        sendAnnotationEvent('edit', {
-          annotation: properties.annotation!,
-          source: properties.source!,
-        });
-      },
-    },
+    definition.canEdit
+      ? {
+          icon: IconEnum.Edit,
+          label: 'Edit',
+          disabled: editorState.disableEdits,
+          action: () => {
+            skipNextClose();
+            sendAnnotationEvent('edit', {
+              annotation: properties.annotation!,
+              source: properties.source!,
+            });
+          },
+        }
+      : null,
     createActionLinks(definition),
-    {
-      icon: IconEnum.Delete,
-      label: 'Delete',
-      disabled: editorState.disableEdits,
-      action: () => {
-        sendAnnotationEvent('delete', {
-          annotation: properties.annotation!,
-          definition: definition,
-        });
-      },
-    },
+    definition.canDelete
+      ? {
+          icon: IconEnum.Delete,
+          label: 'Delete',
+          disabled: editorState.disableEdits,
+          action: () => {
+            sendAnnotationEvent('delete', {
+              annotation: properties.annotation!,
+            });
+          },
+        }
+      : null,
   ]
     .filter((i) => !!i)
     .flat() as NavbarAction[];

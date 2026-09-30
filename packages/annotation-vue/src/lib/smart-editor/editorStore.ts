@@ -69,8 +69,6 @@ const createEditState = <ANNOTATION>(
     reloadAnnotations();
   };
 
-
-
   watch(
     () => filteredDefinitions.value,
     () => {

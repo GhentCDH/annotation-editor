@@ -1,5 +1,8 @@
 import { z } from 'zod';
-import { type UIAnnotationDefinition } from '../types/ui-annotation-definition.type';
+import {
+  type UIAnnotationDefinition,
+  UiAnnotionDefinitionSchema,
+} from '../types/ui-annotation-definition.type';
 
 const annotationIdSchema = z.union([z.string(), z.number()]);
 export type AnnotationId = z.infer<typeof annotationIdSchema>;
@@ -32,7 +35,7 @@ export const editorAnnotationSchema: z.ZodType<_EditorAnnotation> = z
     z.object({
       id: annotationIdSchema,
       label: z.string().optional(),
-      definition: z.custom<UIAnnotationDefinition>(),
+      definition: UiAnnotionDefinitionSchema,
       metadata: z.any(),
       selectors: z.array(SelectorSchema),
       links: z.array(LinkSchema).default([]),
@@ -44,11 +47,14 @@ export const editorAnnotationSchema: z.ZodType<_EditorAnnotation> = z
       return d.selectors?.find((s) => s.uri === sourceUri);
     };
     const setSelector = (selector: Selector) => {
-      const selectors =
-        d.selectors?.filter((s) => s.uri !== selector.uri) ?? [];
-      selectors.push(selector);
+      const idx = d.selectors.findIndex((s) => s.uri === selector.uri);
+      if (idx >= 0) {
+        d.selectors.splice(idx, 1, selector);
+      } else {
+        d.selectors.push(selector);
+      }
 
-      return selector;
+      return this;
     };
 
     const clone = (annotation: Partial<EditorAnnotation>): EditorAnnotation => {

@@ -14,8 +14,10 @@ import {
 } from '@ghentcdh/annotation-core';
 import { createHighlightStyle } from '@ghentcdh/annotated-text';
 import { type AxiosInstance } from 'axios';
-import { resourceApi } from '@ghentcdh/crouton-vue';
-import { type UIAnnotationDefinition } from '@ghentcdh/annotation-ui';
+import {
+  type UIAnnotationDefinition,
+  UiAnnotionDefinitionSchema,
+} from '@ghentcdh/annotation-ui';
 import { AnnotationDefinitionService } from './annotation-definition.service';
 import {
   type DefinitionsFetchFn,
@@ -82,18 +84,16 @@ const toVueDefinition = (
   activeStyle: typeof createHighlightStyle,
 ): UIAnnotationDefinition => {
   const style = def.annotation ?? {};
-  return {
+
+  return UiAnnotionDefinitionSchema.parse({
     ...def,
-    label: def.name,
     allowedChildren: resolveKeyLabels(style.allowedChildren, grouped),
     allowedLinks: resolveKeyLabels(style.allowedLinks, grouped),
     style: {
       default: createStyle(style.color!),
       active: activeStyle(style.color!),
     },
-    _core: def,
-    resource: def.operations ? resourceApi(def, {}) : null,
-  } as UIAnnotationDefinition;
+  });
 };
 
 const buildVueDefinitions = (

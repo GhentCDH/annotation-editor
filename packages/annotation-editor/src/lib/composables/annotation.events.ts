@@ -110,6 +110,10 @@ const deleteAnnotation = (
   emits: AnnotationEditorEmitsFn,
 ) => {
   const { annotation } = data;
+  const definition = data.annotation.definition;
+
+  const resource = definition.resource;
+
   config.modal
     .show('confirm', {
       title: 'Delete',
@@ -117,28 +121,29 @@ const deleteAnnotation = (
     })
     .then((result) => {
       if (!result?.confirmed) return;
-      if (!definition.resource.delete) {
-        emits('delete:annotation', annotation);
-        return;
-      }
 
-      try {
-        definition.resource.delete(annotation);
-      } catch (error) {
-        console.error('Something went wrong while deleting annotation');
-        console.error(error);
+      resource
+        .delete(annotation)
+        .then(() => {
+          NotificationService.success('Successfully deleted annotation');
 
-        NotificationService.error(
-          'Something went wrong while deleting annotation',
-        );
-      }
+          if (state.selectedAnnotation?.id === annotation.id) {
+            state.selectedAnnotation = null;
+            state.editorState = null;
+            state.disableEdits = false;
+            state.reset();
+          }
 
-      if (state.selectedAnnotation?.id === annotation.id) {
-        state.selectedAnnotation = null;
-        state.editorState = null;
-        state.disableEdits = false;
-        state.reset();
-      }
+          emits('delete:annotation', annotation);
+        })
+        .catch((error) => {
+          console.error('Something went wrong while deleting annotation');
+          console.error(error);
+
+          NotificationService.error(
+            'Something went wrong while deleting annotation',
+          );
+        });
     });
 };
 

@@ -1,4 +1,3 @@
-export * from './lib/types/key-label.type';
 export * from './lib/types/source.model';
 export * from './lib/types/grid-layout.types';
 export * from './lib/types/annotation.contex';

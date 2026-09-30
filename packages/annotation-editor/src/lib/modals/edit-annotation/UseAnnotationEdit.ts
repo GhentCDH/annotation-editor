@@ -5,7 +5,6 @@ import {
   type AnnotationEditModal,
 } from './AnnotationEditModal.properties';
 import { useMetadataEdit } from '../../composables/useMetadataEdit';
-import metadata from '../info/Metadata.vue';
 
 export const UseAnnotationEdit = (
   props: AnnotationEditModal,
@@ -23,6 +22,7 @@ export const UseAnnotationEdit = (
   };
 
   const save = () => {
+    const metadata = metadataEdit.metadata.value;
     if (!selector || !metadata) {
       metadataEdit.message.value = {
         message: 'Select annotation first',
@@ -43,23 +43,25 @@ export const UseAnnotationEdit = (
           selectors: [selector],
         });
     // check if resource can handle backend requests
-
     const cloned = originalAnnotation.clone({
-      metadata: metadataEdit.metadata.value,
+      metadata,
     });
     cloned.setSelector(selector);
 
-    metadataEdit.save(originalAnnotation, emits);
+    return metadataEdit.save(cloned, emits);
   };
 
   const onChangeValue = ({ metadata: _metadata }: { metadata?: any }) => {
-    return metadataEdit.onChangeValue({ metadata, selector });
+    return metadataEdit.onChangeValue({ metadata: _metadata, selector });
   };
 
   const updateSelector = (updatedSelector: Selector) => {
     selector = updatedSelector;
 
-    return metadataEdit.onChangeValue({ metadata, selector });
+    return metadataEdit.onChangeValue({
+      metadata: metadataEdit.metadata.value,
+      selector,
+    });
   };
 
   return {

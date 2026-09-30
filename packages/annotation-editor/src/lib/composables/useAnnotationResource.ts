@@ -1,16 +1,15 @@
 import { type EditorAnnotation } from '@ghentcdh/annotation-ui';
-import { type FormMessageProps, resourceApi } from '@ghentcdh/crouton-vue';
+import { type FormMessageProps } from '@ghentcdh/crouton-vue';
 import { NotificationService } from '@ghentcdh/ui';
 import { type EmitFn, ref } from 'vue';
 import { useEditorState } from './useEditorState';
 
 export const AnnotationMetadataEditEmits = {
-  close: (event: { result: any } | null) => true,
+  close: (event: { annotation: any } | null) => true,
 };
 export const useAnnotationResource = (annotation: EditorAnnotation) => {
-  const operations = annotation.definition.operations ?? {};
   const message = ref<FormMessageProps>({ status: 'idle' });
-  const resource = resourceApi(annotation.definition, {});
+  const resource = annotation.definition.resource;
   const { editorState } = useEditorState();
 
   const _save = async (update: EditorAnnotation) => {
@@ -18,15 +17,18 @@ export const useAnnotationResource = (annotation: EditorAnnotation) => {
       update,
       !annotation.id,
     );
+
     if (annotation.id) {
-      return resource.save(annotation.id, dataToSave).then(() => {
+      return resource.save(annotation.id, dataToSave).then((response) => {
         message.value = { status: 'saved' };
         NotificationService.success('Annotation saved successfully.');
+        return response;
       });
     } else {
-      return resource.create(dataToSave).then(() => {
+      return resource.create(dataToSave).then((response) => {
         message.value = { status: 'saved' };
         NotificationService.success('Annotation saved successfully.');
+        return response;
       });
     }
   };
@@ -35,13 +37,13 @@ export const useAnnotationResource = (annotation: EditorAnnotation) => {
     update: EditorAnnotation,
     emits: EmitFn<typeof AnnotationMetadataEditEmits>,
   ) => {
-    if (!annotation.id && !operations.create) return;
-    if (annotation.id && !operations.update) return;
+    if (!annotation.id && !annotation.definition.canCreate) return;
+    if (annotation.id && !annotation.definition.canEdit) return;
 
     _save(update)
-      .then((result) => {
+      .then((annotation) => {
         emits('close', {
-          result,
+          annotation,
         });
       })
       .catch((err) => {
