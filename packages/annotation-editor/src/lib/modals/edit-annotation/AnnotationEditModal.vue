@@ -22,16 +22,9 @@
       >
         <template #content-before>
           <div class="flex-grow before-scroll">
-            <Collapse
-              :title="label.selectLabel"
-              :scrollable="true"
-            >
+            <Collapse :title="label.selectLabel" :scrollable="true">
               <div :id="editId" />
-              <Btn
-                :outline="true"
-                class="mt-2"
-                @click="selectAll"
-              >
+              <Btn :outline="true" class="mt-2" @click="selectAll">
                 Select all text
               </Btn>
             </Collapse>
@@ -48,11 +41,7 @@
 import { CroutonForm, FormMessage } from '@ghentcdh/crouton-vue';
 import { Btn, Collapse, Modal } from '@ghentcdh/ui';
 import { computed, onMounted, onUnmounted } from 'vue';
-import { type AnnotatedText } from '@ghentcdh/annotated-text';
-import {
-  type EditorAnnotation,
-  updateAnnotation,
-} from '@ghentcdh/annotation-ui';
+import { UiAnnotatedText, updateAnnotation } from '@ghentcdh/annotation-ui';
 import {
   AnnotationEditEmits,
   AnnotationEditModalProperties,
@@ -60,7 +49,7 @@ import {
 import { UseAnnotationEdit } from './UseAnnotationEdit';
 import { useEditorState } from '../../composables/useEditorState';
 
-let annotatedText: AnnotatedText<EditorAnnotation>;
+let annotatedTextConfig: UiAnnotatedText;
 const props = defineProps(AnnotationEditModalProperties);
 
 const { config, findAnnotation } = useEditorState();
@@ -113,7 +102,7 @@ const selectFull = () => {
     source.uri,
     maxRange,
     {
-      fullFlatText: '', //TODO implement it
+      fullFlatText: props.source.content.text,
       startOffset: 0, // TODO implement it
       // fullFlatText: textAdapter.fullFlatText,
       // startOffset: startOffset,
@@ -125,7 +114,7 @@ const selectFull = () => {
 const selectAll = () => {
   const annotation = selectFull();
 
-  annotatedText
+  annotatedTextConfig.annotatedText
     .setAnnotationAdapterParams({ create: false, edit: true })
     .setAnnotations([annotation]);
   updateSelector(annotation.getSelector(props.source.uri));
@@ -136,17 +125,18 @@ onMounted(() => {
 
   const annotations = props.annotation ? [props.annotation] : [];
 
-  annotatedText = config.annotation
-    .createAnnotatedText(editId, props.source)
+  annotatedTextConfig = config.annotation.createAnnotatedText(
+    editId,
+    props.source,
+  );
+  annotatedTextConfig.annotatedText
     .setStyleParams({
       styleFn: () => null,
     })
     .setRenderParams({
       renderFn: () => 'highlight',
     })
-    .setAnnotations(annotations);
-
-  annotatedText
+    .setAnnotations(annotations)
     .setAnnotationAdapterParams({ edit: true, create: !props.annotation?.id })
     .on('annotation-create--end', ({ mouseEvent, event, data: _data }) => {
       updateSelector(_data.annotation.getSelector(props.source.uri));
@@ -158,14 +148,14 @@ onMounted(() => {
 
   const selector = props.annotation.parent?.getSelector(props.source.uri);
   if (selector) {
-    annotatedText.setTextAdapterParams({
+    annotatedTextConfig.annotatedText.setTextAdapterParams({
       limit: { ...selector, ignoreLines: true },
     });
   }
 });
 
 onUnmounted(() => {
-  annotatedText?.destroy();
+  annotatedTextConfig.annotatedText?.destroy();
 });
 </script>
 

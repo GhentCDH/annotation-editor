@@ -1,6 +1,7 @@
 import {
   type AnnotatedText,
   type CustomAnnotationStyle,
+  TextAdapter,
 } from '@ghentcdh/annotated-text';
 import { type UseResource } from '@ghentcdh/crouton-vue'; // Explicit type avoids TS2883 from complex Zod v4 schema chains in .d.ts output.
 import {
@@ -8,7 +9,10 @@ import {
   type KeyLabel,
   type SourceModel,
 } from '@ghentcdh/annotation-core';
-import { type EditorAnnotation } from '../adapter';
+import {
+  AnnotationEditorAnnotationAdapter,
+  type EditorAnnotation,
+} from '../adapter';
 
 // Explicit type avoids TS2883 from complex Zod v4 schema chains in .d.ts output.
 export type UIAnnotationDefinition = AnnotationResource & {
@@ -22,6 +26,11 @@ export type UIAnnotationDefinition = AnnotationResource & {
 
 export type AllowedChildrenPerType = Record<string, Array<KeyLabel>>;
 
+export type UiAnnotatedText = {
+  annotatedText: AnnotatedText<EditorAnnotation>;
+  textAdapter: TextAdapter;
+  annotationAdapter: AnnotationEditorAnnotationAdapter;
+};
 export type UIAnnotationConfiguration = {
   definitions: UIAnnotationDefinition[];
   getDefinition: (id: string) => UIAnnotationDefinition | undefined;
@@ -30,5 +39,5 @@ export type UIAnnotationConfiguration = {
   createAnnotatedText: (
     id: string,
     sourceModel?: SourceModel,
-  ) => AnnotatedText<EditorAnnotation>;
+  ) => UiAnnotatedText;
 };

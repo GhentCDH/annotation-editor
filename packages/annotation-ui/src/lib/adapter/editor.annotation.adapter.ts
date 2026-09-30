@@ -9,8 +9,8 @@ import {
 import {
   type EditorAnnotation,
   editorAnnotationSchema,
-  SelectorSchema,
   type Selector,
+  SelectorSchema,
 } from './editor.annotation';
 import { type UIAnnotationDefinition } from '../types/ui-annotation-definition.type';
 
@@ -43,7 +43,9 @@ const updateSelector = (
   });
 
   const selectors =
-    originalAnnotation?.selectors?.filter((s: Selector) => s.uri !== sourceUri) ?? [];
+    originalAnnotation?.selectors?.filter(
+      (s: Selector) => s.uri !== sourceUri,
+    ) ?? [];
   selectors.push(selector);
 
   return selectors;
@@ -110,7 +112,9 @@ export class AnnotationEditorAnnotationAdapter extends AnnotationAdapter<
 
   _parse(annotation: EditorAnnotation): Annotation | null {
     const parsed = annotation as EditorAnnotation;
-    const selector = parsed?.selectors?.find((t: Selector) => t.uri === this.sourceUri);
+    const selector = parsed?.selectors?.find(
+      (t: Selector) => t.uri === this.sourceUri,
+    );
     if (!selector) {
       return null;
     }
@@ -157,5 +161,23 @@ export class AnnotationEditorAnnotationAdapter extends AnnotationAdapter<
 
     this.addAnnotation(annotation.id, editorAnnotation, annotation);
     return editorAnnotation;
+  }
+
+  updateSelector(annotation: TextAnnotation, range: StartEnd) {
+    const originalAnnotation = this.getOriginalAnnotation(annotation.id);
+    return !originalAnnotation
+      ? createAnnotation(this.sourceUri, annotation, {
+          fullFlatText: this.textAdapter.fullFlatText,
+          startOffset: this.startOffset,
+        })
+      : updateAnnotation(
+          this.sourceUri,
+          annotation,
+          {
+            fullFlatText: this.textAdapter.fullFlatText,
+            startOffset: this.startOffset,
+          },
+          originalAnnotation,
+        );
   }
 }
