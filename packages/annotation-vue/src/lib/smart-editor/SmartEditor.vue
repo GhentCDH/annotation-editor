@@ -1,5 +1,8 @@
 <template>
-  <Drawer class="_h-full" :width-left="300">
+  <Drawer
+    class="_h-full"
+    :width-left="300"
+  >
     <Loading :loading="store.loading" />
     <AnnotationPreview
       v-if="readOnly"

@@ -27,18 +27,39 @@ const createEditState = <ANNOTATION>(
     return definitions.definitions;
   });
 
+  let sourcesSeq = 0;
+  let annotationsSeq = 0;
+
+  const loadSources = () => {
+    const uris = sourceUris.value ?? [];
+    const seq = ++sourcesSeq;
+    loadingSources.value = true;
+    Promise.all(uris.map((uri) => annotationLoader.loadSource(uri)))
+      .then((response) => {
+        if (seq !== sourcesSeq) return;
+        sources.value = response;
+      })
+      .finally(() => {
+        if (seq === sourcesSeq) loadingSources.value = false;
+      });
+
+    reloadAnnotations();
+  };
+
   const reloadAnnotations = () => {
     const uris = sourceUris.value ?? [];
     const defs = filteredDefinitions.value;
     annotationLoader.definitions = defs;
+    const seq = ++annotationsSeq;
     loadingAnnotations.value = true;
 
     Promise.all(uris.map((uri) => annotationLoader.loadAnnotations(uri)))
       .then((response) => {
+        if (seq !== annotationsSeq) return;
         annotations.value = response.flat();
       })
       .finally(() => {
-        loadingAnnotations.value = false;
+        if (seq === annotationsSeq) loadingAnnotations.value = false;
       });
   };
 
@@ -48,19 +69,7 @@ const createEditState = <ANNOTATION>(
     reloadAnnotations();
   };
 
-  const loadSources = () => {
-    const uris = sourceUris.value ?? [];
-    loadingSources.value = true;
-    Promise.all(uris.map((uri) => annotationLoader.loadSource(uri)))
-      .then((response) => {
-        sources.value = response;
-      })
-      .finally(() => {
-        loadingSources.value = false;
-      });
 
-    reloadAnnotations();
-  };
 
   watch(
     () => filteredDefinitions.value,
