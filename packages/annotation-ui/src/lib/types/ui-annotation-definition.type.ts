@@ -1,7 +1,7 @@
 import {
   type AnnotatedText,
   type CustomAnnotationStyle,
-  TextAdapter,
+  type TextAdapter,
 } from '@ghentcdh/annotated-text';
 import { type UseResource } from '@ghentcdh/crouton-vue'; // Explicit type avoids TS2883 from complex Zod v4 schema chains in .d.ts output.
 import {
@@ -10,7 +10,7 @@ import {
   type SourceModel,
 } from '@ghentcdh/annotation-core';
 import {
-  AnnotationEditorAnnotationAdapter,
+  type AnnotationEditorAnnotationAdapter,
   type EditorAnnotation,
 } from '../adapter';
 
