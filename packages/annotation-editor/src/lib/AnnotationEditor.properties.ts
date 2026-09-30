@@ -1,5 +1,4 @@
 import type { EmitFn, ExtractPublicPropTypes, PropType } from 'vue';
-import { type AnnotationDefConfig } from '@ghentcdh/annotation-core';
 import { type TextAdapter } from '@ghentcdh/annotated-text';
 import {
   type GridLayout,
@@ -11,10 +10,6 @@ import {
 
 export const AnnotationEditorProperties = {
   modalView: { type: Boolean, required: false as const, default: true },
-  configuration: {
-    type: Object as PropType<AnnotationDefConfig>,
-    required: true as const,
-  },
   textAdapter: {
     type: Function as PropType<() => TextAdapter>,
     required: false as const,

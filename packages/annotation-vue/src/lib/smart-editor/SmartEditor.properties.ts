@@ -1,0 +1,33 @@
+import type { PropType } from 'vue';
+import { type TextAdapter } from '@ghentcdh/annotated-text';
+import { type TransformAnnotationAdapter } from '@ghentcdh/annotation-ui';
+import { type AnnotationEditorLoader } from './AnnotationEditorLoader';
+
+export const SmartEditorProperties = {
+  loader: {
+    type: Object as PropType<AnnotationEditorLoader<any>>,
+    required: true as const,
+  },
+  textAdapter: {
+    type: Function as PropType<() => TextAdapter>,
+    required: false as const,
+  },
+  annotationTransformer: {
+    type: Object as PropType<TransformAnnotationAdapter<any>>,
+    required: true as const,
+  },
+  watchQueryParams: {
+    type: Boolean,
+    default: true,
+    required: false as const,
+  },
+  sourceUris: {
+    type: Array<string>,
+    required: true as const,
+  },
+  readOnly: {
+    type: Boolean,
+    default: false,
+    required: false as const,
+  },
+};
