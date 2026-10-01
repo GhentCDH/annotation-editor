@@ -9,11 +9,16 @@ import {
 } from 'vue';
 import { type SourceModel } from '@ghentcdh/annotation-core';
 import { groupBy } from 'lodash-es';
+import {
+  type EditorAnnotation,
+  type TransformAnnotationAdapter,
+} from '@ghentcdh/annotation-ui';
 import { type AnnotationEditorLoader } from './AnnotationEditorLoader';
 import { useAnnotationDefinitions } from '../definitions/useAnnotationDefinitions';
 
 const createEditState = <ANNOTATION>(
   annotationLoader: AnnotationEditorLoader<ANNOTATION>,
+  transformer: TransformAnnotationAdapter,
 ) => {
   const definitions = useAnnotationDefinitions();
   const sourceUris = ref<string[] | null>(null);
@@ -26,6 +31,13 @@ const createEditState = <ANNOTATION>(
   const filteredDefinitions = computed(() => {
     return definitions.definitions;
   });
+
+  watch(
+    () => definitions.definitions,
+    () => {
+      transformer.setDefinitions(definitions.definitions);
+    },
+  );
 
   let sourcesSeq = 0;
   let annotationsSeq = 0;
@@ -48,15 +60,16 @@ const createEditState = <ANNOTATION>(
 
   const reloadAnnotations = () => {
     const uris = sourceUris.value ?? [];
-    const defs = filteredDefinitions.value;
-    annotationLoader.definitions = defs;
     const seq = ++annotationsSeq;
     loadingAnnotations.value = true;
 
     Promise.all(uris.map((uri) => annotationLoader.loadAnnotations(uri)))
       .then((response) => {
         if (seq !== annotationsSeq) return;
-        annotations.value = response.flat();
+        annotations.value = response
+          .flat()
+          .map((a) => transformer.parse(a))
+          .filter(Boolean) as EditorAnnotation[];
       })
       .finally(() => {
         if (seq === annotationsSeq) loadingAnnotations.value = false;
@@ -77,13 +90,11 @@ const createEditState = <ANNOTATION>(
   );
 
   const annotationsGroupedByPurpose = computed(() => {
-    return groupBy(annotations.value, (a) => a.definition.id);
+    // TODO decide where to parse now it is in the sub component but that might be wrong
+    return groupBy(annotations.value, (a) => a.definition?.id);
   });
 
-  const selectedAnnotationTypes = ref<string[]>([
-    'orthography_annotation',
-    'typography_annotation',
-  ]);
+  const selectedAnnotationTypes = ref<string[]>([]);
 
   const reload = () => {
     reloadAnnotations();
@@ -121,8 +132,9 @@ const TEXT_STATE_KEY: InjectionKey<TextState> = Symbol('TextState');
 
 export const provideEditorStore = <ANNOTATION>(
   annotationLoader: AnnotationEditorLoader<ANNOTATION>,
+  transformer: TransformAnnotationAdapter<ANNOTATION>,
 ) => {
-  const state = createEditState(annotationLoader);
+  const state = createEditState(annotationLoader, transformer);
   provide(TEXT_STATE_KEY, state);
   return state;
 };

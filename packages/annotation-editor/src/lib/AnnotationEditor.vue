@@ -11,7 +11,10 @@
       :title="source.content.label ?? ''"
       :style="paneStyle(source)"
     >
-      <SourceEdit :source="source" />
+      <SourceEdit
+        :source="source"
+        :readonly="readonly"
+      />
     </Collapse>
     <AnnotationModal />
   </div>

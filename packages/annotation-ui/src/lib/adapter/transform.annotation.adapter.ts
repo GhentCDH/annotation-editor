@@ -38,7 +38,7 @@ export abstract class TransformAnnotationAdapter<
   abstract name: string;
   abstract defaultParams: AnnotationAdapterParams;
 
-  protected abstract parse(annotation: ANNOTATION): EditorAnnotation | null;
+  abstract parse(annotation: ANNOTATION): EditorAnnotation | null;
   abstract format(annotation: EditorAnnotation, isNew: boolean): ANNOTATION;
 
   private definitionsMap: Record<string, UIAnnotationDefinition> = {};
@@ -63,7 +63,9 @@ export abstract class TransformAnnotationAdapter<
     return parsed;
   }
 
-  resolveDefinition(schemaUri: string): UIAnnotationDefinition | { name: string } {
+  resolveDefinition(
+    schemaUri: string,
+  ): UIAnnotationDefinition | { name: string } {
     return this.definitionsMap[schemaUri] ?? { name: 'default' };
   }
 

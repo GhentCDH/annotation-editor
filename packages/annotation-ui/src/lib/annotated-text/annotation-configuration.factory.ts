@@ -14,10 +14,7 @@ import {
   type UIAnnotationDefinition,
 } from '../types/ui-annotation-definition.type';
 import { AnnotationEditorAnnotationAdapter } from '../adapter/editor.annotation.adapter';
-import {
-  type EditorAnnotation,
-  type TransformAnnotationAdapter,
-} from '../adapter';
+import { type EditorAnnotation } from '../adapter';
 
 const groupById = <KEY extends keyof UIAnnotationDefinition>(
   defs: UIAnnotationDefinition[],
@@ -41,10 +38,9 @@ const groupById = <KEY extends keyof UIAnnotationDefinition>(
 export const createAnnotationConfiguration = (
   annotationDefinitions: UIAnnotationDefinition[] | undefined,
   textAdapter: (() => TextAdapter) | undefined,
-  transformAnnotationAdapter: TransformAnnotationAdapter<any>,
+  defaultAannotationAdapterParams = {},
 ): UIAnnotationConfiguration => {
   const definitions = annotationDefinitions ?? ([] as UIAnnotationDefinition[]);
-  transformAnnotationAdapter.setDefinitions(definitions);
   const definitionsMap = groupById(definitions) as Record<
     string,
     UIAnnotationDefinition
@@ -84,7 +80,7 @@ export const createAnnotationConfiguration = (
       styleFn: styleFn(listStyles),
     });
     const annotationAdapter = new AnnotationEditorAnnotationAdapter({
-      ...transformAnnotationAdapter.defaultParams,
+      ...defaultAannotationAdapterParams,
       sourceModel,
     });
     const annotatedText = createAnnotatedText<EditorAnnotation>(id, {

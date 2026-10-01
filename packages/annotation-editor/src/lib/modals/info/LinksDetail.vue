@@ -60,29 +60,33 @@ const links = computed<LinkDisplay[]>(() => {
 });
 
 const actions = (link: LinkDisplay) => {
-  if (!link.definition.operations.delete) return [];
+  if (editorState.readonly) return [];
 
   return [
-    {
-      icon: IconEnum.Edit,
-      label: 'Edit',
-      disabled: editorState.disableEdits,
-      action: () => {
-        sendAnnotationEvent('edit', {
-          annotation: link.annotation,
-        });
-      },
-    },
-    {
-      icon: IconEnum.Delete,
-      label: 'Delete',
-      disabled: editorState.disableEdits,
-      action: () => {
-        sendAnnotationEvent('delete', {
-          annotation: link.annotation,
-        });
-      },
-    },
-  ];
+    link.definition.canEdit
+      ? {
+          icon: IconEnum.Edit,
+          label: 'Edit',
+          disabled: editorState.disableEdits,
+          action: () => {
+            sendAnnotationEvent('edit', {
+              annotation: link.annotation,
+            });
+          },
+        }
+      : null,
+    link.definition.canDelete
+      ? {
+          icon: IconEnum.Delete,
+          label: 'Delete',
+          disabled: editorState.disableEdits,
+          action: () => {
+            sendAnnotationEvent('delete', {
+              annotation: link.annotation,
+            });
+          },
+        }
+      : null,
+  ].filter(Boolean);
 };
 </script>

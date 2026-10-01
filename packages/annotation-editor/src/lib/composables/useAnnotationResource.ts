@@ -13,10 +13,7 @@ export const useAnnotationResource = (annotation: EditorAnnotation) => {
   const { editorState } = useEditorState();
 
   const _save = async (update: EditorAnnotation) => {
-    const dataToSave = editorState.annotationTransformer.format(
-      update,
-      !annotation.id,
-    );
+    const dataToSave = editorState.format(update, !annotation.id);
 
     if (annotation.id) {
       return resource.save(annotation.id, dataToSave).then((response) => {

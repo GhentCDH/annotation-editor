@@ -18,10 +18,7 @@ export const useMetadataEdit = (annotation: EditorAnnotation) => {
     selector?: Selector;
   }) => {
     hasChanged.value = true;
-    metadata.value = editorState.annotationTransformer.transformMetadata(
-      _metadata,
-      selector,
-    );
+    metadata.value = editorState.transformMetadata(_metadata, selector);
     return metadata.value;
   };
 

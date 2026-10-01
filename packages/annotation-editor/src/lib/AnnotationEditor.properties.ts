@@ -1,11 +1,11 @@
 import type { EmitFn, ExtractPublicPropTypes, PropType } from 'vue';
 import { type TextAdapter } from '@ghentcdh/annotated-text';
 import {
+  type EditorAnnotation,
   type GridLayout,
   type SourceModel,
   type TransformAnnotationAdapter,
   type UIAnnotationDefinition,
-  W3cTransformAnnotationAdapter,
 } from '@ghentcdh/annotation-ui';
 
 export const AnnotationEditorProperties = {
@@ -14,14 +14,14 @@ export const AnnotationEditorProperties = {
     type: Function as PropType<() => TextAdapter>,
     required: false as const,
   },
+  // TODO this should become only setmetadata etc functions
   annotationTransformer: {
     type: Object as PropType<TransformAnnotationAdapter<object>>,
-    required: false as const,
-    default: new W3cTransformAnnotationAdapter(),
+    required: true as const,
   },
   sources: { type: Array as PropType<SourceModel[]>, required: true as const },
   annotations: {
-    type: Array as PropType<object[]>,
+    type: Array as PropType<EditorAnnotation[]>,
     required: true as const,
   },
   cols: { type: Number, required: false, default: 2 },
@@ -43,6 +43,11 @@ export const AnnotationEditorProperties = {
     type: String,
     required: false,
     default: undefined,
+  },
+  readonly: {
+    type: Boolean,
+    required: false,
+    default: false,
   },
 };
 

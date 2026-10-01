@@ -16,7 +16,7 @@
     "@ghentcdh/annotated-text": "^1.1.0",
     "@ghentcdh/annotation-core": "workspace:*",
     "@ghentcdh/annotation-ui": "workspace:*",
-    "@ghentcdh/crouton-vue": "0.0.1-alpha.75",
+    "@ghentcdh/crouton-vue": "0.0.1-alpha.78",
     "@ghentcdh/ui": "^3.1.1",
     "@ghentcdh/w3c-utils": "^1.1.0",
     "@jsonforms/core": "^3.7.0",
@@ -66,7 +66,7 @@
     "zod": "^4.4.3"
   },
   "dependencies": {
-    "@ghentcdh/crouton-core": "0.0.1-alpha.75",
+    "@ghentcdh/crouton-core": "0.0.1-alpha.78",
     "@tiptap/markdown": "^3.27.1",
     "@tiptap/starter-kit": "^3.27.1",
     "@tiptap/vue-3": "^3.27.1",

@@ -20,3 +20,5 @@ minimumReleaseAgeExclude:
   - '@ghentcdh/crouton-vue'
   - '@ghentcdh/create-crouton'
   - '@ghentcdh/ui@3.1.1'
+  - '@ghentcdh/annotated-text@1.1.0'
+  - '@ghentcdh/w3c-utils@1.1.0'

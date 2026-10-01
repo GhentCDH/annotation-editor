@@ -1,7 +1,7 @@
 import {
   type AnnotationModalConfig,
   type EditorAnnotation,
-  type TransformAnnotationAdapter,
+  type Selector,
   type UIAnnotationConfiguration,
 } from '@ghentcdh/annotation-ui';
 
@@ -20,5 +20,6 @@ export type EditorState_ = {
   selectedAnnotation: EditorAnnotation | null;
   reset: () => void;
   show: () => void;
-  annotationTransformer: TransformAnnotationAdapter<any>;
+  format: (annotation: EditorAnnotation, isNew: boolean) => any;
+  transformMetadata: (metadata: any, selector: Selector) => any;
 };

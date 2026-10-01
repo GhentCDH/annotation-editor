@@ -4,22 +4,8 @@
     :width-left="300"
   >
     <Loading :loading="store.loading" />
-    <AnnotationPreview
-      v-if="readOnly"
-      :configuration="definitionsState.configuration"
-      :sources="store.sources"
-      :annotations="store.filteredAnnotations"
-      :annotation-definitions="definitionsState.definitions"
-      :text-adapter="textAdapter"
-      :annotation-transformer="annotationTransformer"
-      :selected-annotation-id="selectedAnnotationId"
-      :selected-annotation-action="selectedAnnotationAction"
-      :cols="1"
-      :modal-view="false"
-      @select:annotation="selectAnnotation"
-    />
     <AnnotationEditor
-      v-else
+      :readonly="readonly"
       :configuration="definitionsState.configuration"
       :sources="store.sources"
       :annotations="store.filteredAnnotations"
@@ -30,6 +16,7 @@
       :selected-annotation-action="selectedAnnotationAction"
       :cols="1"
       :modal-view="false"
+      :layout="layout"
       @select:annotation="selectAnnotation"
       @delete:annotation="store.reload"
       @update:annotation="store.reload"
@@ -41,16 +28,15 @@
           v-model="store.selectedAnnotationTypes"
           :count="store.annotationsGroupedByPurpose"
         />
+
+        <slot name="annotation-menu" />
       </div>
     </template>
   </Drawer>
 </template>
 
 <script lang="ts" setup>
-import {
-  AnnotationEditor,
-  AnnotationPreview,
-} from '@ghentcdh/annotation-editor';
+import { AnnotationEditor } from '@ghentcdh/annotation-editor';
 import { onMounted, ref, watch } from 'vue';
 import type { W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { useRoute, useRouter } from 'vue-router';
@@ -67,7 +53,7 @@ const selectedAnnotationAction = ref<string | undefined>(undefined);
 
 const route = useRoute();
 const router = useRouter();
-const store = provideEditorStore(props.loader);
+const store = provideEditorStore(props.loader, props.annotationTransformer);
 
 const definitionsState = useAnnotationDefinitions();
 

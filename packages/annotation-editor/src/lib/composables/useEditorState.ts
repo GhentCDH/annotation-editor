@@ -53,10 +53,6 @@ export const useProvideEditorState = (
   containerRef: TemplateRef<HTMLElement>,
   { readonly } = { readonly: false },
 ) => {
-  const parsedAnnotations = computed(() => {
-    return props.annotationTransformer.setAnnotations(props.annotations);
-  });
-
   const config = shallowReactive<EditorConfig>({
     modal: createModalConfig(annotationModalDefaults),
     annotation: createAnnotationConfiguration(
@@ -85,7 +81,8 @@ export const useProvideEditorState = (
     readonly,
     show: () => showEditorState(),
     reset: () => resetEditorState(),
-    annotationTransformer: props.annotationTransformer,
+    format: props.annotationTransformer.format,
+    transformMetadata: props.annotationTransformer.transformMetadata,
   });
 
   watch(
@@ -98,13 +95,13 @@ export const useProvideEditorState = (
       config.annotation = createAnnotationConfiguration(
         props.annotationDefinitions,
         props.textAdapter,
-        props.annotationTransformer,
+        props.annotationTransformer.defaultParams,
       );
     },
   );
 
   const findAnnotationData = (annotationId: string) => {
-    const annotation = (parsedAnnotations.value ?? []).find(
+    const annotation = (props.annotations ?? []).find(
       (a) => a.id === annotationId,
     );
     if (!annotation) return null;
@@ -128,7 +125,7 @@ export const useProvideEditorState = (
     [
       () => props.selectedAnnotationId,
       () => props.selectedAnnotationAction,
-      () => parsedAnnotations.value,
+      () => props.annotations,
     ],
     ([id, action]) =>
       selectAnnotationById(containerRef, id, action, selectByIdCtx),
@@ -144,7 +141,7 @@ export const useProvideEditorState = (
   };
 
   const findAnnotation = (uri: AnnotationId) => {
-    return parsedAnnotations.value?.find((a) => a.id === uri) ?? null;
+    return props.annotations?.find((a) => a.id === uri) ?? null;
   };
 
   provide(EDITOR_KEY, {
@@ -157,7 +154,7 @@ export const useProvideEditorState = (
       emits,
       containerRef,
     ),
-    annotations: parsedAnnotations,
+    annotations: computed(() => props.annotations ?? []),
     findAnnotation,
   });
 };

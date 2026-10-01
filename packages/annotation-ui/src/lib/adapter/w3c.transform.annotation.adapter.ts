@@ -22,10 +22,9 @@ const createSelector = (resource: W3CSpecificResource) => {
       ? [resource.selector]
       : [];
   const obj = {
-    ...(selectorArr as Array<Record<string, unknown>>).reduce<Record<string, unknown>>(
-      (acc, { type: _, ...rest }) => ({ ...acc, ...rest }),
-      {},
-    ),
+    ...(selectorArr as Array<Record<string, unknown>>).reduce<
+      Record<string, unknown>
+    >((acc, { type: _, ...rest }) => ({ ...acc, ...rest }), {}),
     uri: resource.source,
   };
   const parsed = SelectorSchema.safeParse(obj);
@@ -54,7 +53,6 @@ export class W3cTransformAnnotationAdapter extends TransformAnnotationAdapter<W3
       }
     }
     const definitionSchemaUri = getAnnotationStyle(builder)?.id ?? '';
-
     const parsedAnnotation = editorAnnotationSchema.parse({
       id: annotation.id,
       definition: this.resolveDefinition(definitionSchemaUri),
