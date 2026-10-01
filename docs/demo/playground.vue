@@ -314,12 +314,19 @@
       :source-uris="sourceUris"
       :watch-query-params="false"
     />
+
+    <h4>Status</h4>
+    <AnnotationDefinitionsStatusView />
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue';
-import { type AnnotationEditorLoader, SmartAnnotationEditor } from '@ghentcdh/annotation-vue';
+import {
+  AnnotationDefinitionsStatusView,
+  type AnnotationEditorLoader,
+  SmartAnnotationEditor,
+} from '@ghentcdh/annotation-vue';
 import { useResources } from '@demo/composables/useResources';
 import { useAnnotations } from '@demo/composables/useAnnotations';
 import { useSources } from '@demo/composables/useSources';
@@ -361,19 +368,27 @@ watch(annotations, () => annotationsVersion.value++, { deep: false });
 // Plain object — avoids AnnotationEditorLoader constructor calling inject()+provide()
 // which would overwrite useResources()'s provided definitions state for all children.
 const definitionsLoaded = ref(false);
-nextTick(() => { definitionsLoaded.value = true; });
+nextTick(() => {
+  definitionsLoaded.value = true;
+});
 
 const loader = {
   definitionsLoaded,
   isSchema: false,
-  async loadResources() { return resources.value.map((r) => r.url); },
+  async loadResources() {
+    return resources.value.map((r) => r.url);
+  },
   async loadSource(uri: string) {
     const base = uri.split('?')[0];
     return sources.value.find((s) => s.uri === base) as SourceModel;
   },
-  async loadAnnotations(_uri: string) { return annotations.value; },
+  async loadAnnotations(_uri: string) {
+    return annotations.value;
+  },
   async loadDefinitions() {},
-  getDefinitions() { return []; },
+  getDefinitions() {
+    return [];
+  },
 } as unknown as AnnotationEditorLoader<W3CAnnotation>;
 
 // URI version suffix forces SmartAnnotationEditor to reload when annotations change
