@@ -1,3 +1,14 @@
+## 0.0.1-alpha.17 (2026-10-01)
+
+### 🩹 Fixes
+
+- bundle annotation-ui and annotation-editor into annotation-vue ([2ec5366d](https://github.com/GhentCDH/annotation-editor/commit/2ec5366d))
+- strip workspace-only deps from published package.json ([a2bfbed0](https://github.com/GhentCDH/annotation-editor/commit/a2bfbed0))
+
+### ❤️ Thank You
+
+- Bo Vandersteene
+
 ## 0.0.1-alpha.16 (2026-10-01)
 
 ### 🚀 Features
