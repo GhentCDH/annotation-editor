@@ -4,7 +4,7 @@ import {
   type ViewConfig,
   ViewConfigSchema,
 } from '@ghentcdh/crouton-core';
-import { ContextBuilder } from '@ghentcdh/w3c-utils';
+import { type ContextBuilder } from '@ghentcdh/w3c-utils';
 import {
   AnnotationConfigSchema,
   AnnotationJsonResourceShape,

@@ -319,13 +319,22 @@
       :layout="layout"
       :annotation-definitions="definitions"
     />
+
+    {{ sourceUrl }}
+    <SmartAnnotationEditor
+      :loader="loader"
+      :source-uris="sourceUris"
+      :layout="layout"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { watch } from 'vue';
+import { computed, watch } from 'vue';
 import { AnnotationEditor } from '@ghentcdh/annotation-editor';
+import { SmartAnnotationEditor } from '@ghentcdh/annotation-vue';
 import { config, useResources } from '@demo/composables/useResources';
+import { Loader } from '@demo/composables/loader';
 import { useAnnotations } from '@demo/composables/useAnnotations';
 import { useSources } from '@demo/composables/useSources';
 import { useAnnotationParser } from '@demo/composables/useAnnotationParser';
@@ -337,6 +346,8 @@ const layout: GridLayout = {
   columns: '1fr',
   panes: [{ sourceId: 'translation', area: 'translation' }],
 };
+
+const loader = new Loader();
 
 const { resources, newUrl, newName, definitions, add, remove, onEdit } =
   useResources();
@@ -362,6 +373,7 @@ const {
   rebuild: rebuildSources,
 } = useSources();
 
+const sourceUris = computed(() => [sourceUrl]);
 const {
   input: parserInput,
   sourceUri: parserSource,
