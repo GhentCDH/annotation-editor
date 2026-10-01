@@ -9,10 +9,10 @@
   >
     <template #content>
       <CroutonForm
-        v-if="annotation.definition"
+        v-if="definition"
         layout="rows"
         :data="metadata"
-        :views="annotation.definition.schemas"
+        :views="definition.schemas"
         :format-before-save="formatBeforeSave"
         form-max-width="w-max max-w-lg form-scroll min-w-[1/2]"
         :save-id="annotation?.id"
@@ -63,13 +63,20 @@ const { config, findAnnotation } = useEditorState();
 
 const emits = defineEmits(AnnotationEditEmits);
 
-const { save, cancel, metadata, message, onChangeValue, updateSelector } =
-  UseAnnotationEdit(props, emits);
+const {
+  save,
+  cancel,
+  metadata,
+  message,
+  onChangeValue,
+  updateSelector,
+  definition,
+} = UseAnnotationEdit(props, emits);
 
 const editId = `edit-select-annotation-${Date.now()}--`;
 
 const label = computed(() => {
-  const _label = props.annotation.definition.label;
+  const _label = definition.label;
   const isNew = !props.annotation?.id;
   return {
     title: isNew ? `Create ${_label}` : `Edit ${_label}`,

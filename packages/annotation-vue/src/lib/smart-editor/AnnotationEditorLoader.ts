@@ -10,6 +10,8 @@ export abstract class AnnotationEditorLoader<ANNOTATION> {
   private definitionsLoaded = ref(false);
 
   private readonly useAnnotationDefinitions: AnnotationDefinitionsState;
+  // flag to identify if the schema is already parsed to crouton format.
+  protected isSchema = false;
 
   constructor() {
     const existing = inject(ANNOTATION_DEFINITIONS_KEY, null);
@@ -24,9 +26,16 @@ export abstract class AnnotationEditorLoader<ANNOTATION> {
 
   async loadDefinitions() {
     const resources = await this.loadResources();
-    this.useAnnotationDefinitions.loadFromResourceUris(resources).then(() => {
-      this.definitionsLoaded.value = true;
-    });
+
+    // If the schema is already parsed to the crouton format then load it directly
+    if (this.isSchema) {
+      this.useAnnotationDefinitions.loadFromUrls(resources).then(() => {
+        this.definitionsLoaded.value = true;
+      });
+    } else
+      this.useAnnotationDefinitions.loadFromResourceUris(resources).then(() => {
+        this.definitionsLoaded.value = true;
+      });
   }
 
   getDefinitions() {

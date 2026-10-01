@@ -1,4 +1,7 @@
-import { type EditorAnnotation } from '@ghentcdh/annotation-ui';
+import {
+  type EditorAnnotation,
+  type UIAnnotationDefinition,
+} from '@ghentcdh/annotation-ui';
 import { type FormMessageProps } from '@ghentcdh/crouton-vue';
 import { NotificationService } from '@ghentcdh/ui';
 import { type EmitFn, ref } from 'vue';
@@ -7,9 +10,12 @@ import { useEditorState } from './useEditorState';
 export const AnnotationMetadataEditEmits = {
   close: (event: { annotation: any } | null) => true,
 };
-export const useAnnotationResource = (annotation: EditorAnnotation) => {
+export const useAnnotationResource = (
+  annotation: EditorAnnotation,
+  definition: UIAnnotationDefinition,
+) => {
   const message = ref<FormMessageProps>({ status: 'idle' });
-  const resource = annotation.definition.resource;
+  const resource = definition.resource;
   const { editorState } = useEditorState();
 
   const _save = async (update: EditorAnnotation) => {
@@ -34,8 +40,8 @@ export const useAnnotationResource = (annotation: EditorAnnotation) => {
     update: EditorAnnotation,
     emits: EmitFn<typeof AnnotationMetadataEditEmits>,
   ) => {
-    if (!annotation.id && !annotation.definition.canCreate) return;
-    if (annotation.id && !annotation.definition.canEdit) return;
+    if (!annotation.id && !definition.canCreate) return;
+    if (annotation.id && !definition.canEdit) return;
 
     _save(update)
       .then((annotation) => {

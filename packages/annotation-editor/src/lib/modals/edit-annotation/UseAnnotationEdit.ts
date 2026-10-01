@@ -5,6 +5,7 @@ import {
   type AnnotationEditModal,
 } from './AnnotationEditModal.properties';
 import { useMetadataEdit } from '../../composables/useMetadataEdit';
+import { useEditorState } from '../../composables/useEditorState';
 
 export const UseAnnotationEdit = (
   props: AnnotationEditModal,
@@ -14,7 +15,9 @@ export const UseAnnotationEdit = (
     props.source.uri,
   );
 
-  const metadataEdit = useMetadataEdit(props.annotation);
+  const { getDefinition } = useEditorState();
+  const definition = getDefinition(props.annotation.definitionUri);
+  const metadataEdit = useMetadataEdit(props.annotation, definition);
 
   const cancel = () => {
     // utils.cancel();
@@ -37,7 +40,7 @@ export const UseAnnotationEdit = (
       : editorAnnotationSchema.parse({
           id: 'NEW_ANNOTATION',
           metadata: {},
-          definition: props.annotation.definition,
+          definitionUri: definition.id,
           label: '',
           links: [],
           selectors: [selector],
@@ -71,5 +74,6 @@ export const UseAnnotationEdit = (
     onChangeValue,
     message: metadataEdit.message,
     updateSelector,
+    definition,
   };
 };

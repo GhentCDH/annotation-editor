@@ -55,7 +55,8 @@ export class W3cTransformAnnotationAdapter extends TransformAnnotationAdapter<W3
     const definitionSchemaUri = getAnnotationStyle(builder)?.id ?? '';
     const parsedAnnotation = editorAnnotationSchema.parse({
       id: annotation.id,
-      definition: this.resolveDefinition(definitionSchemaUri),
+      definitionUri: definitionSchemaUri,
+      // definition: this.resolveDefinition(definitionSchemaUri),
       metadata: getMetadata(builder),
       selectors,
       links,

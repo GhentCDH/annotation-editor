@@ -1,8 +1,4 @@
 import { z } from 'zod';
-import {
-  type UIAnnotationDefinition,
-  UiAnnotionDefinitionSchema,
-} from '../types/ui-annotation-definition.type';
 
 const annotationIdSchema = z.union([z.string(), z.number()]);
 export type AnnotationId = z.infer<typeof annotationIdSchema>;
@@ -23,7 +19,7 @@ export type AnnotationLink = z.infer<typeof LinkSchema>;
 export type _EditorAnnotation = {
   id: AnnotationId;
   label?: string;
-  definition: UIAnnotationDefinition;
+  definitionUri: string;
   metadata: any;
   selectors: Array<{ uri: string; start: number; end: number }>;
   parentId?: AnnotationId;
@@ -35,11 +31,11 @@ export const editorAnnotationSchema: z.ZodType<_EditorAnnotation> = z
     z.object({
       id: annotationIdSchema,
       label: z.string().optional(),
-      definition: UiAnnotionDefinitionSchema,
       metadata: z.any(),
       selectors: z.array(SelectorSchema),
       links: z.array(LinkSchema).default([]),
       parentId: annotationIdSchema.optional(),
+      definitionUri: z.string().optional(),
     }),
   )
   .transform((d) => {
@@ -63,6 +59,7 @@ export const editorAnnotationSchema: z.ZodType<_EditorAnnotation> = z
 
     return {
       ...d,
+      definitionUri: d.definitionUri ?? d.definition?.id,
       getSelector,
       setSelector,
       clone,

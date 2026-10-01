@@ -25,7 +25,8 @@
     "@ghentcdh/crouton-core": "0.0.1-alpha.75",
     "@ghentcdh/annotation-editor": "workspace:*",
     "@ghentcdh/annotation-ui": "workspace:*",
-    "lodash-es": "4.18.1"
+    "lodash-es": "4.18.1",
+    "@ghentcdh/crouton-vue": "0.0.1-alpha.78"
   },
   "peerDependencies": {
     "@ghentcdh/annotation-core": "^0.0.1-alpha.12",

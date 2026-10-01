@@ -10,12 +10,12 @@ export const useAnnotationLink = (
   props: LinkAnnotationProps,
   emits: EmitFn<typeof LinkEmits>,
 ) => {
-  const { findAnnotation } = useEditorState();
-
+  const { findAnnotation, getDefinition } = useEditorState();
+  const definition = getDefinition(props.annotation.definitionUri);
   const metadata = {};
   const annotations = props.annotation.links.map((l) => findAnnotation(l.uri));
 
-  const metadataEdit = useMetadataEdit(props.annotation);
+  const metadataEdit = useMetadataEdit(props.annotation, definition);
 
   const cancel = () => {
     emits('close', null);
@@ -41,5 +41,6 @@ export const useAnnotationLink = (
     onChangeValue,
     message: metadataEdit.message,
     annotations,
+    definition,
   };
 };

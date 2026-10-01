@@ -10,7 +10,7 @@
       <CroutonForm
         layout="rows"
         :data="metadata"
-        :views="annotation.definition.schemas"
+        :views="definition.schemas"
         :format-before-save="formatBeforeSave"
         form-max-width="w-max max-w-lg"
         @save="save"
@@ -49,15 +49,22 @@ import AnnotationText from '../info/Annotation-text.vue';
 const props = defineProps(LinkAnnotationProperties);
 const emits = defineEmits(LinkEmits);
 
-const { save, cancel, onChangeValue, message, annotations, metadata } =
-  useAnnotationLink(props, emits);
+const {
+  save,
+  cancel,
+  onChangeValue,
+  message,
+  annotations,
+  metadata,
+  definition,
+} = useAnnotationLink(props, emits);
 
 const formatBeforeSave = (formData: Record<string, unknown>) => {
   return onChangeValue({ metadata: formData });
 };
 
 const label = computed(() => {
-  const _label = props.annotation.definition.label;
+  const _label = definition.label;
 
   return {
     title: `Create ${_label} link`,

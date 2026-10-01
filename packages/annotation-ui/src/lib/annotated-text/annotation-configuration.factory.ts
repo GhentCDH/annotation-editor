@@ -10,13 +10,14 @@ import { type SourceModel } from '@ghentcdh/annotation-core';
 import { defaultRender, styleFn } from './annotation-render.style';
 import {
   type AllowedChildrenPerType,
+  type DefinitionMap,
   type UIAnnotationConfiguration,
   type UIAnnotationDefinition,
 } from '../types/ui-annotation-definition.type';
 import { AnnotationEditorAnnotationAdapter } from '../adapter/editor.annotation.adapter';
 import { type EditorAnnotation } from '../adapter';
 
-const groupById = <KEY extends keyof UIAnnotationDefinition>(
+export const groupById = <KEY extends keyof UIAnnotationDefinition>(
   defs: UIAnnotationDefinition[],
   valueKey?: KEY,
 ) => {
@@ -39,12 +40,9 @@ export const createAnnotationConfiguration = (
   annotationDefinitions: UIAnnotationDefinition[] | undefined,
   textAdapter: (() => TextAdapter) | undefined,
   defaultAannotationAdapterParams = {},
+  definitionsMap: DefinitionMap,
 ): UIAnnotationConfiguration => {
   const definitions = annotationDefinitions ?? ([] as UIAnnotationDefinition[]);
-  const definitionsMap = groupById(definitions) as Record<
-    string,
-    UIAnnotationDefinition
-  >;
   const rootTypes = definitions
     .filter((d) => d.annotation.isRoot)
     .map((d) => ({ key: d.id, label: d.label }));
@@ -74,10 +72,10 @@ export const createAnnotationConfiguration = (
     const _textAdapter = textAdapter?.() ?? PlainTextAdapter();
 
     const renderParams = () => ({
-      renderFn: defaultRender,
+      renderFn: defaultRender(definitionsMap),
     });
     const styleParams = () => ({
-      styleFn: styleFn(listStyles),
+      styleFn: styleFn(listStyles, definitionsMap),
     });
     const annotationAdapter = new AnnotationEditorAnnotationAdapter({
       ...defaultAannotationAdapterParams,

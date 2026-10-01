@@ -43,9 +43,11 @@ import { type NavbarAction } from '../../components/navbar.properties';
 
 const properties = defineProps(AnnotationInfoCardProperties);
 
-const { editorState, sendAnnotationEvent } = useEditorState();
+const { editorState, sendAnnotationEvent, getDefinition } = useEditorState();
 
-const annotationDef = computed(() => properties.annotation.definition);
+const annotationDef = computed(() =>
+  getDefinition(properties.annotation.definitionUri),
+);
 const purposeLabel = computed(() => annotationDef.value?.label);
 const metadata = computed(() => properties.annotation?.metadata);
 
@@ -88,7 +90,7 @@ const close = () => {
 const createAnnotation = (annotationType: string) => {
   skipNextClose();
   sendAnnotationEvent('create', {
-    type: annotationType,
+    definitionUri: annotationType,
     source: properties.source,
     parentAnnotation: properties.annotation,
   });
@@ -126,7 +128,7 @@ const createActionLinks = (definition: UIAnnotationDefinition) => {
     label: `Add ${link.label}`,
     disabled: editorState.disableEdits,
     action: () => {
-      sendAnnotationEvent('link', { link });
+      sendAnnotationEvent('link', { link, definition });
     },
   }));
 };
@@ -145,6 +147,7 @@ const actions = computed(() => {
             skipNextClose();
             sendAnnotationEvent('edit', {
               annotation: properties.annotation!,
+              definition: annotationDef.value,
               source: properties.source!,
             });
           },
@@ -159,6 +162,7 @@ const actions = computed(() => {
           action: () => {
             sendAnnotationEvent('delete', {
               annotation: properties.annotation!,
+              definition: annotationDef.value,
             });
           },
         }

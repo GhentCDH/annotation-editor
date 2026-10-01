@@ -98,7 +98,7 @@ onUnmounted(() => {
 
 const createAnnotation = (definition: UIAnnotationDefinition) => {
   sendAnnotationEvent('create', {
-    definition: definition,
+    definitionUri: definition.id,
     source: properties.source,
   });
 };

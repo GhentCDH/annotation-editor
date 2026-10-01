@@ -32,13 +32,6 @@ const createEditState = <ANNOTATION>(
     return definitions.definitions;
   });
 
-  watch(
-    () => definitions.definitions,
-    () => {
-      transformer.setDefinitions(definitions.definitions);
-    },
-  );
-
   let sourcesSeq = 0;
   let annotationsSeq = 0;
 
@@ -90,8 +83,7 @@ const createEditState = <ANNOTATION>(
   );
 
   const annotationsGroupedByPurpose = computed(() => {
-    // TODO decide where to parse now it is in the sub component but that might be wrong
-    return groupBy(annotations.value, (a) => a.definition?.id);
+    return groupBy(annotations.value, (a) => a.definitionUri);
   });
 
   const selectedAnnotationTypes = ref<string[]>([]);

@@ -12,8 +12,11 @@ import {
 import {
   type AnnotationId,
   createAnnotationConfiguration,
+  type DefinitionMap,
   type EditorAnnotation,
+  groupById,
   type SourceModel,
+  type UIAnnotationDefinition,
 } from '@ghentcdh/annotation-ui';
 import {
   type AnnotationEvents,
@@ -42,6 +45,7 @@ export type EditorState = {
   ) => void;
   annotations: ComputedRef<Readonly<EditorAnnotation[]>>;
   findAnnotation: (uri: AnnotationId) => EditorAnnotation | null;
+  getDefinition: (uri: string) => UIAnnotationDefinition;
 };
 
 const EDITOR_KEY: InjectionKey<EditorState> = Symbol('editor');
@@ -53,12 +57,14 @@ export const useProvideEditorState = (
   containerRef: TemplateRef<HTMLElement>,
   { readonly } = { readonly: false },
 ) => {
+  let definitionsMap = groupById(props.annotationDefinitions) as DefinitionMap;
   const config = shallowReactive<EditorConfig>({
     modal: createModalConfig(annotationModalDefaults),
     annotation: createAnnotationConfiguration(
       props.annotationDefinitions,
       props.textAdapter,
       props.annotationTransformer,
+      definitionsMap,
     ),
   });
 
@@ -90,12 +96,15 @@ export const useProvideEditorState = (
       () => props.annotationDefinitions,
       () => props.textAdapter,
       () => props.annotationTransformer,
+      () => props.annotationDefinitions,
     ],
     () => {
+      definitionsMap = groupById(props.annotationDefinitions) as DefinitionMap;
       config.annotation = createAnnotationConfiguration(
         props.annotationDefinitions,
         props.textAdapter,
         props.annotationTransformer.defaultParams,
+        definitionsMap,
       );
     },
   );
@@ -155,6 +164,9 @@ export const useProvideEditorState = (
       containerRef,
     ),
     annotations: computed(() => props.annotations ?? []),
+    getDefinition: (uri: string) => {
+      return definitionsMap[uri];
+    },
     findAnnotation,
   });
 };

@@ -7,26 +7,6 @@ import {
   LinkSchema,
   type Selector,
 } from './editor.annotation';
-import { type UIAnnotationDefinition } from '../types/ui-annotation-definition.type';
-
-const groupById = <KEY extends keyof UIAnnotationDefinition>(
-  defs: UIAnnotationDefinition[],
-  valueKey?: KEY,
-) => {
-  if (!defs)
-    return {} as Record<
-      string,
-      UIAnnotationDefinition[KEY] | UIAnnotationDefinition
-    >;
-
-  return defs.reduce(
-    (acc, def) => {
-      acc[def.id] = valueKey ? def[valueKey] : def;
-      return acc;
-    },
-    {} as Record<string, UIAnnotationDefinition[KEY] | UIAnnotationDefinition>,
-  );
-};
 
 export abstract class TransformAnnotationAdapter<
   ANNOTATION extends BaseAnnotation,
@@ -41,15 +21,7 @@ export abstract class TransformAnnotationAdapter<
   abstract parse(annotation: ANNOTATION): EditorAnnotation | null;
   abstract format(annotation: EditorAnnotation, isNew: boolean): ANNOTATION;
 
-  private definitionsMap: Record<string, UIAnnotationDefinition> = {};
   protected originalAnnotations: ANNOTATION[] = [];
-
-  setDefinitions(definitions: UIAnnotationDefinition[]) {
-    this.definitionsMap = groupById(definitions) as Record<
-      string,
-      UIAnnotationDefinition
-    >;
-  }
 
   setAnnotations(annotations: ANNOTATION[]): EditorAnnotation[] {
     this.originalAnnotations = annotations;
@@ -61,12 +33,6 @@ export abstract class TransformAnnotationAdapter<
     parsed = this.createLinks(parsed);
 
     return parsed;
-  }
-
-  resolveDefinition(
-    schemaUri: string,
-  ): UIAnnotationDefinition | { name: string } {
-    return this.definitionsMap[schemaUri] ?? { name: 'default' };
   }
 
   transformMetadata(metadata: any, selector: Selector) {

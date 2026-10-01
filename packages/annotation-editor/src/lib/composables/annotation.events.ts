@@ -15,13 +15,14 @@ type SelectAnnotationData = {
   source: SourceModel;
   mouseEvent: MouseEvent;
   containerRef?: HTMLElement;
+  definition: UIAnnotationDefinition;
 };
 
 type CreateAnnotationData = Pick<
   AnnotationEditModalShow,
   'source' | 'parentAnnotation'
 > & {
-  definition: UIAnnotationDefinition;
+  definitionUri: string;
 };
 
 type EditAnnotationData = Pick<
@@ -29,14 +30,17 @@ type EditAnnotationData = Pick<
   'source' | 'parentAnnotation'
 > & {
   annotation: EditorAnnotation;
+  definition: UIAnnotationDefinition;
 };
 
 type DeleteAnnotationData = {
   annotation: EditorAnnotation;
+  definition: UIAnnotationDefinition;
 };
 
 type LinkData = {
   link: KeyLabel;
+  definition: UIAnnotationDefinition;
 };
 
 export type AnnotationEvents = {
@@ -62,7 +66,7 @@ export const createAnnotation = (
     .show('edit-annotation', {
       source: data.source,
       annotation: {
-        definition: data.definition,
+        definitionUri: data.definitionUri,
         parentAnnotation: data.parentAnnotation,
         selectors: [],
       },
@@ -87,7 +91,7 @@ export const editAnnotation = (
   state.editorState = 'edit';
   emits('select:annotation', data.annotation, 'edit');
 
-  const isLink = data.annotation.definition.annotation.type === 'link';
+  const isLink = data.definition.annotation.type === 'link';
 
   config.modal
     .show(isLink ? 'link-annotation' : 'edit-annotation', {
@@ -110,7 +114,7 @@ const deleteAnnotation = (
   emits: AnnotationEditorEmitsFn,
 ) => {
   const { annotation } = data;
-  const definition = data.annotation.definition;
+  const definition = data.definition;
 
   const resource = definition.resource;
 
@@ -199,6 +203,10 @@ const endLink = (
     .show('link-annotation', {
       sourceAnnotation,
       targetAnnotation,
+      annotation: {
+        definitionUri: data.definition.id,
+        links: [{ uri: sourceAnnotation.id }, { uri: targetAnnotation.id }],
+      },
     })
     .then((result) => {
       state.show();

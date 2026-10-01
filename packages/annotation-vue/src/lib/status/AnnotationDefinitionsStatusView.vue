@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-5xl mx-auto p-6 space-y-6">
+  <div class="max-w-6xl mx-auto p-6 space-y-6">
     <!-- Header -->
     <div
       class="rounded-lg border p-4 flex flex-col sm:flex-row sm:items-center gap-3"
@@ -169,7 +169,7 @@
               v-if="expanded.has(def.id)"
               class="border-t border-base-300 bg-base-100 p-4 space-y-4"
             >
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <div
                     class="text-xs font-semibold text-base-content/60 uppercase tracking-wide mb-1"
@@ -189,6 +189,23 @@
                   <pre
                     class="text-xs bg-base-200 rounded p-3 overflow-x-auto max-h-96"
                   >{{ compiledJson(def) }}</pre>
+                </div>
+                <div>
+                  <div class="font-bold mt-2">
+                    Edit form
+                  </div>
+                  <CroutonForm
+                    :views="def.schemas"
+                    :data="{}"
+                  />
+                  <div class="font-bold mt-2">
+                    Readonly form
+                  </div>
+                  <CroutonForm
+                    :views="def.schemas"
+                    :data="{}"
+                    :readonly="true"
+                  />
                 </div>
               </div>
             </div>
@@ -213,6 +230,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { type UIAnnotationDefinition } from '@ghentcdh/annotation-ui';
+import { CroutonForm } from '@ghentcdh/crouton-vue';
 import { peekAnnotationDefinitionsState } from '../definitions/useAnnotationDefinitions';
 
 const tick = ref(0);

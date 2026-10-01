@@ -72,8 +72,8 @@ export const ANNOTATION_DEFINITIONS_KEY: InjectionKey<AnnotationDefinitionsState
 
 let _globalState: AnnotationDefinitionsState | null = null;
 
-export const peekAnnotationDefinitionsState = (): AnnotationDefinitionsState | null =>
-  _globalState;
+export const peekAnnotationDefinitionsState =
+  (): AnnotationDefinitionsState | null => _globalState;
 
 const resolveKeyLabels = (
   ids: string[] | undefined,
@@ -218,7 +218,12 @@ export const createAnnotationDefinitionsState = (
             defs.push(result.data);
             rawMap[result.data.id] = result.raw;
           } else {
-            errors.push({ id: result.id, name: result.name, error: result.error, raw: result.raw });
+            errors.push({
+              id: result.id,
+              name: result.name,
+              error: result.error,
+              raw: result.raw,
+            });
           }
         }
         state.loadErrors = errors;
