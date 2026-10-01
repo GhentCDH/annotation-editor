@@ -1,3 +1,13 @@
+## 0.0.1-alpha.23 (2026-10-01)
+
+### 🩹 Fixes
+
+- **annotation-vue:** fix package.json exports to use dist-root-relative paths ([ad5cd910](https://github.com/GhentCDH/annotation-editor/commit/ad5cd910))
+
+### ❤️ Thank You
+
+- Bo Vandersteene
+
 ## 0.0.1-alpha.22 (2026-10-01)
 
 ### 🩹 Fixes
