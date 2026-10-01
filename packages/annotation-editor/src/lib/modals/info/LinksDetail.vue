@@ -33,7 +33,8 @@ import { useEditorState } from '../../composables/useEditorState';
 
 const props = defineProps<{ annotation: EditorAnnotation }>();
 
-const { editorState, sendAnnotationEvent, findAnnotation } = useEditorState();
+const { editorState, sendAnnotationEvent, findAnnotation, getDefinition } =
+  useEditorState();
 
 type LinkDisplay = {
   definition: UIAnnotationDefinition;
@@ -50,7 +51,8 @@ const links = computed<LinkDisplay[]>(() => {
     const relation = findAnnotation(annotationId);
 
     return {
-      definition: link.definition,
+      id: link.id,
+      definition: getDefinition(link.definitionUri),
       annotation: link,
       relation,
     };
@@ -71,6 +73,7 @@ const actions = (link: LinkDisplay) => {
           action: () => {
             sendAnnotationEvent('edit', {
               annotation: link.annotation,
+              definition: link.definition,
             });
           },
         }
@@ -83,6 +86,7 @@ const actions = (link: LinkDisplay) => {
           action: () => {
             sendAnnotationEvent('delete', {
               annotation: link.annotation,
+              definition: link.definition,
             });
           },
         }

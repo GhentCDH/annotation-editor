@@ -59,10 +59,12 @@ const createEditState = <ANNOTATION>(
     Promise.all(uris.map((uri) => annotationLoader.loadAnnotations(uri)))
       .then((response) => {
         if (seq !== annotationsSeq) return;
-        annotations.value = response
+        const parsed = response
           .flat()
           .map((a) => transformer.parse(a))
           .filter(Boolean) as EditorAnnotation[];
+
+        annotations.value = transformer.createLinks(parsed);
       })
       .finally(() => {
         if (seq === annotationsSeq) loadingAnnotations.value = false;

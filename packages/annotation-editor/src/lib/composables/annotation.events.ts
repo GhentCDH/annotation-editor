@@ -98,6 +98,7 @@ export const editAnnotation = (
     .show(isLink ? 'link-annotation' : 'edit-annotation', {
       source: data.source,
       annotation: data.annotation,
+      definitionUrl: data.definition.id,
     })
     .then((result) => {
       state.show();

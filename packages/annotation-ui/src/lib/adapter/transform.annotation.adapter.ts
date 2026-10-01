@@ -23,18 +23,6 @@ export abstract class TransformAnnotationAdapter<
 
   protected originalAnnotations: ANNOTATION[] = [];
 
-  setAnnotations(annotations: ANNOTATION[]): EditorAnnotation[] {
-    this.originalAnnotations = annotations;
-
-    let parsed = annotations
-      .map((a) => this.parse(a))
-      .filter(Boolean) as EditorAnnotation[];
-
-    parsed = this.createLinks(parsed);
-
-    return parsed;
-  }
-
   transformMetadata(metadata: any, selector: Selector) {
     return metadata;
   }
@@ -50,7 +38,7 @@ export abstract class TransformAnnotationAdapter<
 
       annotation.links.forEach((l) => {
         const link = mapById[l.uri];
-        if (link) {
+        if (link && !link.links.some((existing) => existing.uri === annotation.id)) {
           link.links.push(LinkSchema.parse({ uri: annotation.id }));
         }
       });
