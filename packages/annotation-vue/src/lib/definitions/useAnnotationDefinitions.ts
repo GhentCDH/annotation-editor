@@ -20,18 +20,28 @@ import {
 } from '@ghentcdh/annotation-ui';
 import { AnnotationDefinitionService } from './annotation-definition.service';
 import {
+  buildAnnotationDefFromResourceJsonSafe,
   type DefinitionsFetchFn,
   type GlobModules,
-  loadAnnotationDefFromResourceUris,
   loadAnnotationDefinitionsFromConfigs,
   loadAnnotationDefinitionsFromGlob,
   loadAnnotationDefinitionsFromUrls,
+  type ResourceLoadResult,
 } from './annotation-definition.loader';
+
+export type AnnotationLoadError = {
+  id?: string;
+  name?: string;
+  error: string;
+  raw: unknown;
+};
 
 export type AnnotationDefinitionsState = {
   configuration: AnnotationDefConfig;
   definitions: UIAnnotationDefinition[];
   definitionsMap: Record<string, UIAnnotationDefinition>;
+  loadErrors: AnnotationLoadError[];
+  rawJsonMap: Record<string, unknown>;
   getDefinitionById: (id: string) => UIAnnotationDefinition | undefined;
   loadFromGlob: (modules: GlobModules) => void;
   loadFromConfigs: (configs: AnnotationJsonResource[]) => void;
@@ -59,6 +69,11 @@ export type ProvideAnnotationDefinitionsOptions = {
 
 export const ANNOTATION_DEFINITIONS_KEY: InjectionKey<AnnotationDefinitionsState> =
   Symbol('annotation-definitions');
+
+let _globalState: AnnotationDefinitionsState | null = null;
+
+export const peekAnnotationDefinitionsState = (): AnnotationDefinitionsState | null =>
+  _globalState;
 
 const resolveKeyLabels = (
   ids: string[] | undefined,
@@ -139,9 +154,12 @@ export const createAnnotationDefinitionsState = (
     configuration: config,
     definitions: [] as UIAnnotationDefinition[],
     definitionsMap: {} as Record<string, UIAnnotationDefinition>,
+    loadErrors: [] as AnnotationLoadError[],
+    rawJsonMap: {} as Record<string, unknown>,
     loading: false,
     error: null as Error | null,
     service,
+    /* ponytail: global singleton — last state wins, fine for single-app usage */
 
     getDefinitionById(id: string): UIAnnotationDefinition | undefined {
       return state.definitionsMap[id];
@@ -177,10 +195,34 @@ export const createAnnotationDefinitionsState = (
     async loadFromResourceUris(urls: string[]) {
       state.loading = true;
       state.error = null;
+      state.loadErrors = [];
+      state.rawJsonMap = {};
       try {
-        const defs = (await loadAnnotationDefFromResourceUris(urls)).filter(
-          (d): d is AnnotationResource => d !== null,
+        const results: ResourceLoadResult[] = await Promise.all(
+          urls.map((url) =>
+            fetch(url)
+              .then((r) => r.json())
+              .then((raw) => buildAnnotationDefFromResourceJsonSafe(raw))
+              .catch((e): ResourceLoadResult => ({
+                success: false,
+                error: e instanceof Error ? e.message : String(e),
+                raw: null,
+              })),
+          ),
         );
+        const defs: AnnotationResource[] = [];
+        const errors: AnnotationLoadError[] = [];
+        const rawMap: Record<string, unknown> = {};
+        for (const result of results) {
+          if (result.success) {
+            defs.push(result.data);
+            rawMap[result.data.id] = result.raw;
+          } else {
+            errors.push({ id: result.id, name: result.name, error: result.error, raw: result.raw });
+          }
+        }
+        state.loadErrors = errors;
+        state.rawJsonMap = rawMap;
         updateDefinitions(defs);
       } catch (e) {
         console.error(e);
@@ -222,6 +264,7 @@ export const createAnnotationDefinitionsState = (
     },
   });
 
+  _globalState = state;
   return state;
 };
 

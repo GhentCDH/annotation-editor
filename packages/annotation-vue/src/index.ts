@@ -9,12 +9,15 @@ export {
 } from './lib/definitions/annotation-definition.loader';
 export {
   type AnnotationDefinitionsState,
+  type AnnotationLoadError,
   type ProvideAnnotationDefinitionsOptions,
   provideAnnotationDefinitions,
   useAnnotationDefinitions,
   createAnnotationDefinitionsState,
+  peekAnnotationDefinitionsState,
 } from './lib/definitions/useAnnotationDefinitions';
 export { AnnotationPlugin } from './lib/annotation.plugin';
+export * from './lib/status';
 export { configureApi } from './lib/service/useApi';
 export * from '@ghentcdh/annotation-core';
 export * from '@ghentcdh/annotation-editor';

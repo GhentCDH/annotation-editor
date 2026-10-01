@@ -61,6 +61,39 @@ export const buildAnnotationDefFromResourceJson = (
   }
 };
 
+export type ResourceLoadResult =
+  | { success: true; data: AnnotationResource; raw: unknown }
+  | { success: false; error: string; raw: unknown; id?: string; name?: string };
+
+export const buildAnnotationDefFromResourceJsonSafe = (
+  raw: unknown,
+): ResourceLoadResult => {
+  try {
+    const resource = raw as AnnotationJsonResource;
+    const normalized = {
+      ...resource,
+      annotation: { color: '#c1d344', ...resource.annotation, isRoot: true },
+    };
+    const compiled = parseSchema(normalized, {
+      baseUrl: '',
+      extensions: { annotation: AnnotationConfigSchema },
+    });
+    if (!compiled) {
+      return { success: false, error: 'parseSchema returned null', raw, id: resource.id, name: resource.name };
+    }
+    return { success: true, data: compiled as unknown as AnnotationResource, raw };
+  } catch (error) {
+    const r = raw as AnnotationJsonResource | null;
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : String(error),
+      raw,
+      id: r?.id,
+      name: r?.name,
+    };
+  }
+};
+
 const extractConfig = (mod: GlobModule): AnnotationJsonResource => {
   if ('default' in mod) return mod.default;
   return mod;

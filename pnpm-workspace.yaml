@@ -19,3 +19,4 @@ minimumReleaseAgeExclude:
   - '@ghentcdh/crouton-core'
   - '@ghentcdh/crouton-vue'
   - '@ghentcdh/create-crouton'
+  - '@ghentcdh/ui@3.1.1'

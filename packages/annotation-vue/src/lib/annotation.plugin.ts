@@ -9,6 +9,7 @@ import {
   createAndLoadDefinitionsState,
   type ProvideAnnotationDefinitionsOptions,
 } from './definitions/useAnnotationDefinitions';
+import { ANNOTATION_STATUS } from './status/annotation-status.routes';
 
 export type AnnotationPluginOptions = ProvideAnnotationDefinitionsOptions & {
   router: Router;
@@ -36,8 +37,14 @@ export const AnnotationPlugin: Plugin<[AnnotationPluginOptions]> = {
     const state = createAndLoadDefinitionsState(options);
 
     app.provide(ANNOTATION_DEFINITIONS_KEY, state);
-    return state;
 
-    // return state;
+    options.router.addRoute({
+      path: '/annotation-editor/status',
+      name: ANNOTATION_STATUS,
+      component: () =>
+        import('./status/AnnotationDefinitionsStatusView.vue'),
+    });
+
+    return state;
   },
 };
