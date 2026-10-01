@@ -30,6 +30,7 @@ export default defineConfig(() => ({
       bundledPackages: [
         '@ghentcdh/annotation-core',
         '@ghentcdh/annotation-editor',
+        '@ghentcdh/annotation-ui',
       ],
     }),
     copyPackageJson(),
