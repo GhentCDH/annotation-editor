@@ -1,6 +1,8 @@
 /// <reference types='vitest' />
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
+import dts from 'vite-plugin-dts';
+import { copyPackageJson } from '../../tools/vite/copy-package-json.mts';
 import * as path from 'path';
 import tailwindcss from '@tailwindcss/vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
@@ -8,7 +10,17 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 export default defineConfig(() => ({
   root: import.meta.dirname,
   cacheDir: '../../node_modules/.vite/annotation-vue',
-  plugins: [vue(), tailwindcss(), tsconfigPaths()],
+  plugins: [
+    vue(),
+    tailwindcss(),
+    tsconfigPaths(),
+    dts({
+      entryRoot: 'src',
+      tsconfigPath: path.join(import.meta.dirname, 'tsconfig.lib.json'),
+      pathsToAliases: false,
+    }),
+    copyPackageJson(),
+  ],
   build: {
     outDir: '../../dist/packages/annotation-vue',
     emptyOutDir: true,
