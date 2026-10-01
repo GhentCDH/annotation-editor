@@ -24,7 +24,21 @@ export const copyPackageJson = (): Plugin => {
 
       try {
         mkdirSync(dirname(dest), { recursive: true });
-        writeFileSync(dest, readFileSync(src, 'utf-8'));
+        const pkg = JSON.parse(readFileSync(src, 'utf-8'));
+
+        // Strip workspace-only (private/unpublished) deps so consumers don't get 404s.
+        // These packages are bundled into the output by vite's alias resolution.
+        for (const field of ['dependencies', 'devDependencies', 'peerDependencies'] as const) {
+          if (!pkg[field]) continue;
+          pkg[field] = Object.fromEntries(
+            Object.entries(pkg[field] as Record<string, string>).filter(
+              ([, v]) => !v.startsWith('workspace:'),
+            ),
+          );
+          if (Object.keys(pkg[field]).length === 0) delete pkg[field];
+        }
+
+        writeFileSync(dest, JSON.stringify(pkg, null, 2) + '\n');
       } catch {
         // Silently skip if package.json doesn't exist
       }
