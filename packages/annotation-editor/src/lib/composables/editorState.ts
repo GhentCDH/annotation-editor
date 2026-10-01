@@ -3,7 +3,7 @@ import {
   type EditorAnnotation,
   type Selector,
   type SourceModel,
-  UiAnnotatedText,
+  type UiAnnotatedText,
 } from '@ghentcdh/annotation-ui';
 
 type EditorStatus = 'show' | 'create' | 'edit' | 'link' | null;

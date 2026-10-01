@@ -66,7 +66,7 @@ export const useProvideEditorState = (
     modal: createModalConfig(annotationModalDefaults),
     createAnnotatedText: createAnnotationConfiguration(
       props.textAdapter,
-      props.annotationTransformer,
+      props.annotationTransformer.defaultParams,
       definitionsMap.value,
     ),
   });
@@ -90,8 +90,13 @@ export const useProvideEditorState = (
     readonly,
     show: () => showEditorState(),
     reset: () => resetEditorState(),
-    format: props.annotationTransformer.format,
-    transformMetadata: props.annotationTransformer.transformMetadata,
+    format:
+      props.annotationTransformer?.format.bind(props.annotationTransformer) ??
+      (() => null),
+    transformMetadata:
+      props.annotationTransformer?.transformMetadata.bind(
+        props.annotationTransformer,
+      ) ?? ((m) => m),
   });
 
   watch(

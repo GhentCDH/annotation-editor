@@ -66,8 +66,8 @@ export const createAnnotationConfiguration = (
       styleFn: styleFn(listStyles, definitionsMap),
     });
     const annotationAdapter = new AnnotationEditorAnnotationAdapter({
-      ...defaultAannotationAdapterParams,
       sourceModel,
+      ...defaultAannotationAdapterParams,
     });
     const annotatedText = createAnnotatedText<EditorAnnotation>(id, {
       annotationAdapter,
