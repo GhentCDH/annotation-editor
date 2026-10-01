@@ -6,6 +6,7 @@ import {
   type SourceModel,
   type TransformAnnotationAdapter,
   type UIAnnotationDefinition,
+  W3cTransformAnnotationAdapter,
 } from '@ghentcdh/annotation-ui';
 
 export const AnnotationEditorProperties = {
@@ -18,6 +19,7 @@ export const AnnotationEditorProperties = {
   annotationTransformer: {
     type: Object as PropType<TransformAnnotationAdapter<object>>,
     required: true as const,
+    default: new W3cTransformAnnotationAdapter(),
   },
   sources: { type: Array as PropType<SourceModel[]>, required: true as const },
   annotations: {

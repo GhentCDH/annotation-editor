@@ -100,7 +100,7 @@ const toVueDefinition = (
 ): UIAnnotationDefinition => {
   const style = def.annotation ?? {};
 
-  return UiAnnotionDefinitionSchema.parse({
+  const parsed = UiAnnotionDefinitionSchema.parse({
     ...def,
     allowedChildren: resolveKeyLabels(style.allowedChildren, grouped),
     allowedLinks: resolveKeyLabels(style.allowedLinks, grouped),
@@ -109,6 +109,14 @@ const toVueDefinition = (
       active: activeStyle(style.color!),
     },
   });
+
+  return {
+    ...parsed,
+    color: style.color,
+    target: style.target,
+    views: def.schemas ?? (def as any).views,
+    _core: def,
+  } as UIAnnotationDefinition;
 };
 
 const buildVueDefinitions = (

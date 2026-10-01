@@ -30,6 +30,10 @@ export type UIAnnotationDefinition = AnnotationResource & {
   canDelete: boolean;
   canCreate: boolean;
   resource: ReturnType<typeof resourceApi>;
+  color?: string;
+  target?: string;
+  views?: Record<string, unknown> | null;
+  _core?: AnnotationResource;
 };
 
 // Cast to ZodObject locally so .extend() is available; AnnotationResourceSchema is

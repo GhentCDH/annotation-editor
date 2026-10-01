@@ -34,7 +34,7 @@ export const AnnotationResourceSchema: z.ZodType<AnnotationResource> = z.object(
   title,
   operations,
   annotation: AnnotationConfigSchema,
-  context: z.instanceof(ContextBuilder).optional().nullish(),
+  context: z.custom<ContextBuilder>(() => true).optional().nullish(),
   schemas: z
     .record(z.string(), ViewConfigSchema.partial())
     .optional()
