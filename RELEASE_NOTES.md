@@ -1,3 +1,13 @@
+## 0.0.1-alpha.18 (2026-10-01)
+
+### 🩹 Fixes
+
+- rewrite CSS exports to actual vite output filename in dist package.json ([1e886a0e](https://github.com/GhentCDH/annotation-editor/commit/1e886a0e))
+
+### ❤️ Thank You
+
+- Bo Vandersteene
+
 ## 0.0.1-alpha.17 (2026-10-01)
 
 ### 🩹 Fixes
