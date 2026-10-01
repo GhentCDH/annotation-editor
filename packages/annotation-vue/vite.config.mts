@@ -8,22 +8,9 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 export default defineConfig(() => ({
   root: import.meta.dirname,
   cacheDir: '../../node_modules/.vite/annotation-vue',
-  resolve: {
-    tsconfigPaths: true,
-    alias: {
-      '@ghentcdh/annotation-editor': path.resolve(
-        import.meta.dirname,
-        '../../packages/annotation-editor/src/index.ts',
-      ),
-      '@ghentcdh/annotation-ui': path.resolve(
-        import.meta.dirname,
-        '../../packages/annotation-ui/src/index.ts',
-      ),
-    },
-  },
   plugins: [vue(), tailwindcss(), tsconfigPaths()],
   build: {
-    outDir: '../../dist/packages/annotation-vue',
+    outDir: './dist',
     emptyOutDir: true,
     reportCompressedSize: true,
     commonjsOptions: {
