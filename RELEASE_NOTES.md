@@ -1,3 +1,13 @@
+## 0.0.1-alpha.22 (2026-10-01)
+
+### 🩹 Fixes
+
+- **annotation-vue:** fix build output path and add missing dts/copyPackageJson plugins ([21a2a71e](https://github.com/GhentCDH/annotation-editor/commit/21a2a71e))
+
+### ❤️ Thank You
+
+- Bo Vandersteene
+
 ## 0.0.1-alpha.21 (2026-10-01)
 
 This was a version bump only, there were no code changes.
