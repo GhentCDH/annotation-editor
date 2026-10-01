@@ -12,7 +12,6 @@ import {
   type Selector,
   SelectorSchema,
 } from './editor.annotation';
-import { type UIAnnotationDefinition } from '../types/ui-annotation-definition.type';
 
 type SourceModel = any;
 type Params = AnnotationAdapterParams & { sourceModel: SourceModel };
@@ -76,7 +75,7 @@ export const updateAnnotation = (
 
 export const createAnnotation = (
   sourceUri: string,
-  anno: StartEnd & { definition?: UIAnnotationDefinition },
+  anno: StartEnd & { definitionUri?: string },
   text: {
     fullFlatText: string;
     startOffset: number;
@@ -85,7 +84,7 @@ export const createAnnotation = (
   return editorAnnotationSchema.parse({
     id: 'NEW_ANNOTATION',
     metadata: {},
-    definition: {},
+    definitionUri: anno.definitionUri ?? 'default',
     label: '',
     links: [],
     selectors: updateSelector(sourceUri, anno, {

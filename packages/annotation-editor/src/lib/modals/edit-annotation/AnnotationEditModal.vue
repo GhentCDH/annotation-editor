@@ -157,7 +157,7 @@ onMounted(() => {
     .setAnnotationAdapterParams({ edit: true, create: !props.annotation?.id })
     .on('annotation-create--end', ({ mouseEvent, event, data: _data }) => {
       updateSelector(_data.annotation.getSelector(props.source.uri));
-      annotatedText.setAnnotationAdapterParams({ create: false, edit: true });
+      annotatedTextConfig.annotatedText.setAnnotationAdapterParams({ create: false, edit: true });
     })
     .on('annotation-edit--end', ({ mouseEvent, event, data }) => {
       updateSelector(data.annotation.getSelector(props.source.uri));

@@ -1,5 +1,6 @@
 <template>
-  <AnnotationPreview
+  <AnnotationEditor
+    :readonly="true"
     :configuration="config"
     :sources="sourcesPlainTxt"
     :annotations="annotations"
@@ -16,7 +17,7 @@ import {
   layout,
   sourcesPlainTxt,
 } from '@demo/demo-text';
-import { AnnotationPreview, configureApi } from '@ghentcdh/annotation-vue';
+import { AnnotationEditor, configureApi } from '@ghentcdh/annotation-vue';
 import axios from 'axios';
 
 configureApi(axios);

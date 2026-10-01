@@ -71,9 +71,7 @@ export class W3cTransformAnnotationAdapter extends TransformAnnotationAdapter<W3
   format(annotation: EditorAnnotation, isNew: boolean): W3CAnnotation {
     const builder = w3cAnnotation();
 
-    if (!isNew) {
-      builder.setId(String(annotation.id));
-    }
+    builder.setId(String(annotation.id ?? 'NEW_ONE'));
 
     builder.setMotivation('tagging');
 

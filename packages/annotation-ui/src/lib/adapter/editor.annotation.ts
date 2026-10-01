@@ -21,7 +21,7 @@ export type _EditorAnnotation = {
   label?: string;
   definitionUri: string;
   metadata: any;
-  selectors: Array<{ uri: string; start: number; end: number }>;
+  selectors: Array<Selector>;
   parentId?: AnnotationId;
   links: any[];
 };
@@ -35,7 +35,7 @@ export const editorAnnotationSchema: z.ZodType<_EditorAnnotation> = z
       selectors: z.array(SelectorSchema),
       links: z.array(LinkSchema).default([]),
       parentId: annotationIdSchema.optional(),
-      definitionUri: z.string().optional(),
+      definitionUri: z.string(),
     }),
   )
   .transform((d) => {
