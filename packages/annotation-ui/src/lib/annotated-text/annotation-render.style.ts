@@ -13,15 +13,13 @@ export const defaultRender =
 export const styleFn =
   (listStyles: string[], definitions: DefinitionMap) =>
   (annotation: EditorAnnotation) => {
-    const definition = definitions[annotation.definitionUri];
-    if (!definition) return 'default';
-
-    const styleId = definition?.id ?? 'default';
+    const styleId = annotation.definitionUri ?? 'default';
 
     if (!listStyles.includes(styleId)) {
       Debugger.debug('styleFn', `No style found for ${styleId}`);
 
-      if (definition.annotation.color) {
+      const definition = definitions[annotation.definitionUri];
+      if (definition?.annotation.color) {
         return { default: createHighlightStyle(definition.annotation.color) };
       }
 

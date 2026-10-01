@@ -48,7 +48,7 @@
 import { CroutonForm, FormMessage } from '@ghentcdh/crouton-vue';
 import { Btn, Collapse, Modal } from '@ghentcdh/ui';
 import { computed, onMounted, onUnmounted } from 'vue';
-import { type UiAnnotatedText } from '@ghentcdh/annotation-ui';
+import { type UiAnnotatedText, updateAnnotation } from '@ghentcdh/annotation-ui';
 import {
   AnnotationEditEmits,
   AnnotationEditModalProperties,
@@ -112,14 +112,12 @@ const selectFull = () => {
     ...annotation,
   };
 
-  return annotatedTextConfig.textAdapter.updateAnnotation(
+  return updateAnnotation(
     source.uri,
     maxRange,
     {
       fullFlatText: props.source.content.text,
       startOffset: 0, // TODO implement it
-      // fullFlatText: textAdapter.fullFlatText,
-      // startOffset: startOffset,
     },
     original,
   );

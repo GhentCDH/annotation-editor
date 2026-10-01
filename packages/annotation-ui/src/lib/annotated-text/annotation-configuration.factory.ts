@@ -37,12 +37,11 @@ export const groupById = <KEY extends keyof UIAnnotationDefinition>(
 };
 
 export const createAnnotationConfiguration = (
-  annotationDefinitions: UIAnnotationDefinition[] | undefined,
   textAdapter: (() => TextAdapter) | undefined,
   defaultAannotationAdapterParams = {},
   definitionsMap: DefinitionMap,
 ): UIAnnotationConfiguration => {
-  const definitions = annotationDefinitions ?? ([] as UIAnnotationDefinition[]);
+  const definitions = Object.values(definitionsMap);
   const rootTypes = definitions
     .filter((d) => d.annotation.isRoot)
     .map((d) => ({ key: d.id, label: d.label }));

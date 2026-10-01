@@ -11,7 +11,7 @@ export const useAnnotationLink = (
   emits: EmitFn<typeof LinkEmits>,
 ) => {
   const { findAnnotation, getDefinition } = useEditorState();
-  const definition = getDefinition(props.annotation.definitionUri);
+  const definition = getDefinition(props.definitionUri);
   const metadata = {};
   const annotations = props.annotation.links.map((l) => findAnnotation(l.uri));
 

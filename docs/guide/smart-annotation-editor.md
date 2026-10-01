@@ -117,14 +117,15 @@ annotations are mutated.
 
 ## Props
 
-| Prop                    | Type                            | Required | Default     | Description                                                                   |
-|-------------------------|---------------------------------|----------|-------------|-------------------------------------------------------------------------------|
-| `loader`                | `AnnotationEditorLoader<T>`     | ✓       | —           | Loads sources, annotations, and annotation definition resources               |
-| `annotationTransformer` | `TransformAnnotationAdapter<T>` | ✓       | —           | Converts between your domain model and the editor's `EditorAnnotation` format |
-| `sourceUris`            | `string[]`                      | ✓       | —           | URIs identifying the sources to load. Change them to trigger a reload         |
-| `textAdapter`           | `() => TextAdapter`             | —        | `undefined` | Custom text rendering adapter (e.g. `TextLineAdapter`)                        |
-| `watchQueryParams`      | `boolean`                       | —        | `true`      | Sync selected annotation and action with the URL query string                 |
-| `readOnly`              | `boolean`                       | —        | `false`     | Render `AnnotationPreview` instead of `AnnotationEditor`                      |
+| Prop                    | Type                            | Required | Default                          | Description                                                                   |
+|-------------------------|---------------------------------|----------|----------------------------------|-------------------------------------------------------------------------------|
+| `loader`                | `AnnotationEditorLoader<T>`     | ✓        | —                                | Loads sources, annotations, and annotation definition resources               |
+| `sourceUris`            | `string[]`                      | ✓        | —                                | URIs identifying the sources to load. Change them to trigger a reload         |
+| `annotationTransformer` | `TransformAnnotationAdapter<T>` | —        | `new W3cTransformAnnotationAdapter()` | Converts between your domain model and `EditorAnnotation`. Defaults to the built-in W3C adapter. |
+| `layout`                | `GridLayout`                    | —        | `undefined`                      | Custom CSS grid layout — see [AnnotationEditor custom layout](./annotation-editor.md#custom-layout) |
+| `textAdapter`           | `() => TextAdapter`             | —        | `undefined`                      | Custom text rendering adapter (e.g. `TextLineAdapter`)                        |
+| `watchQueryParams`      | `boolean`                       | —        | `true`                           | Sync selected annotation and action with the URL query string                 |
+| `readonly`              | `boolean`                       | —        | `false`                          | Disable editing — only display annotations, no create/edit/delete             |
 
 ## AnnotationEditorLoader
 
@@ -143,7 +144,7 @@ class MyLoader extends AnnotationEditorLoader<MyAnnotation> {
   }
 
   /** Return a SourceModel for the given URI */
-  async loadSource(sourceUri: string): Promise<SourceModel> { …
+  async loadSource(sourceUri: string | number): Promise<SourceModel> { …
   }
 
   /** Return all annotations for the given source URI */
@@ -172,11 +173,13 @@ import {
   TransformAnnotationAdapter,
   editorAnnotationSchema,
   type EditorAnnotation,
+  type AnnotationAdapterParams,
 } from '@ghentcdh/annotation-ui';
 
 class MyTransformAdapter extends TransformAnnotationAdapter<MyAnnotation> {
   name = 'MyAnnotationAdapter';
-  readonly defaultParams = { startOffset: 0 };
+  /** Required — passed to the text adapter to control selection behaviour */
+  defaultParams: AnnotationAdapterParams = { startOffset: 0 };
 
   /** Raw API object → EditorAnnotation (return null to skip) */
   parse(raw: MyAnnotation): EditorAnnotation | null { …

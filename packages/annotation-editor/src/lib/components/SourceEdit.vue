@@ -15,7 +15,7 @@
 <script lang="ts" setup>
 import { v4 as uuid } from 'uuid';
 import { type AnnotatedText } from '@ghentcdh/annotated-text';
-import { onMounted, onUnmounted, ref, watch } from 'vue';
+import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import {
   type EditorAnnotation,
   type UIAnnotationDefinition,
@@ -34,6 +34,14 @@ let textAnnotation: AnnotatedText<EditorAnnotation> | undefined = undefined;
 
 const mainEl = ref(null);
 let observer: IntersectionObserver | null = null;
+
+watch(
+  () => config.annotation,
+  () => {
+    textAnnotation?.destroy();
+    nextTick(() => drawTextAnnotation());
+  },
+);
 
 watch(
   () => properties.source,

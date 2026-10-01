@@ -57,14 +57,15 @@ export const useProvideEditorState = (
   containerRef: TemplateRef<HTMLElement>,
   { readonly } = { readonly: false },
 ) => {
-  let definitionsMap = groupById(props.annotationDefinitions) as DefinitionMap;
+  const definitionsMap = computed(
+    () => groupById(props.annotationDefinitions) as DefinitionMap,
+  );
   const config = shallowReactive<EditorConfig>({
     modal: createModalConfig(annotationModalDefaults),
     annotation: createAnnotationConfiguration(
-      props.annotationDefinitions,
       props.textAdapter,
       props.annotationTransformer,
-      definitionsMap,
+      definitionsMap.value,
     ),
   });
 
@@ -93,18 +94,16 @@ export const useProvideEditorState = (
 
   watch(
     [
-      () => props.annotationDefinitions,
+      () => props.annotations,
       () => props.textAdapter,
       () => props.annotationTransformer,
-      () => props.annotationDefinitions,
+      () => definitionsMap.value,
     ],
     () => {
-      definitionsMap = groupById(props.annotationDefinitions) as DefinitionMap;
       config.annotation = createAnnotationConfiguration(
-        props.annotationDefinitions,
         props.textAdapter,
         props.annotationTransformer.defaultParams,
-        definitionsMap,
+        definitionsMap.value,
       );
     },
   );
@@ -120,7 +119,11 @@ export const useProvideEditorState = (
     if (!sourceUri) return { annotation };
 
     const source = (props.sources ?? []).find((s) => s.uri === sourceUri);
-    return { annotation, source };
+    return {
+      annotation,
+      source,
+      definition: getDefinition(annotation.definitionUri),
+    };
   };
 
   const selectByIdCtx: SelectByIdContext = {
@@ -153,6 +156,14 @@ export const useProvideEditorState = (
     return props.annotations?.find((a) => a.id === uri) ?? null;
   };
 
+  const getDefinition = (uri: AnnotationId) => {
+    const def = definitionsMap.value[uri];
+    if (!def) {
+      console.warn(`No definition found for ${uri}`);
+    }
+    return def;
+  };
+
   provide(EDITOR_KEY, {
     sources,
     config: config as Readonly<EditorConfig>,
@@ -164,9 +175,7 @@ export const useProvideEditorState = (
       containerRef,
     ),
     annotations: computed(() => props.annotations ?? []),
-    getDefinition: (uri: string) => {
-      return definitionsMap[uri];
-    },
+    getDefinition,
     findAnnotation,
   });
 };

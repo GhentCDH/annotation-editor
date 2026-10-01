@@ -9,10 +9,10 @@ Interactive editor component for creating, editing, and deleting W3C annotations
 ```vue
 <template>
   <AnnotationEditor
-    :configuration="config"
     :sources="sources"
-    :annotations="annotations"
+    :annotations="editorAnnotations"
     :annotation-definitions="definitions"
+    :annotation-transformer="transformer"
     @create:annotation="onCreate"
     @update:annotation="onUpdate"
     @delete:annotation="onDelete"
@@ -21,11 +21,13 @@ Interactive editor component for creating, editing, and deleting W3C annotations
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { AnnotationEditor, type SourceModel } from '@ghentcdh/annotation-editor';
-import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
+import { computed, ref } from 'vue';
+import { AnnotationEditor } from '@ghentcdh/annotation-editor';
+import { TransformAnnotationAdapter, editorAnnotationSchema, type EditorAnnotation } from '@ghentcdh/annotation-ui';
+import { type SourceModel } from '@ghentcdh/annotation-core';
 import { type AnnotationDefConfig } from '@ghentcdh/annotation-core';
 import { provideAnnotationDefinitions } from '@ghentcdh/annotation-vue';
+import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 
 const config: AnnotationDefConfig = {
   baseUrl: 'https://api.example.com/',
@@ -45,45 +47,51 @@ const sources: SourceModel[] = [
   },
 ];
 
-const annotations = ref<W3CAnnotation[]>([]);
+// Extend TransformAnnotationAdapter for your domain model
+class MyAdapter extends TransformAnnotationAdapter<W3CAnnotation> {
+  name = 'MyAdapter';
+  defaultParams = {};
 
-const onCreate  = async (a: W3CAnnotation) => { annotations.value = [...annotations.value, a]; };
-const onUpdate  = async (a: W3CAnnotation) => { annotations.value = annotations.value.map((x) => (x.id === a.id ? a : x)); };
-const onDelete  = async (a: W3CAnnotation) => { annotations.value = annotations.value.filter((x) => x.id !== a.id); };
+  parse(raw: W3CAnnotation): EditorAnnotation | null {
+    return editorAnnotationSchema.parse({ id: raw.id, /* map fields */ });
+  }
+
+  format(annotation: EditorAnnotation, isNew: boolean): W3CAnnotation {
+    return { id: annotation.id, /* map fields */ } as W3CAnnotation;
+  }
+}
+
+const transformer = new MyAdapter();
+const rawAnnotations = ref<W3CAnnotation[]>([]);
+const editorAnnotations = computed(() => transformer.setAnnotations(rawAnnotations.value));
+
+const onCreate  = async (a: W3CAnnotation) => { rawAnnotations.value = [...rawAnnotations.value, a]; };
+const onUpdate  = async (a: W3CAnnotation) => { rawAnnotations.value = rawAnnotations.value.map((x) => (x.id === a.id ? a : x)); };
+const onDelete  = async (a: W3CAnnotation) => { rawAnnotations.value = rawAnnotations.value.filter((x) => x.id !== a.id); };
 const onSelect  = (a: W3CAnnotation | null, action: string | null) => { console.log('select', a?.id, action); };
 </script>
 ```
+:::
+
+::: tip Use SmartAnnotationEditor for full data loading
+For most use cases — fetching sources, annotations, and definitions from an API — use [`SmartAnnotationEditor`](./smart-annotation-editor.md) instead. It handles loading, caching, and the adapter pattern internally.
 :::
 
 ## Props
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `configuration` | `AnnotationDefConfig` | ✓ | — | Base URL, app name, and prefix for annotation URIs |
 | `sources` | `SourceModel[]` | ✓ | — | Text sources to render and annotate |
-| `annotations` | `W3CAnnotation[]` | ✓ | — | Current set of annotations (managed externally) |
-| `annotationDefinitions` | `AnnotationDefinition[]` | ✓ | — | Available annotation types (label, colour, views for table/form/detail) |
+| `annotations` | `EditorAnnotation[]` | ✓ | — | Pre-converted annotations (use your adapter's `setAnnotations()`) |
+| `annotationDefinitions` | `UIAnnotationDefinition[]` | ✓ | — | Available annotation types (label, colour, views for table/form/detail) |
+| `annotationTransformer` | `TransformAnnotationAdapter<T>` | ✓ | — | Adapter that converts between your domain model and `EditorAnnotation` |
 | `cols` | `number` | — | `2` | Number of grid columns (ignored when `layout` is set) |
 | `layout` | `GridLayout` | — | `undefined` | Custom CSS grid layout — see [Custom layout](#custom-layout) |
 | `modalView` | `boolean` | — | `true` | Show annotation details in a modal (`true`) or inline (`false`) |
-| `selectedAnnotationId` | `string` | — | `undefined` | Pre-select an annotation by ID on mount |
+| `readonly` | `boolean` | — | `false` | Disable editing (annotations are displayed but cannot be created/edited/deleted) |
+| `selectedAnnotationId` | `string \| number` | — | `undefined` | Pre-select an annotation by ID on mount |
 | `selectedAnnotationAction` | `string` | — | `undefined` | Action to trigger on the pre-selected annotation |
-| `textAdapter` | `TextAdapter` | — | `undefined` | Custom adapter for text rendering |
-| `annotationAdapter` | `AnnotationAdapter` | — | `undefined` | Custom adapter for annotation rendering |
-
-### AnnotationDefConfig
-
-```ts
-import { type AnnotationDefConfig } from '@ghentcdh/annotation-core';
-
-const config: AnnotationDefConfig = {
-  baseUrl: 'https://api.example.com/', // trailing slash required
-  app: 'my-app',
-  prefix: 'my-prefix',
-  isDev: false,      // optional — disables caching during development
-  cacheTTLms: 60000, // optional — definition cache lifetime in ms
-};
-```
+| `textAdapter` | `() => TextAdapter` | — | `undefined` | Custom adapter for text rendering |
 
 ### SourceModel
 
@@ -169,10 +177,10 @@ Use `cols` to control the number of columns. Each `SourceModel` gets its own col
 ```vue
 <template>
   <AnnotationEditor
-    :configuration="config"
     :sources="sources"
-    :annotations="annotations"
+    :annotations="editorAnnotations"
     :annotation-definitions="definitions"
+    :annotation-transformer="transformer"
     :cols="2"
     @create:annotation="onCreate"
     @update:annotation="onUpdate"
@@ -181,9 +189,9 @@ Use `cols` to control the number of columns. Each `SourceModel` gets its own col
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { AnnotationEditor, type SourceModel } from '@ghentcdh/annotation-editor';
-import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
+import { computed, ref } from 'vue';
+import { AnnotationEditor } from '@ghentcdh/annotation-editor';
+import { type SourceModel } from '@ghentcdh/annotation-core';
 
 const sources: SourceModel[] = [
   {
@@ -200,10 +208,11 @@ const sources: SourceModel[] = [
   },
 ];
 
-const annotations = ref<W3CAnnotation[]>([]);
-const onCreate  = async (a: W3CAnnotation) => { annotations.value = [...annotations.value, a]; };
-const onUpdate  = async (a: W3CAnnotation) => { annotations.value = annotations.value.map((x) => (x.id === a.id ? a : x)); };
-const onDelete  = async (a: W3CAnnotation) => { annotations.value = annotations.value.filter((x) => x.id !== a.id); };
+// transformer and rawAnnotations defined as in the Usage example above
+const editorAnnotations = computed(() => transformer.setAnnotations(rawAnnotations.value));
+const onCreate  = async (a: W3CAnnotation) => { rawAnnotations.value = [...rawAnnotations.value, a]; };
+const onUpdate  = async (a: W3CAnnotation) => { rawAnnotations.value = rawAnnotations.value.map((x) => (x.id === a.id ? a : x)); };
+const onDelete  = async (a: W3CAnnotation) => { rawAnnotations.value = rawAnnotations.value.filter((x) => x.id !== a.id); };
 </script>
 ```
 
@@ -214,10 +223,10 @@ Original and translation side by side, commentary spanning the full width below.
 ```vue
 <template>
   <AnnotationEditor
-    :configuration="config"
     :sources="sources"
-    :annotations="annotations"
+    :annotations="editorAnnotations"
     :annotation-definitions="definitions"
+    :annotation-transformer="transformer"
     :layout="layout"
     @create:annotation="onCreate"
     @update:annotation="onUpdate"
@@ -226,9 +235,9 @@ Original and translation side by side, commentary spanning the full width below.
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { AnnotationEditor, type SourceModel, type GridLayout } from '@ghentcdh/annotation-editor';
-import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
+import { computed, ref } from 'vue';
+import { AnnotationEditor } from '@ghentcdh/annotation-editor';
+import { type SourceModel, type GridLayout } from '@ghentcdh/annotation-ui';
 
 const sources: SourceModel[] = [
   {
@@ -264,10 +273,11 @@ const layout: GridLayout = {
   ],
 };
 
-const annotations = ref<W3CAnnotation[]>([]);
-const onCreate  = async (a: W3CAnnotation) => { annotations.value = [...annotations.value, a]; };
-const onUpdate  = async (a: W3CAnnotation) => { annotations.value = annotations.value.map((x) => (x.id === a.id ? a : x)); };
-const onDelete  = async (a: W3CAnnotation) => { annotations.value = annotations.value.filter((x) => x.id !== a.id); };
+// transformer and rawAnnotations defined as in the Usage example above
+const editorAnnotations = computed(() => transformer.setAnnotations(rawAnnotations.value));
+const onCreate  = async (a: W3CAnnotation) => { rawAnnotations.value = [...rawAnnotations.value, a]; };
+const onUpdate  = async (a: W3CAnnotation) => { rawAnnotations.value = rawAnnotations.value.map((x) => (x.id === a.id ? a : x)); };
+const onDelete  = async (a: W3CAnnotation) => { rawAnnotations.value = rawAnnotations.value.filter((x) => x.id !== a.id); };
 </script>
 ```
 

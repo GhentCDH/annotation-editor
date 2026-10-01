@@ -17,7 +17,7 @@ export class LinkAnnotation extends AnnotationModal<
   }
 
   override show(data: LinkAnnotationShow) {
-    return super._show({ ...data, type: this._type });
+    return super._show({ ...data, definitionUri: this._type });
   }
 }
 

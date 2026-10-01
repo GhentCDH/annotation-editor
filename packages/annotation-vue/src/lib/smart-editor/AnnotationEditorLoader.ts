@@ -7,11 +7,11 @@ import {
 } from '../definitions/useAnnotationDefinitions';
 
 export abstract class AnnotationEditorLoader<ANNOTATION> {
-  private definitionsLoaded = ref(false);
-
   private readonly useAnnotationDefinitions: AnnotationDefinitionsState;
   // flag to identify if the schema is already parsed to crouton format.
   protected isSchema = false;
+
+  public readonly definitionsLoaded = ref(false);
 
   constructor() {
     const existing = inject(ANNOTATION_DEFINITIONS_KEY, null);

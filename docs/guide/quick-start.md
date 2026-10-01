@@ -59,10 +59,10 @@ const sources: SourceModel[] = [
 
 <template>
   <AnnotationEditor
-    :configuration="config"
     :sources="sources"
-    :annotations="annotations"
+    :annotations="editorAnnotations"
     :annotation-definitions="definitions"
+    :annotation-transformer="transformer"
     @create:annotation="onCreate"
     @update:annotation="onUpdate"
     @delete:annotation="onDelete"
@@ -70,11 +70,12 @@ const sources: SourceModel[] = [
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue';
-  import { AnnotationEditor, type SourceModel } from '@ghentcdh/annotation-editor';
+  import { computed, ref } from 'vue';
+  import { AnnotationEditor } from '@ghentcdh/annotation-editor';
+  import { TransformAnnotationAdapter, editorAnnotationSchema, type EditorAnnotation, type AnnotationAdapterParams } from '@ghentcdh/annotation-ui';
   import { provideAnnotationDefinitions } from '@ghentcdh/annotation-vue';
   import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-  import { type AnnotationDefConfig } from '@ghentcdh/annotation-core';
+  import { type AnnotationDefConfig, type SourceModel } from '@ghentcdh/annotation-core';
 
   const config: AnnotationDefConfig = {
     baseUrl: 'https://api.example.com/',
@@ -95,59 +96,64 @@ const sources: SourceModel[] = [
         label: 'Original',
         text: 'Lorem ipsum dolor sit amet.',
         textDirection: 'ltr',
-        processingLanguage: 'en'
+        processingLanguage: 'en',
       },
     },
   ];
 
-  const annotations = ref<W3CAnnotation[]>([]);
+  // Implement TransformAnnotationAdapter for your domain model
+  class MyAdapter extends TransformAnnotationAdapter<W3CAnnotation> {
+    name = 'MyAdapter';
+    defaultParams: AnnotationAdapterParams = {};
+
+    parse(raw: W3CAnnotation): EditorAnnotation | null {
+      return editorAnnotationSchema.parse({ id: raw.id, /* map fields */ });
+    }
+
+    format(annotation: EditorAnnotation, isNew: boolean): W3CAnnotation {
+      return { id: annotation.id, /* map fields */ } as W3CAnnotation;
+    }
+  }
+
+  const transformer = new MyAdapter();
+  const rawAnnotations = ref<W3CAnnotation[]>([]);
+  // Convert raw annotations to the editor's internal format
+  const editorAnnotations = computed(() => transformer.setAnnotations(rawAnnotations.value));
 
   const onCreate = async (annotation: W3CAnnotation) => {
     // persist to your API, then push to local state
-    annotations.value = [...annotations.value, annotation];
+    rawAnnotations.value = [...rawAnnotations.value, annotation];
   };
 
   const onUpdate = async (annotation: W3CAnnotation) => {
-    annotations.value = annotations.value.map((a) =>
+    rawAnnotations.value = rawAnnotations.value.map((a) =>
       a.id === annotation.id ? annotation : a,
     );
   };
 
   const onDelete = async (annotation: W3CAnnotation) => {
-    annotations.value = annotations.value.filter((a) => a.id !== annotation.id);
+    rawAnnotations.value = rawAnnotations.value.filter((a) => a.id !== annotation.id);
   };
 </script>
 ```
 
-## Read-only preview
+::: tip Prefer SmartAnnotationEditor
+If your data comes from an API, [`SmartAnnotationEditor`](./smart-annotation-editor.md) handles loading, caching, and adapter wiring for you with less boilerplate.
+:::
 
-Swap `AnnotationEditor` for `AnnotationPreview` when you only need display (no editing):
+## Read-only mode
+
+Pass `:readonly="true"` to `AnnotationEditor` to display annotations without allowing edits, or use `SmartAnnotationEditor` with `:readonly="true"`:
 
 ```vue
-
-<template>
-  <AnnotationPreview
-    :configuration="config"
-    :sources="sources"
-    :annotations="annotations"
-    :annotation-definitions="definitions"
-    @select:annotation="onSelect"
-  />
-</template>
-
-<script setup lang="ts">
-  import { AnnotationPreview } from '@ghentcdh/annotation-preview';
-  import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-
-  // ... same config/sources/annotations/definitions setup as above
-
-  const onSelect = (annotation: W3CAnnotation | null, action: string | null) => {
-    console.log('selected', annotation?.id, action);
-  };
-</script>
+<SmartAnnotationEditor
+  :loader="loader"
+  :source-uris="sourceUris"
+  :readonly="true"
+/>
 ```
 
 ## Next steps
 
 - [AnnotationEditor](./annotation-editor.md) — full props, events, and examples
-- [AnnotationPreview](./annotation-preview.md) — read-only display with custom grid layouts
+- [SmartAnnotationEditor](./smart-annotation-editor.md) — loader-driven component with built-in data fetching

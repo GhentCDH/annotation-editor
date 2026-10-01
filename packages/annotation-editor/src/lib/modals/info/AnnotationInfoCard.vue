@@ -134,7 +134,8 @@ const createActionLinks = (definition: UIAnnotationDefinition) => {
 };
 
 const actions = computed(() => {
-  const definition = annotationDef.value!;
+  const definition = annotationDef.value;
+  if (!definition) return [];
 
   return [
     addActions(definition),

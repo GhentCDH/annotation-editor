@@ -13,6 +13,7 @@ import { type AnnotationEditorEmitsFn } from '../AnnotationEditor.properties';
 type SelectAnnotationData = {
   annotation: EditorAnnotation;
   source: SourceModel;
+  definitionUri: string;
   mouseEvent: MouseEvent;
   containerRef?: HTMLElement;
   definition: UIAnnotationDefinition;
@@ -204,7 +205,7 @@ const endLink = (
       sourceAnnotation,
       targetAnnotation,
       annotation: {
-        definitionUri: data.definition.id,
+        definitionUri: data.definitionUri,
         links: [{ uri: sourceAnnotation.id }, { uri: targetAnnotation.id }],
       },
     })

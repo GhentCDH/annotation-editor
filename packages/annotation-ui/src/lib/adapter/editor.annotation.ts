@@ -59,7 +59,7 @@ export const editorAnnotationSchema: z.ZodType<_EditorAnnotation> = z
 
     return {
       ...d,
-      definitionUri: d.definitionUri ?? d.definition?.id,
+      definitionUri: d.definitionUri,
       getSelector,
       setSelector,
       clone,

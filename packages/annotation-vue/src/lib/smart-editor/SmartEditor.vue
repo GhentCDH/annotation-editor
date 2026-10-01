@@ -3,8 +3,9 @@
     class="_h-full"
     :width-left="300"
   >
-    <Loading :loading="store.loading" />
+    <Loading :loading="store.loading || !props.loader.definitionsLoaded" />
     <AnnotationEditor
+      v-if="props.loader.definitionsLoaded"
       :readonly="readonly"
       :configuration="definitionsState.configuration"
       :sources="store.sources"
@@ -48,7 +49,7 @@ import AnnotationFilter from '../filter/AnnotationFilter.vue';
 
 const props = defineProps(SmartEditorProperties);
 
-const selectedAnnotationId = ref<number | undefined>(undefined);
+const selectedAnnotationId = ref<string | undefined>(undefined);
 const selectedAnnotationAction = ref<string | undefined>(undefined);
 
 const route = useRoute();
@@ -60,7 +61,7 @@ const definitionsState = useAnnotationDefinitions();
 onMounted(() => {
   if (!props.watchQueryParams) return;
   const { action, annotationId } = route.query;
-  if (annotationId) selectedAnnotationId.value = Number(annotationId);
+  if (annotationId) selectedAnnotationId.value = annotationId as string;
   if (action) selectedAnnotationAction.value = action as string;
 });
 

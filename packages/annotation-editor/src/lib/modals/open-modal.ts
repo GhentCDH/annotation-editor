@@ -2,6 +2,7 @@ import { nextTick, type TemplateRef } from 'vue';
 import {
   type EditorAnnotation,
   type SourceModel,
+  type UIAnnotationDefinition,
 } from '@ghentcdh/annotation-ui';
 import type { AnnotationEditorEmitsFn } from '../AnnotationEditor.properties';
 import type { EditorConfig, EditorState_ } from '../composables/editorState';
@@ -11,6 +12,7 @@ import { getAnnotationElementCenter } from '../utils/mouse-events';
 type AnnotationData = {
   annotation: EditorAnnotation;
   source: SourceModel | undefined;
+  definition: UIAnnotationDefinition;
 };
 
 export type SelectByIdContext = {
@@ -55,7 +57,14 @@ export const selectAnnotationById = (
   return nextTick(() => {
     // editorState.selectedAnnotation = annotation;
     if (action === 'edit') {
-      editAnnotation({ source, annotation }, config, editorState, emits);
+      const definition = data.definition;
+      if (!definition) return;
+      editAnnotation(
+        { source, annotation, definition },
+        config,
+        editorState,
+        emits,
+      );
     } else {
       const position = getAnnotationElementCenter(
         container.value!,

@@ -4,6 +4,11 @@ import { type EditorAnnotation } from '@ghentcdh/annotation-ui';
 export const LinkAnnotationProperties = {
   annotation: {
     type: Object as PropType<EditorAnnotation>,
+    required: true as const,
+  },
+  definitionUri: {
+    type: String,
+    required: true as const,
   },
 };
 
