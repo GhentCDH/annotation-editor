@@ -1,9 +1,9 @@
 /// <reference types='vitest' />
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import dts from 'vite-plugin-dts';
-import { copyPackageJson } from '../../tools/vite/copy-package-json.mts';
 import * as path from 'path';
+import tailwindcss from '@tailwindcss/vite';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig(() => ({
   root: import.meta.dirname,
@@ -21,20 +21,7 @@ export default defineConfig(() => ({
       ),
     },
   },
-  plugins: [
-    vue(),
-    dts({
-      entryRoot: 'src',
-      tsconfigPath: path.join(import.meta.dirname, 'tsconfig.lib.json'),
-      pathsToAliases: false,
-      bundledPackages: [
-        '@ghentcdh/annotation-core',
-        '@ghentcdh/annotation-editor',
-        '@ghentcdh/annotation-ui',
-      ],
-    }),
-    copyPackageJson(),
-  ],
+  plugins: [vue(), tailwindcss(), tsconfigPaths()],
   build: {
     outDir: '../../dist/packages/annotation-vue',
     emptyOutDir: true,
@@ -45,13 +32,12 @@ export default defineConfig(() => ({
     lib: {
       entry: 'src/index.ts',
       name: 'annotation-vue',
-      fileName: () => 'index.mjs',
-      format: ['es'],
+      fileName: 'index',
+      formats: ['es'],
     },
     rollupOptions: {
       external: [
         '@ghentcdh/annotated-text',
-        '@ghentcdh/annotation-core',
         '@ghentcdh/crouton-core',
         '@ghentcdh/crouton-vue',
         '@ghentcdh/w3c-utils',
@@ -61,6 +47,7 @@ export default defineConfig(() => ({
         'zod',
       ],
       output: {
+        globals: { vue: 'Vue' },
         assetFileNames: 'styles[extname]',
       },
     },

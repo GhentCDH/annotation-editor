@@ -4,9 +4,29 @@
  * Replaces the asset-copying functionality previously provided by the
  * deprecated `nxCopyAssetsPlugin()`.
  */
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
-import { resolve, dirname } from 'node:path';
+import { readFileSync, writeFileSync, mkdirSync, readdirSync, statSync } from 'node:fs';
+import { resolve, dirname, join } from 'node:path';
 import type { Plugin } from 'vite';
+
+const findPrivatePackageNames = (workspaceRoot: string): Set<string> => {
+  const names = new Set<string>();
+  const packagesDir = join(workspaceRoot, 'packages');
+  try {
+    for (const entry of readdirSync(packagesDir)) {
+      const pkgPath = join(packagesDir, entry, 'package.json');
+      try {
+        if (!statSync(pkgPath).isFile()) continue;
+        const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'));
+        if (pkg.private && pkg.name) names.add(pkg.name);
+      } catch {
+        // skip unreadable entries
+      }
+    }
+  } catch {
+    // skip if packages dir doesn't exist
+  }
+  return names;
+};
 
 export const copyPackageJson = (): Plugin => {
   let outDir: string;
@@ -26,13 +46,17 @@ export const copyPackageJson = (): Plugin => {
         mkdirSync(dirname(dest), { recursive: true });
         const pkg = JSON.parse(readFileSync(src, 'utf-8'));
 
-        // Strip workspace-only (private/unpublished) deps so consumers don't get 404s.
-        // These packages are bundled into the output by vite's alias resolution.
+        // Collect all private workspace package names so we can strip them from
+        // the published deps — they're bundled via vite alias and not on npm.
+        const workspaceRoot = resolve(root, '../..');
+        const privateNames = findPrivatePackageNames(workspaceRoot);
+
         for (const field of ['dependencies', 'devDependencies', 'peerDependencies'] as const) {
           if (!pkg[field]) continue;
           pkg[field] = Object.fromEntries(
             Object.entries(pkg[field] as Record<string, string>).filter(
-              ([, v]) => !v.startsWith('workspace:'),
+              ([name, version]) =>
+                !version.startsWith('workspace:') && !privateNames.has(name),
             ),
           );
           if (Object.keys(pkg[field]).length === 0) delete pkg[field];

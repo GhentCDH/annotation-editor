@@ -9,32 +9,6 @@
       "options": {
         "packageRoot": "dist/{projectRoot}"
       }
-    },
-    "build": {
-      "outputs": [
-        "{projectRoot}/{options.outDir}",
-        "{workspaceRoot}/dist/packages/annotation-vue"
-      ],
-      "options": {
-        "config": "./vite.config.mts",
-        "outDir": "../../dist/packages/annotation-vue"
-      },
-      "configurations": {
-        "production": {
-          "mode": "production"
-        },
-        "development": {
-          "mode": "development"
-        }
-      }
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
-    },
-    "test": {
-      "executor": "@nx/vitest:test",
-      "outputs": ["{projectRoot}/coverage/unit"]
     }
   }
 }
