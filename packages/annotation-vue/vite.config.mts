@@ -10,7 +10,7 @@ export default defineConfig(() => ({
   cacheDir: '../../node_modules/.vite/annotation-vue',
   plugins: [vue(), tailwindcss(), tsconfigPaths()],
   build: {
-    outDir: './dist',
+    outDir: '../../dist/packages/annotation-vue',
     emptyOutDir: true,
     reportCompressedSize: true,
     commonjsOptions: {
