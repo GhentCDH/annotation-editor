@@ -1,5 +1,5 @@
 import { type SourceModel } from '@ghentcdh/annotation-core';
-import { inject, ref } from 'vue';
+import { inject, nextTick, ref } from 'vue';
 import {
   ANNOTATION_DEFINITIONS_KEY,
   type AnnotationDefinitionsState,
@@ -26,15 +26,14 @@ export abstract class AnnotationEditorLoader<ANNOTATION> {
 
   async loadDefinitions() {
     const resources = await this.loadResources();
-
     // If the schema is already parsed to the crouton format then load it directly
     if (this.isSchema) {
       this.useAnnotationDefinitions.loadFromUrls(resources).then(() => {
-        this.definitionsLoaded.value = true;
+        nextTick(() => (this.definitionsLoaded.value = true));
       });
     } else
       this.useAnnotationDefinitions.loadFromResourceUris(resources).then(() => {
-        this.definitionsLoaded.value = true;
+        nextTick(() => (this.definitionsLoaded.value = true));
       });
   }
 

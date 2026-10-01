@@ -71,6 +71,8 @@ const createEditState = <ANNOTATION>(
 
   const setSourceUris = (uris: string[]) => {
     sourceUris.value = uris;
+    sources.value = [];
+    annotations.value = [];
     loadSources();
     reloadAnnotations();
   };

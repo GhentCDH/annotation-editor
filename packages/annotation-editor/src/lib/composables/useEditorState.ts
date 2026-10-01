@@ -57,9 +57,9 @@ export const useProvideEditorState = (
   containerRef: TemplateRef<HTMLElement>,
   { readonly } = { readonly: false },
 ) => {
-  const definitionsMap = computed(
-    () => groupById(props.annotationDefinitions) as DefinitionMap,
-  );
+  const definitionsMap = computed(() => {
+    return groupById(props.annotationDefinitions) as DefinitionMap;
+  });
   const config = shallowReactive<EditorConfig>({
     modal: createModalConfig(annotationModalDefaults),
     annotation: createAnnotationConfiguration(

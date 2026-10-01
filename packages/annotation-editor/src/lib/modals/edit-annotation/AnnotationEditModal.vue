@@ -48,7 +48,10 @@
 import { CroutonForm, FormMessage } from '@ghentcdh/crouton-vue';
 import { Btn, Collapse, Modal } from '@ghentcdh/ui';
 import { computed, onMounted, onUnmounted } from 'vue';
-import { type UiAnnotatedText, updateAnnotation } from '@ghentcdh/annotation-ui';
+import {
+  type UiAnnotatedText,
+  updateAnnotation,
+} from '@ghentcdh/annotation-ui';
 import {
   AnnotationEditEmits,
   AnnotationEditModalProperties,
@@ -142,6 +145,8 @@ onMounted(() => {
     props.source,
   );
   annotatedTextConfig.annotatedText
+    // Snapper should be derived from the annotation model
+    // .setSnapper(new WordSnapper())
     .setStyleParams({
       styleFn: () => null,
     })

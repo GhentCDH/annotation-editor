@@ -4,7 +4,6 @@ import {
   type CustomAnnotationStyle,
   PlainTextAdapter,
   type TextAdapter,
-  WordSnapper,
 } from '@ghentcdh/annotated-text';
 import { type SourceModel } from '@ghentcdh/annotation-core';
 import { defaultRender, styleFn } from './annotation-render.style';
@@ -86,7 +85,6 @@ export const createAnnotationConfiguration = (
     });
 
     annotatedText
-      .setSnapper(new WordSnapper())
       .setRenderParams(renderParams())
       .setStyleParams(styleParams())
       .registerStyles(styles);

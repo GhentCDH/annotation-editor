@@ -39,7 +39,7 @@ export const UseAnnotationEdit = (
       ? props.annotation
       : editorAnnotationSchema.parse({
           id: 'NEW_ANNOTATION',
-          metadata: {},
+          metadata,
           definitionUri: definition.id,
           label: '',
           links: [],

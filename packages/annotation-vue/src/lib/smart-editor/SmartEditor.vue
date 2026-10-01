@@ -3,9 +3,11 @@
     class="_h-full"
     :width-left="300"
   >
-    <Loading :loading="store.loading || !props.loader.definitionsLoaded" />
+    <Loading
+      :loading="store.loading || !props.loader.definitionsLoaded.value"
+    />
     <AnnotationEditor
-      v-if="props.loader.definitionsLoaded"
+      v-if="props.loader.definitionsLoaded.value"
       :readonly="readonly"
       :configuration="definitionsState.configuration"
       :sources="store.sources"

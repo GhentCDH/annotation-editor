@@ -14,5 +14,6 @@ export const getAnnotationStyle = (builder: W3CAnnotationBuilder) => {
 export const getMetadata = (builder: W3CAnnotationBuilder) => {
   const metadataBody = builder.getBodiesByType(AnnotationMetadataType);
   const metadata = metadataBody?.[0] ?? null;
+
   return metadata ?? null;
 };

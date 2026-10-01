@@ -3,7 +3,7 @@ import {
   type Selector,
   type UIAnnotationDefinition,
 } from '@ghentcdh/annotation-ui';
-import { ref } from 'vue';
+import { ref, toRaw } from 'vue';
 import { useEditorState } from './useEditorState';
 import { useAnnotationResource } from './useAnnotationResource';
 
@@ -25,7 +25,8 @@ export const useMetadataEdit = (
     selector?: Selector;
   }) => {
     hasChanged.value = true;
-    metadata.value = editorState.transformMetadata(_metadata, selector);
+    const transformed = editorState.transformMetadata(_metadata, selector);
+    metadata.value = structuredClone(toRaw(transformed));
     return metadata.value;
   };
 

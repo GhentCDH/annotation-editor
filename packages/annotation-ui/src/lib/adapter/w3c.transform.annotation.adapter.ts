@@ -5,6 +5,10 @@ import {
   type W3CSpecificResource,
 } from '@ghentcdh/w3c-utils';
 import {
+  AnnotationMetadataType,
+  AnnotationStyleType,
+} from '@ghentcdh/annotation-core';
+import {
   type AnnotationLink,
   type EditorAnnotation,
   editorAnnotationSchema,
@@ -56,7 +60,6 @@ export class W3cTransformAnnotationAdapter extends TransformAnnotationAdapter<W3
     const parsedAnnotation = editorAnnotationSchema.parse({
       id: annotation.id,
       definitionUri: definitionSchemaUri,
-      // definition: this.resolveDefinition(definitionSchemaUri),
       metadata: getMetadata(builder),
       selectors,
       links,
@@ -66,6 +69,42 @@ export class W3cTransformAnnotationAdapter extends TransformAnnotationAdapter<W3
   }
 
   format(annotation: EditorAnnotation, isNew: boolean): W3CAnnotation {
-    throw new Error('not yet implemented.');
+    const builder = w3cAnnotation();
+
+    if (!isNew) {
+      builder.setId(String(annotation.id));
+    }
+
+    builder.setMotivation('tagging');
+
+    if (annotation.definitionUri) {
+      builder.addBody({
+        type: AnnotationStyleType,
+        purpose: 'styling',
+        id: annotation.definitionUri,
+        name: annotation.definitionUri,
+      } as any);
+    }
+
+    if (annotation.metadata) {
+      builder.addBody({ type: AnnotationMetadataType, ...annotation.metadata });
+    }
+
+    for (const selector of annotation.selectors) {
+      const { uri, start, end, exact, prefix, suffix } = selector;
+
+      builder.updateTextPositionSelector({ start, end }, uri);
+      if (exact !== undefined || prefix !== undefined || suffix !== undefined) {
+        builder.updateTextQuoteSelector(
+          { exact: exact ?? '', prefix, suffix },
+          uri,
+        );
+      }
+    }
+
+    for (const link of annotation.links) {
+      builder.addTarget({ type: 'SpecificResource', source: link.uri });
+    }
+    return builder.build();
   }
 }
