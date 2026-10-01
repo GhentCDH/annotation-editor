@@ -11,7 +11,6 @@
       </summary>
 
       <div class="px-6">
-        <!-- Annotation Definitions -->
         <div class="mb-5">
           <h4
             class="mt-0 mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500"
@@ -90,7 +89,6 @@
           </div>
         </div>
 
-        <!-- Annotations URL -->
         <div class="mb-4">
           <h4
             class="mt-0 mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500"
@@ -190,7 +188,6 @@
           </div>
         </div>
 
-        <!-- Source Text URL -->
         <div class="mb-2">
           <h4
             class="mt-0 mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500"
@@ -312,34 +309,36 @@
         </div>
       </div>
     </details>
-    <AnnotationEditor
-      :configuration="config"
-      :sources="sources"
-      :annotations="annotations"
-      :layout="layout"
-      :annotation-definitions="definitions"
+    <SmartAnnotationEditor
+      :loader="loader"
+      :source-uris="sourceUris"
+      :watch-query-params="false"
     />
+
+    <h4>Status</h4>
+    <AnnotationDefinitionsStatusView />
   </div>
 </template>
 
 <script setup lang="ts">
-import { watch } from 'vue';
-import { AnnotationEditor } from '@ghentcdh/annotation-editor';
-import { config, useResources } from '@demo/composables/useResources';
+import { computed, nextTick, ref, watch } from 'vue';
+import {
+  AnnotationDefinitionsStatusView,
+  type AnnotationEditorLoader,
+  SmartAnnotationEditor,
+} from '@ghentcdh/annotation-vue';
+import { useResources } from '@demo/composables/useResources';
 import { useAnnotations } from '@demo/composables/useAnnotations';
 import { useSources } from '@demo/composables/useSources';
 import { useAnnotationParser } from '@demo/composables/useAnnotationParser';
 import { useSourceParser } from '@demo/composables/useSourceParser';
-import type { GridLayout } from '@ghentcdh/annotation-core';
+import type { SourceModel } from '@ghentcdh/annotation-core';
+import type { W3CAnnotation } from '@ghentcdh/w3c-utils';
 
-const layout: GridLayout = {
-  areas: [['translation']],
-  columns: '1fr',
-  panes: [{ sourceId: 'translation', area: 'translation' }],
-};
-
+// Must be first: provides ANNOTATION_DEFINITIONS_KEY so SmartAnnotationEditor's children inject it
 const { resources, newUrl, newName, definitions, add, remove, onEdit } =
   useResources();
+
 const {
   url: annotationsUrl,
   content: annotationsContent,
@@ -362,6 +361,41 @@ const {
   rebuild: rebuildSources,
 } = useSources();
 
+// annotationsVersion bumps when annotations change so SmartAnnotationEditor reruns loadAnnotations
+const annotationsVersion = ref(0);
+watch(annotations, () => annotationsVersion.value++, { deep: false });
+
+// Plain object — avoids AnnotationEditorLoader constructor calling inject()+provide()
+// which would overwrite useResources()'s provided definitions state for all children.
+const definitionsLoaded = ref(false);
+nextTick(() => {
+  definitionsLoaded.value = true;
+});
+
+const loader = {
+  definitionsLoaded,
+  isSchema: false,
+  async loadResources() {
+    return resources.value.map((r) => r.url);
+  },
+  async loadSource(uri: string) {
+    const base = uri.split('?')[0];
+    return sources.value.find((s) => s.uri === base) as SourceModel;
+  },
+  async loadAnnotations(_uri: string) {
+    return annotations.value;
+  },
+  async loadDefinitions() {},
+  getDefinitions() {
+    return [];
+  },
+} as unknown as AnnotationEditorLoader<W3CAnnotation>;
+
+// URI version suffix forces SmartAnnotationEditor to reload when annotations change
+const sourceUris = computed(() => {
+  const v = annotationsVersion.value;
+  return sources.value.map((s) => (v > 0 ? `${s.uri}?v=${v}` : s.uri));
+});
 const {
   input: parserInput,
   sourceUri: parserSource,

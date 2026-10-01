@@ -10,11 +10,16 @@
 
 <script setup lang="ts">
 import {
-  annotations,
+  annotations as w3cAnnotations,
   config,
   definitions,
   layout,
   sourcesPlainTxt,
 } from '@demo/demo-text';
 import { AnnotationEditor } from '@ghentcdh/annotation-vue';
+import { W3cTransformAnnotationAdapter } from '../../packages/annotation-ui/src';
+
+const transformer = new W3cTransformAnnotationAdapter();
+let annotations = w3cAnnotations.map((a) => transformer.parse(a));
+annotations = transformer.createLinks(annotations);
 </script>

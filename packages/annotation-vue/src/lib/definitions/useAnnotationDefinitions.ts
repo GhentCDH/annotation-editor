@@ -1,0 +1,329 @@
+import {
+  inject,
+  type InjectionKey,
+  markRaw,
+  provide,
+  shallowReactive,
+} from 'vue';
+import {
+  type AnnotationDefConfig,
+  type AnnotationJsonResource,
+  type AnnotationResource,
+  type AnnotationResource as CoreAnnotationDefinition,
+  type KeyLabel,
+} from '@ghentcdh/annotation-core';
+import { createHighlightStyle } from '@ghentcdh/annotated-text';
+import { type AxiosInstance } from 'axios';
+import {
+  type UIAnnotationDefinition,
+  UiAnnotionDefinitionSchema,
+} from '@ghentcdh/annotation-ui';
+import { AnnotationDefinitionService } from './annotation-definition.service';
+import {
+  buildAnnotationDefFromResourceJsonSafe,
+  type DefinitionsFetchFn,
+  type GlobModules,
+  loadAnnotationDefinitionsFromConfigs,
+  loadAnnotationDefinitionsFromGlob,
+  loadAnnotationDefinitionsFromUrls,
+  type ResourceLoadResult,
+} from './annotation-definition.loader';
+
+export type AnnotationLoadError = {
+  id?: string;
+  name?: string;
+  error: string;
+  raw: unknown;
+};
+
+export type AnnotationDefinitionsState = {
+  configuration: AnnotationDefConfig;
+  definitions: UIAnnotationDefinition[];
+  definitionsMap: Record<string, UIAnnotationDefinition>;
+  loadErrors: AnnotationLoadError[];
+  rawJsonMap: Record<string, unknown>;
+  getDefinitionById: (id: string) => UIAnnotationDefinition | undefined;
+  loadFromGlob: (modules: GlobModules) => void;
+  loadFromConfigs: (configs: AnnotationJsonResource[]) => void;
+  loadFromDefinitions: (defs: CoreAnnotationDefinition[]) => void;
+  loadFromUrl: (url: string, fetchFn?: DefinitionsFetchFn) => Promise<void>;
+  loadFromUrls: (urls: string[]) => Promise<void>;
+  loadFromResourceUris: (urls: string[]) => Promise<void>;
+  loading: boolean;
+  error: Error | null;
+  service: AnnotationDefinitionService;
+};
+
+export type ProvideAnnotationDefinitionsOptions = {
+  api?: AxiosInstance;
+  config: AnnotationDefConfig;
+  resourceFolder?: GlobModules;
+  factory?: (id: string) => unknown;
+  createHighlightStyle?: typeof createHighlightStyle;
+  activeHighlightStyle?: typeof createHighlightStyle;
+  definitionsUrl?: string;
+  definitionsUrls?: string[];
+  resourceUrls?: string[];
+  fetchFn?: DefinitionsFetchFn;
+};
+
+export const ANNOTATION_DEFINITIONS_KEY: InjectionKey<AnnotationDefinitionsState> =
+  Symbol('annotation-definitions');
+
+let _globalState: AnnotationDefinitionsState | null = null;
+
+export const peekAnnotationDefinitionsState =
+  (): AnnotationDefinitionsState | null => _globalState;
+
+const resolveKeyLabels = (
+  ids: string[] | undefined,
+  grouped: Record<string, AnnotationResource>,
+): KeyLabel[] => {
+  if (!ids) return [];
+  return ids.reduce<KeyLabel[]>((acc, id) => {
+    const def = grouped[id];
+    if (def) {
+      const style = def.annotation;
+      const item: KeyLabel = { key: def.id, label: def.name };
+      if (style.icon) item.icon = style.icon;
+      acc.push(item);
+    }
+    return acc;
+  }, []);
+};
+
+const toVueDefinition = (
+  def: AnnotationResource,
+  grouped: Record<string, AnnotationResource>,
+  createStyle: typeof createHighlightStyle,
+  activeStyle: typeof createHighlightStyle,
+): UIAnnotationDefinition => {
+  const style = def.annotation ?? {};
+
+  const parsed = UiAnnotionDefinitionSchema.parse({
+    ...def,
+    allowedChildren: resolveKeyLabels(style.allowedChildren, grouped),
+    allowedLinks: resolveKeyLabels(style.allowedLinks, grouped),
+    style: {
+      default: createStyle(style.color!),
+      active: activeStyle(style.color!),
+    },
+  });
+
+  return {
+    ...parsed,
+    color: style.color,
+    target: style.target,
+    views: def.schemas ?? (def as any).views,
+    _core: def,
+  } as UIAnnotationDefinition;
+};
+
+const buildVueDefinitions = (
+  coreDefs: CoreAnnotationDefinition[],
+  grouped: Record<string, CoreAnnotationDefinition>,
+  createStyle: typeof createHighlightStyle,
+  activeStyle: typeof createHighlightStyle,
+): UIAnnotationDefinition[] =>
+  coreDefs.map((def) =>
+    toVueDefinition(def, grouped, createStyle, activeStyle as any),
+  );
+
+const buildDefinitionsMap = (
+  definitions: UIAnnotationDefinition[],
+): Record<string, UIAnnotationDefinition> =>
+  definitions.reduce((acc: Record<string, UIAnnotationDefinition>, def) => {
+    acc[def.id] = def;
+    return acc;
+  }, {});
+
+export const createAnnotationDefinitionsState = (
+  options: ProvideAnnotationDefinitionsOptions,
+): AnnotationDefinitionsState => {
+  const { config } = options;
+  const createStyle = options.createHighlightStyle ?? createHighlightStyle;
+  const activeStyle = options.activeHighlightStyle ?? createStyle;
+
+  const service = markRaw(new AnnotationDefinitionService());
+
+  const updateDefinitions = (coreDefs: AnnotationResource[]) => {
+    service.setDefinitions(coreDefs);
+    const grouped = service.findAllGrouped();
+    state.definitions = buildVueDefinitions(
+      coreDefs,
+      grouped,
+      createStyle,
+      activeStyle,
+    );
+    state.definitionsMap = buildDefinitionsMap(state.definitions);
+  };
+
+  const state: AnnotationDefinitionsState = shallowReactive({
+    configuration: config,
+    definitions: [] as UIAnnotationDefinition[],
+    definitionsMap: {} as Record<string, UIAnnotationDefinition>,
+    loadErrors: [] as AnnotationLoadError[],
+    rawJsonMap: {} as Record<string, unknown>,
+    loading: false,
+    error: null as Error | null,
+    service,
+    /* ponytail: global singleton — last state wins, fine for single-app usage */
+
+    getDefinitionById(id: string): UIAnnotationDefinition | undefined {
+      return state.definitionsMap[id];
+    },
+
+    loadFromDefinitions(defs: CoreAnnotationDefinition[]) {
+      updateDefinitions(defs);
+    },
+
+    loadFromGlob(modules: GlobModules) {
+      const defs = loadAnnotationDefinitionsFromGlob(modules);
+      updateDefinitions(defs);
+    },
+
+    loadFromConfigs(configs: AnnotationJsonResource[]) {
+      const defs = loadAnnotationDefinitionsFromConfigs(configs);
+      updateDefinitions(defs);
+    },
+
+    async loadFromUrls(urls: string[]) {
+      state.loading = true;
+      state.error = null;
+      try {
+        const defs = await loadAnnotationDefinitionsFromUrls(urls);
+        updateDefinitions(defs);
+      } catch (e) {
+        console.error(e);
+        state.error = e instanceof Error ? e : new Error(String(e));
+      } finally {
+        state.loading = false;
+      }
+    },
+    async loadFromResourceUris(urls: string[]) {
+      state.loading = true;
+      state.error = null;
+      state.loadErrors = [];
+      state.rawJsonMap = {};
+      try {
+        const results: ResourceLoadResult[] = await Promise.all(
+          urls.map((url) =>
+            fetch(url)
+              .then((r) => r.json())
+              .then((raw) => buildAnnotationDefFromResourceJsonSafe(raw))
+              .catch((e): ResourceLoadResult => ({
+                success: false,
+                error: e instanceof Error ? e.message : String(e),
+                raw: null,
+              })),
+          ),
+        );
+        const defs: AnnotationResource[] = [];
+        const errors: AnnotationLoadError[] = [];
+        const rawMap: Record<string, unknown> = {};
+        for (const result of results) {
+          if (result.success) {
+            defs.push(result.data);
+            rawMap[result.data.id] = result.raw;
+          } else {
+            errors.push({
+              id: result.id,
+              name: result.name,
+              error: result.error,
+              raw: result.raw,
+            });
+          }
+        }
+        state.loadErrors = errors;
+        state.rawJsonMap = rawMap;
+        updateDefinitions(defs);
+      } catch (e) {
+        console.error(e);
+        state.error = e instanceof Error ? e : new Error(String(e));
+      } finally {
+        state.loading = false;
+      }
+    },
+    async loadFromUrl(url: string, fetchFn?: DefinitionsFetchFn) {
+      state.loading = true;
+      state.error = null;
+      try {
+        let defs: AnnotationResource[];
+        if (fetchFn) {
+          const resources = await fetchFn(url);
+          defs = loadAnnotationDefinitionsFromConfigs(
+            resources as AnnotationJsonResource[],
+          );
+        } else {
+          const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error(
+              `Failed to fetch annotation definitions: ${response.status} ${response.statusText}`,
+            );
+          }
+          const configuration = await response.json();
+          const urls = configuration.annotations.map(
+            (a: { schemas: string }) => a.schemas,
+          );
+          defs = await loadAnnotationDefinitionsFromUrls(urls);
+        }
+        updateDefinitions(defs);
+      } catch (e) {
+        console.error(e);
+        state.error = e instanceof Error ? e : new Error(String(e));
+      } finally {
+        state.loading = false;
+      }
+    },
+  });
+
+  _globalState = state;
+  return state;
+};
+
+export const createAndLoadDefinitionsState = (
+  options: ProvideAnnotationDefinitionsOptions,
+) => {
+  const state = createAnnotationDefinitionsState(options);
+
+  if (options.resourceFolder) {
+    state.loadFromGlob(options.resourceFolder);
+  }
+
+  if (options.definitionsUrl) {
+    state.loadFromUrl(options.definitionsUrl, options.fetchFn);
+  }
+
+  if (options.definitionsUrls) {
+    state.loadFromUrls(options.definitionsUrls);
+  }
+  if (options.resourceUrls) {
+    state.loadFromResourceUris(options.resourceUrls);
+  }
+  return state;
+};
+/**
+ * Called once at root — creates state, provides to descendants.
+ * If `resourceFolder` given, loads definitions immediately.
+ */
+export const provideAnnotationDefinitions = (
+  options: ProvideAnnotationDefinitionsOptions,
+): AnnotationDefinitionsState => {
+  const state = createAndLoadDefinitionsState(options);
+
+  provide(ANNOTATION_DEFINITIONS_KEY, state);
+  return state;
+};
+
+/**
+ * Called in child components — injects state from ancestor.
+ */
+export const useAnnotationDefinitions = (): AnnotationDefinitionsState => {
+  const ctx = inject(ANNOTATION_DEFINITIONS_KEY);
+  if (!ctx)
+    throw new Error(
+      'useAnnotationDefinitions() must be called inside a component that called provideAnnotationDefinitions()',
+    );
+
+  return ctx;
+};

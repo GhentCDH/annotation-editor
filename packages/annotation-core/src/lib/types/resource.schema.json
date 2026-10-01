@@ -1861,6 +1861,13 @@
               "items": {
                 "type": "string"
               }
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/__schema0"
+                }
+              ]
             }
           ]
         },
@@ -1885,10 +1892,17 @@
           }
         },
         "required": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "boolean"
+            }
+          ]
         },
         "items": {
           "allOf": [

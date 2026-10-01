@@ -1,23 +1,27 @@
-export { AnnotationDefinitionService } from './lib/service/annotation-definition.service';
+export { TransformAnnotationAdapter } from '@ghentcdh/annotation-ui';
+
+export { AnnotationDefinitionService } from './lib/definitions/annotation-definition.service';
 export {
   type GlobModules,
   loadAnnotationDefinitionsFromGlob,
   loadAnnotationDefinitionsFromConfigs,
   loadAnnotationDefinitionsFromUrls,
-} from './lib/loader/annotation-definition.loader';
+} from './lib/definitions/annotation-definition.loader';
 export {
   type AnnotationDefinitionsState,
+  type AnnotationLoadError,
   type ProvideAnnotationDefinitionsOptions,
   provideAnnotationDefinitions,
   useAnnotationDefinitions,
   createAnnotationDefinitionsState,
-} from './lib/composables/useAnnotationDefinitions';
-export { AnnotationPlugin } from './lib/annotation.plugin';
+  peekAnnotationDefinitionsState,
+} from './lib/definitions/useAnnotationDefinitions';
+export * from './lib/status';
 export { configureApi } from './lib/service/useApi';
-export * from '@ghentcdh/annotation-preview';
 export * from '@ghentcdh/annotation-core';
 export * from '@ghentcdh/annotation-editor';
 
 import './lib/styles.css';
 
-export { default as AnnotationFilter } from './lib/components/filter/AnnotationFilter.vue';
+export { default as AnnotationFilter } from './lib/filter/AnnotationFilter.vue';
+export * from './lib/smart-editor';

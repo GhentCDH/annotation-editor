@@ -5,7 +5,7 @@
         v-for="link in links"
         :key="link.annotation.id"
       >
-        <th>{{ link.label }}</th>
+        <th>{{ link.definition.label }}</th>
         <td class="max-w-[300px]">
           <AnnotationText
             :annotation="link.relation"
@@ -13,7 +13,7 @@
           />
         </td>
         <td>
-          <Navbar :actions="actions(link as any)" />
+          <Navbar :actions="actions(link)" />
         </td>
       </tr>
     </tbody>
@@ -23,53 +23,74 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { IconEnum } from '@ghentcdh/ui';
-import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-import { type AnnotationLink } from '@ghentcdh/annotation-ui';
+import {
+  type EditorAnnotation,
+  type UIAnnotationDefinition,
+} from '@ghentcdh/annotation-ui';
 import AnnotationText from './Annotation-text.vue';
 import Navbar from '../../components/navbar.vue';
 import { useEditorState } from '../../composables/useEditorState';
 
-const props = defineProps<{ annotation: W3CAnnotation }>();
+const props = defineProps<{ annotation: EditorAnnotation }>();
 
-const { config, editorState, utils, sendAnnotationEvent } = useEditorState();
+const { editorState, sendAnnotationEvent, findAnnotation, getDefinition } =
+  useEditorState();
 
 type LinkDisplay = {
-  purpose: string | undefined;
-  annotation: W3CAnnotation;
-  relation: W3CAnnotation;
+  definition: UIAnnotationDefinition;
+  annotation: EditorAnnotation;
+  relation: EditorAnnotation;
 };
 
 const links = computed<LinkDisplay[]>(() => {
-  return utils
-    .getLinks(props.annotation)
-    .map((link: AnnotationLink) => {
-      const purpose = link.purpose;
-      const relation = link.relations.find((r) => r.id !== props.annotation.id);
-      const def = config.annotation.getDefinition(purpose);
-      return {
-        purpose: def?.id,
-        label: def?.label ?? def?.name,
-        annotation: link.annotation,
-        relation,
-      };
-    })
-    .filter((link): link is LinkDisplay => !!link.relation);
+  const _links = props.annotation.links.map((l) => {
+    const link = findAnnotation(l.uri);
+    const annotationId = link.links.find(
+      (li) => li.uri !== props.annotation.id,
+    )?.uri;
+    const relation = findAnnotation(annotationId);
+
+    return {
+      id: link.id,
+      definition: getDefinition(link.definitionUri),
+      annotation: link,
+      relation,
+    };
+  });
+
+  return _links;
 });
 
-const actions = (link: AnnotationLink) => {
-  const definition = config.annotation.getDefinition(link.purpose);
+const actions = (link: LinkDisplay) => {
+  if (editorState.readonly) return [];
+
   return [
-    {
-      icon: IconEnum.Delete,
-      label: 'Delete',
-      disabled: editorState.disableEdits,
-      action: () => {
-        sendAnnotationEvent('delete', {
-          annotation: link.annotation,
-          definition,
-        });
-      },
-    },
-  ];
+    link.definition.canEdit
+      ? {
+          icon: IconEnum.Edit,
+          label: 'Edit',
+          disabled: editorState.disableEdits,
+          action: () => {
+            sendAnnotationEvent('edit', {
+              annotation: link.annotation,
+              definition: link.definition,
+            });
+          },
+        }
+      : null,
+    link.definition.canDelete
+      ? {
+          icon: IconEnum.Delete,
+          label: 'Delete',
+          disabled: editorState.disableEdits,
+          action: () => {
+            sendAnnotationEvent('delete', {
+              annotation: link.annotation,
+              definition: link.definition,
+            });
+          },
+        }
+      : null,
+  ].filter(Boolean);
 };
 </script>

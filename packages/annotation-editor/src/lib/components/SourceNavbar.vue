@@ -14,19 +14,28 @@ import { useEditorState } from '../composables/useEditorState';
 
 const properties = defineProps(SourceNavbarProperties);
 const emits = defineEmits(SourceNavbarEmits);
-const { config, editorState } = useEditorState();
-const actions = computed(() => [
-  {
-    icon: IconEnum.Plus,
-    label: 'Add',
-    disabled: editorState.disableEdits,
-    children: config.annotation.rootTypes.map((type) => ({
-      action: () => createAnnotation(type.key),
-      label: type.label,
-      disabled: properties.disabled,
-    })),
-  },
-]);
+const { editorState, allDefinitions, getDefinition } = useEditorState();
+
+const actions = computed(() => {
+  const rootTypes = allDefinitions.value
+    .filter((d) => d.annotation.isRoot)
+    .map((d) => ({ key: d.id, label: d.label }));
+
+  return [
+    {
+      icon: IconEnum.Plus,
+      label: 'Add',
+      disabled: editorState.disableEdits,
+      children: rootTypes.map((type) => ({
+        action: () => {
+          createAnnotation(getDefinition(type.key));
+        },
+        label: type.label,
+        disabled: properties.disabled,
+      })),
+    },
+  ];
+});
 
 const createAnnotation = (annotationType: string) => {
   emits('createAnnotation', annotationType);

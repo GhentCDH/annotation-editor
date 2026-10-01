@@ -1,10 +1,9 @@
-import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { type TemplateRef } from 'vue';
-import type {
-  AnnotationUtils,
-  KeyLabel,
-  SourceModel,
-  UIAnnotationDefinition,
+import {
+  type EditorAnnotation,
+  type KeyLabel,
+  type SourceModel,
+  type UIAnnotationDefinition,
 } from '@ghentcdh/annotation-ui';
 import { NotificationService } from '@ghentcdh/ui';
 import { type EditorConfig, type EditorState_ } from './editorState';
@@ -12,33 +11,37 @@ import { type AnnotationEditModalShow } from '../modals/edit-annotation/Annotati
 import { type AnnotationEditorEmitsFn } from '../AnnotationEditor.properties';
 
 type SelectAnnotationData = {
-  annotation: W3CAnnotation;
+  annotation: EditorAnnotation;
   source: SourceModel;
+  definitionUri: string;
   mouseEvent: MouseEvent;
   containerRef?: HTMLElement;
+  definition: UIAnnotationDefinition;
 };
 
 type CreateAnnotationData = Pick<
   AnnotationEditModalShow,
   'source' | 'parentAnnotation'
 > & {
-  type: string;
+  definitionUri: string;
 };
 
 type EditAnnotationData = Pick<
   AnnotationEditModalShow,
   'source' | 'parentAnnotation'
 > & {
-  annotation: W3CAnnotation;
+  annotation: EditorAnnotation;
+  definition: UIAnnotationDefinition;
 };
 
 type DeleteAnnotationData = {
-  annotation: W3CAnnotation;
+  annotation: EditorAnnotation;
   definition: UIAnnotationDefinition;
 };
 
 type LinkData = {
   link: KeyLabel;
+  definition: UIAnnotationDefinition;
 };
 
 export type AnnotationEvents = {
@@ -49,7 +52,7 @@ export type AnnotationEvents = {
   link: LinkData;
 };
 
-const createAnnotation = (
+export const createAnnotation = (
   data: CreateAnnotationData,
   config: EditorConfig,
   state: EditorState_,
@@ -60,19 +63,27 @@ const createAnnotation = (
   state.disableEdits = true;
   state.editorState = 'create';
 
-  config.modal.show('edit-annotation', data).then((result) => {
-    state.show();
+  config.modal
+    .show('edit-annotation', {
+      source: data.source,
+      annotation: {
+        definitionUri: data.definitionUri,
+        parentAnnotation: data.parentAnnotation,
+        selectors: [],
+      },
+    })
+    .then((result) => {
+      state.show();
 
-    if (!result?.annotation) return;
-    emits('create:annotation', result.annotation);
-  });
+      if (!result?.annotation) return;
+      emits('create:annotation', result.annotation);
+    });
 };
 
-const editAnnotation = (
+export const editAnnotation = (
   data: EditAnnotationData,
   config: EditorConfig,
   state: EditorState_,
-  utils: AnnotationUtils,
   emits: AnnotationEditorEmitsFn,
 ) => {
   if (state.disableEdits) return;
@@ -80,12 +91,14 @@ const editAnnotation = (
   state.disableEdits = true;
   state.editorState = 'edit';
   emits('select:annotation', data.annotation, 'edit');
+
+  const isLink = data.definition.annotation.type === 'link';
+
   config.modal
-    .show('edit-annotation', {
+    .show(isLink ? 'link-annotation' : 'edit-annotation', {
       source: data.source,
       annotation: data.annotation,
-      parentAnnotation: utils.getParent(data.annotation),
-      type: utils.getAnnotationType(data.annotation),
+      definitionUrl: data.definition.id,
     })
     .then((result) => {
       state.show();
@@ -102,7 +115,11 @@ const deleteAnnotation = (
   state: EditorState_,
   emits: AnnotationEditorEmitsFn,
 ) => {
-  const { annotation, definition } = data;
+  const { annotation } = data;
+  const definition = data.definition;
+
+  const resource = definition.resource;
+
   config.modal
     .show('confirm', {
       title: 'Delete',
@@ -110,28 +127,29 @@ const deleteAnnotation = (
     })
     .then((result) => {
       if (!result?.confirmed) return;
-      if (!definition.resource.delete) {
-        emits('delete:annotation', annotation);
-        return;
-      }
 
-      try {
-        definition.resource.delete(annotation);
-      } catch (error) {
-        console.error('Something went wrong while deleting annotation');
-        console.error(error);
+      resource
+        .delete(annotation)
+        .then(() => {
+          NotificationService.success('Successfully deleted annotation');
 
-        NotificationService.error(
-          'Something went wrong while deleting annotation',
-        );
-      }
+          if (state.selectedAnnotation?.id === annotation.id) {
+            state.selectedAnnotation = null;
+            state.editorState = null;
+            state.disableEdits = false;
+            state.reset();
+          }
 
-      if (state.selectedAnnotation?.id === annotation.id) {
-        state.selectedAnnotation = null;
-        state.editorState = null;
-        state.disableEdits = false;
-        state.reset();
-      }
+          emits('delete:annotation', annotation);
+        })
+        .catch((error) => {
+          console.error('Something went wrong while deleting annotation');
+          console.error(error);
+
+          NotificationService.error(
+            'Something went wrong while deleting annotation',
+          );
+        });
     });
 };
 
@@ -187,6 +205,10 @@ const endLink = (
     .show('link-annotation', {
       sourceAnnotation,
       targetAnnotation,
+      annotation: {
+        definitionUri: data.definitionUri,
+        links: [{ uri: sourceAnnotation.id }, { uri: targetAnnotation.id }],
+      },
     })
     .then((result) => {
       state.show();
@@ -197,7 +219,7 @@ const endLink = (
     });
 };
 
-const handleSelectAnnotation = (
+export const handleSelectAnnotation = (
   data: SelectAnnotationData | null,
   config: EditorConfig,
   state: EditorState_,
@@ -231,7 +253,6 @@ export const sendAnnotationEvent =
   (
     config: EditorConfig,
     editorState: EditorState_,
-    utils: AnnotationUtils,
     emits: AnnotationEditorEmitsFn,
     containerRef: TemplateRef<HTMLElement>,
   ) =>
@@ -253,7 +274,6 @@ export const sendAnnotationEvent =
           data as AnnotationEvents['edit'],
           config,
           editorState,
-          utils,
           emits,
         );
       case 'create':

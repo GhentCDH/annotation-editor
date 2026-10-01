@@ -1,11 +1,11 @@
 import type { ExtractPublicPropTypes, PropType } from 'vue';
-import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-import type { SourceModel } from '@ghentcdh/annotation-ui';
-
+import {
+  type EditorAnnotation,
+  type SourceModel,
+} from '@ghentcdh/annotation-ui';
 
 export const SourceEditProperties = {
   source: { type: Object as PropType<SourceModel>, required: true as const },
-  annotations: { type: Array as PropType<W3CAnnotation[]>, required: true as const },
 };
 
 export type SourceEditProps = ExtractPublicPropTypes<
@@ -14,11 +14,11 @@ export type SourceEditProps = ExtractPublicPropTypes<
 
 export const SourceEditEmits = {
   createAnnotation: (_annotationType: string) => true,
-  editAnnotation: (_annotation: W3CAnnotation) => true,
-  deleteAnnotation: (_annotation: W3CAnnotation) => true,
+  editAnnotation: (_annotation: EditorAnnotation) => true,
+  deleteAnnotation: (_annotation: EditorAnnotation) => true,
   selectAnnotation: (_data: {
     mouseEvent: MouseEvent;
-    annotation: W3CAnnotation;
+    annotation: EditorAnnotation;
     source: SourceModel;
   }) => true,
 };

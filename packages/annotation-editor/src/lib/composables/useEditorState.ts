@@ -10,11 +10,13 @@ import {
   watch,
 } from 'vue';
 import {
-  type AnnotationUtils,
-  annotationUtils,
+  type AnnotationId,
   createAnnotationConfiguration,
-  createModalConfig,
+  type DefinitionMap,
+  type EditorAnnotation,
+  groupById,
   type SourceModel,
+  type UIAnnotationDefinition,
 } from '@ghentcdh/annotation-ui';
 import {
   type AnnotationEvents,
@@ -26,7 +28,11 @@ import {
   type AnnotationEditorProps,
 } from '../AnnotationEditor.properties';
 import { annotationModalDefaults } from '../modals/AnnotationModal.defaults';
-import { selectAnnotationById } from '../modals/open-modal';
+import {
+  selectAnnotationById,
+  type SelectByIdContext,
+} from '../modals/open-modal';
+import { createModalConfig } from '../modals/annotationModal.composable';
 
 export type EditorState = {
   sources: ComputedRef<Readonly<SourceModel[]>>;
@@ -37,7 +43,10 @@ export type EditorState = {
     data: AnnotationEvents[KEY],
     callback?: (response: any) => void,
   ) => void;
-  utils: AnnotationUtils;
+  annotations: ComputedRef<Readonly<EditorAnnotation[]>>;
+  allDefinitions: ComputedRef<Readonly<UIAnnotationDefinition[]>>;
+  findAnnotation: (uri: AnnotationId) => EditorAnnotation | null;
+  getDefinition: (uri: string) => UIAnnotationDefinition;
 };
 
 const EDITOR_KEY: InjectionKey<EditorState> = Symbol('editor');
@@ -47,23 +56,20 @@ export const useProvideEditorState = (
   props: AnnotationEditorProps,
   emits: AnnotationEditorEmitsFn,
   containerRef: TemplateRef<HTMLElement>,
+  { readonly } = { readonly: false },
 ) => {
-  const utils = annotationUtils(props.configuration);
-
+  const allDefinitions = computed(() => props.annotationDefinitions);
+  const definitionsMap = computed(() => {
+    return groupById(props.annotationDefinitions) as DefinitionMap;
+  });
   const config = shallowReactive<EditorConfig>({
     modal: createModalConfig(annotationModalDefaults),
-    annotation: createAnnotationConfiguration(
-      props.annotationDefinitions,
-      utils,
+    createAnnotatedText: createAnnotationConfiguration(
       props.textAdapter,
-      props.annotationAdapter,
+      props.annotationTransformer.defaultParams,
+      definitionsMap.value,
     ),
   });
-
-  utils.setAnnotations(
-    props.annotations ?? [],
-    config.annotation.allowedChildrenPerType,
-  );
 
   const sources = computed(() => props.sources ?? []);
 
@@ -81,32 +87,29 @@ export const useProvideEditorState = (
     selectedAnnotation: null,
     disableEdits: false,
     info: null,
+    readonly,
     show: () => showEditorState(),
     reset: () => resetEditorState(),
+    format:
+      props.annotationTransformer?.format.bind(props.annotationTransformer) ??
+      (() => null),
+    transformMetadata:
+      props.annotationTransformer?.transformMetadata.bind(
+        props.annotationTransformer,
+      ) ?? ((m) => m),
   });
 
   watch(
     [
-      () => props.annotationDefinitions,
       () => props.textAdapter,
-      () => props.annotationAdapter,
+      () => props.annotationTransformer,
+      () => definitionsMap.value,
     ],
     () => {
-      config.annotation = createAnnotationConfiguration(
-        props.annotationDefinitions,
-        utils,
+      config.createAnnotatedText = createAnnotationConfiguration(
         props.textAdapter,
-        props.annotationAdapter,
-      );
-    },
-  );
-
-  watch(
-    () => props.annotations,
-    () => {
-      utils.setAnnotations(
-        props.annotations ?? [],
-        config.annotation.allowedChildrenPerType,
+        props.annotationTransformer.defaultParams,
+        definitionsMap.value,
       );
     },
   );
@@ -117,15 +120,21 @@ export const useProvideEditorState = (
     );
     if (!annotation) return null;
 
-    const sourceUri = utils.getSourceUri(annotation)?.sourceUri;
+    const sourceUri = annotation.selectors?.[0]?.uri;
+
+    if (!sourceUri) return { annotation };
+
     const source = (props.sources ?? []).find((s) => s.uri === sourceUri);
-    return { annotation, source };
+    return {
+      annotation,
+      source,
+      definition: getDefinition(annotation.definitionUri),
+    };
   };
 
-  const selectByIdCtx = {
+  const selectByIdCtx: SelectByIdContext = {
     config,
     editorState,
-    utils,
     emits,
     findAnnotationData,
   };
@@ -149,18 +158,32 @@ export const useProvideEditorState = (
     editorState.info = null;
   };
 
+  const findAnnotation = (uri: AnnotationId) => {
+    return props.annotations?.find((a) => a.id === uri) ?? null;
+  };
+
+  const getDefinition = (uri: AnnotationId) => {
+    const def = definitionsMap.value[uri];
+    if (!def) {
+      console.warn(`No definition found for ${uri}`);
+    }
+    return def;
+  };
+
   provide(EDITOR_KEY, {
     sources,
     config: config as Readonly<EditorConfig>,
     editorState: editorState as Readonly<EditorState_>,
-    utils,
     sendAnnotationEvent: sendAnnotationEvent(
       config,
       editorState,
-      utils,
       emits,
       containerRef,
     ),
+    annotations: computed(() => props.annotations ?? []),
+    getDefinition,
+    allDefinitions,
+    findAnnotation,
   });
 };
 

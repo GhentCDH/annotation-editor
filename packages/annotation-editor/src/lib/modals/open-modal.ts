@@ -1,19 +1,23 @@
 import { nextTick, type TemplateRef } from 'vue';
-import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-import type { AnnotationUtils, SourceModel  } from '@ghentcdh/annotation-ui';
-import { getAnnotationElementCenter } from '@ghentcdh/annotation-ui';
+import {
+  type EditorAnnotation,
+  type SourceModel,
+  type UIAnnotationDefinition,
+} from '@ghentcdh/annotation-ui';
 import type { AnnotationEditorEmitsFn } from '../AnnotationEditor.properties';
 import type { EditorConfig, EditorState_ } from '../composables/editorState';
+import { editAnnotation } from '../composables/annotation.events';
+import { getAnnotationElementCenter } from '../utils/mouse-events';
 
 type AnnotationData = {
-  annotation: W3CAnnotation;
+  annotation: EditorAnnotation;
   source: SourceModel | undefined;
+  definition: UIAnnotationDefinition;
 };
 
-type SelectByIdContext = {
+export type SelectByIdContext = {
   config: EditorConfig;
   editorState: EditorState_;
-  utils: AnnotationUtils;
   emits: AnnotationEditorEmitsFn;
   findAnnotationData: (id: string) => AnnotationData | null;
 };
@@ -24,7 +28,7 @@ export const selectAnnotationById = (
   action: string | undefined,
   ctx: SelectByIdContext,
 ) => {
-  const { config, editorState, utils, emits, findAnnotationData } = ctx;
+  const { config, editorState, emits, findAnnotationData } = ctx;
 
   if (!annotationId) {
     if (editorState.selectedAnnotation) {
@@ -46,30 +50,21 @@ export const selectAnnotationById = (
   }
 
   const data = findAnnotationData(annotationId);
-  if (!data?.source) return;
+  if (!data) return;
 
   const { annotation, source } = data;
 
   return nextTick(() => {
-    editorState.selectedAnnotation = annotation;
-
+    // editorState.selectedAnnotation = annotation;
     if (action === 'edit') {
-      editorState.disableEdits = true;
-      editorState.editorState = 'edit';
-      config.modal
-        .show('edit-annotation', {
-          source,
-          annotation,
-          parentAnnotation: utils.getParent(annotation),
-          type: utils.getAnnotationType(annotation),
-        })
-        .then((result: any | null) => {
-          editorState.show();
-          emits('select:annotation', editorState.selectedAnnotation, 'show');
-
-          if (!result?.annotation) return;
-          emits('update:annotation', result.annotation);
-        });
+      const definition = data.definition;
+      if (!definition) return;
+      editAnnotation(
+        { source, annotation, definition },
+        config,
+        editorState,
+        emits,
+      );
     } else {
       const position = getAnnotationElementCenter(
         container.value!,

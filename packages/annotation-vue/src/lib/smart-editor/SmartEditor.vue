@@ -1,0 +1,96 @@
+<template>
+  <Drawer
+    class="_h-full"
+    :width-left="300"
+  >
+    <Loading
+      :loading="store.loading || !props.loader.definitionsLoaded.value"
+    />
+    <AnnotationEditor
+      v-if="props.loader.definitionsLoaded.value"
+      :readonly="readonly"
+      :configuration="definitionsState.configuration"
+      :sources="store.sources"
+      :annotations="store.filteredAnnotations"
+      :annotation-definitions="definitionsState.definitions"
+      :text-adapter="textAdapter"
+      :annotation-transformer="annotationTransformer"
+      :selected-annotation-id="selectedAnnotationId"
+      :selected-annotation-action="selectedAnnotationAction"
+      :cols="1"
+      :modal-view="false"
+      :layout="layout"
+      @select:annotation="selectAnnotation"
+      @delete:annotation="store.reload"
+      @update:annotation="store.reload"
+      @create:annotation="store.reload"
+    />
+    <template #left-drawer>
+      <div class="gap-2 flex flex-col">
+        <AnnotationFilter
+          v-model="store.selectedAnnotationTypes"
+          :count="store.annotationsGroupedByPurpose"
+        />
+
+        <slot name="annotation-menu" />
+      </div>
+    </template>
+  </Drawer>
+</template>
+
+<script lang="ts" setup>
+import { AnnotationEditor } from '@ghentcdh/annotation-editor';
+import { onMounted, ref, watch } from 'vue';
+import type { W3CAnnotation } from '@ghentcdh/w3c-utils';
+import { useRoute, useRouter } from 'vue-router';
+import { Drawer, Loading } from '@ghentcdh/ui';
+import { provideEditorStore } from './editorStore';
+import { SmartEditorProperties } from './SmartEditor.properties';
+import { useAnnotationDefinitions } from '../definitions/useAnnotationDefinitions';
+import AnnotationFilter from '../filter/AnnotationFilter.vue';
+
+const props = defineProps(SmartEditorProperties);
+
+const selectedAnnotationId = ref<string | undefined>(undefined);
+const selectedAnnotationAction = ref<string | undefined>(undefined);
+
+const route = useRoute();
+const router = useRouter();
+const store = provideEditorStore(props.loader, props.annotationTransformer);
+
+const definitionsState = useAnnotationDefinitions();
+
+onMounted(() => {
+  if (!props.watchQueryParams) return;
+  const { action, annotationId } = route.query;
+  if (annotationId) selectedAnnotationId.value = annotationId as string;
+  if (action) selectedAnnotationAction.value = action as string;
+});
+
+watch(
+  () => props.sourceUris,
+  () => {
+    store.setSourceUris(props.sourceUris);
+  },
+  { immediate: true },
+);
+
+const selectAnnotation = (
+  annotation: W3CAnnotation | null,
+  action: string | null,
+) => {
+  if (!props.watchQueryParams) return;
+  const query = { ...route.query };
+  if (annotation) {
+    query.annotationId = annotation.id;
+  } else {
+    delete query.annotationId;
+  }
+  if (action) {
+    query.action = action;
+  } else {
+    delete query.action;
+  }
+  router.replace({ query });
+};
+</script>

@@ -1,6 +1,10 @@
 import { z } from 'zod';
-import { type JsonResourceOperations, type ViewConfig, ViewConfigSchema } from '@ghentcdh/crouton-core';
-import { ContextBuilder } from '@ghentcdh/w3c-utils';
+import {
+  type JsonResourceOperations,
+  type ViewConfig,
+  ViewConfigSchema,
+} from '@ghentcdh/crouton-core';
+import { type ContextBuilder } from '@ghentcdh/w3c-utils';
 import {
   AnnotationConfigSchema,
   AnnotationJsonResourceShape,
@@ -23,18 +27,16 @@ export type AnnotationResource = {
   schemas?: Record<string, Partial<ViewConfig>> | null;
 };
 
-export const AnnotationResourceSchema: z.ZodType<AnnotationResource> =
-  AnnotationJsonResourceShape.pick({
-    id: true,
-    name: true,
-    title: true,
-    operations: true,
-    annotation: true,
-  }).extend({
-    annotation: AnnotationConfigSchema,
-    context: z.instanceof(ContextBuilder).optional().nullish(),
-    schemas: z
-      .record(z.string(), ViewConfigSchema.partial())
-      .optional()
-      .nullish(),
-  }) as z.ZodType<AnnotationResource>;
+const { id, name, title, operations } = AnnotationJsonResourceShape.shape;
+export const AnnotationResourceSchema: z.ZodType<AnnotationResource> = z.object({
+  id,
+  name,
+  title,
+  operations,
+  annotation: AnnotationConfigSchema,
+  context: z.custom<ContextBuilder>(() => true).optional().nullish(),
+  schemas: z
+    .record(z.string(), ViewConfigSchema.partial())
+    .optional()
+    .nullish(),
+}) as unknown as z.ZodType<AnnotationResource>;

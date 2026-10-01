@@ -1,21 +1,29 @@
-import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-import type {
-  AnnotationConfiguration,
-  AnnotationModalConfig,
+import {
+  type AnnotationModalConfig,
+  type EditorAnnotation,
+  type Selector,
+  type SourceModel,
+  type UiAnnotatedText,
 } from '@ghentcdh/annotation-ui';
 
 type EditorStatus = 'show' | 'create' | 'edit' | 'link' | null;
 
 export type EditorConfig = {
   modal: AnnotationModalConfig;
-  annotation: AnnotationConfiguration;
+  createAnnotatedText: (
+    id: string,
+    sourceModel?: SourceModel,
+  ) => UiAnnotatedText;
 };
 
 export type EditorState_ = {
   info: { message: string; short: string } | null;
   editorState: EditorStatus;
   disableEdits: boolean;
-  selectedAnnotation: W3CAnnotation | null;
+  readonly: boolean;
+  selectedAnnotation: EditorAnnotation | null;
   reset: () => void;
   show: () => void;
+  format: (annotation: EditorAnnotation, isNew: boolean) => any;
+  transformMetadata: (metadata: any, selector: Selector) => any;
 };

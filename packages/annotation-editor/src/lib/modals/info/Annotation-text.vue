@@ -30,11 +30,11 @@ import { type AnnotatedText } from '@ghentcdh/annotated-text';
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { v4 as uuidv4 } from 'uuid';
 import { Collapse } from '@ghentcdh/ui';
-import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
+import { type EditorAnnotation } from '@ghentcdh/annotation-ui';
 import { useEditorState } from '../../composables/useEditorState';
 
 const properties = defineProps<{
-  annotation: W3CAnnotation;
+  annotation: EditorAnnotation;
   maxCharacters?: number;
   showSource?: boolean;
 }>();
@@ -43,21 +43,23 @@ const annotationTextId = `annotation-text-${uuidv4()}`;
 const annotationTextFullId = `annotation-text-full-${uuidv4()}`;
 const showHover = ref(false);
 
-let annotatedText: AnnotatedText<W3CAnnotation>;
-let annotatedTextFull: AnnotatedText<W3CAnnotation>;
+let annotatedText: AnnotatedText<EditorAnnotation>;
+let annotatedTextFull: AnnotatedText<EditorAnnotation>;
 
-const { config, utils, sources } = useEditorState();
+const { config, sources } = useEditorState();
 
 const textData = computed(() => {
-  const { textPositionSelector, sourceUri } = utils.getSourceUri(
-    properties.annotation,
-  )!;
+  const _sources = Object.fromEntries(sources.value.map((s) => [s.uri, s]));
+  const textPositionSelector = properties.annotation.selectors.find(
+    (s) => _sources[s.uri],
+  );
 
-  const source = sources.value.find((source) => source.uri === sourceUri);
-  if (!source) {
-    console.warn(`Source not found for uri: ${sourceUri}`);
+  if (!textPositionSelector) {
+    console.warn('Source not found for', properties.annotation);
     return null;
   }
+
+  const source = _sources[textPositionSelector.uri];
 
   const end = properties.maxCharacters
     ? Math.min(
@@ -79,9 +81,9 @@ onMounted(() => {
   const { textPositionSelector, text, end } = _data;
   showHover.value = textPositionSelector.end > end;
 
-  annotatedText = config.annotation
+  annotatedText = config
     .createAnnotatedText(annotationTextId, text)
-    .setTextAdapter({
+    .annotatedText.setTextAdapterParams({
       limit: {
         start: textPositionSelector.start,
         end: end,
@@ -104,7 +106,7 @@ watch(
     showHover.value = textPositionSelector.end > end;
 
     annotatedText
-      .setTextAdapter({
+      .setTextAdapterParams({
         limit: {
           start: textPositionSelector.start,
           end: end,
@@ -128,9 +130,9 @@ const showFullText = (mouseEvent: MouseEvent) => {
 const renderFullText = () => {
   const { textPositionSelector, text } = textData.value!;
 
-  annotatedTextFull = config.annotation
+  annotatedTextFull = config
     .createAnnotatedText(annotationTextFullId, text)
-    .setTextAdapter({
+    .annotatedText.setTextAdapterParams({
       limit: {
         start: textPositionSelector.start,
         end: textPositionSelector.end,

@@ -6,7 +6,7 @@ import {
   AnnotationStyleType,
 } from '@ghentcdh/annotation-core';
 import { type ContextBuilder } from '@ghentcdh/w3c-utils';
-import { type AnnotationDefinitionService } from '../service/annotation-definition.service';
+import { type AnnotationDefinitionService } from '../definitions/annotation-definition.service';
 
 export type AnnotationNamespaceRoutePaths = {
   all: string;
@@ -190,7 +190,10 @@ export const createAnnotationNamespaceRoutes = (
           };
         }
         const def = service.findById(id);
-        return { title: `${id}.jsonld`, data: def?.context?.toJsonLdContext() ?? null };
+        return {
+          title: `${id}.jsonld`,
+          data: def?.context?.toJsonLdContext() ?? null,
+        };
       },
     },
     {
@@ -221,7 +224,10 @@ export const createAnnotationNamespaceRoutes = (
       props: (route) => {
         const type = route.params['type'] as string;
         const def = service.findById(type);
-        return { title: `${type}/anno.jsonld`, data: def?.context?.toJsonLdContext() ?? null };
+        return {
+          title: `${type}/anno.jsonld`,
+          data: def?.context?.toJsonLdContext() ?? null,
+        };
       },
     },
     {

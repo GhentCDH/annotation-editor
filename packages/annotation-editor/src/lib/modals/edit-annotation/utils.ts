@@ -1,6 +1,7 @@
 import { type Selector, type SourceModel } from '@ghentcdh/annotation-core';
-import { w3cAnnotation, type W3CAnnotation } from '@ghentcdh/w3c-utils';
+import { w3cAnnotation } from '@ghentcdh/w3c-utils';
 import { type W3CSpecificResource } from '@ghentcdh/w3c-utils/lib/annotation/annotation.schema';
+import { type EditorAnnotation } from '@ghentcdh/annotation-ui';
 
 const createSelector = (selector: W3CSpecificResource): Selector => {
   let result = { source: selector.source } as Selector;
@@ -18,8 +19,8 @@ export const getTextSelector = ({
   annotation,
 }: {
   source: SourceModel;
-  parent?: W3CAnnotation;
-  annotation: W3CAnnotation;
+  parent?: EditorAnnotation;
+  annotation: EditorAnnotation;
 }) => {
   const current = w3cAnnotation(annotation);
   const specifyResourceSelector = current.getSpecificResourceTargets(

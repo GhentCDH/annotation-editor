@@ -13,7 +13,7 @@
     >
       <SourceEdit
         :source="source"
-        :annotations="annotations"
+        :readonly="readonly"
       />
     </Collapse>
     <AnnotationModal />

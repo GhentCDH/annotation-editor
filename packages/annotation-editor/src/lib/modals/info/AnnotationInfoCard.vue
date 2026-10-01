@@ -1,51 +1,86 @@
 <template>
-  <AnnotationInfoCardBase
-    ref="baseRef"
-    v-bind="$props"
-    :config="config.annotation"
-    :utils="utils"
-    :disable-close="editorState.disableEdits"
-    @close="close"
+  <div
+    ref="cardRef"
+    class="card bg-base-100 shadow-xl absolute z-50"
+    :style="{
+      left: `${properties.position.x}px`,
+      top: `${properties.position.y}px`,
+      maxHeight: `calc(100vh - ${properties.position.y}px - 16px)`,
+      minHeight: '100px',
+    }"
   >
-    <template #links="{ annotation }">
-      <LinksDetail :annotation="annotation" />
-    </template>
-    <template #actions>
-      <Alert
-        v-if="editorState.info"
-        type="info"
-        :message="'Action: ' + editorState.info.short"
+    <div class="card-body p-2 overflow-y-auto">
+      <div class="flex items-center justify-between gap-2">
+        <div><strong>Type:</strong> {{ purposeLabel }}</div>
+      </div>
+      <Metadata
+        v-if="annotationDef"
+        :data="metadata"
+        :definition="annotationDef"
       />
-      <Navbar :actions="actions" />
-    </template>
-  </AnnotationInfoCardBase>
+      <LinksDetail :annotation="properties.annotation" />
+      <template v-if="!editorState.readonly">
+        <Alert
+          v-if="editorState.info"
+          type="info"
+          :message="'Action: ' + editorState.info.short"
+        />
+        <Navbar :actions="actions" />
+      </template>
+    </div>
+  </div>
 </template>
 <script lang="ts" setup>
 import { Alert, IconEnum } from '@ghentcdh/ui';
-import {
-  type AnnotationDefinition,
-  AnnotationInfoCardBase,
-} from '@ghentcdh/annotation-ui';
-import { computed, ref } from 'vue';
+import { type UIAnnotationDefinition } from '@ghentcdh/annotation-ui';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { AnnotationInfoCardProperties } from './AnnotationInfoCard.properties';
 import LinksDetail from './LinksDetail.vue';
+import { default as Metadata } from './Metadata.vue';
 import { useEditorState } from '../../composables/useEditorState';
 import Navbar from '../../components/navbar.vue';
 import { type NavbarAction } from '../../components/navbar.properties';
 
 const properties = defineProps(AnnotationInfoCardProperties);
 
-const baseRef = ref<InstanceType<typeof AnnotationInfoCardBase>>();
-const { config, editorState, sendAnnotationEvent, utils } = useEditorState();
-
-const purpose = computed(() => {
-  if (!properties.annotation) return 'default';
-  return utils.getAnnotationType(properties.annotation);
-});
+const { editorState, sendAnnotationEvent, getDefinition } = useEditorState();
 
 const annotationDef = computed(() =>
-  config.annotation.getDefinition(purpose.value),
+  getDefinition(properties.annotation.definitionUri),
 );
+const purposeLabel = computed(() => annotationDef.value?.label);
+const metadata = computed(() => properties.annotation?.metadata);
+
+// Outside-click handling (inlined from AnnotationInfoCardBase)
+const cardRef = ref<HTMLElement>();
+const closeNextClick = ref(true);
+
+watch(
+  () => properties.annotation,
+  () => {
+    closeNextClick.value = true;
+  },
+);
+
+onMounted(() => document.addEventListener('click', handleOutsideClick));
+onUnmounted(() => document.removeEventListener('click', handleOutsideClick));
+
+const skipNextClose = () => {
+  closeNextClick.value = true;
+};
+
+function handleOutsideClick(e: MouseEvent) {
+  if (editorState.disableEdits) return;
+
+  if (closeNextClick.value) {
+    closeNextClick.value = false;
+    return;
+  }
+
+  if (cardRef.value && !cardRef.value.contains(e.target as Node)) {
+    close();
+  }
+}
 
 const close = () => {
   sendAnnotationEvent('select', null);
@@ -53,15 +88,15 @@ const close = () => {
 };
 
 const createAnnotation = (annotationType: string) => {
-  baseRef.value?.skipNextClose();
+  skipNextClose();
   sendAnnotationEvent('create', {
-    type: annotationType,
+    definitionUri: annotationType,
     source: properties.source,
     parentAnnotation: properties.annotation,
   });
 };
 
-const addActions = (definition: AnnotationDefinition) => {
+const addActions = (definition: UIAnnotationDefinition) => {
   const actions = definition?.allowedChildren ?? [];
 
   if (actions.length === 0) return null;
@@ -87,45 +122,52 @@ const addActions = (definition: AnnotationDefinition) => {
   };
 };
 
-const createActionLinks = (definition: AnnotationDefinition) => {
+const createActionLinks = (definition: UIAnnotationDefinition) => {
   return definition?.allowedLinks.map((link) => ({
     icon: link.icon ?? IconEnum.Link,
     label: `Add ${link.label}`,
     disabled: editorState.disableEdits,
     action: () => {
-      sendAnnotationEvent('link', { link });
+      sendAnnotationEvent('link', { link, definition });
     },
   }));
 };
 
 const actions = computed(() => {
-  const definition = annotationDef.value!;
+  const definition = annotationDef.value;
+  if (!definition) return [];
+
   return [
     addActions(definition),
-    {
-      icon: IconEnum.Edit,
-      label: 'Edit',
-      disabled: editorState.disableEdits,
-      action: () => {
-        baseRef.value?.skipNextClose();
-        sendAnnotationEvent('edit', {
-          annotation: properties.annotation!,
-          source: properties.source!,
-        });
-      },
-    },
+    definition.canEdit
+      ? {
+          icon: IconEnum.Edit,
+          label: 'Edit',
+          disabled: editorState.disableEdits,
+          action: () => {
+            skipNextClose();
+            sendAnnotationEvent('edit', {
+              annotation: properties.annotation!,
+              definition: annotationDef.value,
+              source: properties.source!,
+            });
+          },
+        }
+      : null,
     createActionLinks(definition),
-    {
-      icon: IconEnum.Delete,
-      label: 'Delete',
-      disabled: editorState.disableEdits,
-      action: () => {
-        sendAnnotationEvent('delete', {
-          annotation: properties.annotation!,
-          definition: definition,
-        });
-      },
-    },
+    definition.canDelete
+      ? {
+          icon: IconEnum.Delete,
+          label: 'Delete',
+          disabled: editorState.disableEdits,
+          action: () => {
+            sendAnnotationEvent('delete', {
+              annotation: properties.annotation!,
+              definition: annotationDef.value,
+            });
+          },
+        }
+      : null,
   ]
     .filter((i) => !!i)
     .flat() as NavbarAction[];

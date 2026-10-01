@@ -1,28 +1,24 @@
 import type { ExtractPublicPropTypes, PropType } from 'vue';
-import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
+import { type EditorAnnotation } from '@ghentcdh/annotation-ui';
 
 export const LinkAnnotationProperties = {
-  sourceAnnotation: {
-    type: Object as PropType<W3CAnnotation>,
+  annotation: {
+    type: Object as PropType<EditorAnnotation>,
     required: true as const,
   },
-  targetAnnotation: {
-    type: Object as PropType<W3CAnnotation>,
+  definitionUri: {
+    type: String,
     required: true as const,
   },
-  type: { type: String, required: true as const },
 };
 
 export type LinkAnnotationProps = ExtractPublicPropTypes<
   typeof LinkAnnotationProperties
 >;
 
-export type LinkAnnotationShow = Pick<
-  LinkAnnotationProps,
-  'sourceAnnotation' | 'targetAnnotation'
->;
+export type LinkAnnotationShow = Pick<LinkAnnotationProps, 'annotation'>;
 
-export type LinkAnnotationCloseEvent = { annotation: W3CAnnotation };
+export type LinkAnnotationCloseEvent = { annotation: EditorAnnotation };
 
 export const LinkEmits = {
   close: (event: LinkAnnotationCloseEvent) => true,

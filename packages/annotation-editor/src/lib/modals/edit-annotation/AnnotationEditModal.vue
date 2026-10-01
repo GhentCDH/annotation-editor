@@ -9,10 +9,10 @@
   >
     <template #content>
       <CroutonForm
-        v-if="annotationDef"
+        v-if="definition"
         layout="rows"
         :data="metadata"
-        :views="annotationDef.schemas"
+        :views="definition.schemas"
         :format-before-save="formatBeforeSave"
         form-max-width="w-max max-w-lg form-scroll min-w-[1/2]"
         :save-id="annotation?.id"
@@ -48,8 +48,10 @@
 import { CroutonForm, FormMessage } from '@ghentcdh/crouton-vue';
 import { Btn, Collapse, Modal } from '@ghentcdh/ui';
 import { computed, onMounted, onUnmounted } from 'vue';
-import { type AnnotatedText } from '@ghentcdh/annotated-text';
-import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
+import {
+  type UiAnnotatedText,
+  updateAnnotation,
+} from '@ghentcdh/annotation-ui';
 import {
   AnnotationEditEmits,
   AnnotationEditModalProperties,
@@ -57,10 +59,10 @@ import {
 import { UseAnnotationEdit } from './UseAnnotationEdit';
 import { useEditorState } from '../../composables/useEditorState';
 
-let annotatedText: AnnotatedText<W3CAnnotation>;
+let annotatedTextConfig: UiAnnotatedText;
 const props = defineProps(AnnotationEditModalProperties);
 
-const { config, utils } = useEditorState();
+const { config, findAnnotation } = useEditorState();
 
 const emits = defineEmits(AnnotationEditEmits);
 
@@ -68,22 +70,22 @@ const {
   save,
   cancel,
   metadata,
-  annotationSelector,
-  annotationDef,
   message,
   onChangeValue,
+  updateSelector,
+  definition,
 } = UseAnnotationEdit(props, emits);
 
 const editId = `edit-select-annotation-${Date.now()}--`;
 
 const label = computed(() => {
-  const _label = annotationDef?.label ?? props.type;
-
+  const _label = definition.label;
+  const isNew = !props.annotation?.id;
   return {
-    title: props.annotation ? `Edit ${_label}` : `Create ${_label}`,
-    selectLabel: props.annotation
-      ? `Adjust ${_label} selection`
-      : `Select ${_label} selection`,
+    title: isNew ? `Create ${_label}` : `Edit ${_label}`,
+    selectLabel: isNew
+      ? `Select ${_label} selection`
+      : `Adjust ${_label} selection`,
   };
 });
 
@@ -91,84 +93,86 @@ const formatBeforeSave = (formData: any) => {
   return onChangeValue({ metadata: formData });
 };
 
-const selectAll = () => {
-  const source = props.source!;
-  const selec = textPositionSelector?.value ?? {
+const selectFull = () => {
+  const { source, annotation } = props;
+  const maxRange = {
     start: 0,
     end: source!.content.text.length + 1,
   };
-  const selector = {
-    ...selec,
-    source: source.uri,
-  };
-
-  annotationSelector.value = utils.createAnnotationFromSelector(
-    annotationDef,
-    null,
-    selector,
-  );
-
-  annotatedText
-    .setAnnotationAdapterParams({ create: false, edit: true })
-    .setAnnotations([annotationSelector.value]);
-};
-const textPositionSelector = computed(() => {
-  if (!props.parentAnnotation || !props.source) {
-    return null;
+  if (annotation.parentId) {
+    const parent = findAnnotation(annotation.parentId);
+    const selector = parent.getSelector(source.uri);
+    if (selector) {
+      maxRange.start = selector.start;
+      maxRange.end = selector.end;
+    }
   }
 
-  return utils.getTextPositionSelector(
-    props.parentAnnotation,
-    props.source.uri,
+  const original = {
+    id: 'NEW_ANNOTATION',
+    metadata,
+    selectors: [],
+    ...annotation,
+  };
+
+  return updateAnnotation(
+    source.uri,
+    maxRange,
+    {
+      fullFlatText: props.source.content.text,
+      startOffset: 0, // TODO implement it
+    },
+    original,
   );
-});
+};
+
+const selectAll = () => {
+  const annotation = selectFull();
+
+  annotatedTextConfig.annotatedText
+    .setAnnotationAdapterParams({ create: false, edit: true })
+    .setAnnotations([annotation]);
+  updateSelector(annotation.getSelector(props.source.uri));
+};
 
 onMounted(() => {
   if (!props.source) return;
 
   const annotations = props.annotation ? [props.annotation] : [];
 
-  if (props.annotation) {
-    annotationSelector.value = utils.createAnnotationFromSelector(
-      annotationDef,
-      props.annotation,
-      null,
-    );
-  }
-  annotatedText = config.annotation
-    .createAnnotatedText(editId, props.source)
+  annotatedTextConfig = config.createAnnotatedText(editId, props.source);
+  annotatedTextConfig.annotatedText
+    // Snapper should be derived from the annotation model
+    // .setSnapper(new WordSnapper())
     .setStyleParams({
       styleFn: () => null,
     })
     .setRenderParams({
       renderFn: () => 'highlight',
     })
-    .setAnnotations(annotations);
-
-  annotatedText
-    .setAnnotationAdapterParams({ edit: true, create: !props.annotation })
+    .setAnnotations(annotations)
+    .setAnnotationAdapterParams({ edit: true, create: !props.annotation?.id })
     .on('annotation-create--end', ({ mouseEvent, event, data: _data }) => {
-      annotationSelector.value = _data.annotation;
-      onChangeValue({ annotation: _data.annotation });
-      annotatedText
-        .setAnnotations([annotationSelector.value])
-        .setAnnotationAdapterParams({ create: false, edit: true });
+      updateSelector(_data.annotation.getSelector(props.source.uri));
+      annotatedTextConfig.annotatedText.setAnnotationAdapterParams({
+        create: false,
+        edit: true,
+      });
     })
     .on('annotation-edit--end', ({ mouseEvent, event, data }) => {
-      annotationSelector.value = data.annotation;
-      onChangeValue(data);
-      annotatedText.setAnnotations([annotationSelector.value]);
+      updateSelector(data.annotation.getSelector(props.source.uri));
     });
 
-  if (textPositionSelector.value) {
-    annotatedText.setTextAdapterParams({
-      limit: { ...textPositionSelector.value, ignoreLines: true },
+  const selector = props.annotation.parent?.getSelector(props.source.uri);
+  if (selector) {
+    annotatedTextConfig.annotatedText.setTextAdapterParams({
+      limit: { ...selector, ignoreLines: true },
     });
   }
 });
 
 onUnmounted(() => {
-  annotatedText?.destroy();
+  annotatedTextConfig.annotatedText?.destroy();
 });
 </script>
 

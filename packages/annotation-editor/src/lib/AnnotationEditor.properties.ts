@@ -1,30 +1,29 @@
 import type { EmitFn, ExtractPublicPropTypes, PropType } from 'vue';
-
-import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-import { type AnnotationDefConfig } from '@ghentcdh/annotation-core';
+import { type TextAdapter } from '@ghentcdh/annotated-text';
 import {
-  type AnnotationAdapter,
-  type TextAdapter,
-} from '@ghentcdh/annotated-text';
-import type { GridLayout, AnnotationDefinition , SourceModel  } from '@ghentcdh/annotation-ui';
+  type EditorAnnotation,
+  type GridLayout,
+  type SourceModel,
+  type TransformAnnotationAdapter,
+  type UIAnnotationDefinition,
+  W3cTransformAnnotationAdapter,
+} from '@ghentcdh/annotation-ui';
 
 export const AnnotationEditorProperties = {
   modalView: { type: Boolean, required: false as const, default: true },
-  configuration: {
-    type: Object as PropType<AnnotationDefConfig>,
-    required: true as const,
-  },
   textAdapter: {
     type: Function as PropType<() => TextAdapter>,
     required: false as const,
   },
-  annotationAdapter: {
-    type: Function as PropType<() => AnnotationAdapter<W3CAnnotation>>,
-    required: false as const,
+  // TODO this should become only setmetadata etc functions
+  annotationTransformer: {
+    type: Object as PropType<TransformAnnotationAdapter<object>>,
+    required: true as const,
+    default: new W3cTransformAnnotationAdapter(),
   },
   sources: { type: Array as PropType<SourceModel[]>, required: true as const },
   annotations: {
-    type: Array as PropType<W3CAnnotation[]>,
+    type: Array as PropType<EditorAnnotation[]>,
     required: true as const,
   },
   cols: { type: Number, required: false, default: 2 },
@@ -34,14 +33,23 @@ export const AnnotationEditorProperties = {
     default: undefined,
   },
   annotationDefinitions: {
-    type: Array as PropType<AnnotationDefinition[]>,
+    type: Array as PropType<UIAnnotationDefinition[]>,
     required: true as const,
   },
-  selectedAnnotationId: { type: String, required: false, default: undefined },
+  selectedAnnotationId: {
+    type: [String, Number] as PropType<string | number | undefined>,
+    required: false as const,
+    default: undefined,
+  },
   selectedAnnotationAction: {
     type: String,
     required: false,
     default: undefined,
+  },
+  readonly: {
+    type: Boolean,
+    required: false,
+    default: false,
   },
 };
 
@@ -50,12 +58,15 @@ export type AnnotationEditorProps = ExtractPublicPropTypes<
 >;
 
 export const AnnotationEditorEmits = {
-  'update:annotation': (annotation: W3CAnnotation) => Promise<W3CAnnotation>,
-  'delete:annotation': (annotation: W3CAnnotation) => Promise<W3CAnnotation>,
-  'create:annotation': (annotation: W3CAnnotation) => Promise<W3CAnnotation>,
+  'update:annotation': <ANNOTATION>(annotation: ANNOTATION) =>
+    Promise<ANNOTATION>,
+  'delete:annotation': <ANNOTATION>(annotation: ANNOTATION) =>
+    Promise<ANNOTATION>,
+  'create:annotation': <ANNOTATION>(annotation: ANNOTATION) =>
+    Promise<ANNOTATION>,
   'create:annotation:events': (_payload: any) => true,
-  'select:annotation': (
-    _annotation: W3CAnnotation | null,
+  'select:annotation': <ANNOTATION>(
+    _annotation: ANNOTATION | null,
     _action: string | null,
   ) => true,
 };

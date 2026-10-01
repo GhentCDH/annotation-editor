@@ -1,14 +1,12 @@
 import type { ExtractPublicPropTypes, PropType } from 'vue';
-import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-import type { Selector, SourceModel } from '@ghentcdh/annotation-ui';
+import {
+  type EditorAnnotation,
+  type Selector,
+  type SourceModel,
+} from '@ghentcdh/annotation-ui';
 
 export const AnnotationEditModalProperties = {
-  type: { type: String, required: true as const },
-  annotation: { type: Object as PropType<W3CAnnotation>, required: false },
-  parentAnnotation: {
-    type: Object as PropType<W3CAnnotation>,
-    required: false,
-  },
+  annotation: { type: Object as PropType<EditorAnnotation>, required: false },
   source: { type: Object as PropType<SourceModel>, required: true as const },
 };
 
@@ -17,7 +15,7 @@ export type AnnotationEditModal = ExtractPublicPropTypes<
 >;
 
 export type AnnotationEditModalEvent = {
-  annotation: W3CAnnotation;
+  annotation: EditorAnnotation;
   rawData: any;
   selectors: Selector[];
 };
