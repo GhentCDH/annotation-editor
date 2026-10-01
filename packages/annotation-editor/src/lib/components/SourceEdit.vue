@@ -36,7 +36,7 @@ const mainEl = ref(null);
 let observer: IntersectionObserver | null = null;
 
 watch(
-  () => config.annotation,
+  () => config.createAnnotatedText,
   () => {
     textAnnotation?.destroy();
     nextTick(() => drawTextAnnotation());

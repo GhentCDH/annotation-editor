@@ -101,7 +101,6 @@ export const useProvideEditorState = (
 
   watch(
     [
-      () => props.annotations,
       () => props.textAdapter,
       () => props.annotationTransformer,
       () => definitionsMap.value,
