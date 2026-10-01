@@ -6,7 +6,6 @@ import {
 import {
   type AnnotationResource,
   AnnotationResourceSchema,
-  type SourceModel,
 } from '@ghentcdh/annotation-core';
 import { z } from 'zod';
 import { resourceApi } from '@ghentcdh/crouton-vue';
@@ -56,22 +55,10 @@ export const UiAnnotionDefinitionSchema: z.ZodType<UIAnnotationDefinition> =
       };
     }) as unknown as z.ZodType<UIAnnotationDefinition>;
 
-export type AllowedChildrenPerType = Record<string, Array<KeyLabel>>;
-
 export type UiAnnotatedText = {
   annotatedText: AnnotatedText<EditorAnnotation>;
   textAdapter: TextAdapter;
   annotationAdapter: AnnotationEditorAnnotationAdapter;
-};
-export type UIAnnotationConfiguration = {
-  definitions: UIAnnotationDefinition[];
-  getDefinition: (id: string) => UIAnnotationDefinition | undefined;
-  rootTypes: Array<KeyLabel>;
-  allowedChildrenPerType: AllowedChildrenPerType;
-  createAnnotatedText: (
-    id: string,
-    sourceModel?: SourceModel,
-  ) => UiAnnotatedText;
 };
 
 export type DefinitionMap = Record<string, UIAnnotationDefinition>;

@@ -1,21 +1,12 @@
 <template>
-  <div
-    class="relative"
-    @mouseenter="showFullText"
-    @mouseleave="hideFullText"
-  >
+  <div class="relative" @mouseenter="showFullText" @mouseleave="hideFullText">
     <component
       :is="showSource ? Collapse : 'div'"
       v-bind="showSource ? { title: textData?.text.content.label ?? '-' } : {}"
     >
       <div class="flex flex-row items-center gap-2">
-        <div
-          :id="annotationTextId"
-          class="flex-1"
-        />
-        <div v-if="showHover">
-          ...
-        </div>
+        <div :id="annotationTextId" class="flex-1" />
+        <div v-if="showHover">...</div>
       </div>
     </component>
     <div
@@ -81,7 +72,7 @@ onMounted(() => {
   const { textPositionSelector, text, end } = _data;
   showHover.value = textPositionSelector.end > end;
 
-  annotatedText = config.annotation
+  annotatedText = config
     .createAnnotatedText(annotationTextId, text)
     .annotatedText.setTextAdapterParams({
       limit: {
@@ -130,7 +121,7 @@ const showFullText = (mouseEvent: MouseEvent) => {
 const renderFullText = () => {
   const { textPositionSelector, text } = textData.value!;
 
-  annotatedTextFull = config.annotation
+  annotatedTextFull = config
     .createAnnotatedText(annotationTextFullId, text)
     .annotatedText.setTextAdapterParams({
       limit: {

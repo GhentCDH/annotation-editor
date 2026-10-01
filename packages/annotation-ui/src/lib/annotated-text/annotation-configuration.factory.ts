@@ -8,9 +8,7 @@ import {
 import { type SourceModel } from '@ghentcdh/annotation-core';
 import { defaultRender, styleFn } from './annotation-render.style';
 import {
-  type AllowedChildrenPerType,
   type DefinitionMap,
-  type UIAnnotationConfiguration,
   type UIAnnotationDefinition,
 } from '../types/ui-annotation-definition.type';
 import { AnnotationEditorAnnotationAdapter } from '../adapter/editor.annotation.adapter';
@@ -39,11 +37,8 @@ export const createAnnotationConfiguration = (
   textAdapter: (() => TextAdapter) | undefined,
   defaultAannotationAdapterParams = {},
   definitionsMap: DefinitionMap,
-): UIAnnotationConfiguration => {
+) => {
   const definitions = Object.values(definitionsMap);
-  const rootTypes = definitions
-    .filter((d) => d.annotation.isRoot)
-    .map((d) => ({ key: d.id, label: d.label }));
   const styles = groupById(definitions, 'style') as Record<
     string,
     CustomAnnotationStyle
@@ -61,12 +56,7 @@ export const createAnnotationConfiguration = (
   }
   const listStyles = Object.keys(styles);
 
-  const allowedChildrenPerType = groupById(
-    definitions,
-    'allowedChildren',
-  ) as AllowedChildrenPerType;
-
-  const _createAnnotatedText = (id: string, sourceModel?: SourceModel) => {
+  return (id: string, sourceModel?: SourceModel) => {
     const _textAdapter = textAdapter?.() ?? PlainTextAdapter();
 
     const renderParams = () => ({
@@ -101,16 +91,5 @@ export const createAnnotationConfiguration = (
       textAdapter: _textAdapter,
       annotationAdapter: annotationAdapter,
     };
-  };
-
-  return {
-    allowedChildrenPerType,
-    definitions,
-    getDefinition: (id) => {
-      const def = definitionsMap[id] ?? undefined;
-      return def;
-    },
-    rootTypes,
-    createAnnotatedText: _createAnnotatedText,
   };
 };

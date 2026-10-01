@@ -2,14 +2,18 @@ import {
   type AnnotationModalConfig,
   type EditorAnnotation,
   type Selector,
-  type UIAnnotationConfiguration,
+  type SourceModel,
+  UiAnnotatedText,
 } from '@ghentcdh/annotation-ui';
 
 type EditorStatus = 'show' | 'create' | 'edit' | 'link' | null;
 
 export type EditorConfig = {
   modal: AnnotationModalConfig;
-  annotation: UIAnnotationConfiguration;
+  createAnnotatedText: (
+    id: string,
+    sourceModel?: SourceModel,
+  ) => UiAnnotatedText;
 };
 
 export type EditorState_ = {

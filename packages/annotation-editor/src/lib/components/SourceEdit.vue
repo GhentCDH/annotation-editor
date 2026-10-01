@@ -5,11 +5,7 @@
     @create-annotation="createAnnotation"
   />
   <div class="overflow-y-auto flex-1 min-h-0">
-    <div
-      :id="textUuid"
-      ref="mainEl"
-      :dir="source.content.textDirection"
-    />
+    <div :id="textUuid" ref="mainEl" :dir="source.content.textDirection" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -80,7 +76,7 @@ onMounted(() => {
 });
 
 const drawTextAnnotation = () => {
-  textAnnotation = config.annotation.createAnnotatedText(
+  textAnnotation = config.createAnnotatedText(
     textUuid,
     properties.source,
   ).annotatedText;

@@ -44,6 +44,7 @@ export type EditorState = {
     callback?: (response: any) => void,
   ) => void;
   annotations: ComputedRef<Readonly<EditorAnnotation[]>>;
+  allDefinitions: ComputedRef<Readonly<UIAnnotationDefinition[]>>;
   findAnnotation: (uri: AnnotationId) => EditorAnnotation | null;
   getDefinition: (uri: string) => UIAnnotationDefinition;
 };
@@ -57,12 +58,13 @@ export const useProvideEditorState = (
   containerRef: TemplateRef<HTMLElement>,
   { readonly } = { readonly: false },
 ) => {
+  const allDefinitions = computed(() => props.annotationDefinitions);
   const definitionsMap = computed(() => {
     return groupById(props.annotationDefinitions) as DefinitionMap;
   });
   const config = shallowReactive<EditorConfig>({
     modal: createModalConfig(annotationModalDefaults),
-    annotation: createAnnotationConfiguration(
+    createAnnotatedText: createAnnotationConfiguration(
       props.textAdapter,
       props.annotationTransformer,
       definitionsMap.value,
@@ -100,7 +102,7 @@ export const useProvideEditorState = (
       () => definitionsMap.value,
     ],
     () => {
-      config.annotation = createAnnotationConfiguration(
+      config.createAnnotatedText = createAnnotationConfiguration(
         props.textAdapter,
         props.annotationTransformer.defaultParams,
         definitionsMap.value,
@@ -176,6 +178,7 @@ export const useProvideEditorState = (
     ),
     annotations: computed(() => props.annotations ?? []),
     getDefinition,
+    allDefinitions,
     findAnnotation,
   });
 };
