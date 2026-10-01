@@ -60,6 +60,9 @@ export default defineConfig(() => ({
         'vue-router',
         'zod',
       ],
+      output: {
+        assetFileNames: 'styles[extname]',
+      },
     },
   },
   test: {
