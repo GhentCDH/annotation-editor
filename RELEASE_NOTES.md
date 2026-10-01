@@ -1,3 +1,48 @@
+## 0.0.1-alpha.16 (2026-10-01)
+
+### 🚀 Features
+
+- add annotation-editor adapter ([161a5266](https://github.com/GhentCDH/annotation-editor/commit/161a5266))
+- add annotation-editor adapter ([63700d99](https://github.com/GhentCDH/annotation-editor/commit/63700d99))
+- add annotation-editor adapter ([8b2f87e9](https://github.com/GhentCDH/annotation-editor/commit/8b2f87e9))
+- add annotation-editor adapter ([992ed260](https://github.com/GhentCDH/annotation-editor/commit/992ed260))
+- add annotation-editor adapter ([ee331e6d](https://github.com/GhentCDH/annotation-editor/commit/ee331e6d))
+- add annotation-editor adapter ([f83c0eb1](https://github.com/GhentCDH/annotation-editor/commit/f83c0eb1))
+- add annotation-editor adapter ([c79ae71e](https://github.com/GhentCDH/annotation-editor/commit/c79ae71e))
+- add annotation-editor adapter ([22d04183](https://github.com/GhentCDH/annotation-editor/commit/22d04183))
+- add annotation-editor adapter ([fbfdb251](https://github.com/GhentCDH/annotation-editor/commit/fbfdb251))
+- add annotation-editor adapter ([a8432fa0](https://github.com/GhentCDH/annotation-editor/commit/a8432fa0))
+- add annotation-editor adapter ([a619bc43](https://github.com/GhentCDH/annotation-editor/commit/a619bc43))
+- add annotation-editor adapter ([25335574](https://github.com/GhentCDH/annotation-editor/commit/25335574))
+- add annotation-editor adapter ([1a312e94](https://github.com/GhentCDH/annotation-editor/commit/1a312e94))
+- add annotation-editor adapter ([ce5bcbfe](https://github.com/GhentCDH/annotation-editor/commit/ce5bcbfe))
+- add annotation-editor adapter ([94ca508b](https://github.com/GhentCDH/annotation-editor/commit/94ca508b))
+- add annotation-editor adapter ([66d50708](https://github.com/GhentCDH/annotation-editor/commit/66d50708))
+- add annotation-editor adapter ([7636ccde](https://github.com/GhentCDH/annotation-editor/commit/7636ccde))
+- status page ([09b43b8c](https://github.com/GhentCDH/annotation-editor/commit/09b43b8c))
+- annotation-adapter ([474c7634](https://github.com/GhentCDH/annotation-editor/commit/474c7634))
+- annotation-adapter ([b40d4ee3](https://github.com/GhentCDH/annotation-editor/commit/b40d4ee3))
+- annotation-adapter ([3dec0b5d](https://github.com/GhentCDH/annotation-editor/commit/3dec0b5d))
+
+### 🩹 Fixes
+
+- small issues ([2fc17c49](https://github.com/GhentCDH/annotation-editor/commit/2fc17c49))
+- small issues ([9265fadc](https://github.com/GhentCDH/annotation-editor/commit/9265fadc))
+- resolve TS2883, TS2308, TS2345, TS2698 build errors in annotation-ui ([6901d7d5](https://github.com/GhentCDH/annotation-editor/commit/6901d7d5))
+- save normal w3c annotation ([675242cd](https://github.com/GhentCDH/annotation-editor/commit/675242cd))
+- save normal w3c annotation ([c9de3ee2](https://github.com/GhentCDH/annotation-editor/commit/c9de3ee2))
+- save normal w3c annotation ([6723a08f](https://github.com/GhentCDH/annotation-editor/commit/6723a08f))
+- save normal w3c annotation ([f67e1061](https://github.com/GhentCDH/annotation-editor/commit/f67e1061))
+- save normal w3c annotation ([f09dd671](https://github.com/GhentCDH/annotation-editor/commit/f09dd671))
+- save normal w3c annotation ([39236387](https://github.com/GhentCDH/annotation-editor/commit/39236387))
+- save normal w3c annotation ([354a4fff](https://github.com/GhentCDH/annotation-editor/commit/354a4fff))
+- save normal w3c annotation ([be7d94ca](https://github.com/GhentCDH/annotation-editor/commit/be7d94ca))
+- save normal w3c annotation ([439554d0](https://github.com/GhentCDH/annotation-editor/commit/439554d0))
+
+### ❤️ Thank You
+
+- Bo Vandersteene
+
 ## 0.0.1-alpha.15 (2026-09-23)
 
 This was a version bump only, there were no code changes.
