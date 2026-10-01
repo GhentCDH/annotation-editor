@@ -1,3 +1,13 @@
+## 0.0.1-alpha.19 (2026-10-01)
+
+### 🩹 Fixes
+
+- name CSS output styles.css to match exports map ([2607202a](https://github.com/GhentCDH/annotation-editor/commit/2607202a))
+
+### ❤️ Thank You
+
+- Bo Vandersteene
+
 ## 0.0.1-alpha.18 (2026-10-01)
 
 ### 🩹 Fixes
