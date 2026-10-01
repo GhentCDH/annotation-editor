@@ -22,8 +22,8 @@ const createSelector = (resource: W3CSpecificResource) => {
       ? [resource.selector]
       : [];
   const obj = {
-    ...selectorArr.reduce(
-      (acc: Record<string, unknown>, { type: _, ...rest }) => ({ ...acc, ...rest }),
+    ...(selectorArr as Array<Record<string, unknown>>).reduce<Record<string, unknown>>(
+      (acc, { type: _, ...rest }) => ({ ...acc, ...rest }),
       {},
     ),
     uri: resource.source,

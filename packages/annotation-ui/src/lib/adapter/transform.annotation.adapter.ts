@@ -63,7 +63,7 @@ export abstract class TransformAnnotationAdapter<
     return parsed;
   }
 
-  resolveDefinition(schemaUri: string) {
+  resolveDefinition(schemaUri: string): UIAnnotationDefinition | { name: string } {
     return this.definitionsMap[schemaUri] ?? { name: 'default' };
   }
 

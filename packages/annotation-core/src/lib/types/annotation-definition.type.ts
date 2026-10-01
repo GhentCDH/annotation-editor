@@ -27,17 +27,16 @@ export type AnnotationResource = {
   schemas?: Record<string, Partial<ViewConfig>> | null;
 };
 
-export const AnnotationResourceSchema = AnnotationJsonResourceShape.pick({
-  id: true,
-  name: true,
-  title: true,
-  operations: true,
-  annotation: true,
-}).extend({
+const { id, name, title, operations } = AnnotationJsonResourceShape.shape;
+export const AnnotationResourceSchema: z.ZodType<AnnotationResource> = z.object({
+  id,
+  name,
+  title,
+  operations,
   annotation: AnnotationConfigSchema,
   context: z.instanceof(ContextBuilder).optional().nullish(),
   schemas: z
     .record(z.string(), ViewConfigSchema.partial())
     .optional()
     .nullish(),
-});
+}) as unknown as z.ZodType<AnnotationResource>;
