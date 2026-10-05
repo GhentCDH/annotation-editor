@@ -15,9 +15,12 @@ export const UseAnnotationEdit = (
     props.source.uri,
   );
 
-  const { getDefinition } = useEditorState();
+  const { getDefinition, findAnnotation } = useEditorState();
   const definition = getDefinition(props.annotation.definitionUri);
   const metadataEdit = useMetadataEdit(props.annotation, definition);
+  const parent = props.annotation.parentId
+    ? findAnnotation(props.annotation.parentId)
+    : null;
 
   const cancel = () => {
     // utils.cancel();
@@ -75,5 +78,6 @@ export const UseAnnotationEdit = (
     message: metadataEdit.message,
     updateSelector,
     definition,
+    parent,
   };
 };

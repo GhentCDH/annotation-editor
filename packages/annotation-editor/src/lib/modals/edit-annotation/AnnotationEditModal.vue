@@ -22,16 +22,9 @@
       >
         <template #content-before>
           <div class="flex-grow before-scroll">
-            <Collapse
-              :title="label.selectLabel"
-              :scrollable="true"
-            >
+            <Collapse :title="label.selectLabel" :scrollable="true">
               <div :id="editId" />
-              <Btn
-                :outline="true"
-                class="mt-2"
-                @click="selectAll"
-              >
+              <Btn :outline="true" class="mt-2" @click="selectAll">
                 Select all text
               </Btn>
             </Collapse>
@@ -74,6 +67,7 @@ const {
   onChangeValue,
   updateSelector,
   definition,
+  parent,
 } = UseAnnotationEdit(props, emits);
 
 const editId = `edit-select-annotation-${Date.now()}--`;
@@ -99,8 +93,7 @@ const selectFull = () => {
     start: 0,
     end: source!.content.text.length + 1,
   };
-  if (annotation.parentId) {
-    const parent = findAnnotation(annotation.parentId);
+  if (parent) {
     const selector = parent.getSelector(source.uri);
     if (selector) {
       maxRange.start = selector.start;
@@ -163,7 +156,7 @@ onMounted(() => {
       updateSelector(data.annotation.getSelector(props.source.uri));
     });
 
-  const selector = props.annotation.parent?.getSelector(props.source.uri);
+  const selector = parent?.getSelector(props.source.uri);
   if (selector) {
     annotatedTextConfig.annotatedText.setTextAdapterParams({
       limit: { ...selector, ignoreLines: true },

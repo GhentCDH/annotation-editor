@@ -68,7 +68,7 @@ export const createAnnotation = (
       source: data.source,
       annotation: {
         definitionUri: data.definitionUri,
-        parentAnnotation: data.parentAnnotation,
+        parentId: data.parentAnnotation?.id,
         selectors: [],
       },
     })
