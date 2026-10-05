@@ -1,3 +1,14 @@
+## 0.0.1-alpha.25 (2026-10-05)
+
+### 🚀 Features
+
+- add parent selector ([2a42e201](https://github.com/GhentCDH/annotation-editor/commit/2a42e201))
+- add parent selector ([cecf1757](https://github.com/GhentCDH/annotation-editor/commit/cecf1757))
+
+### ❤️ Thank You
+
+- Bo Vandersteene
+
 ## 0.0.1-alpha.24 (2026-10-01)
 
 This was a version bump only, there were no code changes.
