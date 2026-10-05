@@ -20,7 +20,6 @@ export const useAnnotationResource = (
 
   const _save = async (update: EditorAnnotation) => {
     const dataToSave = editorState.format(update, !annotation.id);
-
     if (annotation.id) {
       return resource.save(annotation.id, dataToSave).then((response) => {
         message.value = { status: 'saved' };

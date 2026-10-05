@@ -1,5 +1,9 @@
 import { type EmitFn } from 'vue';
-import { editorAnnotationSchema, type Selector } from '@ghentcdh/annotation-ui';
+import {
+  editorAnnotationSchema,
+  type Selector,
+  SelectorSchema,
+} from '@ghentcdh/annotation-ui';
 import {
   type AnnotationEditEmits,
   type AnnotationEditModal,
@@ -48,11 +52,28 @@ export const UseAnnotationEdit = (
           links: [],
           selectors: [selector],
         });
+
     // check if resource can handle backend requests
     const cloned = originalAnnotation.clone({
       metadata,
     });
     cloned.setSelector(selector);
+
+    if (parent) {
+      const select = parent.getSelector(props.source.uri);
+      const start = selector.start - select.start;
+      const length = selector.end - selector.start;
+      const parentSelector = SelectorSchema.parse({
+        exact: selector.exact,
+        prefix: selector.prefix,
+        suffix: selector.suffix,
+        start,
+        end: start + length,
+        uri: parent.id,
+      });
+
+      cloned.setSelector(parentSelector);
+    }
 
     return metadataEdit.save(cloned, emits);
   };
