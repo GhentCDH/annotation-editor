@@ -9,7 +9,7 @@
 </template>
 <script setup lang="ts">
 import { CroutonForm } from '@ghentcdh/crouton-vue';
-import { type UIAnnotationDefinition } from '@ghentcdh/annotation-core';
+import { type UIAnnotationDefinition } from '@ghentcdh/annotation-ui';
 import { computed } from 'vue';
 
 const properties = defineProps<{

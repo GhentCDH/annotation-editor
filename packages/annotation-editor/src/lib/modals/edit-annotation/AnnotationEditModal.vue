@@ -22,16 +22,9 @@
       >
         <template #content-before>
           <div class="flex-grow before-scroll">
-            <Collapse
-              :title="label.selectLabel"
-              :scrollable="true"
-            >
+            <Collapse :title="label.selectLabel" :scrollable="true">
               <div :id="editId" />
-              <Btn
-                :outline="true"
-                class="mt-2"
-                @click="selectAll"
-              >
+              <Btn :outline="true" class="mt-2" @click="selectAll">
                 Select all text
               </Btn>
             </Collapse>
@@ -117,6 +110,7 @@ const selectFull = () => {
     id: 'NEW_ANNOTATION',
     metadata,
     selectors: [],
+    definitionUri: annotation?.definitionUri ?? '',
     ...annotation,
   };
 
@@ -127,7 +121,7 @@ const selectFull = () => {
       fullFlatText: props.source.content.text,
       startOffset: 0, // TODO implement it
     },
-    original,
+    original as any,
   );
 };
 
@@ -137,7 +131,8 @@ const selectAll = () => {
   annotatedTextConfig.annotatedText
     .setAnnotationAdapterParams({ create: false, edit: true })
     .setAnnotations([annotation]);
-  updateSelector(annotation.getSelector(props.source.uri));
+  const sel = annotation.getSelector(props.source.uri);
+  if (sel) updateSelector(sel);
 };
 
 onMounted(() => {
@@ -158,14 +153,16 @@ onMounted(() => {
     .setAnnotations(annotations)
     .setAnnotationAdapterParams({ edit: true, create: !props.annotation?.id })
     .on('annotation-create--end', ({ mouseEvent, event, data: _data }) => {
-      updateSelector(_data.annotation.getSelector(props.source.uri));
+      const s = _data.annotation.getSelector(props.source.uri);
+      if (s) updateSelector(s);
       annotatedTextConfig.annotatedText.setAnnotationAdapterParams({
         create: false,
         edit: true,
       });
     })
     .on('annotation-edit--end', ({ mouseEvent, event, data }) => {
-      updateSelector(data.annotation.getSelector(props.source.uri));
+      const s = data.annotation.getSelector(props.source.uri);
+      if (s) updateSelector(s);
     });
 
   const selector = parent?.getSelector(props.source.uri);

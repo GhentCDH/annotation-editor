@@ -24,6 +24,9 @@ export type _EditorAnnotation = {
   selectors: Array<Selector>;
   parentId?: AnnotationId;
   links: any[];
+  getSelector: (sourceUri: string) => Selector | undefined;
+  setSelector: (selector: Selector) => void;
+  clone: (annotation: Partial<_EditorAnnotation>) => _EditorAnnotation;
 };
 
 export const editorAnnotationSchema: z.ZodType<_EditorAnnotation> = z

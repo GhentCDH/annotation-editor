@@ -71,21 +71,18 @@ watch(
   { immediate: true },
 );
 
-const selectAnnotation = (
-  annotation: W3CAnnotation | null,
-  action: string | null,
-) => {
+const selectAnnotation = (annotation: unknown, action: string | null) => {
   if (!props.watchQueryParams) return;
   const query = { ...route.query };
   if (annotation) {
-    query.annotationId = annotation.id;
+    query['annotationId'] = (annotation as W3CAnnotation).id;
   } else {
-    delete query.annotationId;
+    delete query['annotationId'];
   }
   if (action) {
-    query.action = action;
+    query['action'] = action;
   } else {
-    delete query.action;
+    delete query['action'];
   }
   router.replace({ query });
 };

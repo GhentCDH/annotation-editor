@@ -60,7 +60,7 @@ export const selectAnnotationById = (
       const definition = data.definition;
       if (!definition) return;
       editAnnotation(
-        { source, annotation, definition },
+        { source: source ?? undefined, annotation, definition },
         config,
         editorState,
         emits,

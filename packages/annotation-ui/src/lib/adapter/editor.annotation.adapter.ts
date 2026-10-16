@@ -103,7 +103,7 @@ export class AnnotationEditorAnnotationAdapter extends AnnotationAdapter<
   }
 
   name = 'AnnotationEditorAnnotationAdapter';
-  private sourceUri: string;
+  private sourceUri = '';
   override setParams(params: Params) {
     this.sourceUri = params.sourceModel?.uri ?? this.sourceUri;
     super.setParams(params);

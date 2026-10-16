@@ -23,7 +23,8 @@ export const AnnotationEditEmits = {
   close: (event: AnnotationEditModalEvent | null) => true,
 };
 
-export type AnnotationEditModalShow = Pick<
-  AnnotationEditModal,
-  'source' | 'annotation' | 'type' | 'parentAnnotation'
->;
+export type AnnotationEditModalShow = {
+  source?: SourceModel;
+  annotation?: EditorAnnotation;
+  parentAnnotation?: EditorAnnotation;
+};

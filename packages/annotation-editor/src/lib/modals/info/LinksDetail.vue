@@ -1,16 +1,10 @@
 <template>
   <table class="border border-gray-300 table table-zebra table-sm">
     <tbody>
-      <tr
-        v-for="link in links"
-        :key="link.annotation.id"
-      >
+      <tr v-for="link in links" :key="link.annotation.id">
         <th>{{ link.definition.label }}</th>
         <td class="max-w-[300px]">
-          <AnnotationText
-            :annotation="link.relation"
-            :max-characters="25"
-          />
+          <AnnotationText :annotation="link.relation" :max-characters="25" />
         </td>
         <td>
           <Navbar :actions="actions(link)" />
@@ -29,6 +23,7 @@ import {
 } from '@ghentcdh/annotation-ui';
 import AnnotationText from './Annotation-text.vue';
 import Navbar from '../../components/navbar.vue';
+import { type NavbarAction } from '../../components/navbar.properties';
 import { useEditorState } from '../../composables/useEditorState';
 
 const props = defineProps<{ annotation: EditorAnnotation }>();
@@ -43,25 +38,27 @@ type LinkDisplay = {
 };
 
 const links = computed<LinkDisplay[]>(() => {
-  const _links = props.annotation.links.map((l) => {
+  return props.annotation.links.flatMap((l) => {
     const link = findAnnotation(l.uri);
+    if (!link) return [];
     const annotationId = link.links.find(
       (li) => li.uri !== props.annotation.id,
     )?.uri;
     const relation = findAnnotation(annotationId);
+    if (!relation) return [];
 
-    return {
-      id: link.id,
-      definition: getDefinition(link.definitionUri),
-      annotation: link,
-      relation,
-    };
+    return [
+      {
+        id: link.id,
+        definition: getDefinition(link.definitionUri),
+        annotation: link,
+        relation,
+      },
+    ];
   });
-
-  return _links;
 });
 
-const actions = (link: LinkDisplay) => {
+const actions = (link: LinkDisplay): NavbarAction[] => {
   if (editorState.readonly) return [];
 
   return [
@@ -91,6 +88,6 @@ const actions = (link: LinkDisplay) => {
           },
         }
       : null,
-  ].filter(Boolean);
+  ].filter((x): x is NavbarAction => x !== null);
 };
 </script>

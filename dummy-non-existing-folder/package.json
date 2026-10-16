@@ -1,6 +1,6 @@
 {
   "name": "@ghentcdh/annotation-api",
-  "version": "0.0.1-alpha.18",
+  "version": "0.0.1-alpha.25",
   "repository": {
     "type": "git",
     "url": "https://github.com/GhentCDH/annotation-editor"
@@ -13,6 +13,6 @@
     "@nestjs/common": "^12.0.0"
   },
   "dependencies": {
-    "@ghentcdh/crouton-api": "0.0.1-alpha.71"
+    "@ghentcdh/crouton-api": "0.0.1-alpha.83"
   }
 }

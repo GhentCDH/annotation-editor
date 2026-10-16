@@ -31,7 +31,7 @@ export abstract class AnnotationEditorLoader<ANNOTATION> {
     const resources = await this.loadResources();
 
     if (!resources.length) {
-      this.useAnnotationDefinitions.loadFromResourceUris(resources).then(() => {
+      this.useAnnotationDefinitions.loadFromResourceUris(resources as string[]).then(() => {
         nextTick(() => (this.definitionsLoaded.value = true));
       });
 
