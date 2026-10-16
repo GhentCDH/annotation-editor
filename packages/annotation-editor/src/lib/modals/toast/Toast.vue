@@ -1,9 +1,16 @@
 <template>
   <div class="toast toast-center z-[3000]">
-    <div role="alert" class="alert border-primary bg-white">
+    <div
+      role="alert"
+      class="alert border-primary bg-white"
+    >
       <span>{{ toastMessage }}</span>
       <div class="flex gap-2">
-        <Btn v-if="action" :color="Color.secondary" @click="close()">
+        <Btn
+          v-if="action"
+          :color="Color.secondary"
+          @click="close()"
+        >
           {{ action.label || 'Close' }}
         </Btn>
       </div>

@@ -22,9 +22,16 @@
       >
         <template #content-before>
           <div class="flex-grow before-scroll">
-            <Collapse :title="label.selectLabel" :scrollable="true">
+            <Collapse
+              :title="label.selectLabel"
+              :scrollable="true"
+            >
               <div :id="editId" />
-              <Btn :outline="true" class="mt-2" @click="selectAll">
+              <Btn
+                :outline="true"
+                class="mt-2"
+                @click="selectAll"
+              >
                 Select all text
               </Btn>
             </Collapse>
