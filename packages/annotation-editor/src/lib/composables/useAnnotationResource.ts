@@ -2,8 +2,10 @@ import {
   type EditorAnnotation,
   type UIAnnotationDefinition,
 } from '@ghentcdh/annotation-ui';
-import { type FormMessageProps } from '@ghentcdh/crouton-vue';
-import { NotificationService } from '@ghentcdh/ui';
+import {
+  type FormMessageProps,
+  NotificationService,
+} from '@ghentcdh/crouton-vue';
 import { type EmitFn, ref } from 'vue';
 import { useEditorState } from './useEditorState';
 

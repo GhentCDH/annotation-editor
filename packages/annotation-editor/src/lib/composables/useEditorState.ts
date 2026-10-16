@@ -56,7 +56,6 @@ export const useProvideEditorState = (
   props: AnnotationEditorProps,
   emits: AnnotationEditorEmitsFn,
   containerRef: TemplateRef<HTMLElement>,
-  { readonly } = { readonly: false },
 ) => {
   const allDefinitions = computed(() => props.annotationDefinitions);
   const definitionsMap = computed(() => {
@@ -87,7 +86,7 @@ export const useProvideEditorState = (
     selectedAnnotation: null,
     disableEdits: false,
     info: null,
-    readonly,
+    readonly: props.readonly,
     show: () => showEditorState(),
     reset: () => resetEditorState(),
     format:

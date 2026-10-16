@@ -22,16 +22,9 @@
       >
         <template #content-before>
           <div class="flex-grow before-scroll">
-            <Collapse
-              :title="label.selectLabel"
-              :scrollable="true"
-            >
+            <Collapse :title="label.selectLabel" :scrollable="true">
               <div :id="editId" />
-              <Btn
-                :outline="true"
-                class="mt-2"
-                @click="selectAll"
-              >
+              <Btn :outline="true" class="mt-2" @click="selectAll">
                 Select all text
               </Btn>
             </Collapse>
@@ -45,8 +38,13 @@
   </Modal>
 </template>
 <script lang="ts" setup>
-import { CroutonForm, FormMessage } from '@ghentcdh/crouton-vue';
-import { Btn, Collapse, Modal } from '@ghentcdh/ui';
+import {
+  Btn,
+  Collapse,
+  CroutonForm,
+  FormMessage,
+  Modal,
+} from '@ghentcdh/crouton-vue';
 import { computed, onMounted, onUnmounted } from 'vue';
 import {
   type UiAnnotatedText,

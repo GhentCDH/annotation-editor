@@ -35,9 +35,8 @@
   </Modal>
 </template>
 <script setup lang="ts">
-import { Modal } from '@ghentcdh/ui';
+import { CroutonForm, FormMessage, Modal } from '@ghentcdh/crouton-vue';
 import { computed } from 'vue';
-import { CroutonForm, FormMessage } from '@ghentcdh/crouton-vue';
 import {
   LinkAnnotationProperties,
   LinkEmits,

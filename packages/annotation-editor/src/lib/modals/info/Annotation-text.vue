@@ -1,21 +1,12 @@
 <template>
-  <div
-    class="relative"
-    @mouseenter="showFullText"
-    @mouseleave="hideFullText"
-  >
+  <div class="relative" @mouseenter="showFullText" @mouseleave="hideFullText">
     <component
       :is="showSource ? Collapse : 'div'"
       v-bind="showSource ? { title: textData?.text.content.label ?? '-' } : {}"
     >
       <div class="flex flex-row items-center gap-2">
-        <div
-          :id="annotationTextId"
-          class="flex-1"
-        />
-        <div v-if="showHover">
-          ...
-        </div>
+        <div :id="annotationTextId" class="flex-1" />
+        <div v-if="showHover">...</div>
       </div>
     </component>
     <div
@@ -29,7 +20,7 @@
 import { type AnnotatedText } from '@ghentcdh/annotated-text';
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { v4 as uuidv4 } from 'uuid';
-import { Collapse } from '@ghentcdh/ui';
+import { Collapse } from '@ghentcdh/crouton-vue';
 import { type EditorAnnotation } from '@ghentcdh/annotation-ui';
 import { useEditorState } from '../../composables/useEditorState';
 

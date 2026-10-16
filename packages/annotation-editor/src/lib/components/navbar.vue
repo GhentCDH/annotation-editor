@@ -1,13 +1,7 @@
 <template>
   <div class="flex gap-1 py-1">
-    <template
-      v-for="item in actions"
-      :key="item.label"
-    >
-      <div
-        v-if="item.children?.length"
-        class="dropdown"
-      >
+    <template v-for="item in actions" :key="item.label">
+      <div v-if="item.children?.length" class="dropdown">
         <div
           tabindex="0"
           role="button"
@@ -15,10 +9,7 @@
           :class="{ 'btn-disabled': item.disabled }"
           :data-tip="item.label"
         >
-          <Icon
-            :icon="item.icon"
-            size="sm"
-          />
+          <Icon :icon="item.icon" size="sm" />
         </div>
         <ul
           tabindex="0"
@@ -34,21 +25,14 @@
         </ul>
       </div>
 
-      <div
-        v-else
-        class="tooltip tooltip-bottom"
-        :data-tip="item.label"
-      >
+      <div v-else class="tooltip tooltip-bottom" :data-tip="item.label">
         <button
           class="btn btn-sm btn-ghost"
           :class="{ 'btn-disabled': item.disabled }"
           :disabled="item.disabled"
           @click="onAction(item)"
         >
-          <Icon
-            :icon="item.icon"
-            size="sm"
-          />
+          <Icon :icon="item.icon" size="sm" />
         </button>
       </div>
     </template>
@@ -56,8 +40,12 @@
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@ghentcdh/ui';
-import { type NavbarAction, type NavbarChildAction, NavbarProperties } from './navbar.properties';
+import { Icon } from '@ghentcdh/crouton-vue';
+import {
+  type NavbarAction,
+  type NavbarChildAction,
+  NavbarProperties,
+} from './navbar.properties';
 
 defineProps(NavbarProperties);
 

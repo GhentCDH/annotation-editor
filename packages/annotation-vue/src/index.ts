@@ -1,4 +1,7 @@
-export { TransformAnnotationAdapter } from '@ghentcdh/annotation-ui';
+export {
+  TransformAnnotationAdapter,
+  W3cTransformAnnotationAdapter,
+} from '@ghentcdh/annotation-ui';
 
 export { AnnotationDefinitionService } from './lib/definitions/annotation-definition.service';
 export {

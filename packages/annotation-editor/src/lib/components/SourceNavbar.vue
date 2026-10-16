@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconEnum } from '@ghentcdh/ui';
+import { IconEnum } from '@ghentcdh/crouton-vue';
 import { computed } from 'vue';
 import Navbar from './navbar.vue';
 import {

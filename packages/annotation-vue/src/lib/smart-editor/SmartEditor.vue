@@ -1,13 +1,9 @@
 <template>
-  <Drawer
-    class="_h-full"
-    :width-left="300"
-  >
+  <Drawer class="_h-full" :width-left="300">
     <Loading
       :loading="store.loading || !props.loader.definitionsLoaded.value"
     />
     <AnnotationEditor
-      v-if="props.loader.definitionsLoaded.value"
       :readonly="readonly"
       :configuration="definitionsState.configuration"
       :sources="store.sources"
@@ -43,7 +39,7 @@ import { AnnotationEditor } from '@ghentcdh/annotation-editor';
 import { onMounted, ref, watch } from 'vue';
 import type { W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { useRoute, useRouter } from 'vue-router';
-import { Drawer, Loading } from '@ghentcdh/ui';
+import { Drawer, Loading } from '@ghentcdh/crouton-vue';
 import { provideEditorStore } from './editorStore';
 import { SmartEditorProperties } from './SmartEditor.properties';
 import { useAnnotationDefinitions } from '../definitions/useAnnotationDefinitions';

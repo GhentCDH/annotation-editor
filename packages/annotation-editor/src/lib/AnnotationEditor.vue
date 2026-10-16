@@ -11,17 +11,14 @@
       :title="source.content.label ?? ''"
       :style="paneStyle(source)"
     >
-      <SourceEdit
-        :source="source"
-        :readonly="readonly"
-      />
+      <SourceEdit :source="source" />
     </Collapse>
     <AnnotationModal />
   </div>
 </template>
 <script lang="ts" setup>
 import { computed, onMounted, useTemplateRef } from 'vue';
-import { Collapse } from '@ghentcdh/ui';
+import { Collapse } from '@ghentcdh/crouton-vue';
 import {
   buildGridStyle,
   getPaneArea,

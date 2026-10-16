@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { computed, type PropType } from 'vue';
-import { Filter } from '@ghentcdh/ui';
+import { Filter } from '@ghentcdh/crouton-vue';
 import { useAnnotationDefinitions } from '../definitions/useAnnotationDefinitions';
 
 const annotationDefinitions = useAnnotationDefinitions();

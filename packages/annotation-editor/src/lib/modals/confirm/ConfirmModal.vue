@@ -1,18 +1,10 @@
 <template>
-  <Modal
-    :modal-title="title"
-    :open="true"
-    :disable-close="true"
-  >
+  <Modal :modal-title="title" :open="true" :disable-close="true">
     <template #content>
       {{ message }}
     </template>
     <template #actions>
-      <Btn
-        :color="('secondary' as any)"
-        :outline="true"
-        @click="closeMe(false)"
-      >
+      <Btn :color="'secondary' as any" :outline="true" @click="closeMe(false)">
         {{ cancelLabel }}
       </Btn>
       <Btn @click="closeMe(true)">
@@ -23,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { Btn, Modal } from '@ghentcdh/ui';
+import { Btn, Modal } from '@ghentcdh/crouton-vue';
 import { ConfirmEmits, ConfirmProperties } from './confirm.properties';
 
 defineProps(ConfirmProperties);
