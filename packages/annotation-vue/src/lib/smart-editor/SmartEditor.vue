@@ -26,6 +26,7 @@
         <AnnotationFilter
           v-model="store.selectedAnnotationTypes"
           :count="store.annotationsGroupedByPurpose"
+          v-bind="itemClickBind"
         />
 
         <slot name="annotation-menu" />
@@ -36,7 +37,7 @@
 
 <script lang="ts" setup>
 import { AnnotationEditor } from '@ghentcdh/annotation-editor';
-import { onMounted, ref, watch } from 'vue';
+import { getCurrentInstance, onMounted, ref, watch } from 'vue';
 import type { W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { useRoute, useRouter } from 'vue-router';
 import { Drawer, Loading } from '@ghentcdh/crouton-vue';
@@ -46,6 +47,9 @@ import { useAnnotationDefinitions } from '../definitions/useAnnotationDefinition
 import AnnotationFilter from '../filter/AnnotationFilter.vue';
 
 const props = defineProps(SmartEditorProperties);
+const emit = defineEmits(['item-click']);
+const hasItemClick = !!getCurrentInstance()?.vnode.props?.['onItemClick'];
+const itemClickBind = hasItemClick ? { onItemClick: (item: Record<string, any>) => emit('item-click', item) } : {};
 
 const selectedAnnotationId = ref<string | undefined>(undefined);
 const selectedAnnotationAction = ref<string | undefined>(undefined);
