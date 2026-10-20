@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@ghentcdh/annotated-text": "^1.1.0",
+    "@heroicons/vue": "^2.2.0",
     "axios": "^1.19.0",
     "@ghentcdh/crouton-core": "0.0.1-alpha.85",
     "lodash-es": "4.18.1",

@@ -55,3 +55,4 @@ _tmp**
 _tmp_*
 .pnpm-store
 docs/.vuepress/public/schema/
+plans
