@@ -1,12 +1,12 @@
-import { type Selector, type SourceModel } from '@ghentcdh/annotation-core';
+import { type SourceModel } from '@ghentcdh/annotation-core';
 import { w3cAnnotation } from '@ghentcdh/w3c-utils';
 import { type W3CSpecificResource } from '@ghentcdh/w3c-utils/lib/annotation/annotation.schema';
-import { type EditorAnnotation } from '@ghentcdh/annotation-ui';
+import { type EditorAnnotation, type Selector } from '@ghentcdh/annotation-ui';
 
 const createSelector = (selector: W3CSpecificResource): Selector => {
-  let result = { source: selector.source } as Selector;
+  let result = { source: selector.source } as unknown as Selector;
 
-  for (const s of selector.selector) {
+  for (const s of (selector.selector as any[])) {
     result = { ...result, ...s, type: undefined };
   }
 
@@ -22,7 +22,7 @@ export const getTextSelector = ({
   parent?: EditorAnnotation;
   annotation: EditorAnnotation;
 }) => {
-  const current = w3cAnnotation(annotation);
+  const current = w3cAnnotation(annotation as any);
   const specifyResourceSelector = current.getSpecificResourceTargets(
     source.uri,
   )[0];
@@ -33,7 +33,7 @@ export const getTextSelector = ({
 
   if (!parent) return [sourceSelector];
 
-  const parentTextSelector = w3cAnnotation(parent).getTextPositionSelector(
+  const parentTextSelector = w3cAnnotation(parent as any).getTextPositionSelector(
     source.uri,
   )[0];
   const length = sourceSelector.end - sourceSelector.start;

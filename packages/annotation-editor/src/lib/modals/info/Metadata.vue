@@ -4,7 +4,7 @@
     :id="`annotation-selection-modal`"
     :data="data"
     :readonly="true"
-    :views="views"
+    :views="(views as any)"
   />
 </template>
 <script setup lang="ts">
@@ -18,5 +18,5 @@ const properties = defineProps<{
 }>();
 
 const views = computed(() => properties.definition?.schemas);
-const show = computed(() => views.value?.view?.ui?.elements?.length > 0);
+const show = computed(() => (views.value?.['view']?.['ui']?.['elements'] as any[])?.length > 0);
 </script>

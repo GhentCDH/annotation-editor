@@ -10,7 +10,7 @@
       <CroutonForm
         layout="rows"
         :data="metadata"
-        :views="definition.schemas"
+        :views="(definition.schemas as any)"
         :format-before-save="formatBeforeSave"
         form-max-width="w-max max-w-lg"
         @save="save"

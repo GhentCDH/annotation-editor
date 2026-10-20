@@ -16,7 +16,7 @@
     "@ghentcdh/annotated-text": "^1.1.0",
     "@ghentcdh/annotation-core": "workspace:*",
     "@ghentcdh/annotation-ui": "workspace:*",
-    "@ghentcdh/crouton-vue": "0.0.1-alpha.82",
+    "@ghentcdh/crouton-vue": "0.0.1-alpha.85",
     "@ghentcdh/w3c-utils": "^1.1.0",
     "@jsonforms/core": "^3.7.0",
     "@nestjs/common": "^12.0.1",
@@ -65,7 +65,7 @@
     "zod": "^4.4.3"
   },
   "dependencies": {
-    "@ghentcdh/crouton-core": "0.0.1-alpha.82",
+    "@ghentcdh/crouton-core": "0.0.1-alpha.85",
     "@ghentcdh/crouton-cli": "0.0.1-alpha.81",
     "@tiptap/markdown": "^3.27.1",
     "@tiptap/starter-kit": "^3.27.1",

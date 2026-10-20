@@ -142,7 +142,7 @@ const deleteAnnotation = (
 
           emits('delete:annotation', annotation);
         })
-        .catch((error) => {
+        .catch((error: unknown) => {
           console.error('Something went wrong while deleting annotation');
           console.error(error);
 

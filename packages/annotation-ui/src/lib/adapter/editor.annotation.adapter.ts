@@ -100,10 +100,15 @@ export class AnnotationEditorAnnotationAdapter extends AnnotationAdapter<
 > {
   constructor(params: Params) {
     super(params);
+    this.uuid = Math.round(Math.random() * 100);
+
+    this.setParams(params);
   }
 
   name = 'AnnotationEditorAnnotationAdapter';
+  private uuid;
   private sourceUri = '';
+
   override setParams(params: Params) {
     this.sourceUri = params.sourceModel?.uri ?? this.sourceUri;
     super.setParams(params);

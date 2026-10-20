@@ -24,7 +24,7 @@ const createEditState = <ANNOTATION extends BaseAnnotation>(
   const sourceUris = ref<string[] | null>(null);
   const sources = ref<SourceModel[]>([]);
 
-  const annotations = ref([]);
+  const annotations = ref<EditorAnnotation[]>([]);
   const loadingSources = ref(true);
   const loadingAnnotations = ref(true);
 

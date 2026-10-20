@@ -41,7 +41,7 @@ export const editorAnnotationSchema: z.ZodType<_EditorAnnotation> = z
       definitionUri: z.string(),
     }),
   )
-  .transform((d) => {
+  .transform((d): _EditorAnnotation => {
     const getSelector = (sourceUri: string) => {
       return d.selectors?.find((s) => s.uri === sourceUri);
     };
@@ -62,6 +62,7 @@ export const editorAnnotationSchema: z.ZodType<_EditorAnnotation> = z
 
     return {
       ...d,
+      id: d.id,
       definitionUri: d.definitionUri,
       getSelector,
       setSelector,

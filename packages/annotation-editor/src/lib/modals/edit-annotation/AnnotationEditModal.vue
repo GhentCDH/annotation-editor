@@ -12,19 +12,26 @@
         v-if="definition"
         layout="rows"
         :data="metadata"
-        :views="definition.schemas"
+        :views="(definition.schemas as any)"
         :format-before-save="formatBeforeSave"
         form-max-width="w-max max-w-lg form-scroll min-w-[1/2]"
-        :save-id="annotation?.id"
+        :save-id="annotation?.id !== undefined ? String(annotation!.id) : undefined"
         @save="save"
         @on-save-success="save"
         @cancel="cancel"
       >
         <template #content-before>
           <div class="flex-grow before-scroll">
-            <Collapse :title="label.selectLabel" :scrollable="true">
+            <Collapse
+              :title="label.selectLabel"
+              :scrollable="true"
+            >
               <div :id="editId" />
-              <Btn :outline="true" class="mt-2" @click="selectAll">
+              <Btn
+                :outline="true"
+                class="mt-2"
+                @click="selectAll"
+              >
                 Select all text
               </Btn>
             </Collapse>
