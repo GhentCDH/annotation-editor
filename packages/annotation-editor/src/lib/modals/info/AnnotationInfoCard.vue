@@ -4,9 +4,10 @@
     class="card bg-base-100 shadow-xl absolute z-50"
     :style="{
       left: `${adjustedX}px`,
-      top: `${properties.position.y}px`,
-      maxHeight: `calc(100vh - ${properties.position.y}px - 16px)`,
+      top: `${adjustedY}px`,
+      maxHeight: `calc(100vh - ${adjustedY}px - 16px)`,
       minHeight: '100px',
+      minWidth: '320px',
     }"
   >
     <div class="card-body p-2 overflow-y-auto">
@@ -40,6 +41,7 @@ import { default as Metadata } from './Metadata.vue';
 import { useEditorState } from '../../composables/useEditorState';
 import Navbar from '../../components/navbar.vue';
 import { type NavbarAction } from '../../components/navbar.properties';
+import { getAnnotationElementCenter } from '../../utils/mouse-events';
 
 const properties = defineProps(AnnotationInfoCardProperties);
 
@@ -54,18 +56,38 @@ const metadata = computed(() => properties.annotation?.metadata);
 // Outside-click handling (inlined from AnnotationInfoCardBase)
 const cardRef = ref<HTMLElement>();
 const adjustedX = ref(properties.position.x);
+const adjustedY = ref(properties.position.y);
 
-const clampX = async () => {
+const clampX = (x: number, parent: HTMLElement) => {
+  const margin = 8;
+  const maxLeft = parent.clientWidth - (cardRef.value?.offsetWidth ?? 0) - margin;
+  adjustedX.value = Math.max(margin, Math.min(x, maxLeft));
+};
+
+const applyPosition = async (x: number, y: number) => {
   await nextTick();
   if (!cardRef.value) return;
   const parent = cardRef.value.offsetParent as HTMLElement;
   if (!parent) return;
-  const margin = 8;
-  const maxLeft = parent.clientWidth - cardRef.value.offsetWidth - margin;
-  adjustedX.value = Math.max(margin, Math.min(properties.position.x, maxLeft));
+  adjustedY.value = y;
+  clampX(x, parent);
 };
 
-watch(() => properties.position, clampX, { immediate: true });
+const recalcPosition = async () => {
+  if (!cardRef.value) return;
+  const parent = cardRef.value.offsetParent as HTMLElement;
+  if (!parent) return;
+  const pos = getAnnotationElementCenter(parent, String(properties.annotation.id));
+  if (pos) {
+    await applyPosition(pos.x, pos.y);
+  }
+};
+
+watch(
+  () => properties.position,
+  (pos) => applyPosition(pos.x, pos.y),
+  { immediate: true },
+);
 const closeNextClick = ref(true);
 
 watch(
@@ -75,8 +97,14 @@ watch(
   },
 );
 
-onMounted(() => document.addEventListener('click', handleOutsideClick));
-onUnmounted(() => document.removeEventListener('click', handleOutsideClick));
+onMounted(() => {
+  document.addEventListener('click', handleOutsideClick);
+  window.addEventListener('resize', recalcPosition);
+});
+onUnmounted(() => {
+  document.removeEventListener('click', handleOutsideClick);
+  window.removeEventListener('resize', recalcPosition);
+});
 
 const skipNextClose = () => {
   closeNextClick.value = true;
