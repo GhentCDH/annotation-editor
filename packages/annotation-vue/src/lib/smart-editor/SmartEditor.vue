@@ -47,9 +47,9 @@ import { useAnnotationDefinitions } from '../definitions/useAnnotationDefinition
 import AnnotationFilter from '../filter/AnnotationFilter.vue';
 
 const props = defineProps(SmartEditorProperties);
-const emit = defineEmits(['item-click']);
-const hasItemClick = !!getCurrentInstance()?.vnode.props?.['onItemClick'];
-const itemClickBind = hasItemClick ? { onItemClick: (item: Record<string, any>) => emit('item-click', item) } : {};
+const emit = defineEmits(['annotationtype-click']);
+const hasItemClick = !!getCurrentInstance()?.vnode.props?.['onAnnotationtypeClick'];
+const itemClickBind = hasItemClick ? { onAnnotationtypeClick: (item: Record<string, any>) => emit('annotationtype-click', item) } : {};
 
 const selectedAnnotationId = ref<string | undefined>(undefined);
 const selectedAnnotationAction = ref<string | undefined>(undefined);

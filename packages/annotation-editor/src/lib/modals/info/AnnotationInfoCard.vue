@@ -3,7 +3,7 @@
     ref="cardRef"
     class="card bg-base-100 shadow-xl absolute z-50"
     :style="{
-      left: `${properties.position.x}px`,
+      left: `${adjustedX}px`,
       top: `${properties.position.y}px`,
       maxHeight: `calc(100vh - ${properties.position.y}px - 16px)`,
       minHeight: '100px',
@@ -33,7 +33,7 @@
 <script lang="ts" setup>
 import { Alert, IconEnum } from '@ghentcdh/crouton-vue';
 import { type UIAnnotationDefinition } from '@ghentcdh/annotation-ui';
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { AnnotationInfoCardProperties } from './AnnotationInfoCard.properties';
 import LinksDetail from './LinksDetail.vue';
 import { default as Metadata } from './Metadata.vue';
@@ -53,6 +53,19 @@ const metadata = computed(() => properties.annotation?.metadata);
 
 // Outside-click handling (inlined from AnnotationInfoCardBase)
 const cardRef = ref<HTMLElement>();
+const adjustedX = ref(properties.position.x);
+
+const clampX = async () => {
+  await nextTick();
+  if (!cardRef.value) return;
+  const parent = cardRef.value.offsetParent as HTMLElement;
+  if (!parent) return;
+  const margin = 8;
+  const maxLeft = parent.clientWidth - cardRef.value.offsetWidth - margin;
+  adjustedX.value = Math.max(margin, Math.min(properties.position.x, maxLeft));
+};
+
+watch(() => properties.position, clampX, { immediate: true });
 const closeNextClick = ref(true);
 
 watch(

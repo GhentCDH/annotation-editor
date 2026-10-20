@@ -53,7 +53,7 @@
           v-if="hasItemClick"
           type="button"
           class="btn btn-ghost btn-xs btn-circle shrink-0"
-          @click.prevent.stop="emit('item-click', item)"
+          @click.prevent.stop="emit('annotationtype-click', item)"
         >
           <Icon
             :icon="IconEnum.ChevronRight"
@@ -70,7 +70,7 @@ import { computed, getCurrentInstance, type PropType } from 'vue';
 import { Collapse, Icon, IconEnum } from '@ghentcdh/crouton-vue';
 import { useAnnotationDefinitions } from '../definitions/useAnnotationDefinitions';
 
-const emit = defineEmits(['update:modelValue', 'item-click']);
+const emit = defineEmits(['update:modelValue', 'annotationtype-click']);
 const model = defineModel<string[]>({ default: () => [] });
 const props = defineProps({
   count: {
@@ -80,7 +80,7 @@ const props = defineProps({
 });
 
 const annotationDefinitions = useAnnotationDefinitions();
-const hasItemClick = !!getCurrentInstance()?.vnode.props?.['onItemClick'];
+const hasItemClick = !!getCurrentInstance()?.vnode.props?.['onAnnotationtypeClick'];
 
 const items = computed(() =>
   annotationDefinitions.definitions.map((def) => ({
