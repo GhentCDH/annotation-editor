@@ -35,31 +35,29 @@
           type="checkbox"
           class="checkbox checkbox-sm"
           :checked="isSelected(item.id)"
-          @change="toggleItem(item.id, ($event.target as HTMLInputElement).checked)"
-        >
+          @change="
+            toggleItem(item.id, ($event.target as HTMLInputElement).checked)
+          "
+        />
         <span
           v-if="item.color"
           class="w-3 h-3 rounded-full shrink-0 ring-1 ring-black/10"
           :style="{ backgroundColor: item.color }"
         />
-        <span class="text-sm flex-1 select-none break-words min-w-0">{{ item.label }}</span>
-        <span
-          v-if="item.count > 0"
-          class="badge badge-sm badge-ghost"
-        >
+        <span class="text-sm flex-1 select-none break-words min-w-0">{{
+          item.label
+        }}</span>
+        <span v-if="item.count > 0" class="badge badge-sm badge-ghost">
           {{ item.count }}
         </span>
-        <button
+        <Btn
           v-if="hasItemClick"
-          type="button"
-          class="btn btn-ghost btn-xs btn-circle shrink-0"
+          :icon="ArrowTopRightOnSquareIcon"
+          size="xs"
+          color="ghost"
           @click.prevent.stop="emit('annotationtype-click', item)"
         >
-          <Icon
-            :icon="IconEnum.ChevronRight"
-            class="w-3 h-3"
-          />
-        </button>
+        </Btn>
       </label>
     </div>
   </Collapse>
@@ -67,8 +65,9 @@
 
 <script setup lang="ts">
 import { computed, getCurrentInstance, type PropType } from 'vue';
-import { Collapse, Icon, IconEnum } from '@ghentcdh/crouton-vue';
+import { Btn, Collapse } from '@ghentcdh/crouton-vue';
 import { useAnnotationDefinitions } from '../definitions/useAnnotationDefinitions';
+import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/24/solid';
 
 const emit = defineEmits(['update:modelValue', 'annotationtype-click']);
 const model = defineModel<string[]>({ default: () => [] });
@@ -80,7 +79,8 @@ const props = defineProps({
 });
 
 const annotationDefinitions = useAnnotationDefinitions();
-const hasItemClick = !!getCurrentInstance()?.vnode.props?.['onAnnotationtypeClick'];
+const hasItemClick =
+  !!getCurrentInstance()?.vnode.props?.['onAnnotationtypeClick'];
 
 const items = computed(() =>
   annotationDefinitions.definitions.map((def) => ({
@@ -100,14 +100,21 @@ const selectedLabel = computed(() => {
   return `${count}`;
 });
 
-const selectAll = () => emit('update:modelValue', items.value.map((i) => i.id));
+const selectAll = () =>
+  emit(
+    'update:modelValue',
+    items.value.map((i) => i.id),
+  );
 const selectNone = () => emit('update:modelValue', []);
 
 const toggleItem = (id: string, checked: boolean) => {
   if (checked) {
     emit('update:modelValue', [...model.value, id]);
   } else {
-    emit('update:modelValue', model.value.filter((v) => v !== id));
+    emit(
+      'update:modelValue',
+      model.value.filter((v) => v !== id),
+    );
   }
 };
 </script>
