@@ -1,5 +1,5 @@
 import type { ExtractPublicPropTypes, PropType } from 'vue';
-import type { IconEnum } from '@ghentcdh/ui';
+import type { IconEnum } from '@ghentcdh/crouton-vue';
 
 export type NavbarChildAction = {
   label: string;

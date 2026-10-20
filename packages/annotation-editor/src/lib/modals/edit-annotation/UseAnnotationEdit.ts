@@ -15,15 +15,17 @@ export const UseAnnotationEdit = (
   props: AnnotationEditModal,
   emits: EmitFn<typeof AnnotationEditEmits>,
 ) => {
-  let selector: Selector | null = props.annotation?.getSelector?.(
-    props.source.uri,
-  );
+  // annotation is required at runtime (modal is always shown with one); ref is
+  // declared optional so Vue doesn't enforce the prop on the component boundary
+  const annotation = props.annotation!;
+
+  let selector: Selector | undefined = annotation.getSelector(props.source.uri);
 
   const { getDefinition, findAnnotation } = useEditorState();
-  const definition = getDefinition(props.annotation.definitionUri);
-  const metadataEdit = useMetadataEdit(props.annotation, definition);
-  const parent = props.annotation.parentId
-    ? findAnnotation(props.annotation.parentId)
+  const definition = getDefinition(annotation.definitionUri);
+  const metadataEdit = useMetadataEdit(annotation, definition);
+  const parent = annotation.parentId
+    ? findAnnotation(annotation.parentId)
     : null;
 
   const cancel = () => {
@@ -42,8 +44,8 @@ export const UseAnnotationEdit = (
     }
 
     metadataEdit.message.value = { status: 'saving' };
-    const originalAnnotation = props.annotation.id
-      ? props.annotation
+    const originalAnnotation = annotation.id
+      ? annotation
       : editorAnnotationSchema.parse({
           id: 'NEW_ANNOTATION',
           metadata,
@@ -61,6 +63,7 @@ export const UseAnnotationEdit = (
 
     if (parent) {
       const select = parent.getSelector(props.source.uri);
+      if (!select) return metadataEdit.save(cloned, emits);
       const start = selector.start - select.start;
       const length = selector.end - selector.start;
       const parentSelector = SelectorSchema.parse({

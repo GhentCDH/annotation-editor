@@ -195,14 +195,14 @@
                     Edit form
                   </div>
                   <CroutonForm
-                    :views="def.schemas"
+                    :views="(def.schemas ?? {}) as any"
                     :data="{}"
                   />
                   <div class="font-bold mt-2">
                     Readonly form
                   </div>
                   <CroutonForm
-                    :views="def.schemas"
+                    :views="(def.schemas ?? {}) as any"
                     :data="{}"
                     :readonly="true"
                   />

@@ -56,7 +56,6 @@ export const useProvideEditorState = (
   props: AnnotationEditorProps,
   emits: AnnotationEditorEmitsFn,
   containerRef: TemplateRef<HTMLElement>,
-  { readonly } = { readonly: false },
 ) => {
   const allDefinitions = computed(() => props.annotationDefinitions);
   const definitionsMap = computed(() => {
@@ -87,7 +86,7 @@ export const useProvideEditorState = (
     selectedAnnotation: null,
     disableEdits: false,
     info: null,
-    readonly,
+    readonly: props.readonly ?? false,
     show: () => showEditorState(),
     reset: () => resetEditorState(),
     format:
@@ -122,7 +121,7 @@ export const useProvideEditorState = (
 
     const sourceUri = annotation.selectors?.[0]?.uri;
 
-    if (!sourceUri) return { annotation };
+    if (!sourceUri) return { annotation, source: undefined, definition: getDefinition(annotation.definitionUri) };
 
     const source = (props.sources ?? []).find((s) => s.uri === sourceUri);
     return {
@@ -146,7 +145,7 @@ export const useProvideEditorState = (
       () => props.annotations,
     ],
     ([id, action]) =>
-      selectAnnotationById(containerRef, id, action, selectByIdCtx),
+      selectAnnotationById(containerRef, id !== undefined ? String(id) : undefined, action, selectByIdCtx),
     { immediate: true },
   );
 

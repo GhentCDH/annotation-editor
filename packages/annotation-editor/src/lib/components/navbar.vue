@@ -56,8 +56,12 @@
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@ghentcdh/ui';
-import { type NavbarAction, type NavbarChildAction, NavbarProperties } from './navbar.properties';
+import { Icon } from '@ghentcdh/crouton-vue';
+import {
+  type NavbarAction,
+  type NavbarChildAction,
+  NavbarProperties,
+} from './navbar.properties';
 
 defineProps(NavbarProperties);
 

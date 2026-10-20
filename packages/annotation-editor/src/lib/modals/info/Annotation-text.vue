@@ -29,7 +29,7 @@
 import { type AnnotatedText } from '@ghentcdh/annotated-text';
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { v4 as uuidv4 } from 'uuid';
-import { Collapse } from '@ghentcdh/ui';
+import { Collapse } from '@ghentcdh/crouton-vue';
 import { type EditorAnnotation } from '@ghentcdh/annotation-ui';
 import { useEditorState } from '../../composables/useEditorState';
 

@@ -25,7 +25,7 @@ export const useMetadataEdit = (
     selector?: Selector;
   }) => {
     hasChanged.value = true;
-    const transformed = editorState.transformMetadata(_metadata, selector);
+    const transformed = editorState.transformMetadata(_metadata, selector!);
     metadata.value = structuredClone(toRaw(transformed));
     return metadata.value;
   };

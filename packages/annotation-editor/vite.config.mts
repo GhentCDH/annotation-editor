@@ -50,7 +50,6 @@ export default defineConfig(() => ({
       external: [
         '@ghentcdh/annotated-text',
         '@ghentcdh/crouton-vue',
-        '@ghentcdh/ui',
         '@ghentcdh/w3c-utils',
         '@jsonforms/core',
         'uuid',

@@ -2,32 +2,32 @@ import {
   type EditorAnnotation,
   type UIAnnotationDefinition,
 } from '@ghentcdh/annotation-ui';
-import { type FormMessageProps } from '@ghentcdh/crouton-vue';
-import { NotificationService } from '@ghentcdh/ui';
+import { NotificationService } from '@ghentcdh/crouton-vue';
 import { type EmitFn, ref } from 'vue';
 import { useEditorState } from './useEditorState';
+import { type AnnotationEditModalEvent } from '../modals/edit-annotation/AnnotationEditModal.properties';
 
 export const AnnotationMetadataEditEmits = {
-  close: (event: { annotation: any } | null) => true,
+  close: (event: AnnotationEditModalEvent | null) => true,
 };
 export const useAnnotationResource = (
   annotation: EditorAnnotation,
   definition: UIAnnotationDefinition,
 ) => {
-  const message = ref<FormMessageProps>({ status: 'idle' });
+  const message = ref<{ status: 'idle' | 'saving' | 'saved' | 'pending' | 'error'; message?: string }>({ status: 'idle' });
   const resource = definition.resource;
   const { editorState } = useEditorState();
 
   const _save = async (update: EditorAnnotation) => {
     const dataToSave = editorState.format(update, !annotation.id);
     if (annotation.id) {
-      return resource.save(annotation.id, dataToSave).then((response) => {
+      return resource.save(String(annotation.id), dataToSave).then((response: unknown) => {
         message.value = { status: 'saved' };
         NotificationService.success('Annotation saved successfully.');
         return response;
       });
     } else {
-      return resource.create(dataToSave).then((response) => {
+      return resource.create(dataToSave).then((response: unknown) => {
         message.value = { status: 'saved' };
         NotificationService.success('Annotation saved successfully.');
         return response;
@@ -46,6 +46,8 @@ export const useAnnotationResource = (
       .then((annotation) => {
         emits('close', {
           annotation,
+          rawData: annotation,
+          selectors: update.selectors,
         });
       })
       .catch((err) => {

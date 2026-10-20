@@ -1,13 +1,9 @@
 <template>
-  <Drawer
-    class="_h-full"
-    :width-left="300"
-  >
+  <Drawer class="_h-full" :width-left="300">
     <Loading
       :loading="store.loading || !props.loader.definitionsLoaded.value"
     />
     <AnnotationEditor
-      v-if="props.loader.definitionsLoaded.value"
       :readonly="readonly"
       :configuration="definitionsState.configuration"
       :sources="store.sources"
@@ -43,7 +39,7 @@ import { AnnotationEditor } from '@ghentcdh/annotation-editor';
 import { onMounted, ref, watch } from 'vue';
 import type { W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { useRoute, useRouter } from 'vue-router';
-import { Drawer, Loading } from '@ghentcdh/ui';
+import { Drawer, Loading } from '@ghentcdh/crouton-vue';
 import { provideEditorStore } from './editorStore';
 import { SmartEditorProperties } from './SmartEditor.properties';
 import { useAnnotationDefinitions } from '../definitions/useAnnotationDefinitions';
@@ -75,21 +71,18 @@ watch(
   { immediate: true },
 );
 
-const selectAnnotation = (
-  annotation: W3CAnnotation | null,
-  action: string | null,
-) => {
+const selectAnnotation = (annotation: unknown, action: string | null) => {
   if (!props.watchQueryParams) return;
   const query = { ...route.query };
   if (annotation) {
-    query.annotationId = annotation.id;
+    query['annotationId'] = (annotation as W3CAnnotation).id;
   } else {
-    delete query.annotationId;
+    delete query['annotationId'];
   }
   if (action) {
-    query.action = action;
+    query['action'] = action;
   } else {
-    delete query.action;
+    delete query['action'];
   }
   router.replace({ query });
 };

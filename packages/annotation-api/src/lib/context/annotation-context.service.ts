@@ -16,7 +16,7 @@ export class AnnotationContextService {
 
   constructor(
     @Inject(ResourceConfigRegistry)
-    private readonly configRegistry: ResourceConfigRegistry<AnnotationResource>,
+    private readonly configRegistry: ResourceConfigRegistry<any>,
     @Inject(ANNOTATION_DEF_CONFIG_TOKEN)
     private readonly annotationDefConfig: AnnotationDefConfig,
   ) {}
@@ -24,7 +24,7 @@ export class AnnotationContextService {
   async reloadAll() {
     this.contextConfigMap.clear();
 
-    this.configRegistry.findAll().forEach((resource: AnnotationResource) => {
+    (await this.configRegistry.getAll()).forEach((resource: AnnotationResource) => {
       const context = createAnnotationContext(
         this.annotationDefConfig,
         resource,

@@ -10,8 +10,8 @@ import {
   type AnnotationJsonResource,
   type AnnotationResource,
   type AnnotationResource as CoreAnnotationDefinition,
-  type KeyLabel,
 } from '@ghentcdh/annotation-core';
+import { type KeyLabel } from '@ghentcdh/annotation-ui';
 import { createHighlightStyle } from '@ghentcdh/annotated-text';
 import { type AxiosInstance } from 'axios';
 import {
@@ -37,7 +37,7 @@ export type AnnotationLoadError = {
 };
 
 export type AnnotationDefinitionsState = {
-  configuration: AnnotationDefConfig;
+  configuration: AnnotationDefConfig | undefined;
   definitions: UIAnnotationDefinition[];
   definitionsMap: Record<string, UIAnnotationDefinition>;
   loadErrors: AnnotationLoadError[];
@@ -56,7 +56,7 @@ export type AnnotationDefinitionsState = {
 
 export type ProvideAnnotationDefinitionsOptions = {
   api?: AxiosInstance;
-  config: AnnotationDefConfig;
+  config?: AnnotationDefConfig;
   resourceFolder?: GlobModules;
   factory?: (id: string) => unknown;
   createHighlightStyle?: typeof createHighlightStyle;

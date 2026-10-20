@@ -17,7 +17,7 @@ export const AnnotationEditorProperties = {
   },
   // TODO this should become only setmetadata etc functions
   annotationTransformer: {
-    type: Object as PropType<TransformAnnotationAdapter<object>>,
+    type: Object as PropType<TransformAnnotationAdapter<any>>,
     required: true as const,
     default: new W3cTransformAnnotationAdapter(),
   },

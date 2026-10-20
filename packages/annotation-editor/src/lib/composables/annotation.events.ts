@@ -5,7 +5,7 @@ import {
   type SourceModel,
   type UIAnnotationDefinition,
 } from '@ghentcdh/annotation-ui';
-import { NotificationService } from '@ghentcdh/ui';
+import { NotificationService } from '@ghentcdh/crouton-vue';
 import { type EditorConfig, type EditorState_ } from './editorState';
 import { type AnnotationEditModalShow } from '../modals/edit-annotation/AnnotationEditModal.properties';
 import { type AnnotationEditorEmitsFn } from '../AnnotationEditor.properties';
@@ -142,7 +142,7 @@ const deleteAnnotation = (
 
           emits('delete:annotation', annotation);
         })
-        .catch((error) => {
+        .catch((error: unknown) => {
           console.error('Something went wrong while deleting annotation');
           console.error(error);
 

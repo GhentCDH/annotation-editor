@@ -79,9 +79,19 @@ export const buildAnnotationDefFromResourceJsonSafe = (
       extensions: { annotation: AnnotationConfigSchema },
     });
     if (!compiled) {
-      return { success: false, error: 'parseSchema returned null', raw, id: resource.id, name: resource.name };
+      return {
+        success: false,
+        error: 'parseSchema returned null',
+        raw,
+        id: resource.id,
+        name: resource.name,
+      };
     }
-    return { success: true, data: compiled as unknown as AnnotationResource, raw };
+    return {
+      success: true,
+      data: compiled as unknown as AnnotationResource,
+      raw,
+    };
   } catch (error) {
     const r = raw as AnnotationJsonResource | null;
     return {

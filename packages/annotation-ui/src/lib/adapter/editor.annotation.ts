@@ -24,6 +24,9 @@ export type _EditorAnnotation = {
   selectors: Array<Selector>;
   parentId?: AnnotationId;
   links: any[];
+  getSelector: (sourceUri: string) => Selector | undefined;
+  setSelector: (selector: Selector) => void;
+  clone: (annotation: Partial<_EditorAnnotation>) => _EditorAnnotation;
 };
 
 export const editorAnnotationSchema: z.ZodType<_EditorAnnotation> = z
@@ -38,7 +41,7 @@ export const editorAnnotationSchema: z.ZodType<_EditorAnnotation> = z
       definitionUri: z.string(),
     }),
   )
-  .transform((d) => {
+  .transform((d): _EditorAnnotation => {
     const getSelector = (sourceUri: string) => {
       return d.selectors?.find((s) => s.uri === sourceUri);
     };
@@ -59,6 +62,7 @@ export const editorAnnotationSchema: z.ZodType<_EditorAnnotation> = z
 
     return {
       ...d,
+      id: d.id,
       definitionUri: d.definitionUri,
       getSelector,
       setSelector,

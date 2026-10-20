@@ -12,7 +12,7 @@
   "dependencies": {
     "@ghentcdh/annotated-text": "^1.0.11",
     "@ghentcdh/w3c-utils": "^1.0.11",
-    "@ghentcdh/crouton-core": "0.0.1-alpha.75",
+    "@ghentcdh/crouton-core": "0.0.1-alpha.85",
     "zod": "^4.4.3"
   }
 }

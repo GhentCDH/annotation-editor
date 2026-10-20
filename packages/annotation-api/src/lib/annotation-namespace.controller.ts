@@ -11,7 +11,7 @@ import { SCHEMA_PREFIX } from './prefix';
 export class AnnotationNamespaceController {
   constructor(
     @Inject(ResourceConfigRegistry)
-    private readonly service: ResourceConfigRegistry<AnnotationJsonResource>,
+    private readonly service: ResourceConfigRegistry<any>,
     @Inject(ANNOTATION_DEF_CONFIG_TOKEN)
     private readonly annotationContextService: AnnotationContextService,
   ) {}

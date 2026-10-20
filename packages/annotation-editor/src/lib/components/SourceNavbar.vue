@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconEnum } from '@ghentcdh/ui';
+import { IconEnum } from '@ghentcdh/crouton-vue';
 import { computed } from 'vue';
 import Navbar from './navbar.vue';
 import {
@@ -14,7 +14,7 @@ import { useEditorState } from '../composables/useEditorState';
 
 const properties = defineProps(SourceNavbarProperties);
 const emits = defineEmits(SourceNavbarEmits);
-const { editorState, allDefinitions, getDefinition } = useEditorState();
+const { editorState, allDefinitions } = useEditorState();
 
 const actions = computed(() => {
   const rootTypes = allDefinitions.value
@@ -28,7 +28,7 @@ const actions = computed(() => {
       disabled: editorState.disableEdits,
       children: rootTypes.map((type) => ({
         action: () => {
-          createAnnotation(getDefinition(type.key));
+          createAnnotation(type.key);
         },
         label: type.label,
         disabled: properties.disabled,

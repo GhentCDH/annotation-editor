@@ -31,7 +31,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { Alert, IconEnum } from '@ghentcdh/ui';
+import { Alert, IconEnum } from '@ghentcdh/crouton-vue';
 import { type UIAnnotationDefinition } from '@ghentcdh/annotation-ui';
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { AnnotationInfoCardProperties } from './AnnotationInfoCard.properties';

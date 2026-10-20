@@ -1,5 +1,5 @@
 import { type EmitFn } from 'vue';
-import { editorAnnotationSchema } from '@ghentcdh/annotation-ui';
+import { editorAnnotationSchema, type EditorAnnotation } from '@ghentcdh/annotation-ui';
 import {
   type LinkAnnotationProps,
   type LinkEmits,
@@ -16,7 +16,9 @@ export const useAnnotationLink = (
   const definition = getDefinition(definitionUri);
 
   const metadata = {};
-  const annotations = props.annotation.links.map((l) => findAnnotation(l.uri));
+  const annotations = props.annotation.links
+    .map((l) => findAnnotation(l.uri))
+    .filter((a): a is EditorAnnotation => a !== null);
 
   const metadataEdit = useMetadataEdit(props.annotation, definition);
 

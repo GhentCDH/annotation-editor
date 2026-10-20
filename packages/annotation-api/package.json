@@ -13,6 +13,6 @@
     "@nestjs/common": "^12.0.0"
   },
   "dependencies": {
-    "@ghentcdh/crouton-api": "0.0.1-alpha.71"
+    "@ghentcdh/crouton-api": "0.0.1-alpha.85"
   }
 }

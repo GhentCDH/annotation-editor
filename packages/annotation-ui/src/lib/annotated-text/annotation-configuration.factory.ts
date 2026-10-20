@@ -33,6 +33,10 @@ export const groupById = <KEY extends keyof UIAnnotationDefinition>(
   );
 };
 
+export type UIAnnotationConfiguration = ReturnType<
+  typeof createAnnotationConfiguration
+>;
+
 export const createAnnotationConfiguration = (
   textAdapter: (() => TextAdapter) | undefined,
   defaultAannotationAdapterParams = {},

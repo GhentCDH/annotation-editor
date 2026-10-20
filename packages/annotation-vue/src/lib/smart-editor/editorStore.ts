@@ -8,7 +8,7 @@ import {
   watch,
 } from 'vue';
 import { type SourceModel } from '@ghentcdh/annotation-core';
-import { groupBy } from 'lodash-es';
+import { type BaseAnnotation } from '@ghentcdh/annotated-text';
 import {
   type EditorAnnotation,
   type TransformAnnotationAdapter,
@@ -16,15 +16,15 @@ import {
 import { type AnnotationEditorLoader } from './AnnotationEditorLoader';
 import { useAnnotationDefinitions } from '../definitions/useAnnotationDefinitions';
 
-const createEditState = <ANNOTATION>(
+const createEditState = <ANNOTATION extends BaseAnnotation>(
   annotationLoader: AnnotationEditorLoader<ANNOTATION>,
-  transformer: TransformAnnotationAdapter,
+  transformer: TransformAnnotationAdapter<ANNOTATION>,
 ) => {
   const definitions = useAnnotationDefinitions();
   const sourceUris = ref<string[] | null>(null);
   const sources = ref<SourceModel[]>([]);
 
-  const annotations = ref([]);
+  const annotations = ref<EditorAnnotation[]>([]);
   const loadingSources = ref(true);
   const loadingAnnotations = ref(true);
 
@@ -87,7 +87,10 @@ const createEditState = <ANNOTATION>(
   );
 
   const annotationsGroupedByPurpose = computed(() => {
-    return groupBy(annotations.value, (a) => a.definitionUri);
+    return (annotations.value as EditorAnnotation[]).reduce<Record<string, EditorAnnotation[]>>((acc, a) => {
+      (acc[a.definitionUri] ??= []).push(a);
+      return acc;
+    }, {});
   });
 
   const selectedAnnotationTypes = ref<string[]>([]);
@@ -126,7 +129,7 @@ export type TextState = ReturnType<typeof createEditState>;
 
 const TEXT_STATE_KEY: InjectionKey<TextState> = Symbol('TextState');
 
-export const provideEditorStore = <ANNOTATION>(
+export const provideEditorStore = <ANNOTATION extends BaseAnnotation>(
   annotationLoader: AnnotationEditorLoader<ANNOTATION>,
   transformer: TransformAnnotationAdapter<ANNOTATION>,
 ) => {

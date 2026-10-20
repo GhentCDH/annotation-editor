@@ -4,12 +4,12 @@
     :id="`annotation-selection-modal`"
     :data="data"
     :readonly="true"
-    :views="views"
+    :views="(views as any)"
   />
 </template>
 <script setup lang="ts">
 import { CroutonForm } from '@ghentcdh/crouton-vue';
-import { type UIAnnotationDefinition } from '@ghentcdh/annotation-core';
+import { type UIAnnotationDefinition } from '@ghentcdh/annotation-ui';
 import { computed } from 'vue';
 
 const properties = defineProps<{
@@ -18,5 +18,5 @@ const properties = defineProps<{
 }>();
 
 const views = computed(() => properties.definition?.schemas);
-const show = computed(() => views.value?.view?.ui?.elements?.length > 0);
+const show = computed(() => (views.value?.['view']?.['ui']?.['elements'] as any[])?.length > 0);
 </script>

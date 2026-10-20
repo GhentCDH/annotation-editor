@@ -18,7 +18,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { Btn, Color } from '@ghentcdh/ui';
+import { Btn, Color } from '@ghentcdh/crouton-vue';
 import { EditToastEmits, ToastProperties } from './toast.properties';
 
 // Create a new store each time we have a new text

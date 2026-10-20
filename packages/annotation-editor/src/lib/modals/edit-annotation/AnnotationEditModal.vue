@@ -12,10 +12,10 @@
         v-if="definition"
         layout="rows"
         :data="metadata"
-        :views="definition.schemas"
+        :views="(definition.schemas as any)"
         :format-before-save="formatBeforeSave"
         form-max-width="w-max max-w-lg form-scroll min-w-[1/2]"
-        :save-id="annotation?.id"
+        :save-id="annotation?.id !== undefined ? String(annotation!.id) : undefined"
         @save="save"
         @on-save-success="save"
         @cancel="cancel"
@@ -45,8 +45,13 @@
   </Modal>
 </template>
 <script lang="ts" setup>
-import { CroutonForm, FormMessage } from '@ghentcdh/crouton-vue';
-import { Btn, Collapse, Modal } from '@ghentcdh/ui';
+import {
+  Btn,
+  Collapse,
+  CroutonForm,
+  FormMessage,
+  Modal,
+} from '@ghentcdh/crouton-vue';
 import { computed, onMounted, onUnmounted } from 'vue';
 import {
   type UiAnnotatedText,
@@ -112,6 +117,7 @@ const selectFull = () => {
     id: 'NEW_ANNOTATION',
     metadata,
     selectors: [],
+    definitionUri: annotation?.definitionUri ?? '',
     ...annotation,
   };
 
@@ -122,7 +128,7 @@ const selectFull = () => {
       fullFlatText: props.source.content.text,
       startOffset: 0, // TODO implement it
     },
-    original,
+    original as any,
   );
 };
 
@@ -132,7 +138,8 @@ const selectAll = () => {
   annotatedTextConfig.annotatedText
     .setAnnotationAdapterParams({ create: false, edit: true })
     .setAnnotations([annotation]);
-  updateSelector(annotation.getSelector(props.source.uri));
+  const sel = annotation.getSelector(props.source.uri);
+  if (sel) updateSelector(sel);
 };
 
 onMounted(() => {
@@ -153,14 +160,16 @@ onMounted(() => {
     .setAnnotations(annotations)
     .setAnnotationAdapterParams({ edit: true, create: !props.annotation?.id })
     .on('annotation-create--end', ({ mouseEvent, event, data: _data }) => {
-      updateSelector(_data.annotation.getSelector(props.source.uri));
+      const s = _data.annotation.getSelector(props.source.uri);
+      if (s) updateSelector(s);
       annotatedTextConfig.annotatedText.setAnnotationAdapterParams({
         create: false,
         edit: true,
       });
     })
     .on('annotation-edit--end', ({ mouseEvent, event, data }) => {
-      updateSelector(data.annotation.getSelector(props.source.uri));
+      const s = data.annotation.getSelector(props.source.uri);
+      if (s) updateSelector(s);
     });
 
   const selector = parent?.getSelector(props.source.uri);
