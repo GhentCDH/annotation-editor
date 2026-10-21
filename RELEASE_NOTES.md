@@ -1,3 +1,27 @@
+## 0.0.1-alpha.26 (2026-10-21)
+
+### 🚀 Features
+
+- migrate from @ghentcdh/ui to @ghentcdh/crouton-vue and add loadFromConfigs support ([bbb314d7](https://github.com/GhentCDH/annotation-editor/commit/bbb314d7))
+- migrate to latest versions ([871c62d7](https://github.com/GhentCDH/annotation-editor/commit/871c62d7))
+- migrate to latest versions ([28a5b52f](https://github.com/GhentCDH/annotation-editor/commit/28a5b52f))
+- migrate to latest crouton ([61b16bb0](https://github.com/GhentCDH/annotation-editor/commit/61b16bb0))
+- migrate from @ghentcdh/ui to @ghentcdh/crouton-vue and add loadFromConfigs support ([4aba3e44](https://github.com/GhentCDH/annotation-editor/commit/4aba3e44))
+- annotation-card resize position ([ebf13fc3](https://github.com/GhentCDH/annotation-editor/commit/ebf13fc3))
+- **annotation-vue:** forward item-click from SmartEditor through AnnotationFilter ([f8a0fff2](https://github.com/GhentCDH/annotation-editor/commit/f8a0fff2))
+- **annotation-vue:** self-contained AnnotationFilter with item-click support ([fc9c0e2f](https://github.com/GhentCDH/annotation-editor/commit/fc9c0e2f))
+- **annotation-vue:** rename item-click to annotationtype-click; fix card right-edge overflow ([45ce4086](https://github.com/GhentCDH/annotation-editor/commit/45ce4086))
+
+### 🩹 Fixes
+
+- make it nicer ([61cc180f](https://github.com/GhentCDH/annotation-editor/commit/61cc180f))
+- make it nicer ([ee97d699](https://github.com/GhentCDH/annotation-editor/commit/ee97d699))
+- **annotation-vue:** add @heroicons/vue dependency for filter button icon ([8ee755f3](https://github.com/GhentCDH/annotation-editor/commit/8ee755f3))
+
+### ❤️ Thank You
+
+- Bo Vandersteene @bovandersteene
+
 ## 0.0.1-alpha.25 (2026-10-05)
 
 ### 🚀 Features
