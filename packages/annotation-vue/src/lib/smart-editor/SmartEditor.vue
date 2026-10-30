@@ -3,6 +3,7 @@
     <Loading
       :loading="store.loading || !props.loader.definitionsLoaded.value"
     />
+    <slot name="before-editor" />
     <AnnotationEditor
       :readonly="readonly"
       :configuration="definitionsState.configuration"
@@ -48,8 +49,14 @@ import AnnotationFilter from '../filter/AnnotationFilter.vue';
 
 const props = defineProps(SmartEditorProperties);
 const emit = defineEmits(['annotationtype-click']);
-const hasItemClick = !!getCurrentInstance()?.vnode.props?.['onAnnotationtypeClick'];
-const itemClickBind = hasItemClick ? { onAnnotationtypeClick: (item: Record<string, any>) => emit('annotationtype-click', item) } : {};
+const hasItemClick =
+  !!getCurrentInstance()?.vnode.props?.['onAnnotationtypeClick'];
+const itemClickBind = hasItemClick
+  ? {
+      onAnnotationtypeClick: (item: Record<string, any>) =>
+        emit('annotationtype-click', item),
+    }
+  : {};
 
 const selectedAnnotationId = ref<string | undefined>(undefined);
 const selectedAnnotationAction = ref<string | undefined>(undefined);
