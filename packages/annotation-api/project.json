@@ -28,13 +28,11 @@
         }
       }
     },
-    "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
-    },
     "test": {
-      "executor": "@nx/vitest:test",
-      "outputs": ["{projectRoot}/coverage/unit"]
+      "outputs": [
+        "{projectRoot}/coverage/unit",
+        "{workspaceRoot}/coverage/annotation-core"
+      ]
     }
   }
 }

@@ -52,6 +52,30 @@
         "packages/annotation-vue/**/*",
         "packages/annotation-api/**/*"
       ]
+    },
+    {
+      "plugin": "@nx/eslint/plugin",
+      "options": {
+        "targetName": "lint"
+      },
+      "include": [
+        "packages/annotation-api/**/*",
+        "packages/annotation-core/**/*",
+        "packages/annotation-editor/**/*",
+        "packages/annotation-ui/**/*"
+      ]
+    },
+    {
+      "plugin": "@nx/vitest",
+      "options": {
+        "testMode": "watch",
+        "testTargetName": "test"
+      },
+      "include": [
+        "packages/annotation-api/**/*",
+        "packages/annotation-core/**/*",
+        "packages/annotation-editor/**/*"
+      ]
     }
   ],
   "release": {
@@ -70,5 +94,8 @@
   },
   "migrate": {
     "agentic": false
+  },
+  "affected": {
+    "legacy": true
   }
 }
