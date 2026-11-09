@@ -21,3 +21,4 @@ minimumReleaseAgeExclude:
   - '@ghentcdh/create-crouton'
   - '@ghentcdh/annotated-text'
   - '@ghentcdh/w3c-utils'
+  - '@ghentcdh/crouton-cli@0.0.1-alpha.89'
