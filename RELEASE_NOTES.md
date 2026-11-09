@@ -1,3 +1,13 @@
+## 0.0.1-alpha.27 (2026-11-09)
+
+### 🚀 Features
+
+- add slot before the editor ([c5f5da3a](https://github.com/GhentCDH/annotation-editor/commit/c5f5da3a))
+
+### ❤️ Thank You
+
+- Bo Vandersteene
+
 ## 0.0.1-alpha.26 (2026-10-21)
 
 ### 🚀 Features
