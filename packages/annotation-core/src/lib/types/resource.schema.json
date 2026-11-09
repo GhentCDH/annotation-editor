@@ -950,6 +950,10 @@
             "description": "Human-readable label shown in forms and table headers. Defaults to a title-cased version of \"id\".",
             "type": "string"
           },
+          "labelKey": {
+            "description": "Override the auto-generated i18n key for this column's label. When omitted, the key is derived as columnKey(resourceName, id). Set a custom key to use a different translation per context (e.g. a shared label across resources).",
+            "type": "string"
+          },
           "hiddenInTable": {
             "default": false,
             "description": "When true, this column is not rendered in the list/table view.",
@@ -1090,6 +1094,11 @@
                   "asc",
                   "desc"
                 ]
+              },
+              "embed": {
+                "default": true,
+                "description": "When false, this relation cannot be dynamically included via the ?include= query param.",
+                "type": "boolean"
               }
             },
             "required": [
@@ -1113,15 +1122,15 @@
                 "type": "string"
               },
               "format": {
-                "description": "Render format hint for the frontend. Use \"relation\" for sub-resource relations (requires \"resource\"). The display format; determines which field input is used. Use \"fieldInput.type\" to override.",
+                "description": "Render format hint for the frontend. The display format; determines which field input is used. Use \"fieldInput.type\" to override. Note: \"relation\" format is deprecated — use columns.<id>.relation instead.",
                 "type": "string"
               },
               "resource": {
-                "description": "Relative path to the child resource definition (e.g. \"./author.resource\"). Required when format is \"relation\". Resolved at load time to inject sub-resource URIs into options.",
+                "description": "Relative path to the child resource definition (e.g. \"./author.resource\"). Required when format is \"relation\". Resolved at load time to inject sub-resource URIs into options. Deprecated: use columns.<id>.relation.resource instead.",
                 "type": "string"
               },
               "relationType": {
-                "description": "Cardinality of the relation. \"manyToOne\" or \"oneToOne\" — single FK reference rendered as autocomplete or relation control. \"oneToMany\" or \"manyToMany\" — collection rendered as a sub-resource table or multi-select. Auto-derived from the Zod model or a sibling FK column when omitted.",
+                "description": "Cardinality of the relation. Deprecated: use columns.<id>.relation.type instead.\"manyToOne\" or \"oneToOne\" — single FK reference rendered as autocomplete or relation control. \"oneToMany\" or \"manyToMany\" — collection rendered as a sub-resource table or multi-select. Auto-derived from the Zod model or a sibling FK column when omitted.",
                 "type": "string",
                 "enum": [
                   "oneToOne",
@@ -1131,11 +1140,11 @@
                 ]
               },
               "foreignKey": {
-                "description": "FK field on the child model pointing back to the parent (e.g. \"workId\"). Defaults to \"${parentModel}Id\".",
+                "description": "FK field on the child model pointing back to the parent (e.g. \"workId\"). Defaults to \"${parentModel}Id\". Deprecated: use columns.<id>.relation.foreignKey instead.",
                 "type": "string"
               },
               "relation": {
-                "description": "Override the Prisma relation field name when it differs from the column id.",
+                "description": "Override the Prisma relation field name when it differs from the column id. Deprecated: use columns.<id>.relation.prismaField instead.",
                 "type": "string"
               },
               "position": {
@@ -1172,6 +1181,43 @@
                       "readonly": {
                         "description": "Render the field in read-only mode",
                         "type": "boolean"
+                      },
+                      "disabled": {
+                        "description": "Always render the input disabled",
+                        "type": "boolean"
+                      },
+                      "disabledWhen": {
+                        "description": "Disable the input when the condition matches another field",
+                        "examples": [
+                          {
+                            "field": "id",
+                            "exists": true
+                          }
+                        ],
+                        "type": "object",
+                        "properties": {
+                          "field": {
+                            "type": "string",
+                            "description": "The other column id whose value is evaluated for the condition."
+                          },
+                          "eq": {
+                            "description": "Show/hide/disable when the field value equals this value."
+                          },
+                          "neq": {
+                            "description": "Show/hide/disable when the field value does NOT equal this value."
+                          },
+                          "exists": {
+                            "description": "When true, show/hide/disable when the field has a non-empty value.",
+                            "type": "boolean"
+                          },
+                          "notExists": {
+                            "description": "When true, show/hide/disable when the field has no value.",
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "field"
+                        ]
                       },
                       "colspan": {
                         "default": 12,
@@ -1278,7 +1324,7 @@
                     "description": "Property key used as the heading for each array item in \"collapse\" mode.",
                     "type": "string"
                   },
-                  "controls": {
+                  "items": {
                     "type": "array",
                     "items": {
                       "type": "object",
@@ -1313,11 +1359,14 @@
                       ]
                     },
                     "description": "Controls to render for each array item. Each control maps to a property of the item object."
+                  },
+                  "controls": {
+                    "not": {}
                   }
                 },
                 "required": [
                   "layout",
-                  "controls"
+                  "items"
                 ]
               }
             }
@@ -1361,6 +1410,10 @@
             "required": [
               "sql"
             ]
+          },
+          "position": {
+            "description": "Insertion position relative to other visible columns. Same semantics as fieldInput.position. Can also be set via fieldInput.position (takes precedence).",
+            "type": "number"
           }
         },
         "additionalProperties": {}
@@ -1401,14 +1454,6 @@
             "description": "Insertion position relative to other visible columns. Same semantics as fieldInput.position. Can also be set via fieldInput.position (takes precedence).",
             "type": "number"
           },
-          "hiddenInTable": {
-            "description": "When true, this column is hidden in the table view.",
-            "type": "boolean"
-          },
-          "hiddenInView": {
-            "description": "When true, this column is hidden in the detail view.",
-            "type": "boolean"
-          },
           "fieldInput": {
             "description": "Rendering options for form/view schemas (colspan, format, etc). fieldInput.position takes precedence over the top-level position.",
             "type": "object",
@@ -1426,15 +1471,15 @@
                 "type": "string"
               },
               "format": {
-                "description": "Render format hint for the frontend. Use \"relation\" for sub-resource relations (requires \"resource\"). The display format; determines which field input is used. Use \"fieldInput.type\" to override.",
+                "description": "Render format hint for the frontend. The display format; determines which field input is used. Use \"fieldInput.type\" to override. Note: \"relation\" format is deprecated — use columns.<id>.relation instead.",
                 "type": "string"
               },
               "resource": {
-                "description": "Relative path to the child resource definition (e.g. \"./author.resource\"). Required when format is \"relation\". Resolved at load time to inject sub-resource URIs into options.",
+                "description": "Relative path to the child resource definition (e.g. \"./author.resource\"). Required when format is \"relation\". Resolved at load time to inject sub-resource URIs into options. Deprecated: use columns.<id>.relation.resource instead.",
                 "type": "string"
               },
               "relationType": {
-                "description": "Cardinality of the relation. \"manyToOne\" or \"oneToOne\" — single FK reference rendered as autocomplete or relation control. \"oneToMany\" or \"manyToMany\" — collection rendered as a sub-resource table or multi-select. Auto-derived from the Zod model or a sibling FK column when omitted.",
+                "description": "Cardinality of the relation. Deprecated: use columns.<id>.relation.type instead.\"manyToOne\" or \"oneToOne\" — single FK reference rendered as autocomplete or relation control. \"oneToMany\" or \"manyToMany\" — collection rendered as a sub-resource table or multi-select. Auto-derived from the Zod model or a sibling FK column when omitted.",
                 "type": "string",
                 "enum": [
                   "oneToOne",
@@ -1444,11 +1489,11 @@
                 ]
               },
               "foreignKey": {
-                "description": "FK field on the child model pointing back to the parent (e.g. \"workId\"). Defaults to \"${parentModel}Id\".",
+                "description": "FK field on the child model pointing back to the parent (e.g. \"workId\"). Defaults to \"${parentModel}Id\". Deprecated: use columns.<id>.relation.foreignKey instead.",
                 "type": "string"
               },
               "relation": {
-                "description": "Override the Prisma relation field name when it differs from the column id.",
+                "description": "Override the Prisma relation field name when it differs from the column id. Deprecated: use columns.<id>.relation.prismaField instead.",
                 "type": "string"
               },
               "position": {
@@ -1485,6 +1530,43 @@
                       "readonly": {
                         "description": "Render the field in read-only mode",
                         "type": "boolean"
+                      },
+                      "disabled": {
+                        "description": "Always render the input disabled",
+                        "type": "boolean"
+                      },
+                      "disabledWhen": {
+                        "description": "Disable the input when the condition matches another field",
+                        "examples": [
+                          {
+                            "field": "id",
+                            "exists": true
+                          }
+                        ],
+                        "type": "object",
+                        "properties": {
+                          "field": {
+                            "type": "string",
+                            "description": "The other column id whose value is evaluated for the condition."
+                          },
+                          "eq": {
+                            "description": "Show/hide/disable when the field value equals this value."
+                          },
+                          "neq": {
+                            "description": "Show/hide/disable when the field value does NOT equal this value."
+                          },
+                          "exists": {
+                            "description": "When true, show/hide/disable when the field has a non-empty value.",
+                            "type": "boolean"
+                          },
+                          "notExists": {
+                            "description": "When true, show/hide/disable when the field has no value.",
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "field"
+                        ]
                       },
                       "colspan": {
                         "default": 12,
@@ -1591,7 +1673,7 @@
                     "description": "Property key used as the heading for each array item in \"collapse\" mode.",
                     "type": "string"
                   },
-                  "controls": {
+                  "items": {
                     "type": "array",
                     "items": {
                       "type": "object",
@@ -1626,11 +1708,14 @@
                       ]
                     },
                     "description": "Controls to render for each array item. Each control maps to a property of the item object."
+                  },
+                  "controls": {
+                    "not": {}
                   }
                 },
                 "required": [
                   "layout",
-                  "controls"
+                  "items"
                 ]
               }
             }
@@ -1641,14 +1726,6 @@
           "alias",
           "sqlExpression"
         ]
-      }
-    },
-    "include": {
-      "default": [],
-      "description": "Prisma relations to include when querying this resource. Plain string: \"author\" → include: { author: true }. Object: { relation: \"textAuthor\", include: [\"author\"] } for nested includes.",
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/__schema0"
       }
     },
     "source": {
@@ -1969,6 +2046,18 @@
                               "type": "string"
                             },
                             "additionalProperties": {}
+                          },
+                          "pendingMessage": {
+                            "description": "Message shown in the toolbar while the action is processing.",
+                            "type": "string"
+                          },
+                          "successMessage": {
+                            "description": "Message shown in the toolbar on success. Falls back to the server response message.",
+                            "type": "string"
+                          },
+                          "errorMessage": {
+                            "description": "Message shown in the toolbar on failure. Falls back to the server response message.",
+                            "type": "string"
                           }
                         },
                         "required": [
@@ -2129,6 +2218,18 @@
                               "type": "string"
                             },
                             "additionalProperties": {}
+                          },
+                          "pendingMessage": {
+                            "description": "Message shown in the toolbar while the action is processing.",
+                            "type": "string"
+                          },
+                          "successMessage": {
+                            "description": "Message shown in the toolbar on success. Falls back to the server response message.",
+                            "type": "string"
+                          },
+                          "errorMessage": {
+                            "description": "Message shown in the toolbar on failure. Falls back to the server response message.",
+                            "type": "string"
                           }
                         },
                         "required": [
@@ -2537,8 +2638,7 @@
                         "type": "string"
                       },
                       "hideLabel": {
-                        "description": "Hide the label above the input.",
-                        "default": false,
+                        "description": "Hide the label above the input. When explicitly set to false, overrides a column-level hideLabel: true.",
                         "type": "boolean"
                       },
                       "type": {
@@ -2607,6 +2707,10 @@
                           "field"
                         ]
                       },
+                      "disabled": {
+                        "description": "Always render the input disabled.",
+                        "type": "boolean"
+                      },
                       "disabledWhen": {
                         "description": "Conditionally disable this control when the condition matches another field value.",
                         "type": "object",
@@ -2633,6 +2737,10 @@
                         "required": [
                           "field"
                         ]
+                      },
+                      "readonly": {
+                        "description": "Render the input read-only. Overrides fieldInput.options.readonly for this layout item.",
+                        "type": "boolean"
                       }
                     },
                     "required": [
@@ -2940,6 +3048,18 @@
                                 "type": "string"
                               },
                               "additionalProperties": {}
+                            },
+                            "pendingMessage": {
+                              "description": "Message shown in the toolbar while the action is processing.",
+                              "type": "string"
+                            },
+                            "successMessage": {
+                              "description": "Message shown in the toolbar on success. Falls back to the server response message.",
+                              "type": "string"
+                            },
+                            "errorMessage": {
+                              "description": "Message shown in the toolbar on failure. Falls back to the server response message.",
+                              "type": "string"
                             }
                           },
                           "required": [
@@ -3100,6 +3220,18 @@
                                 "type": "string"
                               },
                               "additionalProperties": {}
+                            },
+                            "pendingMessage": {
+                              "description": "Message shown in the toolbar while the action is processing.",
+                              "type": "string"
+                            },
+                            "successMessage": {
+                              "description": "Message shown in the toolbar on success. Falls back to the server response message.",
+                              "type": "string"
+                            },
+                            "errorMessage": {
+                              "description": "Message shown in the toolbar on failure. Falls back to the server response message.",
+                              "type": "string"
                             }
                           },
                           "required": [
