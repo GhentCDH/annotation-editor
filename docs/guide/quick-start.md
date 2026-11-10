@@ -21,7 +21,7 @@ Before adding a component, you need three things:
 **`AnnotationDefConfig`** — tells the library where your annotation namespace lives:
 
 ```ts
-import { type AnnotationDefConfig } from '@ghentcdh/annotation-core';
+import { type AnnotationDefConfig } from '@ghentcdh/annotation-vue';
 
 const config: AnnotationDefConfig = {
   baseUrl: 'https://api.example.com/',
@@ -36,7 +36,7 @@ display, etc). Load these with `provideAnnotationDefinitions` from `@ghentcdh/an
 **`SourceModel[]`** — the text sources to annotate. Each source is a plain object:
 
 ```ts
-import { type SourceModel } from '@ghentcdh/annotation-editor';
+import { type SourceModel } from '@ghentcdh/annotation-vue';
 
 const sources: SourceModel[] = [
   {
@@ -71,11 +71,11 @@ const sources: SourceModel[] = [
 
 <script setup lang="ts">
   import { computed, ref } from 'vue';
-  import { AnnotationEditor } from '@ghentcdh/annotation-editor';
-  import { TransformAnnotationAdapter, editorAnnotationSchema, type EditorAnnotation, type AnnotationAdapterParams } from '@ghentcdh/annotation-ui';
+  import { AnnotationEditor } from '@ghentcdh/annotation-vue';
+  import { TransformAnnotationAdapter, editorAnnotationSchema, type EditorAnnotation, type AnnotationAdapterParams } from '@ghentcdh/annotation-vue';
   import { provideAnnotationDefinitions } from '@ghentcdh/annotation-vue';
   import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-  import { type AnnotationDefConfig, type SourceModel } from '@ghentcdh/annotation-core';
+  import { type AnnotationDefConfig, type SourceModel } from '@ghentcdh/annotation-vue';
 
   const config: AnnotationDefConfig = {
     baseUrl: 'https://api.example.com/',
@@ -118,7 +118,11 @@ const sources: SourceModel[] = [
   const transformer = new MyAdapter();
   const rawAnnotations = ref<W3CAnnotation[]>([]);
   // Convert raw annotations to the editor's internal format
-  const editorAnnotations = computed(() => transformer.setAnnotations(rawAnnotations.value));
+  const toEditorAnnotations = (raw: W3CAnnotation[]) =>
+    transformer.createLinks(
+      raw.map((a) => transformer.parse(a)).filter((a): a is EditorAnnotation => !!a),
+    );
+  const editorAnnotations = computed(() => toEditorAnnotations(rawAnnotations.value));
 
   const onCreate = async (annotation: W3CAnnotation) => {
     // persist to your API, then push to local state

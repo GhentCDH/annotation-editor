@@ -25,14 +25,12 @@ annotations are mutated.
   import {
     SmartAnnotationEditor,
     AnnotationEditorLoader,
-    type SourceModel,
-  } from '@ghentcdh/annotation-vue';
-  import { TextLineAdapter } from '@ghentcdh/annotated-text';
-  import {
     editorAnnotationSchema,
     TransformAnnotationAdapter,
     type EditorAnnotation,
-  } from '@ghentcdh/annotation-ui';
+    type SourceModel,
+  } from '@ghentcdh/annotation-vue';
+  import { TextLineAdapter } from '@ghentcdh/annotated-text';
   import type { W3CAnnotation } from '@ghentcdh/w3c-utils';
 
   // ─── 1. Loader ───────────────────────────────────────────────────────────────
@@ -82,6 +80,7 @@ annotations are mutated.
 
   class MyTransformAdapter extends TransformAnnotationAdapter<W3CAnnotation> {
     name = 'MyTransformAdapter';
+    defaultParams = {};
 
     parse(raw: W3CAnnotation): EditorAnnotation | null {
       const { definition, ...metadata } = raw as any;
@@ -207,7 +206,7 @@ import {
   editorAnnotationSchema,
   type EditorAnnotation,
   type AnnotationAdapterParams,
-} from '@ghentcdh/annotation-ui';
+} from '@ghentcdh/annotation-vue';
 
 class MyTransformAdapter extends TransformAnnotationAdapter<MyAnnotation> {
   name = 'MyAnnotationAdapter';
