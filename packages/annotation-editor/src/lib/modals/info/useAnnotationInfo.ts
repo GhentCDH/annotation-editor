@@ -19,7 +19,7 @@ class AnnotationInfoCard extends AnnotationModal<
 
     if (!position) {
       const event = data.mouseEvent;
-      if (!event) {
+      if (!event || !data.containerRef) {
         console.warn('No position or mouse event provided');
         return undefined;
       }

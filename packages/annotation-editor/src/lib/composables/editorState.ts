@@ -1,11 +1,12 @@
 import { type AnnotationMetadata, type EditorAnnotation, type Selector, type UiAnnotatedText } from '@ghentcdh/annotation-ui';
 import { type SourceModel } from '@ghentcdh/annotation-core';
 import { type AnnotationModalConfig } from '../modals/AnnotationModal.definition';
+import { type AnnotationModalActionMap } from '../modals/AnnotationModal.defaults';
 
 type EditorStatus = 'show' | 'create' | 'edit' | 'link' | null;
 
 export type EditorConfig = {
-  modal: AnnotationModalConfig;
+  modal: AnnotationModalConfig<AnnotationModalActionMap>;
   createAnnotatedText: (
     id: string,
     sourceModel?: SourceModel,

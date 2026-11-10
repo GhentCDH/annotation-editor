@@ -3,11 +3,14 @@ import {
   type AnnotationModalConfig,
   type ModalDefinition,
   type ModalStateDefinition,
+  type ModalTypeConfig,
 } from './AnnotationModal.definition';
 
-export const createModalConfig = (
-  modalDefinitions: Record<string, ModalDefinition> = {},
-): AnnotationModalConfig => {
+export const createModalConfig = <
+  T extends Record<string, ModalTypeConfig<any, any, any>>,
+>(
+  modalDefinitions: Record<keyof T, ModalDefinition>,
+): AnnotationModalConfig<T> => {
   const modalMap = new Map<string, ModalStateDefinition<any, any, any>>();
   Object.entries(modalDefinitions).forEach(([key, { component, useFn }]) => {
     const modal: ModalStateDefinition<any, any, any> = {
@@ -37,12 +40,13 @@ export const createModalConfig = (
   };
 
   const modals = Array.from(modalMap.values());
+  // The runtime map is keyed by string; AnnotationModalConfig<T> gives callers per-key typing.
   return {
     modals,
     getModal,
     show,
     close,
     destroy: () => modals.forEach((modal) => modal.state.close(null)),
-  };
+  } as AnnotationModalConfig<T>;
 };
 

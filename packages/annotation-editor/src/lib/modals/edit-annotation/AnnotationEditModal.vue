@@ -116,14 +116,7 @@ const selectFull = () => {
     }
   }
 
-  const original = {
-    id: 'NEW_ANNOTATION',
-    metadata,
-    selectors: [],
-    definitionUri: annotation?.definitionUri ?? '',
-    ...annotation,
-  };
-
+  const original = annotation!;
   return updateAnnotation(
     source.uri,
     maxRange,
@@ -131,7 +124,7 @@ const selectFull = () => {
       fullFlatText: props.source.content.text,
       startOffset: 0, // TODO implement it
     },
-    original as any,
+    original,
   );
 };
 

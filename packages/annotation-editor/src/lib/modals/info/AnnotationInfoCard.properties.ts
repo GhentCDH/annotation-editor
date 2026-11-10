@@ -22,5 +22,5 @@ export type AnnotationInfoCardEvent = void;
 export type AnnotationInfoCardShow = {
   mouseEvent?: MouseEvent;
   position?: { x: number; y: number };
-  containerRef: HTMLElement;
+  containerRef?: HTMLElement;
 } & Pick<AnnotationInfoCardProp, 'source' | 'annotation'>;

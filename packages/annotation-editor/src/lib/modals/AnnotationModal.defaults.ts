@@ -34,7 +34,7 @@ import {
   type LinkAnnotationShow,
 } from './link-annotation/link-annotation.properties';
 
-type AnnotationModalActionMap = {
+export type AnnotationModalActionMap = {
   toast: ModalTypeConfig<EditToast, EditToast, void>;
   'info-card': ModalTypeConfig<
     AnnotationInfoCardProp,

@@ -63,6 +63,7 @@ export const selectAnnotationById = (
         emits,
       );
     } else {
+      if (!source) return;
       const position = getAnnotationElementCenter(
         container.value!,
         annotationId,
