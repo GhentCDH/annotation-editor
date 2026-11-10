@@ -84,7 +84,7 @@ For most use cases — fetching sources, annotations, and definitions from an AP
 | `sources` | `SourceModel[]` | ✓ | — | Text sources to render and annotate |
 | `annotations` | `EditorAnnotation[]` | ✓ | — | Pre-converted annotations (use your adapter's `setAnnotations()`) |
 | `annotationDefinitions` | `UIAnnotationDefinition[]` | ✓ | — | Available annotation types (label, colour, views for table/form/detail) |
-| `annotationTransformer` | `TransformAnnotationAdapter<T>` | ✓ | — | Adapter that converts between your domain model and `EditorAnnotation` |
+| `annotationTransformer` | `TransformAnnotationAdapter<T>` | — | `new W3cTransformAnnotationAdapter()` | Adapter that converts between your domain model and `EditorAnnotation` |
 | `cols` | `number` | — | `2` | Number of grid columns (ignored when `layout` is set) |
 | `layout` | `GridLayout` | — | `undefined` | Custom CSS grid layout — see [Custom layout](#custom-layout) |
 | `modalView` | `boolean` | — | `true` | Show annotation details in a modal (`true`) or inline (`false`) |
@@ -123,6 +123,18 @@ const source: SourceModel = {
 | `select:annotation` | `(W3CAnnotation \| null, string \| null)` | Emitted on annotation selection/deselection. Second arg is the action name. |
 
 All mutation events (`create`, `update`, `delete`) expect async handlers — the component waits for the promise to settle before clearing modal state.
+
+## Zoom
+
+Each source pane has built-in zoom. Only the text is zoomed, not the page: the text reflows to the pane width and annotations are redrawn to match.
+
+| Control | Action |
+|---------|--------|
+| Buttons | `−` / `%` / `+` buttons rendered on top of the text (`%` resets) |
+| Mouse wheel / trackpad pinch | `Ctrl`/`Cmd` + wheel, or pinch, over the text |
+| Keyboard | `Ctrl`/`Cmd` + `+` / `-` / `0` while the text has focus |
+
+All three controls are always enabled; no props are needed.
 
 ## Custom layout
 
@@ -288,7 +300,6 @@ Pass `selectedAnnotationId` (and optionally `selectedAnnotationAction`) to open 
 ```vue
 <template>
   <AnnotationEditor
-    :configuration="config"
     :sources="sources"
     :annotations="annotations"
     :annotation-definitions="definitions"

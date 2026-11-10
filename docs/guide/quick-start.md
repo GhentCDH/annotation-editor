@@ -5,13 +5,13 @@ Get annotation editing running in a Vue 3 app in under 10 minutes.
 ## Install
 
 ```bash
-pnpm add @ghentcdh/annotation-editor @ghentcdh/annotation-preview @ghentcdh/annotation-vue
+pnpm add @ghentcdh/annotation-vue @ghentcdh/annotation-core @ghentcdh/w3c-utils
 ```
 
 Import the CSS once in your app entry point:
 
 ```ts
-import '@ghentcdh/annotation-editor/index.css';
+import '@ghentcdh/annotation-vue/styles.css';
 ```
 
 ## Concepts
