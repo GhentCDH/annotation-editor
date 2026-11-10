@@ -24,16 +24,12 @@
     "@nx/eslint": "24.0.5",
     "@nx/eslint-plugin": "24.0.5",
     "@nx/js": "24.0.5",
-    "@nx/playwright": "24.0.5",
     "@nx/vite": "24.0.5",
-    "@playwright/test": "1.65.0",
     "@swc-node/register": "~1.12.1",
     "@swc/core": "~1.16.12",
     "@swc/helpers": "~0.5.23",
     "@tailwindcss/vite": "^4.3.0",
     "@types/node": "^26.0.1",
-    "@types/uuid": "^11.0.0",
-    "@typescript-eslint/eslint-plugin": "^8.71.0",
     "@typescript-eslint/parser": "^8.71.0",
     "@vitejs/plugin-vue": "^6.0.7",
     "@vitest/coverage-v8": "5.1.0",
@@ -66,13 +62,8 @@
     "zod": "^4.4.3"
   },
   "dependencies": {
-    "@ghentcdh/crouton-cli": "0.0.1-alpha.89",
     "@ghentcdh/crouton-core": "0.0.1-alpha.89",
-    "@tiptap/markdown": "^3.27.1",
-    "@tiptap/starter-kit": "^3.27.1",
-    "@tiptap/vue-3": "^3.27.1",
     "axios": "^1.19.0",
-    "tiptap-markdown": "^0.9.0",
     "vee-validate": "5.0.0-beta.0"
   }
 }
