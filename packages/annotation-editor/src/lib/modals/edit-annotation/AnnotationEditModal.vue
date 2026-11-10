@@ -54,6 +54,7 @@ import {
 } from '@ghentcdh/crouton-vue';
 import { computed, onMounted, onUnmounted } from 'vue';
 import {
+  type AnnotationMetadata,
   type UiAnnotatedText,
   updateAnnotation,
 } from '@ghentcdh/annotation-ui';
@@ -95,9 +96,11 @@ const label = computed(() => {
   };
 });
 
-const formatBeforeSave = (formData: any) => {
-  return onChangeValue({ metadata: formData });
-};
+// crouton-vue types formatBeforeSave as returning a Promise, but calls it synchronously.
+const formatBeforeSave = ((formData: AnnotationMetadata) =>
+  onChangeValue({ metadata: formData })) as unknown as (
+  formData: AnnotationMetadata,
+) => Promise<AnnotationMetadata>;
 
 const selectFull = () => {
   const { source, annotation } = props;

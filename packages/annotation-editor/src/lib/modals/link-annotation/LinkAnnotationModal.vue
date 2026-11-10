@@ -37,6 +37,7 @@
 <script setup lang="ts">
 import { CroutonForm, FormMessage, Modal } from '@ghentcdh/crouton-vue';
 import { computed } from 'vue';
+import { type AnnotationMetadata } from '@ghentcdh/annotation-ui';
 import {
   LinkAnnotationProperties,
   LinkEmits,
@@ -58,9 +59,11 @@ const {
   definition,
 } = useAnnotationLink(props, emits);
 
-const formatBeforeSave = (formData: Record<string, unknown>) => {
-  return onChangeValue({ metadata: formData });
-};
+// crouton-vue types formatBeforeSave as returning a Promise, but calls it synchronously.
+const formatBeforeSave = ((formData: AnnotationMetadata) =>
+  onChangeValue({ metadata: formData })) as unknown as (
+  formData: AnnotationMetadata,
+) => Promise<AnnotationMetadata>;
 
 const label = computed(() => {
   const _label = definition.label;

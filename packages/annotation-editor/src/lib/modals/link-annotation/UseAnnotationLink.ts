@@ -1,5 +1,5 @@
 import { type EmitFn } from 'vue';
-import { editorAnnotationSchema, type EditorAnnotation } from '@ghentcdh/annotation-ui';
+import { type AnnotationMetadata, editorAnnotationSchema, type EditorAnnotation } from '@ghentcdh/annotation-ui';
 import {
   type LinkAnnotationProps,
   type LinkEmits,
@@ -45,7 +45,7 @@ export const useAnnotationLink = (
 
     return metadataEdit.save(cloned, emits);
   };
-  const onChangeValue = ({ metadata: _metadata }: { metadata?: any }) => {
+  const onChangeValue = ({ metadata: _metadata }: { metadata: AnnotationMetadata }) => {
     return metadataEdit.onChangeValue({ metadata });
   };
 

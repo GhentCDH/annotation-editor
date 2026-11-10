@@ -13,7 +13,7 @@ export type AnnotationEditModal = ExtractPublicPropTypes<
 
 export type AnnotationEditModalEvent = {
   annotation: EditorAnnotation;
-  rawData: any;
+  rawData: unknown;
   selectors: Selector[];
 };
 export const AnnotationEditEmits = {

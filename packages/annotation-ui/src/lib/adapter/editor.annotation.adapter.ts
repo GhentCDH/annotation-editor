@@ -6,6 +6,7 @@ import {
   selectText,
   type TextAnnotation,
 } from '@ghentcdh/annotated-text';
+import { type SourceModel } from '@ghentcdh/annotation-core';
 import {
   type EditorAnnotation,
   editorAnnotationSchema,
@@ -13,8 +14,7 @@ import {
   SelectorSchema,
 } from './editor.annotation';
 
-type SourceModel = any;
-type Params = AnnotationAdapterParams & { sourceModel: SourceModel };
+type Params = AnnotationAdapterParams & { sourceModel?: SourceModel };
 
 type StartEnd = { start: number; end: number };
 const updateSelector = (

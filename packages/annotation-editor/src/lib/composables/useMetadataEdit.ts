@@ -1,4 +1,5 @@
 import {
+  type AnnotationMetadata,
   type EditorAnnotation,
   type Selector,
   type UIAnnotationDefinition,
@@ -21,7 +22,7 @@ export const useMetadataEdit = (
     metadata: _metadata,
     selector,
   }: {
-    metadata?: any;
+    metadata: AnnotationMetadata;
     selector?: Selector;
   }) => {
     hasChanged.value = true;

@@ -1,4 +1,4 @@
-import { type EditorAnnotation, type Selector, type UiAnnotatedText } from '@ghentcdh/annotation-ui';
+import { type AnnotationMetadata, type EditorAnnotation, type Selector, type UiAnnotatedText } from '@ghentcdh/annotation-ui';
 import { type SourceModel } from '@ghentcdh/annotation-core';
 import { type AnnotationModalConfig } from '../modals/AnnotationModal.definition';
 
@@ -21,5 +21,5 @@ export type EditorState_ = {
   reset: () => void;
   show: () => void;
   format: (annotation: EditorAnnotation, isNew: boolean) => any;
-  transformMetadata: (metadata: any, selector: Selector) => any;
+  transformMetadata: (metadata: AnnotationMetadata, selector: Selector) => AnnotationMetadata;
 };
