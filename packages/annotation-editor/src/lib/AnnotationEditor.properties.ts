@@ -1,13 +1,7 @@
 import type { EmitFn, ExtractPublicPropTypes, PropType } from 'vue';
 import { type TextAdapter } from '@ghentcdh/annotated-text';
-import {
-  type EditorAnnotation,
-  type GridLayout,
-  type SourceModel,
-  type TransformAnnotationAdapter,
-  type UIAnnotationDefinition,
-  W3cTransformAnnotationAdapter,
-} from '@ghentcdh/annotation-ui';
+import { type EditorAnnotation, type TransformAnnotationAdapter, type UIAnnotationDefinition, W3cTransformAnnotationAdapter } from '@ghentcdh/annotation-ui';
+import { type GridLayout, type SourceModel } from '@ghentcdh/annotation-core';
 
 export const AnnotationEditorProperties = {
   modalView: { type: Boolean, required: false as const, default: true },
@@ -58,11 +52,11 @@ export type AnnotationEditorProps = ExtractPublicPropTypes<
 >;
 
 export const AnnotationEditorEmits = {
-  'update:annotation': <ANNOTATION>(annotation: ANNOTATION) =>
+  'update:annotation': <ANNOTATION>(_annotation: ANNOTATION) =>
     Promise<ANNOTATION>,
-  'delete:annotation': <ANNOTATION>(annotation: ANNOTATION) =>
+  'delete:annotation': <ANNOTATION>(_annotation: ANNOTATION) =>
     Promise<ANNOTATION>,
-  'create:annotation': <ANNOTATION>(annotation: ANNOTATION) =>
+  'create:annotation': <ANNOTATION>(_annotation: ANNOTATION) =>
     Promise<ANNOTATION>,
   'create:annotation:events': (_payload: any) => true,
   'select:annotation': <ANNOTATION>(

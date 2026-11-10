@@ -5,7 +5,7 @@ import {
 } from './link-annotation.properties';
 import { AnnotationModal } from '../AnnotationModal.definition';
 
-export class LinkAnnotation extends AnnotationModal<
+class LinkAnnotation extends AnnotationModal<
   LinkAnnotationProps,
   LinkAnnotationShow,
   LinkAnnotationCloseEvent

@@ -54,7 +54,7 @@ export type AnnotationModalActionMap = {
   confirm: ModalTypeConfig<ConfirmProps, ConfirmProps, ConfirmCloseEvent>;
 };
 
-export type AnnotationModalAction = keyof AnnotationModalActionMap;
+type AnnotationModalAction = keyof AnnotationModalActionMap;
 
 export const annotationModalDefaults: Record<
   AnnotationModalAction,
@@ -75,5 +75,3 @@ export const annotationModalDefaults: Record<
     useFn: useAnnotationEdit,
   },
 };
-
-export type AnnotationModalDefaults = AnnotationModalActionMap;

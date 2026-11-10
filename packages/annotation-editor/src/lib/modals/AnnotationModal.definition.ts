@@ -46,13 +46,11 @@ export type AnnotationModalConfig<
   getModal: <K extends keyof T>(
     modal: K,
   ) => ModalStateDefinition<T[K]['data'], T[K]['show'], T[K]['closeEvent']>;
-  close: <K extends keyof T>(modal: K, data: T[K]['closeEvent']) => void;
+  close: <K extends keyof T>(modal: K, data?: T[K]['closeEvent']) => void;
   show: <K extends keyof T>(
     modal: K,
-    // FIXME any is wrong
-    data: T[K]['show'] | any,
-  ) => Promise<T[K]['closeEvent'] | null | any>;
-  // FIXME any closeEvent should be correct
+    data: T[K]['show'],
+  ) => Promise<T[K]['closeEvent'] | null>;
 };
 
 export abstract class AnnotationModal<DATA, SHOW_DATA, CLOSE_EVENT>

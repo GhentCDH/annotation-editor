@@ -6,6 +6,7 @@ import {
   selectText,
   type TextAnnotation,
 } from '@ghentcdh/annotated-text';
+import { type SourceModel } from '@ghentcdh/annotation-core';
 import {
   type EditorAnnotation,
   editorAnnotationSchema,
@@ -13,8 +14,7 @@ import {
   SelectorSchema,
 } from './editor.annotation';
 
-type SourceModel = any;
-type Params = AnnotationAdapterParams & { sourceModel: SourceModel };
+type Params = AnnotationAdapterParams & { sourceModel?: SourceModel };
 
 type StartEnd = { start: number; end: number };
 const updateSelector = (
@@ -100,13 +100,10 @@ export class AnnotationEditorAnnotationAdapter extends AnnotationAdapter<
 > {
   constructor(params: Params) {
     super(params);
-    this.uuid = Math.round(Math.random() * 100);
-
     this.setParams(params);
   }
 
   name = 'AnnotationEditorAnnotationAdapter';
-  private uuid;
   private sourceUri = '';
 
   override setParams(params: Params) {
@@ -167,7 +164,7 @@ export class AnnotationEditorAnnotationAdapter extends AnnotationAdapter<
     return editorAnnotation;
   }
 
-  updateSelector(annotation: TextAnnotation, range: StartEnd) {
+  updateSelector(annotation: TextAnnotation, _range: StartEnd) {
     const originalAnnotation = this.getOriginalAnnotation(annotation.id);
     return !originalAnnotation
       ? createAnnotation(this.sourceUri, annotation, {

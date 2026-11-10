@@ -54,6 +54,7 @@ import {
 } from '@ghentcdh/crouton-vue';
 import { computed, onMounted, onUnmounted } from 'vue';
 import {
+  type AnnotationMetadata,
   type UiAnnotatedText,
   updateAnnotation,
 } from '@ghentcdh/annotation-ui';
@@ -67,7 +68,7 @@ import { useEditorState } from '../../composables/useEditorState';
 let annotatedTextConfig: UiAnnotatedText;
 const props = defineProps(AnnotationEditModalProperties);
 
-const { config, findAnnotation } = useEditorState();
+const { config } = useEditorState();
 
 const emits = defineEmits(AnnotationEditEmits);
 
@@ -95,9 +96,11 @@ const label = computed(() => {
   };
 });
 
-const formatBeforeSave = (formData: any) => {
-  return onChangeValue({ metadata: formData });
-};
+// crouton-vue types formatBeforeSave as returning a Promise, but calls it synchronously.
+const formatBeforeSave = ((formData: AnnotationMetadata) =>
+  onChangeValue({ metadata: formData })) as unknown as (
+  formData: AnnotationMetadata,
+) => Promise<AnnotationMetadata>;
 
 const selectFull = () => {
   const { source, annotation } = props;
@@ -113,14 +116,7 @@ const selectFull = () => {
     }
   }
 
-  const original = {
-    id: 'NEW_ANNOTATION',
-    metadata,
-    selectors: [],
-    definitionUri: annotation?.definitionUri ?? '',
-    ...annotation,
-  };
-
+  const original = annotation!;
   return updateAnnotation(
     source.uri,
     maxRange,
@@ -128,7 +124,7 @@ const selectFull = () => {
       fullFlatText: props.source.content.text,
       startOffset: 0, // TODO implement it
     },
-    original as any,
+    original,
   );
 };
 
@@ -159,7 +155,7 @@ onMounted(() => {
     })
     .setAnnotations(annotations)
     .setAnnotationAdapterParams({ edit: true, create: !props.annotation?.id })
-    .on('annotation-create--end', ({ mouseEvent, event, data: _data }) => {
+    .on('annotation-create--end', ({ data: _data }) => {
       const s = _data.annotation.getSelector(props.source.uri);
       if (s) updateSelector(s);
       annotatedTextConfig.annotatedText.setAnnotationAdapterParams({
@@ -167,7 +163,7 @@ onMounted(() => {
         edit: true,
       });
     })
-    .on('annotation-edit--end', ({ mouseEvent, event, data }) => {
+    .on('annotation-edit--end', ({ data }) => {
       const s = data.annotation.getSelector(props.source.uri);
       if (s) updateSelector(s);
     });

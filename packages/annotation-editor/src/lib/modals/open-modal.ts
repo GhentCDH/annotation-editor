@@ -1,9 +1,6 @@
 import { nextTick, type TemplateRef } from 'vue';
-import {
-  type EditorAnnotation,
-  type SourceModel,
-  type UIAnnotationDefinition,
-} from '@ghentcdh/annotation-ui';
+import { type EditorAnnotation, type UIAnnotationDefinition } from '@ghentcdh/annotation-ui';
+import { type SourceModel } from '@ghentcdh/annotation-core';
 import type { AnnotationEditorEmitsFn } from '../AnnotationEditor.properties';
 import type { EditorConfig, EditorState_ } from '../composables/editorState';
 import { editAnnotation } from '../composables/annotation.events';
@@ -66,6 +63,7 @@ export const selectAnnotationById = (
         emits,
       );
     } else {
+      if (!source) return;
       const position = getAnnotationElementCenter(
         container.value!,
         annotationId,

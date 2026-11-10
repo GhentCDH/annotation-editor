@@ -1,10 +1,11 @@
 import { type TemplateRef } from 'vue';
 import {
+  editorAnnotationSchema,
   type EditorAnnotation,
   type KeyLabel,
-  type SourceModel,
   type UIAnnotationDefinition,
 } from '@ghentcdh/annotation-ui';
+import { type SourceModel } from '@ghentcdh/annotation-core';
 import { NotificationService } from '@ghentcdh/crouton-vue';
 import { type EditorConfig, type EditorState_ } from './editorState';
 import { type AnnotationEditModalShow } from '../modals/edit-annotation/AnnotationEditModal.properties';
@@ -52,7 +53,7 @@ export type AnnotationEvents = {
   link: LinkData;
 };
 
-export const createAnnotation = (
+const createAnnotation = (
   data: CreateAnnotationData,
   config: EditorConfig,
   state: EditorState_,
@@ -66,11 +67,15 @@ export const createAnnotation = (
   config.modal
     .show('edit-annotation', {
       source: data.source,
-      annotation: {
+      // Empty id marks a draft: the edit modal creates instead of updates.
+      annotation: editorAnnotationSchema.parse({
+        id: '',
         definitionUri: data.definitionUri,
         parentId: data.parentAnnotation?.id,
+        metadata: {},
         selectors: [],
-      },
+        links: [],
+      }),
     })
     .then((result) => {
       state.show();
@@ -98,7 +103,6 @@ export const editAnnotation = (
     .show(isLink ? 'link-annotation' : 'edit-annotation', {
       source: data.source,
       annotation: data.annotation,
-      definitionUrl: data.definition.id,
     })
     .then((result) => {
       state.show();
@@ -198,28 +202,32 @@ const endLink = (
     console.warn('No target annotation selected, linking not possible');
     return;
   }
-  config.modal.close('toast', undefined as void);
+  config.modal.close('toast');
 
   const sourceAnnotation = state.selectedAnnotation;
   config.modal
     .show('link-annotation', {
-      sourceAnnotation,
-      targetAnnotation,
-      annotation: {
+      annotation: editorAnnotationSchema.parse({
+        id: '',
         definitionUri: data.definitionUri,
-        links: [{ uri: sourceAnnotation.id }, { uri: targetAnnotation.id }],
-      },
+        metadata: {},
+        selectors: [],
+        links: [
+          { uri: String(sourceAnnotation.id) },
+          { uri: String(targetAnnotation.id) },
+        ],
+      }),
     })
     .then((result) => {
       state.show();
 
-      if (result.annotation) {
+      if (result?.annotation) {
         emits('create:annotation', result.annotation);
       }
     });
 };
 
-export const handleSelectAnnotation = (
+const handleSelectAnnotation = (
   data: SelectAnnotationData | null,
   config: EditorConfig,
   state: EditorState_,

@@ -1,13 +1,4 @@
 import type { AxiosInstance } from 'axios';
 
-let _api: AxiosInstance;
-
-export const configureApi = (api: AxiosInstance) => {
-  _api = api;
-};
-
-export const useApi = (): AxiosInstance => {
-  if (!_api)
-    throw new Error('[AnnotationPlugin] useApi() called before configureApi()');
-  return _api;
-};
+/** @deprecated No-op: the configured instance is never read. Will be removed in a future release. */
+export const configureApi = (_api: AxiosInstance) => {};

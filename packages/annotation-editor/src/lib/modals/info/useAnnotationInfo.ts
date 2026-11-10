@@ -9,7 +9,7 @@ import {
 } from '../AnnotationModal.definition';
 import { getMousePosition } from '../../utils/mouse-events';
 
-export class AnnotationInfoCard extends AnnotationModal<
+class AnnotationInfoCard extends AnnotationModal<
   AnnotationInfoCardProp,
   AnnotationInfoCardShow,
   AnnotationInfoCardEvent
@@ -19,7 +19,7 @@ export class AnnotationInfoCard extends AnnotationModal<
 
     if (!position) {
       const event = data.mouseEvent;
-      if (!event) {
+      if (!event || !data.containerRef) {
         console.warn('No position or mouse event provided');
         return undefined;
       }

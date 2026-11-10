@@ -14,7 +14,7 @@ export type DefinitionsFetchFn = (
   url: string,
 ) => Promise<AnnotationJsonResource[]>;
 
-export const buildAnnotationDefFromJson = (
+const buildAnnotationDefFromJson = (
   resource: AnnotationJsonResource,
 ): AnnotationResource | null => {
   try {
@@ -41,6 +41,7 @@ export const buildAnnotationDefFromJson = (
   }
 };
 
+/** @public used by docs/.vuepress/components/ResourceJsonValidator.vue */
 export const buildAnnotationDefFromResourceJson = (
   resource: AnnotationJsonResource,
 ): AnnotationResource | null => {
@@ -130,19 +131,6 @@ export const loadAnnotationDefinitionsFromUrls = async (urls: string[]) => {
   return Promise.all(
     urls.map((a) => {
       return fetch(a).then((r) => r.json());
-    }),
-  );
-};
-
-export const loadAnnotationDefFromResourceUris = async (urls: string[]) => {
-  return Promise.all(
-    urls.map((a) => {
-      return fetch(a)
-        .then((r) => r.json())
-        .then((r) => {
-          return r;
-        })
-        .then(buildAnnotationDefFromResourceJson);
     }),
   );
 };

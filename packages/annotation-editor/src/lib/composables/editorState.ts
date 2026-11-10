@@ -1,15 +1,12 @@
-import {
-  type EditorAnnotation,
-  type Selector,
-  type SourceModel,
-  type UiAnnotatedText,
-} from '@ghentcdh/annotation-ui';
+import { type AnnotationMetadata, type EditorAnnotation, type Selector, type UiAnnotatedText } from '@ghentcdh/annotation-ui';
+import { type SourceModel } from '@ghentcdh/annotation-core';
 import { type AnnotationModalConfig } from '../modals/AnnotationModal.definition';
+import { type AnnotationModalActionMap } from '../modals/AnnotationModal.defaults';
 
 type EditorStatus = 'show' | 'create' | 'edit' | 'link' | null;
 
 export type EditorConfig = {
-  modal: AnnotationModalConfig;
+  modal: AnnotationModalConfig<AnnotationModalActionMap>;
   createAnnotatedText: (
     id: string,
     sourceModel?: SourceModel,
@@ -25,5 +22,5 @@ export type EditorState_ = {
   reset: () => void;
   show: () => void;
   format: (annotation: EditorAnnotation, isNew: boolean) => any;
-  transformMetadata: (metadata: any, selector: Selector) => any;
+  transformMetadata: (metadata: AnnotationMetadata, selector: Selector) => AnnotationMetadata;
 };

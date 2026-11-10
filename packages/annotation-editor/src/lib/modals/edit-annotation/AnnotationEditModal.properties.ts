@@ -1,9 +1,6 @@
 import type { ExtractPublicPropTypes, PropType } from 'vue';
-import {
-  type EditorAnnotation,
-  type Selector,
-  type SourceModel,
-} from '@ghentcdh/annotation-ui';
+import { type EditorAnnotation, type Selector } from '@ghentcdh/annotation-ui';
+import { type SourceModel } from '@ghentcdh/annotation-core';
 
 export const AnnotationEditModalProperties = {
   annotation: { type: Object as PropType<EditorAnnotation>, required: false },
@@ -16,11 +13,11 @@ export type AnnotationEditModal = ExtractPublicPropTypes<
 
 export type AnnotationEditModalEvent = {
   annotation: EditorAnnotation;
-  rawData: any;
+  rawData: unknown;
   selectors: Selector[];
 };
 export const AnnotationEditEmits = {
-  close: (event: AnnotationEditModalEvent | null) => true,
+  close: (_event: AnnotationEditModalEvent | null) => true,
 };
 
 export type AnnotationEditModalShow = {

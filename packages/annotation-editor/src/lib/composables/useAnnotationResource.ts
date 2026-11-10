@@ -7,8 +7,8 @@ import { type EmitFn, ref } from 'vue';
 import { useEditorState } from './useEditorState';
 import { type AnnotationEditModalEvent } from '../modals/edit-annotation/AnnotationEditModal.properties';
 
-export const AnnotationMetadataEditEmits = {
-  close: (event: AnnotationEditModalEvent | null) => true,
+type AnnotationMetadataEditEmits = {
+  close: (event: AnnotationEditModalEvent | null) => true;
 };
 export const useAnnotationResource = (
   annotation: EditorAnnotation,
@@ -37,7 +37,7 @@ export const useAnnotationResource = (
 
   const save = async (
     update: EditorAnnotation,
-    emits: EmitFn<typeof AnnotationMetadataEditEmits>,
+    emits: EmitFn<AnnotationMetadataEditEmits>,
   ) => {
     if (!annotation.id && !definition.canCreate) return;
     if (annotation.id && !definition.canEdit) return;
