@@ -1,3 +1,13 @@
+## 0.0.1-alpha.28 (2026-11-10)
+
+### 🚀 Features
+
+- use zoom functionality ([d33d62ae](https://github.com/GhentCDH/annotation-editor/commit/d33d62ae))
+
+### ❤️ Thank You
+
+- Bo Vandersteene
+
 ## 0.0.1-alpha.27 (2026-11-09)
 
 ### 🚀 Features
