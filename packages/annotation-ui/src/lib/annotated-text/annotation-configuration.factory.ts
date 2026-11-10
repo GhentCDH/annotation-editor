@@ -81,7 +81,9 @@ export const createAnnotationConfiguration = (
     annotatedText
       .setRenderParams(renderParams())
       .setStyleParams(styleParams())
-      .registerStyles(styles);
+      .registerStyles(styles)
+      .setZoomControls({ buttons: true, wheel: true, keyboard: true });
+    ;
 
     if (sourceModel) {
       const { content } = sourceModel;
