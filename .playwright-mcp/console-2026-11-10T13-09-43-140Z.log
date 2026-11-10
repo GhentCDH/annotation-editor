@@ -1,0 +1,55 @@
+[     128ms] [WARNING] [Vue warn]: provide() can only be used inside setup(). @ http://localhost:8199/.vuepress/.cache/deps/chunk-BTDQOJ7K.js?v=676834fd:2306
+[     134ms] [WARNING] [Vue warn]: Missing required prop: "annotationTransformer" 
+  at <AnnotationEditor configuration= {baseUrl: https://api.example.com/, app: my-app, prefix: my-prefix} sources= [Object, Object, Object] annotations= [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object]  ... > 
+  at <Editor> 
+  at <Editor.html onVnodeMounted=fn<onVnodeMounted> onVnodeUpdated=fn<onVnodeUpdated> onVnodeBeforeUnmount=fn<onVnodeBeforeUnmount>  ... > 
+  at <Content ref=Ref< undefined > id="markdown-content" > 
+  at <MarkdownContent> 
+  at <X> 
+  at <PageContent key="/demo/editor.html" > 
+  at <BaseTransition mode="out-in" onBeforeEnter=fn<onBeforeEnter> onBeforeLeave=fn<pending>  ... > 
+  at <Transition name="fade-in-up" mode="out-in" onBeforeEnter=fn<resolve>  ... > 
+  at <MainFadeInUpTransition> 
+  at <X> 
+  at <MainLayout> 
+  at <Layout> 
+  at <Vuepress> @ http://localhost:8199/.vuepress/.cache/deps/chunk-BTDQOJ7K.js?v=676834fd:2306
+[     136ms] [WARNING] [Vue warn]: Unhandled error during execution of render function 
+  at <PageMeta> 
+  at <X> 
+  at <PageContent key="/demo/editor.html" > 
+  at <BaseTransition mode="out-in" onBeforeEnter=fn<onBeforeEnter> onBeforeLeave=fn<pending>  ... > 
+  at <Transition name="fade-in-up" mode="out-in" onBeforeEnter=fn<resolve>  ... > 
+  at <MainFadeInUpTransition> 
+  at <X> 
+  at <MainLayout> 
+  at <Layout> 
+  at <Vuepress> @ http://localhost:8199/.vuepress/.cache/deps/chunk-BTDQOJ7K.js?v=676834fd:2306
+[     138ms] TypeError: Cannot read properties of undefined (reading 'latestUpdateAt')
+    at ComputedRefImpl.fn (http://localhost:8199/@fs/Users/bovandersteene/project/ugent/annotations/annotation-editor-cleanup/node_modules/.pnpm/@vuepress+plugin-git@2.0.0-rc.137_@vuepress+bundler-vite@2.0.0-rc.26_@types+node@26.6.6_673b990e2778a2588ea440416389c189/node_modules/@vuepress/plugin-git/dist/GitChangelog-Do7jXfkp.js?t=1794316171557&v=676834fd:2:2502)
+    at refreshComputed (http://localhost:8199/.vuepress/.cache/deps/chunk-BTDQOJ7K.js?v=676834fd:732:29)
+    at get value (http://localhost:8199/.vuepress/.cache/deps/chunk-BTDQOJ7K.js?v=676834fd:2013:5)
+    at Proxy.<anonymous> (http://localhost:8199/@fs/Users/bovandersteene/project/ugent/annotations/annotation-editor-cleanup/node_modules/.pnpm/vuepress-theme-hope@2.0.0-rc.110_@vuepress+bundler-vite@2.0.0-rc.26_@types+node@26.6.6__5784f63ab265ffe626c9381d124dff80/node_modules/vuepress-theme-hope/dist/NotFound-CM9CzF00.js?t=1794316171589&v=676834fd:357:174)
+    at renderComponentRoot (http://localhost:8199/.vuepress/.cache/deps/chunk-BTDQOJ7K.js?v=676834fd:7096:17)
+    at ReactiveEffect.componentUpdateFn [as fn] (http://localhost:8199/.vuepress/.cache/deps/chunk-BTDQOJ7K.js?v=676834fd:8692:46)
+    at ReactiveEffect.run (http://localhost:8199/.vuepress/.cache/deps/chunk-BTDQOJ7K.js?v=676834fd:578:19)
+    at setupRenderEffect (http://localhost:8199/.vuepress/.cache/deps/chunk-BTDQOJ7K.js?v=676834fd:8837:5)
+    at mountComponent (http://localhost:8199/.vuepress/.cache/deps/chunk-BTDQOJ7K.js?v=676834fd:8596:7)
+    at processComponent (http://localhost:8199/.vuepress/.cache/deps/chunk-BTDQOJ7K.js?v=676834fd:8543:9)
+[   15596ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:8199/@vite/client:865
+[   19610ms] [WARNING] [Vue warn]: provide() can only be used inside setup(). @ http://localhost:8199/.vuepress/.cache/deps/chunk-BTDQOJ7K.js?v=676834fd:2306
+[   19616ms] [WARNING] [Vue warn]: Missing required prop: "annotationTransformer" 
+  at <AnnotationEditor configuration= {baseUrl: https://api.example.com/, app: my-app, prefix: my-prefix} sources= [Object, Object, Object] annotations= [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object]  ... > 
+  at <Editor> 
+  at <Editor.html onVnodeMounted=fn<onVnodeMounted> onVnodeUpdated=fn<onVnodeUpdated> onVnodeBeforeUnmount=fn<onVnodeBeforeUnmount>  ... > 
+  at <Content ref=Ref< undefined > id="markdown-content" > 
+  at <MarkdownContent> 
+  at <X> 
+  at <PageContent key="/demo/editor.html" > 
+  at <BaseTransition mode="out-in" onBeforeEnter=fn<onBeforeEnter> onBeforeLeave=fn<pending>  ... > 
+  at <Transition name="fade-in-up" mode="out-in" onBeforeEnter=fn<resolve>  ... > 
+  at <MainFadeInUpTransition> 
+  at <X> 
+  at <MainLayout> 
+  at <Layout> 
+  at <Vuepress> @ http://localhost:8199/.vuepress/.cache/deps/chunk-BTDQOJ7K.js?v=676834fd:2306

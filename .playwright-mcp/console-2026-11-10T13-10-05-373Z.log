@@ -1,0 +1,92 @@
+[     127ms] [WARNING] [Vue warn]: provide() can only be used inside setup(). @ http://localhost:8199/.vuepress/.cache/deps/chunk-BTDQOJ7K.js?v=676834fd:2306
+[     134ms] [WARNING] [Vue warn]: Missing required prop: "annotationTransformer" 
+  at <AnnotationEditor configuration= {baseUrl: https://api.example.com/, app: my-app, prefix: my-prefix} sources= [Object, Object, Object] annotations= [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object]  ... > 
+  at <Editor> 
+  at <Editor.html onVnodeMounted=fn<onVnodeMounted> onVnodeUpdated=fn<onVnodeUpdated> onVnodeBeforeUnmount=fn<onVnodeBeforeUnmount>  ... > 
+  at <Content ref=Ref< undefined > id="markdown-content" > 
+  at <MarkdownContent> 
+  at <X> 
+  at <PageContent key="/demo/editor.html" > 
+  at <BaseTransition mode="out-in" onBeforeEnter=fn<onBeforeEnter> onBeforeLeave=fn<pending>  ... > 
+  at <Transition name="fade-in-up" mode="out-in" onBeforeEnter=fn<resolve>  ... > 
+  at <MainFadeInUpTransition> 
+  at <X> 
+  at <MainLayout> 
+  at <Layout> 
+  at <Vuepress> @ http://localhost:8199/.vuepress/.cache/deps/chunk-BTDQOJ7K.js?v=676834fd:2306
+[    3728ms] [WARNING] [Vue warn]: Extraneous non-props attributes (data-dispatch-renderer, data-dispatch-scope) were passed to component but could not be automatically inherited because component renders fragment or text or teleport root nodes. 
+  at <StringControlRenderer key=0 uischema= {type: Control, scope: #/properties/name, options: Object} schema= {type: string, title: name, minLength: 1}  ... > 
+  at <Dispatch uischema= {type: Control, scope: #/properties/name, options: Object} schema= {type: object, properties: Object, additionalProperties: true} > 
+  at <LayoutRenderer key=0 uischema= {type: GridLayout, elements: Array(5)} schema= {type: object, properties: Object, additionalProperties: true}  ... > 
+  at <Dispatch uischema= {type: GridLayout, elements: Array(5)} schema= {type: object, properties: Object, additionalProperties: true} > 
+  at <FormComponent ref_key="formRef" ref=Ref< null > id="modal-edit_541"  ... > 
+  at <FormComponent key=0 id="modal-edit_541" ref_key="formRef"  ... > 
+  at <CroutonForm key=0 layout="rows" data= {}  ... > 
+  at <Modal modal-title="Create Animals" open=true disable-close=false  ... > 
+  at <AnnotationEditModal key=0 ref_for=true source= {id: translation, uri: urn:demo:plain:original, type: text, content: Object}  ... > 
+  at <AnnotationModal> 
+  at <AnnotationEditor configuration= {baseUrl: https://api.example.com/, app: my-app, prefix: my-prefix} sources= [Object, Object, Object] annotations= [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object]  ... > 
+  at <Editor> 
+  at <Editor.html onVnodeMounted=fn<onVnodeMounted> onVnodeUpdated=fn<onVnodeUpdated> onVnodeBeforeUnmount=fn<onVnodeBeforeUnmount>  ... > 
+  at <Content ref=Ref< Proxy(Object) > id="markdown-content" > 
+  at <MarkdownContent> 
+  at <X> 
+  at <PageContent key="/demo/editor.html" > 
+  at <BaseTransition mode="out-in" onBeforeEnter=fn<onBeforeEnter> onBeforeLeave=fn<pending>  ... > 
+  at <Transition name="fade-in-up" mode="out-in" onBeforeEnter=fn<resolve>  ... > 
+  at <MainFadeInUpTransition> 
+  at <X> 
+  at <MainLayout> 
+  at <Layout> 
+  at <Vuepress> @ http://localhost:8199/.vuepress/.cache/deps/chunk-BTDQOJ7K.js?v=676834fd:2306
+[    3732ms] [WARNING] [Vue warn]: Extraneous non-props attributes (data-dispatch-renderer, data-dispatch-scope) were passed to component but could not be automatically inherited because component renders fragment or text or teleport root nodes. 
+  at <StringControlRenderer key=0 uischema= {type: Control, scope: #/properties/breed, options: Object} schema= {type: string, title: breed, minLength: 1}  ... > 
+  at <Dispatch uischema= {type: Control, scope: #/properties/breed, options: Object} schema= {type: object, properties: Object, additionalProperties: true} > 
+  at <LayoutRenderer key=0 uischema= {type: GridLayout, elements: Array(5)} schema= {type: object, properties: Object, additionalProperties: true}  ... > 
+  at <Dispatch uischema= {type: GridLayout, elements: Array(5)} schema= {type: object, properties: Object, additionalProperties: true} > 
+  at <FormComponent ref_key="formRef" ref=Ref< null > id="modal-edit_541"  ... > 
+  at <FormComponent key=0 id="modal-edit_541" ref_key="formRef"  ... > 
+  at <CroutonForm key=0 layout="rows" data= {}  ... > 
+  at <Modal modal-title="Create Animals" open=true disable-close=false  ... > 
+  at <AnnotationEditModal key=0 ref_for=true source= {id: translation, uri: urn:demo:plain:original, type: text, content: Object}  ... > 
+  at <AnnotationModal> 
+  at <AnnotationEditor configuration= {baseUrl: https://api.example.com/, app: my-app, prefix: my-prefix} sources= [Object, Object, Object] annotations= [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object]  ... > 
+  at <Editor> 
+  at <Editor.html onVnodeMounted=fn<onVnodeMounted> onVnodeUpdated=fn<onVnodeUpdated> onVnodeBeforeUnmount=fn<onVnodeBeforeUnmount>  ... > 
+  at <Content ref=Ref< Proxy(Object) > id="markdown-content" > 
+  at <MarkdownContent> 
+  at <X> 
+  at <PageContent key="/demo/editor.html" > 
+  at <BaseTransition mode="out-in" onBeforeEnter=fn<onBeforeEnter> onBeforeLeave=fn<pending>  ... > 
+  at <Transition name="fade-in-up" mode="out-in" onBeforeEnter=fn<resolve>  ... > 
+  at <MainFadeInUpTransition> 
+  at <X> 
+  at <MainLayout> 
+  at <Layout> 
+  at <Vuepress> @ http://localhost:8199/.vuepress/.cache/deps/chunk-BTDQOJ7K.js?v=676834fd:2306
+[    3732ms] [WARNING] [Vue warn]: Extraneous non-props attributes (data-dispatch-renderer, data-dispatch-scope) were passed to component but could not be automatically inherited because component renders fragment or text or teleport root nodes. 
+  at <StringControlRenderer key=0 uischema= {type: Control, scope: #/properties/species, options: Object} schema= {type: string, title: Species, minLength: 1}  ... > 
+  at <Dispatch uischema= {type: Control, scope: #/properties/species, options: Object} schema= {type: object, properties: Object, additionalProperties: true} > 
+  at <LayoutRenderer key=0 uischema= {type: GridLayout, elements: Array(5)} schema= {type: object, properties: Object, additionalProperties: true}  ... > 
+  at <Dispatch uischema= {type: GridLayout, elements: Array(5)} schema= {type: object, properties: Object, additionalProperties: true} > 
+  at <FormComponent ref_key="formRef" ref=Ref< null > id="modal-edit_541"  ... > 
+  at <FormComponent key=0 id="modal-edit_541" ref_key="formRef"  ... > 
+  at <CroutonForm key=0 layout="rows" data= {}  ... > 
+  at <Modal modal-title="Create Animals" open=true disable-close=false  ... > 
+  at <AnnotationEditModal key=0 ref_for=true source= {id: translation, uri: urn:demo:plain:original, type: text, content: Object}  ... > 
+  at <AnnotationModal> 
+  at <AnnotationEditor configuration= {baseUrl: https://api.example.com/, app: my-app, prefix: my-prefix} sources= [Object, Object, Object] annotations= [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object]  ... > 
+  at <Editor> 
+  at <Editor.html onVnodeMounted=fn<onVnodeMounted> onVnodeUpdated=fn<onVnodeUpdated> onVnodeBeforeUnmount=fn<onVnodeBeforeUnmount>  ... > 
+  at <Content ref=Ref< Proxy(Object) > id="markdown-content" > 
+  at <MarkdownContent> 
+  at <X> 
+  at <PageContent key="/demo/editor.html" > 
+  at <BaseTransition mode="out-in" onBeforeEnter=fn<onBeforeEnter> onBeforeLeave=fn<pending>  ... > 
+  at <Transition name="fade-in-up" mode="out-in" onBeforeEnter=fn<resolve>  ... > 
+  at <MainFadeInUpTransition> 
+  at <X> 
+  at <MainLayout> 
+  at <Layout> 
+  at <Vuepress> @ http://localhost:8199/.vuepress/.cache/deps/chunk-BTDQOJ7K.js?v=676834fd:2306
+[   14699ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:8199/@vite/client:865
