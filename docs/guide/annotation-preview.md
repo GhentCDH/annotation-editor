@@ -58,7 +58,7 @@ const onSelect = (annotation: W3CAnnotation | null, action: string | null) => {
 | `annotations` | `W3CAnnotation[]` | ✓ | — | Annotations to highlight |
 | `annotationDefinitions` | `AnnotationDefinition[]` | ✓ | — | Available annotation types (labels, styles, and views) |
 | `cols` | `number` | — | `2` | Number of grid columns (ignored when `layout` is set) |
-| `layout` | `GridLayout` | — | `undefined` | Custom CSS grid layout — see [Custom layout](#custom-layout). Also available as `PreviewLayout` (deprecated alias). |
+| `layout` | `GridLayout` | — | `undefined` | Custom CSS grid layout — see [Custom layout](#custom-layout). |
 | `selectedAnnotationId` | `string` | — | `undefined` | Highlight a specific annotation on mount |
 | `textAdapter` | `TextAdapter` | — | `undefined` | Custom adapter for text rendering |
 | `annotationAdapter` | `AnnotationAdapter` | — | `undefined` | Custom adapter for annotation rendering |
@@ -71,7 +71,7 @@ const onSelect = (annotation: W3CAnnotation | null, action: string | null) => {
 
 ## Custom layout
 
-By default sources are placed in an equal-width column grid controlled by `cols`. For more control — e.g. a commentary pane spanning the full width below two source panes — pass a `GridLayout` object (`PreviewLayout` is a deprecated alias).
+By default sources are placed in an equal-width column grid controlled by `cols`. For more control — e.g. a commentary pane spanning the full width below two source panes — pass a `GridLayout` object.
 
 ```ts
 import { type GridLayout } from '@ghentcdh/annotation-preview';
@@ -132,7 +132,7 @@ Original and translation side by side, commentary spanning the full width below.
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { AnnotationPreview, type PreviewLayout } from '@ghentcdh/annotation-preview';
+import { AnnotationPreview, type GridLayout } from '@ghentcdh/annotation-preview';
 import { type SourceModel } from '@ghentcdh/annotation-editor';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 
@@ -157,7 +157,7 @@ const sources: SourceModel[] = [
   },
 ];
 
-const layout: PreviewLayout = {
+const layout: GridLayout = {
   areas: [
     ['original', 'translation'],
     ['commentary', 'commentary'],

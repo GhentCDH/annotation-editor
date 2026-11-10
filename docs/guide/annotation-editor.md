@@ -237,7 +237,7 @@ Original and translation side by side, commentary spanning the full width below.
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { AnnotationEditor } from '@ghentcdh/annotation-editor';
-import { type SourceModel, type GridLayout } from '@ghentcdh/annotation-ui';
+import { type SourceModel, type GridLayout } from '@ghentcdh/annotation-core';
 
 const sources: SourceModel[] = [
   {

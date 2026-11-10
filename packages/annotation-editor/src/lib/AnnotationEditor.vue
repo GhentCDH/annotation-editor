@@ -19,11 +19,7 @@
 <script lang="ts" setup>
 import { computed, onMounted, useTemplateRef } from 'vue';
 import { Collapse } from '@ghentcdh/crouton-vue';
-import {
-  buildGridStyle,
-  getPaneArea,
-  type SourceModel,
-} from '@ghentcdh/annotation-ui';
+import { buildGridStyle, getPaneArea, type SourceModel } from '@ghentcdh/annotation-core';
 import {
   AnnotationEditorEmits,
   AnnotationEditorProperties,

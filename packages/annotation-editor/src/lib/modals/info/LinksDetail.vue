@@ -50,6 +50,7 @@ const links = computed<LinkDisplay[]>(() => {
     const annotationId = link.links.find(
       (li) => li.uri !== props.annotation.id,
     )?.uri;
+    if (annotationId === undefined) return [];
     const relation = findAnnotation(annotationId);
     if (!relation) return [];
 

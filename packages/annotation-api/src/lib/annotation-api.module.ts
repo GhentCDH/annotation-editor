@@ -9,7 +9,7 @@ import { CroutonApiModule } from '@ghentcdh/crouton-api';
 import { registerResourceExtensions } from '@ghentcdh/crouton-core';
 import { AnnotationNamespaceController } from './annotation-namespace.controller';
 import { AnnotationController } from './annotation/annotation.controller';
-import { ANNOTATION_DEF_CONFIG_TOKEN } from './utils/annotation.context-builder';
+import { ANNOTATION_DEF_CONFIG_TOKEN } from './context/annotation-def-config.token';
 import { SCHEMA_PREFIX } from './prefix';
 import { AnnotationContextService } from './context/annotation-context.service';
 import { AnnotationCrudRepository } from './annotation/annotation.repository';

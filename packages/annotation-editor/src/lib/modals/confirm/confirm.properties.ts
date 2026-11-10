@@ -1,7 +1,5 @@
 import type { ExtractPublicPropTypes } from 'vue';
 
-export type ConfirmAction = { label: string; onClick: () => void };
-
 export const ConfirmProperties = {
   title: { type: String, required: true as const },
   message: { type: String, required: true as const },
@@ -14,5 +12,5 @@ export type ConfirmProps = ExtractPublicPropTypes<typeof ConfirmProperties>;
 export type ConfirmCloseEvent = { confirmed: boolean };
 
 export const ConfirmEmits = {
-  close: (event: ConfirmCloseEvent) => true,
+  close: (_event: ConfirmCloseEvent) => true,
 };

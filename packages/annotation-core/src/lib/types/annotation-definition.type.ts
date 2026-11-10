@@ -10,8 +10,7 @@ import {
   AnnotationJsonResourceShape,
 } from './annotation-json-config.types';
 
-const viewDefList = ['table', 'view', 'form'] as const;
-export type ViewDef = (typeof viewDefList)[number];
+export type ViewDef = 'table' | 'view' | 'form';
 
 export const annotationColumnDefinition = z.custom<any>();
 

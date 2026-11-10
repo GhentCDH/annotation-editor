@@ -16,14 +16,16 @@ export type Selector = z.infer<typeof SelectorSchema>;
 export const LinkSchema = z.object({ uri: z.string() });
 export type AnnotationLink = z.infer<typeof LinkSchema>;
 
+export type AnnotationMetadata = Record<string, unknown>;
+
 export type _EditorAnnotation = {
   id: AnnotationId;
   label?: string;
   definitionUri: string;
-  metadata: any;
+  metadata: AnnotationMetadata;
   selectors: Array<Selector>;
   parentId?: AnnotationId;
-  links: any[];
+  links: AnnotationLink[];
   getSelector: (sourceUri: string) => Selector | undefined;
   setSelector: (selector: Selector) => void;
   clone: (annotation: Partial<_EditorAnnotation>) => _EditorAnnotation;
@@ -34,7 +36,7 @@ export const editorAnnotationSchema: z.ZodType<_EditorAnnotation> = z
     z.object({
       id: annotationIdSchema,
       label: z.string().optional(),
-      metadata: z.any(),
+      metadata: z.custom<AnnotationMetadata>(),
       selectors: z.array(SelectorSchema),
       links: z.array(LinkSchema).default([]),
       parentId: annotationIdSchema.optional(),

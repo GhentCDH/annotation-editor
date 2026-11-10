@@ -126,7 +126,7 @@ const buildVueDefinitions = (
   activeStyle: typeof createHighlightStyle,
 ): UIAnnotationDefinition[] =>
   coreDefs.map((def) =>
-    toVueDefinition(def, grouped, createStyle, activeStyle as any),
+    toVueDefinition(def, grouped, createStyle, activeStyle),
   );
 
 const buildDefinitionsMap = (
@@ -281,7 +281,7 @@ export const createAnnotationDefinitionsState = (
   return state;
 };
 
-export const createAndLoadDefinitionsState = (
+const createAndLoadDefinitionsState = (
   options: ProvideAnnotationDefinitionsOptions,
 ) => {
   const state = createAnnotationDefinitionsState(options);

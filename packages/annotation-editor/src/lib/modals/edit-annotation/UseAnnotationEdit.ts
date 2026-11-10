@@ -1,5 +1,6 @@
 import { type EmitFn } from 'vue';
 import {
+  type AnnotationMetadata,
   editorAnnotationSchema,
   type Selector,
   SelectorSchema,
@@ -81,7 +82,7 @@ export const UseAnnotationEdit = (
     return metadataEdit.save(cloned, emits);
   };
 
-  const onChangeValue = ({ metadata: _metadata }: { metadata?: any }) => {
+  const onChangeValue = ({ metadata: _metadata }: { metadata: AnnotationMetadata }) => {
     return metadataEdit.onChangeValue({ metadata: _metadata, selector });
   };
 

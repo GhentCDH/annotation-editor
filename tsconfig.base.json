@@ -30,7 +30,9 @@
         "./node_modules/@ghentcdh/annotated-text"
       ]
     },
-    "strict": false,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "noUncheckedSideEffectImports": false,
     "types": ["*"],
     "esModuleInterop": false

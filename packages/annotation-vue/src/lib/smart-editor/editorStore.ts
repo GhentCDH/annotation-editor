@@ -1,6 +1,5 @@
 import {
   computed,
-  inject,
   type InjectionKey,
   provide,
   reactive,
@@ -125,7 +124,7 @@ const createEditState = <ANNOTATION extends BaseAnnotation>(
   });
 };
 
-export type TextState = ReturnType<typeof createEditState>;
+type TextState = ReturnType<typeof createEditState>;
 
 const TEXT_STATE_KEY: InjectionKey<TextState> = Symbol('TextState');
 
@@ -135,14 +134,5 @@ export const provideEditorStore = <ANNOTATION extends BaseAnnotation>(
 ) => {
   const state = createEditState(annotationLoader, transformer);
   provide(TEXT_STATE_KEY, state);
-  return state;
-};
-
-export const useEditorStore = (): TextState => {
-  const state = inject(TEXT_STATE_KEY);
-  if (!state)
-    throw new Error(
-      'useEditorStore() must be called inside a component that calls provideEditorStore()',
-    );
   return state;
 };

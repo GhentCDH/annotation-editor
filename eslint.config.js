@@ -83,7 +83,14 @@ export default [
         },
       ],
       'no-console': ['error', { allow: ['warn', 'error'] }],
-      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
       '@typescript-eslint/no-explicit-any': 'warn',
       'import-x/default': 'off',
       'import-x/named': 'off',
@@ -92,8 +99,8 @@ export default [
         1,
         {
           groups: [
-            'external',
             'builtin',
+            'external',
             'internal',
             'sibling',
             'parent',

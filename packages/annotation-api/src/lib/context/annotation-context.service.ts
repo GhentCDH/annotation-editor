@@ -6,9 +6,8 @@ import {
   createAnnotationContext,
 } from '@ghentcdh/annotation-core';
 import { ResourceConfigRegistry } from '@ghentcdh/crouton-api';
-import { ANNOTATION_DEF_CONFIG_TOKEN } from '../utils/annotation.context-builder';
+import { ANNOTATION_DEF_CONFIG_TOKEN } from './annotation-def-config.token';
 
-type Resource = Pick<AnnotationResource, 'annotation'>;
 @Injectable()
 export class AnnotationContextService {
   private readonly contextConfigMap = new Map<string, AnnotationContext>();

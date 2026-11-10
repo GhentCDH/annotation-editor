@@ -3,6 +3,7 @@ import {
   type BaseAnnotation,
 } from '@ghentcdh/annotated-text';
 import {
+  type AnnotationMetadata,
   type EditorAnnotation,
   LinkSchema,
   type Selector,
@@ -10,7 +11,7 @@ import {
 
 export abstract class TransformAnnotationAdapter<
   ANNOTATION extends BaseAnnotation,
-  PARAMS extends AnnotationAdapterParams = AnnotationAdapterParams,
+  _PARAMS extends AnnotationAdapterParams = AnnotationAdapterParams,
 > {
   /**
    * Name of the adapter. Be unique :-).
@@ -23,7 +24,7 @@ export abstract class TransformAnnotationAdapter<
 
   protected originalAnnotations: ANNOTATION[] = [];
 
-  transformMetadata(metadata: any, selector: Selector) {
+  transformMetadata(metadata: AnnotationMetadata, _selector: Selector): AnnotationMetadata {
     return metadata;
   }
 
