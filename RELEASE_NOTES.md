@@ -1,3 +1,17 @@
+## 0.0.1-alpha.29 (2026-11-10)
+
+### 🩹 Fixes
+
+- type annotation modal show/close per key and pass real annotations ([fa8aba06](https://github.com/GhentCDH/annotation-editor/commit/fa8aba06))
+- pass a parsed draft annotation when creating from the navbar ([22a32f27](https://github.com/GhentCDH/annotation-editor/commit/22a32f27))
+- **annotation-core:** make annotated-text a peer dependency ([78debdf3](https://github.com/GhentCDH/annotation-editor/commit/78debdf3))
+- **annotation-vue:** make annotated-text a peer dependency ([07681a44](https://github.com/GhentCDH/annotation-editor/commit/07681a44))
+- **annotation-vue:** ship declarations for bundled private packages and .vue files ([0721d1be](https://github.com/GhentCDH/annotation-editor/commit/0721d1be))
+
+### ❤️ Thank You
+
+- Bo Vandersteene
+
 ## 0.0.1-alpha.28 (2026-11-10)
 
 ### 🚀 Features
