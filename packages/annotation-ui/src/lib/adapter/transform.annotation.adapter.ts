@@ -11,7 +11,7 @@ import {
 
 export abstract class TransformAnnotationAdapter<
   ANNOTATION extends BaseAnnotation,
-  PARAMS extends AnnotationAdapterParams = AnnotationAdapterParams,
+  _PARAMS extends AnnotationAdapterParams = AnnotationAdapterParams,
 > {
   /**
    * Name of the adapter. Be unique :-).

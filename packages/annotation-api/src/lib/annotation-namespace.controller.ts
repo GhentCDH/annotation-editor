@@ -1,5 +1,4 @@
 import { Controller, Get, Inject, Param } from '@nestjs/common';
-import { type AnnotationJsonResource } from '@ghentcdh/annotation-core';
 import { ApiTags } from '@nestjs/swagger';
 import { ResourceConfigRegistry } from '@ghentcdh/crouton-api';
 import { type AnnotationContextService } from './context/annotation-context.service';

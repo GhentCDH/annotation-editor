@@ -86,7 +86,7 @@ const drawTextAnnotation = () => {
     .setTagLabelFn((annotation: EditorAnnotation) => {
       return annotation.label ?? '';
     })
-    .on('click', ({ mouseEvent, event, data }) => {
+    .on('click', ({ mouseEvent, data }) => {
       const definition = getDefinition(data.annotation.definitionUri);
       sendAnnotationEvent('select', {
         mouseEvent: mouseEvent!,

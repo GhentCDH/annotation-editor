@@ -17,7 +17,7 @@ export type AnnotationEditModalEvent = {
   selectors: Selector[];
 };
 export const AnnotationEditEmits = {
-  close: (event: AnnotationEditModalEvent | null) => true,
+  close: (_event: AnnotationEditModalEvent | null) => true,
 };
 
 export type AnnotationEditModalShow = {

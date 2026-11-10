@@ -68,7 +68,7 @@ import { useEditorState } from '../../composables/useEditorState';
 let annotatedTextConfig: UiAnnotatedText;
 const props = defineProps(AnnotationEditModalProperties);
 
-const { config, findAnnotation } = useEditorState();
+const { config } = useEditorState();
 
 const emits = defineEmits(AnnotationEditEmits);
 
@@ -162,7 +162,7 @@ onMounted(() => {
     })
     .setAnnotations(annotations)
     .setAnnotationAdapterParams({ edit: true, create: !props.annotation?.id })
-    .on('annotation-create--end', ({ mouseEvent, event, data: _data }) => {
+    .on('annotation-create--end', ({ data: _data }) => {
       const s = _data.annotation.getSelector(props.source.uri);
       if (s) updateSelector(s);
       annotatedTextConfig.annotatedText.setAnnotationAdapterParams({
@@ -170,7 +170,7 @@ onMounted(() => {
         edit: true,
       });
     })
-    .on('annotation-edit--end', ({ mouseEvent, event, data }) => {
+    .on('annotation-edit--end', ({ data }) => {
       const s = data.annotation.getSelector(props.source.uri);
       if (s) updateSelector(s);
     });

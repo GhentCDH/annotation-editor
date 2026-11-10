@@ -12,5 +12,5 @@ export type ConfirmProps = ExtractPublicPropTypes<typeof ConfirmProperties>;
 export type ConfirmCloseEvent = { confirmed: boolean };
 
 export const ConfirmEmits = {
-  close: (event: ConfirmCloseEvent) => true,
+  close: (_event: ConfirmCloseEvent) => true,
 };

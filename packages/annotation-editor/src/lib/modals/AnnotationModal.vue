@@ -18,7 +18,7 @@ import { onUnmounted } from 'vue';
 import { AnnotationModalProperties } from './AnnotationModal.properties';
 import { useEditorState } from '../composables/useEditorState';
 
-const props = defineProps(AnnotationModalProperties);
+defineProps(AnnotationModalProperties);
 const { config } = useEditorState();
 
 onUnmounted(() => {

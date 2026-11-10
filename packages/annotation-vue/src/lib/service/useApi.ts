@@ -1,7 +1,4 @@
 import type { AxiosInstance } from 'axios';
 
-let _api: AxiosInstance;
-
-export const configureApi = (api: AxiosInstance) => {
-  _api = api;
-};
+/** @deprecated No-op: the configured instance is never read. Will be removed in a future release. */
+export const configureApi = (_api: AxiosInstance) => {};

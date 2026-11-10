@@ -21,5 +21,5 @@ export type LinkAnnotationShow = Pick<LinkAnnotationProps, 'annotation'>;
 export type LinkAnnotationCloseEvent = { annotation: EditorAnnotation };
 
 export const LinkEmits = {
-  close: (event: LinkAnnotationCloseEvent | null) => true,
+  close: (_event: LinkAnnotationCloseEvent | null) => true,
 };

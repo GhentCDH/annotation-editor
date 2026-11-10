@@ -68,7 +68,7 @@ export class W3cTransformAnnotationAdapter extends TransformAnnotationAdapter<W3
     return parsedAnnotation;
   }
 
-  format(annotation: EditorAnnotation, isNew: boolean): W3CAnnotation {
+  format(annotation: EditorAnnotation, _isNew: boolean): W3CAnnotation {
     const builder = w3cAnnotation();
 
     builder.setId(String(annotation.id ?? 'NEW_ONE'));

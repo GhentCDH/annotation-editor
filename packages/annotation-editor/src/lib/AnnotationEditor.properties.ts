@@ -52,11 +52,11 @@ export type AnnotationEditorProps = ExtractPublicPropTypes<
 >;
 
 export const AnnotationEditorEmits = {
-  'update:annotation': <ANNOTATION>(annotation: ANNOTATION) =>
+  'update:annotation': <ANNOTATION>(_annotation: ANNOTATION) =>
     Promise<ANNOTATION>,
-  'delete:annotation': <ANNOTATION>(annotation: ANNOTATION) =>
+  'delete:annotation': <ANNOTATION>(_annotation: ANNOTATION) =>
     Promise<ANNOTATION>,
-  'create:annotation': <ANNOTATION>(annotation: ANNOTATION) =>
+  'create:annotation': <ANNOTATION>(_annotation: ANNOTATION) =>
     Promise<ANNOTATION>,
   'create:annotation:events': (_payload: any) => true,
   'select:annotation': <ANNOTATION>(
