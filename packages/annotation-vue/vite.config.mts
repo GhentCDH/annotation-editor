@@ -7,6 +7,8 @@ import * as path from 'path';
 import tailwindcss from '@tailwindcss/vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
+const PRIVATE_PACKAGES = ['annotation-ui', 'annotation-editor'];
+
 export default defineConfig(() => ({
   root: import.meta.dirname,
   cacheDir: '../../node_modules/.vite/annotation-vue',
@@ -14,10 +16,25 @@ export default defineConfig(() => ({
     vue(),
     tailwindcss(),
     tsconfigPaths(),
+    // annotation-ui and annotation-editor are private (bundled into the JS), so
+    // emit their declarations next to ours and rewrite imports to relative paths.
     dts({
-      entryRoot: 'src',
+      entryRoot: '..',
       tsconfigPath: path.join(import.meta.dirname, 'tsconfig.lib.json'),
+      include: [
+        'src/**/*.ts',
+        'src/**/*.vue',
+        ...PRIVATE_PACKAGES.flatMap((p) => [
+          `../${p}/src/**/*.ts`,
+          `../${p}/src/**/*.vue`,
+        ]),
+      ],
+      exclude: ['../**/*.spec.ts', '../**/*.test.ts', '../**/__tests__/**'],
       pathsToAliases: false,
+      aliases: PRIVATE_PACKAGES.map((p) => ({
+        find: `@ghentcdh/${p}`,
+        replacement: path.join(import.meta.dirname, `../${p}/src`),
+      })),
     }),
     copyPackageJson(),
   ],
