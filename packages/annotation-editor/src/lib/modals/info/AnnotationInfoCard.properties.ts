@@ -1,8 +1,6 @@
 import { type ExtractPublicPropTypes, type PropType } from 'vue';
-import {
-  type EditorAnnotation,
-  type SourceModel,
-} from '@ghentcdh/annotation-ui';
+import { type EditorAnnotation } from '@ghentcdh/annotation-ui';
+import { type SourceModel } from '@ghentcdh/annotation-core';
 
 type Position = { x: number; y: number };
 

@@ -1,9 +1,6 @@
 import type { ExtractPublicPropTypes, PropType } from 'vue';
-import {
-  type EditorAnnotation,
-  type Selector,
-  type SourceModel,
-} from '@ghentcdh/annotation-ui';
+import { type EditorAnnotation, type Selector } from '@ghentcdh/annotation-ui';
+import { type SourceModel } from '@ghentcdh/annotation-core';
 
 export const AnnotationEditModalProperties = {
   annotation: { type: Object as PropType<EditorAnnotation>, required: false },

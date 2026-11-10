@@ -1,10 +1,6 @@
 import { type TemplateRef } from 'vue';
-import {
-  type EditorAnnotation,
-  type KeyLabel,
-  type SourceModel,
-  type UIAnnotationDefinition,
-} from '@ghentcdh/annotation-ui';
+import { type EditorAnnotation, type KeyLabel, type UIAnnotationDefinition } from '@ghentcdh/annotation-ui';
+import { type SourceModel } from '@ghentcdh/annotation-core';
 import { NotificationService } from '@ghentcdh/crouton-vue';
 import { type EditorConfig, type EditorState_ } from './editorState';
 import { type AnnotationEditModalShow } from '../modals/edit-annotation/AnnotationEditModal.properties';

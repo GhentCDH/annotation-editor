@@ -1,9 +1,5 @@
-import {
-  type EditorAnnotation,
-  type Selector,
-  type SourceModel,
-  type UiAnnotatedText,
-} from '@ghentcdh/annotation-ui';
+import { type EditorAnnotation, type Selector, type UiAnnotatedText } from '@ghentcdh/annotation-ui';
+import { type SourceModel } from '@ghentcdh/annotation-core';
 import { type AnnotationModalConfig } from '../modals/AnnotationModal.definition';
 
 type EditorStatus = 'show' | 'create' | 'edit' | 'link' | null;

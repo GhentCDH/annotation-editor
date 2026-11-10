@@ -39,9 +39,6 @@ export type GridLayout = {
   panes: PaneConfig[];
 };
 
-/** @deprecated Use `GridLayout` instead */
-export type PreviewLayout = GridLayout;
-
 /** Computed CSS styles for the grid container */
 export const buildGridStyle = (layout: GridLayout): Record<string, string> => {
   const templateAreas = layout.areas

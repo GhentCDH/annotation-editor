@@ -9,15 +9,8 @@ import {
   type TemplateRef,
   watch,
 } from 'vue';
-import {
-  type AnnotationId,
-  createAnnotationConfiguration,
-  type DefinitionMap,
-  type EditorAnnotation,
-  groupById,
-  type SourceModel,
-  type UIAnnotationDefinition,
-} from '@ghentcdh/annotation-ui';
+import { type AnnotationId, createAnnotationConfiguration, type DefinitionMap, type EditorAnnotation, groupById, type UIAnnotationDefinition } from '@ghentcdh/annotation-ui';
+import { type SourceModel } from '@ghentcdh/annotation-core';
 import {
   type AnnotationEvents,
   sendAnnotationEvent,
