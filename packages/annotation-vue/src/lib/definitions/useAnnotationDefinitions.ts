@@ -281,7 +281,7 @@ export const createAnnotationDefinitionsState = (
   return state;
 };
 
-export const createAndLoadDefinitionsState = (
+const createAndLoadDefinitionsState = (
   options: ProvideAnnotationDefinitionsOptions,
 ) => {
   const state = createAnnotationDefinitionsState(options);

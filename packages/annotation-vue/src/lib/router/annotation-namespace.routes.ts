@@ -8,7 +8,7 @@ import {
 import { type ContextBuilder } from '@ghentcdh/w3c-utils';
 import { type AnnotationDefinitionService } from '../definitions/annotation-definition.service';
 
-export type AnnotationNamespaceRoutePaths = {
+type AnnotationNamespaceRoutePaths = {
   all: string;
   allJsonLd: string;
   byId: (id: string) => string;
@@ -149,7 +149,7 @@ const JsonView = defineComponent({
   },
 });
 
-export const NAMESPACE_ROUTE_META = {
+const NAMESPACE_ROUTE_META = {
   namespace: true,
   layout: 'blank',
 } as const;

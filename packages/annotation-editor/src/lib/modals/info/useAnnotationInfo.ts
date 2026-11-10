@@ -9,7 +9,7 @@ import {
 } from '../AnnotationModal.definition';
 import { getMousePosition } from '../../utils/mouse-events';
 
-export class AnnotationInfoCard extends AnnotationModal<
+class AnnotationInfoCard extends AnnotationModal<
   AnnotationInfoCardProp,
   AnnotationInfoCardShow,
   AnnotationInfoCardEvent

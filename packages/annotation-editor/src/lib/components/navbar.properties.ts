@@ -1,4 +1,4 @@
-import type { ExtractPublicPropTypes, PropType } from 'vue';
+import type { PropType } from 'vue';
 import type { IconEnum } from '@ghentcdh/crouton-vue';
 
 export type NavbarChildAction = {
@@ -18,5 +18,3 @@ export type NavbarAction = {
 export const NavbarProperties = {
   actions: { type: Array as PropType<NavbarAction[]>, required: true as const },
 };
-
-export type NavbarProps = ExtractPublicPropTypes<typeof NavbarProperties>;

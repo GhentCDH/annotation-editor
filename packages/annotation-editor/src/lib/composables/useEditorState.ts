@@ -34,7 +34,7 @@ import {
 } from '../modals/open-modal';
 import { createModalConfig } from '../modals/annotationModal.composable';
 
-export type EditorState = {
+type EditorState = {
   sources: ComputedRef<Readonly<SourceModel[]>>;
   config: Readonly<EditorConfig>;
   editorState: Readonly<EditorState_>;

@@ -5,7 +5,7 @@ import {
 
 import { AnnotationModal } from '../AnnotationModal.definition';
 
-export class Confirm extends AnnotationModal<
+class Confirm extends AnnotationModal<
   ConfirmProps,
   ConfirmProps,
   ConfirmCloseEvent

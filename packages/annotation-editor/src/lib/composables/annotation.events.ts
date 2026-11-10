@@ -52,7 +52,7 @@ export type AnnotationEvents = {
   link: LinkData;
 };
 
-export const createAnnotation = (
+const createAnnotation = (
   data: CreateAnnotationData,
   config: EditorConfig,
   state: EditorState_,
@@ -219,7 +219,7 @@ const endLink = (
     });
 };
 
-export const handleSelectAnnotation = (
+const handleSelectAnnotation = (
   data: SelectAnnotationData | null,
   config: EditorConfig,
   state: EditorState_,

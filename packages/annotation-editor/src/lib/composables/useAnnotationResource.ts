@@ -7,7 +7,7 @@ import { type EmitFn, ref } from 'vue';
 import { useEditorState } from './useEditorState';
 import { type AnnotationEditModalEvent } from '../modals/edit-annotation/AnnotationEditModal.properties';
 
-export const AnnotationMetadataEditEmits = {
+const AnnotationMetadataEditEmits = {
   close: (event: AnnotationEditModalEvent | null) => true,
 };
 export const useAnnotationResource = (
