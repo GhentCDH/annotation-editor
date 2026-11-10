@@ -10,7 +10,7 @@ export type ModalTypeConfig<
   closeEvent: CLOSE_EVENT;
 };
 
-export type AnnotationModalFn<
+type AnnotationModalFn<
   DATA = any,
   SHOW_DATA = DATA,
   CLOSE_EVENT = void,
