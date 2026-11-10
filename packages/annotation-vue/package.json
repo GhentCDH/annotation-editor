@@ -10,14 +10,14 @@
   "exports": {
     ".": {
       "@ghentcdh/annotation-vue": "./src/index.ts",
-      "types": "./index.d.ts",
+      "types": "./annotation-vue/src/index.d.ts",
       "import": "./index.js"
     },
     "./styles.css": "./styles.css",
     "./package.json": "./package.json"
   },
   "main": "./index.js",
-  "types": "./index.d.ts",
+  "types": "./annotation-vue/src/index.d.ts",
   "scripts": {
     "build": "vite build",
     "dev": "vite build --watch",
