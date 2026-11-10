@@ -63,3 +63,4 @@ packages/*/index.mjs
 packages/*/index.d.ts
 packages/*/index.css
 packages/*/styles.css
+.playwright-mcp/

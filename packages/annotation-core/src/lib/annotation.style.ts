@@ -9,7 +9,7 @@ import { type AnnotationResource } from './types/annotation-definition.type';
 
 const CONTEXT = 'annotation.style';
 
-export const AnnotationStyleSchema = z.object({
+const AnnotationStyleSchema = z.object({
   id: z.string(),
   name: z.string(),
   target: z
