@@ -1,5 +1,6 @@
 import { type TemplateRef } from 'vue';
 import {
+  editorAnnotationSchema,
   type EditorAnnotation,
   type KeyLabel,
   type SourceModel,
@@ -66,11 +67,15 @@ export const createAnnotation = (
   config.modal
     .show('edit-annotation', {
       source: data.source,
-      annotation: {
+      // Empty id marks a draft: the edit modal creates instead of updates.
+      annotation: editorAnnotationSchema.parse({
+        id: '',
         definitionUri: data.definitionUri,
         parentId: data.parentAnnotation?.id,
+        metadata: {},
         selectors: [],
-      },
+        links: [],
+      }),
     })
     .then((result) => {
       state.show();
