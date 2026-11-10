@@ -24,7 +24,6 @@
     "typecheck": "vue-tsc --noEmit -p tsconfig.lib.json"
   },
   "dependencies": {
-    "@ghentcdh/annotated-text": "^1.2.0",
     "@ghentcdh/annotation-core": "workspace:*",
     "@ghentcdh/annotation-editor": "workspace:*",
     "@ghentcdh/annotation-ui": "workspace:*",
@@ -34,6 +33,7 @@
     "axios": "^1.19.0"
   },
   "peerDependencies": {
+    "@ghentcdh/annotated-text": "^1.2.0",
     "@ghentcdh/w3c-utils": "^1.1.0",
     "vue": "^3.5.0",
     "vue-router": "^5.0.0"

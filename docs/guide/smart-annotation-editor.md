@@ -25,14 +25,12 @@ annotations are mutated.
   import {
     SmartAnnotationEditor,
     AnnotationEditorLoader,
-    type SourceModel,
-  } from '@ghentcdh/annotation-vue';
-  import { TextLineAdapter } from '@ghentcdh/annotated-text';
-  import {
     editorAnnotationSchema,
     TransformAnnotationAdapter,
     type EditorAnnotation,
-  } from '@ghentcdh/annotation-ui';
+    type SourceModel,
+  } from '@ghentcdh/annotation-vue';
+  import { TextLineAdapter } from '@ghentcdh/annotated-text';
   import type { W3CAnnotation } from '@ghentcdh/w3c-utils';
 
   // ─── 1. Loader ───────────────────────────────────────────────────────────────
@@ -82,6 +80,7 @@ annotations are mutated.
 
   class MyTransformAdapter extends TransformAnnotationAdapter<W3CAnnotation> {
     name = 'MyTransformAdapter';
+    defaultParams = {};
 
     parse(raw: W3CAnnotation): EditorAnnotation | null {
       const { definition, ...metadata } = raw as any;
@@ -126,6 +125,39 @@ annotations are mutated.
 | `textAdapter`           | `() => TextAdapter`             | —        | `undefined`                      | Custom text rendering adapter (e.g. `TextLineAdapter`)                        |
 | `watchQueryParams`      | `boolean`                       | —        | `true`                           | Sync selected annotation and action with the URL query string                 |
 | `readonly`              | `boolean`                       | —        | `false`                          | Disable editing — only display annotations, no create/edit/delete             |
+
+::: warning Requires vue-router
+`SmartAnnotationEditor` uses `useRoute()` / `useRouter()` to sync the selection with the URL, so it must be rendered
+inside an app with `vue-router` installed (also when `watchQueryParams` is `false`). `vue-router` is an optional peer
+dependency of `@ghentcdh/annotation-vue`, so install it yourself.
+:::
+
+## Events
+
+| Event                  | Payload               | Description                                                                                  |
+|------------------------|-----------------------|----------------------------------------------------------------------------------------------|
+| `annotationtype-click` | `Record<string, any>` | Emitted when an annotation type in the filter sidebar is clicked. Only active when a listener is attached. |
+
+Create, update and delete are handled internally: the component reloads annotations from the `loader` after each
+mutation.
+
+## Slots
+
+| Slot              | Description                                                         |
+|-------------------|---------------------------------------------------------------------|
+| `before-editor`   | Content rendered above the editor, e.g. a toolbar or source header |
+| `annotation-menu` | Extra content in the left drawer, below the annotation type filter  |
+
+```vue
+<SmartAnnotationEditor :loader="loader" :source-uris="sourceUris">
+  <template #before-editor>
+    <h2>{{ title }}</h2>
+  </template>
+  <template #annotation-menu>
+    <RouterLink to="/help">Annotation guidelines</RouterLink>
+  </template>
+</SmartAnnotationEditor>
+```
 
 ## AnnotationEditorLoader
 
@@ -174,7 +206,7 @@ import {
   editorAnnotationSchema,
   type EditorAnnotation,
   type AnnotationAdapterParams,
-} from '@ghentcdh/annotation-ui';
+} from '@ghentcdh/annotation-vue';
 
 class MyTransformAdapter extends TransformAnnotationAdapter<MyAnnotation> {
   name = 'MyAnnotationAdapter';
@@ -197,8 +229,8 @@ class MyTransformAdapter extends TransformAnnotationAdapter<MyAnnotation> {
 
 ## Read-only mode
 
-Pass `:read-only="true"` to render `AnnotationPreview` instead of `AnnotationEditor`. The loader still fetches data;
-events for mutation are not emitted.
+Pass `:readonly="true"` to disable creating, editing and deleting annotations. The loader still fetches data and
+annotations can still be selected.
 
 ```vue
 
@@ -206,7 +238,7 @@ events for mutation are not emitted.
   :loader="loader"
   :annotation-transformer="transformer"
   :source-uris="sourceUris"
-  :read-only="true"
+  :readonly="true"
 />
 ```
 

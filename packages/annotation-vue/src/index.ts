@@ -1,7 +1,12 @@
 export {
   TransformAnnotationAdapter,
   W3cTransformAnnotationAdapter,
+  editorAnnotationSchema,
+  type EditorAnnotation,
+  type Selector,
+  type UIAnnotationDefinition,
 } from '@ghentcdh/annotation-ui';
+export { type AnnotationAdapterParams } from '@ghentcdh/annotated-text';
 
 export { AnnotationDefinitionService } from './lib/definitions/annotation-definition.service';
 export {
