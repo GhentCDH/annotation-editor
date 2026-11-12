@@ -993,7 +993,7 @@
             "type": "string"
           },
           "enum": {
-            "description": "Name of a shared enum in crouton.enums.json. At load time the loader injects the enum's { value, label }[] into fieldInput.options.values. Use this instead of duplicating the option list on each column.",
+            "description": "Name of a shared enum in crouton.enums.json. At load time the loader injects the enum's { value, label }[] into fieldInput.options.values. Use this instead of duplicating the option list on each column. May be combined with fieldInput.options.values to restrict the enum for this screen; labels are then taken from the enum registry.",
             "type": "string"
           },
           "idField": {
