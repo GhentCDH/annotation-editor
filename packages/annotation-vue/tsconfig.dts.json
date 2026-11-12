@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.lib.json",
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.vue",
+    "../annotation-ui/src/**/*.ts",
+    "../annotation-ui/src/**/*.vue",
+    "../annotation-editor/src/**/*.ts",
+    "../annotation-editor/src/**/*.vue"
+  ],
+  "exclude": [
+    "../**/*.spec.ts",
+    "../**/*.test.ts",
+    "../**/__tests__/**"
+  ]
+}
