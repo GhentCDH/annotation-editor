@@ -15,11 +15,13 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-import { AnnotationCrudRepository } from './annotation.repository';
-import { AnnotationW3cMapperService } from './annotation.mapper.service';
+
 import { AnnotationContextService } from '../context/annotation-context.service';
 import { SCHEMA_PREFIX } from '../prefix';
+import { AnnotationW3cMapperService } from './annotation.mapper.service';
+import { AnnotationCrudRepository } from './annotation.repository';
 
 @Controller(`${SCHEMA_PREFIX}/annotation`)
 @ApiTags('Annotations')

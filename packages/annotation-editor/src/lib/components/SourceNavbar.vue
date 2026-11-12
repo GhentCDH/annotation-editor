@@ -3,14 +3,16 @@
 </template>
 
 <script setup lang="ts">
-import { IconEnum } from '@ghentcdh/crouton-vue';
 import { computed } from 'vue';
-import Navbar from './navbar.vue';
+
+import { IconEnum } from '@ghentcdh/crouton-vue';
+
+import { useEditorState } from '../composables/useEditorState';
 import {
   SourceNavbarEmits,
   SourceNavbarProperties,
 } from './SourceNavbar.properties';
-import { useEditorState } from '../composables/useEditorState';
+import Navbar from './navbar.vue';
 
 const properties = defineProps(SourceNavbarProperties);
 const emits = defineEmits(SourceNavbarEmits);

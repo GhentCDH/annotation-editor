@@ -2,6 +2,7 @@ import {
   type AnnotationAdapterParams,
   type BaseAnnotation,
 } from '@ghentcdh/annotated-text';
+
 import {
   type AnnotationMetadata,
   type EditorAnnotation,

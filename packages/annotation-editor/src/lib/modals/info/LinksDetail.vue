@@ -22,15 +22,17 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { IconEnum } from '@ghentcdh/crouton-vue';
+
 import {
   type EditorAnnotation,
   type UIAnnotationDefinition,
 } from '@ghentcdh/annotation-ui';
-import AnnotationText from './Annotation-text.vue';
-import Navbar from '../../components/navbar.vue';
+import { IconEnum } from '@ghentcdh/crouton-vue';
+
 import { type NavbarAction } from '../../components/navbar.properties';
+import Navbar from '../../components/navbar.vue';
 import { useEditorState } from '../../composables/useEditorState';
+import AnnotationText from './Annotation-text.vue';
 
 const props = defineProps<{ annotation: EditorAnnotation }>();
 

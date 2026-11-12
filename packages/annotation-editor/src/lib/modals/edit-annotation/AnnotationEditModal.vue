@@ -45,6 +45,13 @@
   </Modal>
 </template>
 <script lang="ts" setup>
+import { computed, onMounted, onUnmounted } from 'vue';
+
+import {
+  type AnnotationMetadata,
+  type UiAnnotatedText,
+  updateAnnotation,
+} from '@ghentcdh/annotation-ui';
 import {
   Btn,
   Collapse,
@@ -52,18 +59,13 @@ import {
   FormMessage,
   Modal,
 } from '@ghentcdh/crouton-vue';
-import { computed, onMounted, onUnmounted } from 'vue';
-import {
-  type AnnotationMetadata,
-  type UiAnnotatedText,
-  updateAnnotation,
-} from '@ghentcdh/annotation-ui';
+
+import { useEditorState } from '../../composables/useEditorState';
 import {
   AnnotationEditEmits,
   AnnotationEditModalProperties,
 } from './AnnotationEditModal.properties';
 import { UseAnnotationEdit } from './UseAnnotationEdit';
-import { useEditorState } from '../../composables/useEditorState';
 
 let annotatedTextConfig: UiAnnotatedText;
 const props = defineProps(AnnotationEditModalProperties);

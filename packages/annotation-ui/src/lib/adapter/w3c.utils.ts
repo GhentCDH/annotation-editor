@@ -1,8 +1,8 @@
-import { type W3CAnnotationBuilder } from '@ghentcdh/w3c-utils';
 import {
   AnnotationMetadataType,
   type AnnotationStyle,
 } from '@ghentcdh/annotation-core';
+import { type W3CAnnotationBuilder } from '@ghentcdh/w3c-utils';
 
 export const getAnnotationStyle = (builder: W3CAnnotationBuilder) => {
   const style = builder

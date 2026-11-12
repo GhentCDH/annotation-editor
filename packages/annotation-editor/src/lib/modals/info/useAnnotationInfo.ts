@@ -1,13 +1,13 @@
+import { getMousePosition } from '../../utils/mouse-events';
+import {
+  AnnotationModal,
+  type UseAnnotationModal,
+} from '../AnnotationModal.definition';
 import {
   type AnnotationInfoCardEvent,
   type AnnotationInfoCardProp,
   type AnnotationInfoCardShow,
 } from './AnnotationInfoCard.properties';
-import {
-  AnnotationModal,
-  type UseAnnotationModal,
-} from '../AnnotationModal.definition';
-import { getMousePosition } from '../../utils/mouse-events';
 
 class AnnotationInfoCard extends AnnotationModal<
   AnnotationInfoCardProp,

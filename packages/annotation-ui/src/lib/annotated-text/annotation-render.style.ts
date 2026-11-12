@@ -1,6 +1,7 @@
-import { createHighlightStyle, Debugger } from '@ghentcdh/annotated-text';
-import { type DefinitionMap } from '../types/ui-annotation-definition.type';
+import { Debugger, createHighlightStyle } from '@ghentcdh/annotated-text';
+
 import { type EditorAnnotation } from '../adapter/editor.annotation';
+import { type DefinitionMap } from '../types/ui-annotation-definition.type';
 
 export const defaultRender =
   (definitions: DefinitionMap) =>

@@ -1,9 +1,9 @@
-import { type AnnotationResource } from './annotation-definition.type';
 import { type AnnotationStyle } from '../annotation.style';
 import {
   type AnnotationDefConfig,
   baseContextBuilder,
 } from '../utils/annotation.context-builder';
+import { type AnnotationResource } from './annotation-definition.type';
 
 export const AnnotationMetadataType = 'AnnotationMetadata';
 

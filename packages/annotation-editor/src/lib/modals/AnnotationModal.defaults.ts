@@ -2,37 +2,36 @@ import {
   type ModalDefinition,
   type ModalTypeConfig,
 } from './AnnotationModal.definition';
-import { useToast } from './toast/useToast.composable';
-import ToastComponent from './toast/Toast.vue';
-import AnnotationInfoCardComponent from './info/AnnotationInfoCard.vue';
+import ConfirmModal from './confirm/ConfirmModal.vue';
 import {
-  type AnnotationInfoCardEvent,
-  type AnnotationInfoCardProp,
-  type AnnotationInfoCardShow,
-} from './info/AnnotationInfoCard.properties';
-import { useAnnotationInfo } from './info/useAnnotationInfo';
-import AnnotationEditModal from './edit-annotation/AnnotationEditModal.vue';
-import { useAnnotationEdit } from './edit-annotation/useAnnotationEditModal';
+  type ConfirmCloseEvent,
+  type ConfirmProps,
+} from './confirm/confirm.properties';
+import { useConfirm } from './confirm/useConfirm.composable';
 import {
   type AnnotationEditModal as AnnotationEditModalType,
   type AnnotationEditModalEvent,
   type AnnotationEditModalShow,
 } from './edit-annotation/AnnotationEditModal.properties';
-import { useLinkAnnotation } from './link-annotation/useLinkAnnotation.composable';
+import AnnotationEditModal from './edit-annotation/AnnotationEditModal.vue';
+import { useAnnotationEdit } from './edit-annotation/useAnnotationEditModal';
 import {
-  type ConfirmCloseEvent,
-  type ConfirmProps,
-} from './confirm/confirm.properties';
-import { type EditToast } from './toast/toast.properties';
-
-import ConfirmModal from './confirm/ConfirmModal.vue';
-import { useConfirm } from './confirm/useConfirm.composable';
+  type AnnotationInfoCardEvent,
+  type AnnotationInfoCardProp,
+  type AnnotationInfoCardShow,
+} from './info/AnnotationInfoCard.properties';
+import AnnotationInfoCardComponent from './info/AnnotationInfoCard.vue';
+import { useAnnotationInfo } from './info/useAnnotationInfo';
 import LinkAnnotationModal from './link-annotation/LinkAnnotationModal.vue';
 import {
   type LinkAnnotationCloseEvent,
   type LinkAnnotationProps,
   type LinkAnnotationShow,
 } from './link-annotation/link-annotation.properties';
+import { useLinkAnnotation } from './link-annotation/useLinkAnnotation.composable';
+import ToastComponent from './toast/Toast.vue';
+import { type EditToast } from './toast/toast.properties';
+import { useToast } from './toast/useToast.composable';
 
 export type AnnotationModalActionMap = {
   toast: ModalTypeConfig<EditToast, EditToast, void>;

@@ -6,8 +6,8 @@ export * from './lib/types/annotation-json-config.types';
 export * from './lib/types/annotation-definition.type';
 export {
   type AnnotationStyle,
-  AnnotationStyleType,
   AnnotationStyleContextBuilder,
+  AnnotationStyleType,
   createAnnotationStyleBodyUnsafe,
 } from './lib/annotation.style';
 export * from './lib/utils/annotation.context-builder';

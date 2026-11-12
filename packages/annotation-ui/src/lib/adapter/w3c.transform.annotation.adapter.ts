@@ -1,20 +1,21 @@
 import {
-  w3cAnnotation,
-  type W3CAnnotation,
-  type W3CSelector,
-  type W3CSpecificResource,
-} from '@ghentcdh/w3c-utils';
-import {
   AnnotationMetadataType,
   AnnotationStyleType,
 } from '@ghentcdh/annotation-core';
 import {
+  type W3CAnnotation,
+  type W3CSelector,
+  type W3CSpecificResource,
+  w3cAnnotation,
+} from '@ghentcdh/w3c-utils';
+
+import {
   type AnnotationLink,
   type EditorAnnotation,
-  editorAnnotationSchema,
   LinkSchema,
   type Selector,
   SelectorSchema,
+  editorAnnotationSchema,
 } from './editor.annotation';
 import { TransformAnnotationAdapter } from './transform.annotation.adapter';
 import { getAnnotationStyle, getMetadata } from './w3c.utils';

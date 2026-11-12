@@ -1,31 +1,33 @@
 import {
-  computed,
   type ComputedRef,
-  inject,
   type InjectionKey,
+  type TemplateRef,
+  computed,
+  inject,
   provide,
   reactive,
   shallowReactive,
-  type TemplateRef,
   watch,
 } from 'vue';
-import { type AnnotationId, createAnnotationConfiguration, type DefinitionMap, type EditorAnnotation, groupById, type UIAnnotationDefinition } from '@ghentcdh/annotation-ui';
+
 import { type SourceModel } from '@ghentcdh/annotation-core';
-import {
-  type AnnotationEvents,
-  sendAnnotationEvent,
-} from './annotation.events';
-import { type EditorConfig, type EditorState_ } from './editorState';
+import { type AnnotationId, type DefinitionMap, type EditorAnnotation, type UIAnnotationDefinition, createAnnotationConfiguration, groupById } from '@ghentcdh/annotation-ui';
+
 import {
   type AnnotationEditorEmitsFn,
   type AnnotationEditorProps,
 } from '../AnnotationEditor.properties';
 import { annotationModalDefaults } from '../modals/AnnotationModal.defaults';
-import {
-  selectAnnotationById,
-  type SelectByIdContext,
-} from '../modals/open-modal';
 import { createModalConfig } from '../modals/annotationModal.composable';
+import {
+  type SelectByIdContext,
+  selectAnnotationById,
+} from '../modals/open-modal';
+import {
+  type AnnotationEvents,
+  sendAnnotationEvent,
+} from './annotation.events';
+import { type EditorConfig, type EditorState_ } from './editorState';
 
 type EditorState = {
   sources: ComputedRef<Readonly<SourceModel[]>>;

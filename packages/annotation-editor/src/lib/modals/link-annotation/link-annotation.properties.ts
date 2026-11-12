@@ -1,4 +1,5 @@
 import type { ExtractPublicPropTypes, PropType } from 'vue';
+
 import { type EditorAnnotation } from '@ghentcdh/annotation-ui';
 
 export const LinkAnnotationProperties = {

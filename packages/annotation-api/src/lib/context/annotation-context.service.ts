@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+
 import {
   type AnnotationContext,
   type AnnotationDefConfig,
@@ -6,6 +7,7 @@ import {
   createAnnotationContext,
 } from '@ghentcdh/annotation-core';
 import { ResourceConfigRegistry } from '@ghentcdh/crouton-api';
+
 import { ANNOTATION_DEF_CONFIG_TOKEN } from './annotation-def-config.token';
 
 @Injectable()

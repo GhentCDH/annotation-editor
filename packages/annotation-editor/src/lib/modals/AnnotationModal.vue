@@ -15,8 +15,9 @@
 </template>
 <script lang="ts" setup>
 import { onUnmounted } from 'vue';
-import { AnnotationModalProperties } from './AnnotationModal.properties';
+
 import { useEditorState } from '../composables/useEditorState';
+import { AnnotationModalProperties } from './AnnotationModal.properties';
 
 defineProps(AnnotationModalProperties);
 const { config } = useEditorState();

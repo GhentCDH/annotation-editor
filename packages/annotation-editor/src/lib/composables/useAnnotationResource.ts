@@ -1,11 +1,13 @@
+import { type EmitFn, ref } from 'vue';
+
 import {
   type EditorAnnotation,
   type UIAnnotationDefinition,
 } from '@ghentcdh/annotation-ui';
 import { NotificationService } from '@ghentcdh/crouton-vue';
-import { type EmitFn, ref } from 'vue';
-import { useEditorState } from './useEditorState';
+
 import { type AnnotationEditModalEvent } from '../modals/edit-annotation/AnnotationEditModal.properties';
+import { useEditorState } from './useEditorState';
 
 type AnnotationMetadataEditEmits = {
   close: (event: AnnotationEditModalEvent | null) => true;
