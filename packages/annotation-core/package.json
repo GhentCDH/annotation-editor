@@ -11,7 +11,7 @@
   "types": "./index.d.ts",
   "dependencies": {
     "@ghentcdh/annotated-text": "^1.3.1",
-    "@ghentcdh/crouton-core": "0.0.1-alpha.89",
+    "@ghentcdh/crouton-core": "0.0.1-alpha.92",
     "@ghentcdh/w3c-utils": "^1.3.1",
     "zod": "^4.4.3"
   }

@@ -28,10 +28,10 @@
     "@ghentcdh/annotation-core": "workspace:*",
     "@ghentcdh/annotation-editor": "workspace:*",
     "@ghentcdh/annotation-ui": "workspace:*",
-    "@ghentcdh/crouton-core": "0.0.1-alpha.89",
-    "@ghentcdh/crouton-vue": "0.0.1-alpha.89",
+    "@ghentcdh/crouton-core": "0.0.1-alpha.92",
+    "@ghentcdh/crouton-vue": "0.0.1-alpha.92",
     "@heroicons/vue": "^2.2.0",
-    "axios": "^1.19.0"
+    "axios": "^1.21.1"
   },
   "peerDependencies": {
     "@ghentcdh/w3c-utils": "^1.1.0",
