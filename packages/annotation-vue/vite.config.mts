@@ -2,6 +2,7 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import dts from 'vite-plugin-dts';
+import { checkDtsImports } from '../../tools/vite/check-dts-imports.mts';
 import { copyPackageJson } from '../../tools/vite/copy-package-json.mts';
 import * as path from 'path';
 import tailwindcss from '@tailwindcss/vite';
@@ -29,6 +30,9 @@ export default defineConfig(() => ({
         find: `@ghentcdh/${p}`,
         replacement: path.join(import.meta.dirname, `../${p}/src`),
       })),
+      afterBuild: checkDtsImports(
+        PRIVATE_PACKAGES.map((p) => `@ghentcdh/${p}`),
+      ),
     }),
     copyPackageJson(),
   ],
