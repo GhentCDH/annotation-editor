@@ -45,10 +45,11 @@ export const useAnnotationResource = (
     if (annotation.id && !definition.canEdit) return;
 
     _save(update)
-      .then((annotation) => {
+      .then((response) => {
         emits('close', {
-          annotation,
-          rawData: annotation,
+          // ponytail: API response trusted as EditorAnnotation (was implicit any before crouton-vue bump); parse with editorAnnotationSchema if API shape drifts
+          annotation: response as EditorAnnotation,
+          rawData: response,
           selectors: update.selectors,
         });
       })
