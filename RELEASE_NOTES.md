@@ -1,3 +1,13 @@
+## 0.0.1-alpha.30 (2026-11-12)
+
+### 🩹 Fixes
+
+- **annotation-vue:** emit declarations for type-only modules of bundled packages ([e30a2feb](https://github.com/GhentCDH/annotation-editor/commit/e30a2feb))
+
+### ❤️ Thank You
+
+- Bo Vandersteene
+
 ## 0.0.1-alpha.29 (2026-11-10)
 
 ### 🩹 Fixes
