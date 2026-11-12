@@ -24,6 +24,7 @@
 
 <script setup lang="ts">
 import { Btn, Modal } from '@ghentcdh/crouton-vue';
+
 import { ConfirmEmits, ConfirmProperties } from './confirm.properties';
 
 defineProps(ConfirmProperties);

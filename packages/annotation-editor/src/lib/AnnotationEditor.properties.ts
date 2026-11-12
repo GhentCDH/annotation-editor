@@ -1,7 +1,8 @@
 import type { EmitFn, ExtractPublicPropTypes, PropType } from 'vue';
+
 import { type TextAdapter } from '@ghentcdh/annotated-text';
-import { type EditorAnnotation, type TransformAnnotationAdapter, type UIAnnotationDefinition, W3cTransformAnnotationAdapter } from '@ghentcdh/annotation-ui';
 import { type GridLayout, type SourceModel } from '@ghentcdh/annotation-core';
+import { type EditorAnnotation, type TransformAnnotationAdapter, type UIAnnotationDefinition, W3cTransformAnnotationAdapter } from '@ghentcdh/annotation-ui';
 
 export const AnnotationEditorProperties = {
   modalView: { type: Boolean, required: false as const, default: true },

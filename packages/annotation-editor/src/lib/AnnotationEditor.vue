@@ -18,15 +18,17 @@
 </template>
 <script lang="ts" setup>
 import { computed, onMounted, useTemplateRef } from 'vue';
+
+import { type SourceModel, buildGridStyle, getPaneArea } from '@ghentcdh/annotation-core';
 import { Collapse } from '@ghentcdh/crouton-vue';
-import { buildGridStyle, getPaneArea, type SourceModel } from '@ghentcdh/annotation-core';
+
 import {
   AnnotationEditorEmits,
   AnnotationEditorProperties,
 } from './AnnotationEditor.properties';
 import SourceEdit from './components/SourceEdit.vue';
-import AnnotationModal from './modals/AnnotationModal.vue';
 import { useProvideEditorState } from './composables/useEditorState';
+import AnnotationModal from './modals/AnnotationModal.vue';
 
 const props = defineProps(AnnotationEditorProperties);
 const emit = defineEmits(AnnotationEditorEmits);

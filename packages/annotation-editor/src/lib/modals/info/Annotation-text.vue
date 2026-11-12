@@ -26,11 +26,13 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { type AnnotatedText } from '@ghentcdh/annotated-text';
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { v4 as uuidv4 } from 'uuid';
-import { Collapse } from '@ghentcdh/crouton-vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+
+import { type AnnotatedText } from '@ghentcdh/annotated-text';
 import { type EditorAnnotation } from '@ghentcdh/annotation-ui';
+import { Collapse } from '@ghentcdh/crouton-vue';
+
 import { useEditorState } from '../../composables/useEditorState';
 
 const properties = defineProps<{

@@ -1,9 +1,11 @@
 import { z } from 'zod';
+
 import {
   JsonOperationsSchema,
-  labelFromId,
   ResourceJsonShape,
+  labelFromId,
 } from '@ghentcdh/crouton-core';
+
 import { BASELINE_RESOURCE_VERSION } from './version';
 
 const AnnotationTargetEnum = z.enum(['gutter', 'underline', 'highlight']);

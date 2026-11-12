@@ -14,12 +14,14 @@
 </template>
 <script lang="ts" setup>
 import { v4 as uuid } from 'uuid';
-import { type AnnotatedText } from '@ghentcdh/annotated-text';
 import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
+
+import { type AnnotatedText } from '@ghentcdh/annotated-text';
 import { type EditorAnnotation } from '@ghentcdh/annotation-ui';
+
+import { useEditorState } from '../composables/useEditorState';
 import { SourceEditProperties } from './SourceEdit.properties';
 import SourceNavbar from './SourceNavbar.vue';
-import { useEditorState } from '../composables/useEditorState';
 
 const properties = defineProps(SourceEditProperties);
 

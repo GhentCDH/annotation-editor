@@ -2,16 +2,17 @@ import {
   type Annotation,
   AnnotationAdapter,
   type AnnotationAdapterParams,
+  type TextAnnotation,
   annotationSchema,
   selectText,
-  type TextAnnotation,
 } from '@ghentcdh/annotated-text';
 import { type SourceModel } from '@ghentcdh/annotation-core';
+
 import {
   type EditorAnnotation,
-  editorAnnotationSchema,
   type Selector,
   SelectorSchema,
+  editorAnnotationSchema,
 } from './editor.annotation';
 
 type Params = AnnotationAdapterParams & { sourceModel?: SourceModel };

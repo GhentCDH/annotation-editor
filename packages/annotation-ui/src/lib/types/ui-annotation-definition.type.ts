@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 import {
   type AnnotatedText,
   type CustomAnnotationStyle,
@@ -7,8 +9,8 @@ import {
   type AnnotationResource,
   AnnotationResourceSchema,
 } from '@ghentcdh/annotation-core';
-import { z } from 'zod';
 import { resourceApi } from '@ghentcdh/crouton-vue';
+
 import {
   type AnnotationEditorAnnotationAdapter,
   type EditorAnnotation,

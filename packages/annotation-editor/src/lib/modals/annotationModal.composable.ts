@@ -1,4 +1,5 @@
 import { reactive } from 'vue';
+
 import {
   type AnnotationModalConfig,
   type ModalDefinition,

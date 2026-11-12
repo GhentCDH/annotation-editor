@@ -1,4 +1,4 @@
-import { type Component, ref, type Ref, type UnwrapNestedRefs } from 'vue';
+import { type Component, type Ref, type UnwrapNestedRefs, ref } from 'vue';
 
 export type ModalTypeConfig<
   DATA = void,

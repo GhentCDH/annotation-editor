@@ -1,11 +1,13 @@
-import { type ContextBuilder, contextBuilder } from '@ghentcdh/w3c-utils';
 import { z } from 'zod';
+
 import { Debugger } from '@ghentcdh/annotated-text';
+import { type ContextBuilder, contextBuilder } from '@ghentcdh/w3c-utils';
+
+import { type AnnotationResource } from './types/annotation-definition.type';
 import {
   type AnnotationDefConfig,
   resolveConfig,
 } from './utils/annotation.context-builder';
-import { type AnnotationResource } from './types/annotation-definition.type';
 
 const CONTEXT = 'annotation.style';
 

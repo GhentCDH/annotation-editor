@@ -35,16 +35,17 @@
   </Modal>
 </template>
 <script setup lang="ts">
-import { CroutonForm, FormMessage, Modal } from '@ghentcdh/crouton-vue';
 import { computed } from 'vue';
+
 import { type AnnotationMetadata } from '@ghentcdh/annotation-ui';
+import { CroutonForm, FormMessage, Modal } from '@ghentcdh/crouton-vue';
+
+import AnnotationText from '../info/Annotation-text.vue';
+import { useAnnotationLink } from './UseAnnotationLink';
 import {
   LinkAnnotationProperties,
   LinkEmits,
 } from './link-annotation.properties';
-
-import { useAnnotationLink } from './UseAnnotationLink';
-import AnnotationText from '../info/Annotation-text.vue';
 
 const props = defineProps(LinkAnnotationProperties);
 const emits = defineEmits(LinkEmits);

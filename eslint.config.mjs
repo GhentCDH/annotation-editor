@@ -20,6 +20,10 @@ export default [
       '**/vitest.config.*.timestamp*',
       '**/vite.config.mts',
       '**/vitest.config.mts',
+      '**/node_modules',
+      'docs/.vuepress/.cache',
+      'docs/.vuepress/.temp',
+      '**/test-results/**',
     ],
   },
   {
@@ -75,6 +79,7 @@ export default [
     },
     rules: {
       quotes: ['error', 'single'],
+      'no-console': ['error', { allow: ['warn', 'error'] }],
       '@typescript-eslint/consistent-type-imports': [
         'error',
         {
@@ -82,30 +87,38 @@ export default [
           fixStyle: 'inline-type-imports',
         },
       ],
-      'no-console': ['error', { allow: ['warn', 'error'] }],
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
           argsIgnorePattern: '^_',
           varsIgnorePattern: '^_',
           caughtErrorsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
         },
       ],
       '@typescript-eslint/no-explicit-any': 'warn',
       'import-x/default': 'off',
       'import-x/named': 'off',
       'import-x/no-unresolved': 'off',
+      'import-x/newline-after-import': ['error', { count: 1 }],
+      // Same import order as crouton.
       'import-x/order': [
-        1,
+        'error',
         {
-          groups: [
-            'builtin',
-            'external',
-            'internal',
-            'sibling',
-            'parent',
-            'index',
+          named: true,
+          alphabetize: {
+            order: 'asc',
+          },
+          'newlines-between': 'always',
+          pathGroups: [
+            {
+              pattern: '@ghentcdh/**',
+              group: 'external',
+              position: 'after',
+            },
           ],
+          pathGroupsExcludedImportTypes: ['builtin'],
+          groups: ['external', 'internal', 'index', 'object'],
         },
       ],
     },

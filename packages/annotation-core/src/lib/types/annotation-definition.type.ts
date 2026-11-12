@@ -1,10 +1,12 @@
 import { z } from 'zod';
+
 import {
   type JsonResourceOperations,
   type ViewConfig,
   ViewConfigSchema,
 } from '@ghentcdh/crouton-core';
 import { type ContextBuilder } from '@ghentcdh/w3c-utils';
+
 import {
   AnnotationConfigSchema,
   AnnotationJsonResourceShape,

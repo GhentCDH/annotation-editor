@@ -1,15 +1,17 @@
 import { type TemplateRef } from 'vue';
+
+import { type SourceModel } from '@ghentcdh/annotation-core';
 import {
-  editorAnnotationSchema,
   type EditorAnnotation,
   type KeyLabel,
   type UIAnnotationDefinition,
+  editorAnnotationSchema,
 } from '@ghentcdh/annotation-ui';
-import { type SourceModel } from '@ghentcdh/annotation-core';
 import { NotificationService } from '@ghentcdh/crouton-vue';
-import { type EditorConfig, type EditorState_ } from './editorState';
-import { type AnnotationEditModalShow } from '../modals/edit-annotation/AnnotationEditModal.properties';
+
 import { type AnnotationEditorEmitsFn } from '../AnnotationEditor.properties';
+import { type AnnotationEditModalShow } from '../modals/edit-annotation/AnnotationEditModal.properties';
+import { type EditorConfig, type EditorState_ } from './editorState';
 
 type SelectAnnotationData = {
   annotation: EditorAnnotation;

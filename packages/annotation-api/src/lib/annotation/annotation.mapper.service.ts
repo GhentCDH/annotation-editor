@@ -1,6 +1,8 @@
-import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-import { type AnnotationContext } from '@ghentcdh/annotation-core';
 import { Inject } from '@nestjs/common';
+
+import { type AnnotationContext } from '@ghentcdh/annotation-core';
+import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
+
 import { AnnotationContextService } from '../context/annotation-context.service';
 
 export abstract class AnnotationW3cMapperService<ANNOTATION> {
