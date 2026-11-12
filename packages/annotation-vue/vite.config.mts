@@ -2,6 +2,7 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import dts from 'vite-plugin-dts';
+import { checkDtsImports } from '../../tools/vite/check-dts-imports.mts';
 import { copyPackageJson } from '../../tools/vite/copy-package-json.mts';
 import * as path from 'path';
 import tailwindcss from '@tailwindcss/vite';
@@ -20,21 +21,18 @@ export default defineConfig(() => ({
     // emit their declarations next to ours and rewrite imports to relative paths.
     dts({
       entryRoot: '..',
-      tsconfigPath: path.join(import.meta.dirname, 'tsconfig.lib.json'),
-      include: [
-        'src/**/*.ts',
-        'src/**/*.vue',
-        ...PRIVATE_PACKAGES.flatMap((p) => [
-          `../${p}/src/**/*.ts`,
-          `../${p}/src/**/*.vue`,
-        ]),
-      ],
-      exclude: ['../**/*.spec.ts', '../**/*.test.ts', '../**/__tests__/**'],
+      // tsconfig.dts.json adds the private sources as root files: the plugin only
+      // emits root files and files Vite transforms, so type-only imports would
+      // otherwise be dropped.
+      tsconfigPath: path.join(import.meta.dirname, 'tsconfig.dts.json'),
       pathsToAliases: false,
       aliases: PRIVATE_PACKAGES.map((p) => ({
         find: `@ghentcdh/${p}`,
         replacement: path.join(import.meta.dirname, `../${p}/src`),
       })),
+      afterBuild: checkDtsImports(
+        PRIVATE_PACKAGES.map((p) => `@ghentcdh/${p}`),
+      ),
     }),
     copyPackageJson(),
   ],
