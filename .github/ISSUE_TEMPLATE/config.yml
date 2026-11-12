@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📖 Documentation
+    url: https://ghentcdh.github.io/annotation-editor/
+    about: Guides and reference for the annotation editor, API and Vue components.
+  - name: 🔒 Report a security vulnerability
+    url: https://github.com/GhentCDH/annotation-editor/security/advisories/new
+    about: Please report security issues privately, not as a public issue.

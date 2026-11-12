@@ -4,7 +4,7 @@
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "production": ["default"],
-    "sharedGlobals": ["{workspaceRoot}/.github/workflows/ci.yml"]
+    "sharedGlobals": ["{workspaceRoot}/.github/workflows/merge-request.yml"]
   },
   "plugins": [
     {
@@ -87,7 +87,6 @@
     "changelog": {
       "automaticFromRef": true,
       "workspaceChangelog": {
-        "createRelease": "github",
         "file": "RELEASE_NOTES.md"
       }
     }
