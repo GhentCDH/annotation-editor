@@ -11,7 +11,14 @@ import {
 } from 'vue';
 
 import { type SourceModel } from '@ghentcdh/annotation-core';
-import { type AnnotationId, type DefinitionMap, type EditorAnnotation, type UIAnnotationDefinition, createAnnotationConfiguration, groupById } from '@ghentcdh/annotation-ui';
+import {
+  type AnnotationId,
+  type DefinitionMap,
+  type EditorAnnotation,
+  type UIAnnotationDefinition,
+  createAnnotationConfiguration,
+  groupById,
+} from '@ghentcdh/annotation-ui';
 
 import {
   type AnnotationEditorEmitsFn,
@@ -60,7 +67,7 @@ export const useProvideEditorState = (
     modal: createModalConfig(annotationModalDefaults),
     createAnnotatedText: createAnnotationConfiguration(
       props.textAdapter,
-      props.annotationTransformer.defaultParams,
+      props.annotationTransformer.defaultParams ?? {},
       definitionsMap.value,
     ),
   });
@@ -84,13 +91,11 @@ export const useProvideEditorState = (
     readonly: props.readonly ?? false,
     show: () => showEditorState(),
     reset: () => resetEditorState(),
-    format:
-      props.annotationTransformer?.format.bind(props.annotationTransformer) ??
-      (() => null),
-    transformMetadata:
-      props.annotationTransformer?.transformMetadata.bind(
-        props.annotationTransformer,
-      ) ?? ((m) => m),
+    format: (annotation, isNew) =>
+      props.annotationTransformer.format(annotation, isNew),
+    transformMetadata: (metadata, selector) =>
+      props.annotationTransformer.transformMetadata?.(metadata, selector) ??
+      metadata,
   });
 
   watch(
@@ -102,7 +107,7 @@ export const useProvideEditorState = (
     () => {
       config.createAnnotatedText = createAnnotationConfiguration(
         props.textAdapter,
-        props.annotationTransformer.defaultParams,
+        props.annotationTransformer.defaultParams ?? {},
         definitionsMap.value,
       );
     },
@@ -116,7 +121,12 @@ export const useProvideEditorState = (
 
     const sourceUri = annotation.selectors?.[0]?.uri;
 
-    if (!sourceUri) return { annotation, source: undefined, definition: getDefinition(annotation.definitionUri) };
+    if (!sourceUri)
+      return {
+        annotation,
+        source: undefined,
+        definition: getDefinition(annotation.definitionUri),
+      };
 
     const source = (props.sources ?? []).find((s) => s.uri === sourceUri);
     return {
@@ -140,7 +150,12 @@ export const useProvideEditorState = (
       () => props.annotations,
     ],
     ([id, action]) =>
-      selectAnnotationById(containerRef, id !== undefined ? String(id) : undefined, action, selectByIdCtx),
+      selectAnnotationById(
+        containerRef,
+        id !== undefined ? String(id) : undefined,
+        action,
+        selectByIdCtx,
+      ),
     { immediate: true },
   );
 

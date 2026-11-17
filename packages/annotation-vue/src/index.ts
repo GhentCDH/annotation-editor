@@ -1,6 +1,8 @@
 export {
-  TransformAnnotationAdapter,
-  W3cTransformAnnotationAdapter,
+  type AnnotationTransformer,
+  w3cAnnotationTransformer,
+  createLinks,
+  parseAnnotations,
   editorAnnotationSchema,
   type EditorAnnotation,
   type Selector,
