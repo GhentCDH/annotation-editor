@@ -61,15 +61,23 @@ This is an [Nx](https://nx.dev) monorepo — always run tasks through `pnpm nx`,
 ## Releasing (maintainers)
 
 ```sh
-pnpm release prerelease --preid alpha
+pnpm release prerelease --preid rc   # next release candidate: 0.1.0-rc.0 → 0.1.0-rc.1
+pnpm release 0.1.0                   # exact version, e.g. the final release
 ```
 
 Run it on an up-to-date `main` with a clean working tree. The release commit and tag are pushed
-straight to `main`: with the branch ruleset active, only repository admins can do that.
+straight to `main`: with the rulesets active (`.github/rulesets`), only the `ghentcdh-developers` team can do that.
 
-`--preid alpha` is required: without it `nx release` only looks for stable tags, does not find `v0.0.1-alpha.N`
-and stops with "No git tags matching pattern". Do not work around that with `--first-release`: it falls back to
-the version on disk and builds the changelog as if no earlier release existed.
+The newest `v*` tag is always the base, whatever its preid (`release.releaseTag.strictPreid: false` in
+`nx.json`): the version is bumped from it and the changelog lists the commits since it. Do not use
+`--first-release`: it builds the changelog as if no earlier release existed.
+
+`RELEASE_NOTES.md` lists `feat`, `fix`, `perf` and `refactor` commits. Mark breaking changes with `!` on one of
+those types (`refactor(core)!: …`) and explain the migration in a `BREAKING CHANGE:` footer; a breaking change in
+a `chore:`, `test:` or `ci:` commit does not show up.
+
+Prereleases are published under the npm dist-tag `rc` (`-rc.N`) or `alpha` (any other preid), never `latest`. A
+plain version (`0.1.0`) becomes `latest`.
 
 What happens:
 
@@ -98,7 +106,7 @@ which packages made it.
 ### Try it first
 
 ```sh
-pnpm nx release prerelease --preid alpha --skip-publish --dry-run
+pnpm nx release prerelease --preid rc --skip-publish --dry-run
 ```
 
 shows the new version and changelog entry without changing anything.
