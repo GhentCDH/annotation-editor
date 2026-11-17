@@ -23,7 +23,7 @@ Interactive editor component for creating, editing, and deleting W3C annotations
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { AnnotationEditor } from '@ghentcdh/annotation-vue';
-import { TransformAnnotationAdapter, editorAnnotationSchema, type EditorAnnotation } from '@ghentcdh/annotation-vue';
+import { parseAnnotations, editorAnnotationSchema, type AnnotationTransformer } from '@ghentcdh/annotation-vue';
 import { type SourceModel } from '@ghentcdh/annotation-vue';
 import { type AnnotationDefConfig } from '@ghentcdh/annotation-vue';
 import { provideAnnotationDefinitions } from '@ghentcdh/annotation-vue';
@@ -47,28 +47,15 @@ const sources: SourceModel[] = [
   },
 ];
 
-// Extend TransformAnnotationAdapter for your domain model
-class MyAdapter extends TransformAnnotationAdapter<W3CAnnotation> {
-  name = 'MyAdapter';
-  defaultParams = {};
+// Converts between your domain model and EditorAnnotation
+const transformer: AnnotationTransformer<W3CAnnotation> = {
+  parse: (raw) => editorAnnotationSchema.parse({ id: raw.id, /* map fields */ }),
+  format: (annotation, isNew) => ({ id: annotation.id, /* map fields */ }) as W3CAnnotation,
+};
 
-  parse(raw: W3CAnnotation): EditorAnnotation | null {
-    return editorAnnotationSchema.parse({ id: raw.id, /* map fields */ });
-  }
-
-  format(annotation: EditorAnnotation, isNew: boolean): W3CAnnotation {
-    return { id: annotation.id, /* map fields */ } as W3CAnnotation;
-  }
-}
-
-const transformer = new MyAdapter();
 const rawAnnotations = ref<W3CAnnotation[]>([]);
-// Convert raw annotations to the editor's internal format
-const toEditorAnnotations = (raw: W3CAnnotation[]) =>
-  transformer.createLinks(
-    raw.map((a) => transformer.parse(a)).filter((a): a is EditorAnnotation => !!a),
-  );
-const editorAnnotations = computed(() => toEditorAnnotations(rawAnnotations.value));
+// Convert raw annotations to the editor's internal format (parse + resolve links)
+const editorAnnotations = computed(() => parseAnnotations(transformer, rawAnnotations.value));
 
 const onCreate  = async (a: W3CAnnotation) => { rawAnnotations.value = [...rawAnnotations.value, a]; };
 const onUpdate  = async (a: W3CAnnotation) => { rawAnnotations.value = rawAnnotations.value.map((x) => (x.id === a.id ? a : x)); };
@@ -87,9 +74,9 @@ For most use cases — fetching sources, annotations, and definitions from an AP
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `sources` | `SourceModel[]` | ✓ | — | Text sources to render and annotate |
-| `annotations` | `EditorAnnotation[]` | ✓ | — | Pre-converted annotations (`parse()` each raw annotation with your adapter, then `createLinks()`) |
+| `annotations` | `EditorAnnotation[]` | ✓ | — | Pre-converted annotations (convert with `parseAnnotations(transformer, raw)`) |
 | `annotationDefinitions` | `UIAnnotationDefinition[]` | ✓ | — | Available annotation types (label, colour, views for table/form/detail) |
-| `annotationTransformer` | `TransformAnnotationAdapter<T>` | — | `new W3cTransformAnnotationAdapter()` | Adapter that converts between your domain model and `EditorAnnotation` |
+| `annotationTransformer` | `AnnotationTransformer<T>` | — | `w3cAnnotationTransformer` | Converts between your domain model and `EditorAnnotation` |
 | `cols` | `number` | — | `2` | Number of grid columns (ignored when `layout` is set) |
 | `layout` | `GridLayout` | — | `undefined` | Custom CSS grid layout — see [Custom layout](#custom-layout) |
 | `modalView` | `boolean` | — | `true` | Show annotation details in a modal (`true`) or inline (`false`) |
