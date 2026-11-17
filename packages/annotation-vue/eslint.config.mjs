@@ -18,7 +18,8 @@ export default [
         'error',
         {
           // axios: not imported here, but satisfies the axios peer of @ghentcdh/crouton-vue.
-          ignoredDependencies: ['@ghentcdh/annotation-core', 'axios'],
+          // zod: imported by the bundled private packages (annotation-ui/editor), invisible to this rule.
+          ignoredDependencies: ['@ghentcdh/annotation-core', 'axios', 'zod'],
           ignoredFiles: [
             '{projectRoot}/eslint.config.{js,cjs,mjs,ts,cts,mts}',
             '{projectRoot}/vite.config.{js,ts,mjs,mts}',
