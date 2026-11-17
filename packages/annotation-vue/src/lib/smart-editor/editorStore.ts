@@ -1,23 +1,26 @@
 import {
-  computed,
   type InjectionKey,
+  computed,
   provide,
   reactive,
   ref,
   watch,
 } from 'vue';
-import { type SourceModel } from '@ghentcdh/annotation-core';
+
 import { type BaseAnnotation } from '@ghentcdh/annotated-text';
+import { type SourceModel } from '@ghentcdh/annotation-core';
 import {
+  type AnnotationTransformer,
   type EditorAnnotation,
-  type TransformAnnotationAdapter,
+  parseAnnotations,
 } from '@ghentcdh/annotation-ui';
-import { type AnnotationEditorLoader } from './AnnotationEditorLoader';
+
 import { useAnnotationDefinitions } from '../definitions/useAnnotationDefinitions';
+import { type AnnotationEditorLoader } from './AnnotationEditorLoader';
 
 const createEditState = <ANNOTATION extends BaseAnnotation>(
   annotationLoader: AnnotationEditorLoader<ANNOTATION>,
-  transformer: TransformAnnotationAdapter<ANNOTATION>,
+  transformer: AnnotationTransformer<ANNOTATION>,
 ) => {
   const definitions = useAnnotationDefinitions();
   const sourceUris = ref<string[] | null>(null);
@@ -58,12 +61,7 @@ const createEditState = <ANNOTATION extends BaseAnnotation>(
     Promise.all(uris.map((uri) => annotationLoader.loadAnnotations(uri)))
       .then((response) => {
         if (seq !== annotationsSeq) return;
-        const parsed = response
-          .flat()
-          .map((a) => transformer.parse(a))
-          .filter(Boolean) as EditorAnnotation[];
-
-        annotations.value = transformer.createLinks(parsed);
+        annotations.value = parseAnnotations(transformer, response.flat());
       })
       .finally(() => {
         if (seq === annotationsSeq) loadingAnnotations.value = false;
@@ -86,7 +84,9 @@ const createEditState = <ANNOTATION extends BaseAnnotation>(
   );
 
   const annotationsGroupedByPurpose = computed(() => {
-    return (annotations.value as EditorAnnotation[]).reduce<Record<string, EditorAnnotation[]>>((acc, a) => {
+    return (annotations.value as EditorAnnotation[]).reduce<
+      Record<string, EditorAnnotation[]>
+    >((acc, a) => {
       (acc[a.definitionUri] ??= []).push(a);
       return acc;
     }, {});
@@ -130,7 +130,7 @@ const TEXT_STATE_KEY: InjectionKey<TextState> = Symbol('TextState');
 
 export const provideEditorStore = <ANNOTATION extends BaseAnnotation>(
   annotationLoader: AnnotationEditorLoader<ANNOTATION>,
-  transformer: TransformAnnotationAdapter<ANNOTATION>,
+  transformer: AnnotationTransformer<ANNOTATION>,
 ) => {
   const state = createEditState(annotationLoader, transformer);
   provide(TEXT_STATE_KEY, state);

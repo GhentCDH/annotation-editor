@@ -3,7 +3,10 @@ import { ApiTags } from '@nestjs/swagger';
 
 import { ResourceConfigRegistry } from '@ghentcdh/crouton-api';
 
-import { type AnnotationContextService } from './context/annotation-context.service';
+import {
+  type AnnotationContextService,
+  type AnnotationRegistryResource,
+} from './context/annotation-context.service';
 import { ANNOTATION_DEF_CONFIG_TOKEN } from './context/annotation-def-config.token';
 import { SCHEMA_PREFIX } from './prefix';
 
@@ -12,7 +15,7 @@ import { SCHEMA_PREFIX } from './prefix';
 export class AnnotationNamespaceController {
   constructor(
     @Inject(ResourceConfigRegistry)
-    private readonly service: ResourceConfigRegistry<any>,
+    private readonly service: ResourceConfigRegistry<AnnotationRegistryResource>,
     @Inject(ANNOTATION_DEF_CONFIG_TOKEN)
     private readonly annotationContextService: AnnotationContextService,
   ) {}
@@ -25,10 +28,10 @@ export class AnnotationNamespaceController {
 
     return {
       annotations: all.map((a) => ({
-        id: a.id,
-        name: a.name,
-        schemas: `${base}/${SCHEMA_PREFIX}/${a.id}/schemas`,
-        jsonld: `${base}/ns/${a.id}.jsonld`,
+        id: a.name,
+        name: a.title ?? a.name,
+        schemas: `${base}/${SCHEMA_PREFIX}/${a.name}/schemas`,
+        jsonld: `${base}/ns/${a.name}.jsonld`,
       })),
     };
   }

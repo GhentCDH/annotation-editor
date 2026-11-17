@@ -106,9 +106,11 @@ const formatBeforeSave = ((formData: AnnotationMetadata) =>
 
 const selectFull = () => {
   const { source, annotation } = props;
+  // Same offset the annotation adapter uses for created/edited selections.
+  const startOffset = annotatedTextConfig.annotationAdapter.startOffset;
   const maxRange = {
-    start: 0,
-    end: source!.content.text.length + 1,
+    start: startOffset,
+    end: startOffset + source!.content.text.length + 1,
   };
   if (parent) {
     const selector = parent.getSelector(source.uri);
@@ -124,7 +126,7 @@ const selectFull = () => {
     maxRange,
     {
       fullFlatText: props.source.content.text,
-      startOffset: 0, // TODO implement it
+      startOffset,
     },
     original,
   );

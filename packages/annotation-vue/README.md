@@ -101,8 +101,8 @@ state.loadFromGlob(modules);
 
 // From config array
 state.loadFromConfigs([
-  { id: 'comment', name: 'Comment', color: '#ff0000' },
-  { id: 'entity', name: 'Entity', color: '#00ff00', allowedChildren: ['comment'] },
+  { name: 'comment', title: 'Comment', color: '#ff0000' },
+  { name: 'entity', title: 'Entity', color: '#00ff00', allowedChildren: ['comment'] },
 ]);
 
 // From pre-built core definitions

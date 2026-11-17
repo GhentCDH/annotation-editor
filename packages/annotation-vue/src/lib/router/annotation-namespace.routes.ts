@@ -1,11 +1,13 @@
-import { computed, defineComponent, h, type PropType } from 'vue';
+import { type PropType, computed, defineComponent, h } from 'vue';
 import { type RouteRecordRaw } from 'vue-router';
+
 import {
   type AnnotationDefConfig,
   AnnotationStyleContextBuilder,
   AnnotationStyleType,
 } from '@ghentcdh/annotation-core';
 import { type ContextBuilder } from '@ghentcdh/w3c-utils';
+
 import { type AnnotationDefinitionService } from '../definitions/annotation-definition.service';
 
 type AnnotationNamespaceRoutePaths = {

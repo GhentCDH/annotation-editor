@@ -25,16 +25,14 @@ See the [Preview demo](../demo/preview.md) for a live example.
 <script setup lang="ts">
 import {
   AnnotationEditor,
-  W3cTransformAnnotationAdapter,
+  parseAnnotations,
+  w3cAnnotationTransformer,
   type SourceModel,
 } from '@ghentcdh/annotation-vue';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 
 // sources, definitions, layout and w3cAnnotations: see the AnnotationEditor usage example
-const transformer = new W3cTransformAnnotationAdapter();
-const annotations = transformer.createLinks(
-  w3cAnnotations.map((a) => transformer.parse(a)),
-);
+const annotations = parseAnnotations(w3cAnnotationTransformer, w3cAnnotations);
 
 const onSelect = (annotation: W3CAnnotation | null, action: string | null) => {
   console.log('selected', annotation?.id, action);

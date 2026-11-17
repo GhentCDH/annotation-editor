@@ -4,9 +4,17 @@ An **annotation resource** is the JSON configuration file that tells the editor 
 
 ## Relationship to Crouton
 
-`AnnotationResourceSchema` extends the base **Crouton resource** format. The fields `id`, `name`, `title`, and `operations` come directly from Crouton — see the [Crouton resource documentation](https://ghentcdh.github.io/crouton/guide/resource/resource-json.html) for those fields.
+`AnnotationResourceSchema` extends the base **Crouton resource** format. The fields `name`, `title`, and `operations` come directly from Crouton — see the [Crouton resource documentation](https://ghentcdh.github.io/crouton/guide/resource/resource-json.html) for those fields.
 
 This library adds three fields on top of that base: `annotation`, `context`, and `schemas`.
+
+::: warning `name` is the id (crouton 0.1.0)
+Crouton 0.1.0 removed the root `id` key: the resource id is always `name`, and `title` is the display label.
+Annotation definition URIs are built from `name`, so set `name` to the old `id` to keep existing annotations valid:
+`{ "id": "animals", "name": "Animals" }` → `{ "name": "animals", "title": "Animals" }`. Column entries must not
+carry an `id` either (the map key is the id). Run `crouton migrate resources` afterwards for the remaining
+crouton changes. At runtime `AnnotationResource.id` is still available and always equals `name`.
+:::
 
 ## Fields
 
@@ -26,8 +34,8 @@ Controls how the annotation type is rendered and linked to other types.
 
 ```json
 {
-  "id": "animals",
-  "name": "Animals",
+  "name": "animals",
+  "title": "Animals",
   "annotation": {
     "color": "#65a378",
     "target": "highlight",
@@ -45,7 +53,8 @@ import { baseContextBuilder } from '@ghentcdh/annotation-core';
 
 const resource = AnnotationResourceSchema.parse({
   id: 'animals',
-  name: 'Animals',
+  name: 'animals',
+  title: 'Animals',
   annotation: { color: '#65a378' },
   context: baseContextBuilder('animals', config),
 });
@@ -57,8 +66,8 @@ Optional per-view column overrides. Keys are view names (`table`, `view`, `form`
 
 ```json
 {
-  "id": "animals",
-  "name": "Animals",
+  "name": "animals",
+  "title": "Animals",
   "annotation": { "color": "#65a378" },
   "schemas": {
     "table": { "columns": { "name": { "hiddenInTable": false } } },
@@ -72,8 +81,8 @@ Optional per-view column overrides. Keys are view names (`table`, `view`, `form`
 ```json
 {
   "$schema": "https://ghentcdh.github.io/annotation-editor/schema/v1/resource.schema.json",
-  "id": "animals",
-  "name": "Animals",
+  "name": "animals",
+  "title": "Animals",
   "kind": "custom",
   "annotation": {
     "color": "#65a378",
@@ -103,8 +112,8 @@ Add a `$schema` pointer to your config files to get IDE validation and autocompl
 ```json
 {
   "$schema": "https://ghentcdh.github.io/annotation-editor/schema/v1/resource.schema.json",
-  "id": "my-type",
-  "name": "My Type",
+  "name": "my-type",
+  "title": "My Type",
   "annotation": {}
 }
 ```

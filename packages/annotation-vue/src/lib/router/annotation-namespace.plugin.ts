@@ -1,6 +1,7 @@
 import { type Router } from 'vue-router';
-import { createAnnotationNamespaceRoutes } from './annotation-namespace.routes';
+
 import { type AnnotationDefinitionService } from '../definitions/annotation-definition.service';
+import { createAnnotationNamespaceRoutes } from './annotation-namespace.routes';
 
 type InstallAnnotationNamespaceRoutesOptions = {
   basePath?: string;

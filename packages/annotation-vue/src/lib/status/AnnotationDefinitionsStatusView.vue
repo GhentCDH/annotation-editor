@@ -135,7 +135,7 @@
               />
               <div class="flex-1 min-w-0">
                 <div class="font-medium text-base-content text-sm">
-                  {{ def.name }}
+                  {{ def.title ?? def.name }}
                 </div>
                 <div class="text-xs text-base-content/50 font-mono mt-0.5">
                   {{ def.id }}
@@ -229,8 +229,10 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
+
 import { type UIAnnotationDefinition } from '@ghentcdh/annotation-ui';
 import { CroutonForm } from '@ghentcdh/crouton-vue';
+
 import { peekAnnotationDefinitionsState } from '../definitions/useAnnotationDefinitions';
 
 const tick = ref(0);

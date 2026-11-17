@@ -14,11 +14,10 @@ import {
 
 export type ViewDef = 'table' | 'view' | 'form';
 
-export const annotationColumnDefinition = z.custom<any>();
-
 // Explicit type avoids TS2883 ("cannot be named without a reference to $ZodType")
 // that arises from complex Zod v4 schema chains in .d.ts output.
 export type AnnotationResource = {
+  /** Same as `name` (crouton 0.1.0 dropped the separate root `id`). Set by {@link withResourceId}. */
   id: string;
   name: string;
   title?: string | null;
@@ -28,9 +27,9 @@ export type AnnotationResource = {
   schemas?: Record<string, Partial<ViewConfig>> | null;
 };
 
-const { id, name, title, operations } = AnnotationJsonResourceShape.shape;
+const { name, title, operations } = AnnotationJsonResourceShape.shape;
 export const AnnotationResourceSchema: z.ZodType<AnnotationResource> = z.object({
-  id,
+  id: z.string(),
   name,
   title,
   operations,
@@ -41,3 +40,8 @@ export const AnnotationResourceSchema: z.ZodType<AnnotationResource> = z.object(
     .optional()
     .nullish(),
 }) as unknown as z.ZodType<AnnotationResource>;
+
+/** Crouton resources carry no `id`; the annotation id is the resource `name`. */
+export const withResourceId = <R extends { name: string }>(
+  resource: R,
+): R & { id: string } => ({ ...resource, id: resource.name });

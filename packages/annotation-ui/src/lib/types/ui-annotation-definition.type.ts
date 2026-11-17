@@ -53,7 +53,7 @@ export const UiAnnotionDefinitionSchema: z.ZodType<UIAnnotationDefinition> =
     .transform((def: any) => {
       return {
         ...def,
-        label: def.name,
+        label: def.title ?? def.name,
         canEdit: !!def.operations?.patch,
         canDelete: !!def.operations?.delete,
         canCreate: !!def.operations?.create,

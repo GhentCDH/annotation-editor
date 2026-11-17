@@ -1,33 +1,32 @@
 import {
-  inject,
   type InjectionKey,
+  inject,
   markRaw,
   provide,
   shallowReactive,
 } from 'vue';
+
+import { createHighlightStyle } from '@ghentcdh/annotated-text';
 import {
   type AnnotationDefConfig,
   type AnnotationJsonResource,
   type AnnotationResource,
   type AnnotationResource as CoreAnnotationDefinition,
 } from '@ghentcdh/annotation-core';
-import { type KeyLabel } from '@ghentcdh/annotation-ui';
-import { createHighlightStyle } from '@ghentcdh/annotated-text';
-import { type AxiosInstance } from 'axios';
-import {
+import { type KeyLabel,
   type UIAnnotationDefinition,
-  UiAnnotionDefinitionSchema,
-} from '@ghentcdh/annotation-ui';
-import { AnnotationDefinitionService } from './annotation-definition.service';
+  UiAnnotionDefinitionSchema } from '@ghentcdh/annotation-ui';
+
 import {
-  buildAnnotationDefFromResourceJsonSafe,
   type DefinitionsFetchFn,
   type GlobModules,
+  type ResourceLoadResult,
+  buildAnnotationDefFromResourceJsonSafe,
   loadAnnotationDefinitionsFromConfigs,
   loadAnnotationDefinitionsFromGlob,
   loadAnnotationDefinitionsFromUrls,
-  type ResourceLoadResult,
 } from './annotation-definition.loader';
+import { AnnotationDefinitionService } from './annotation-definition.service';
 
 export type AnnotationLoadError = {
   id?: string;
@@ -55,7 +54,6 @@ export type AnnotationDefinitionsState = {
 };
 
 export type ProvideAnnotationDefinitionsOptions = {
-  api?: AxiosInstance;
   config?: AnnotationDefConfig;
   resourceFolder?: GlobModules;
   factory?: (id: string) => unknown;
@@ -84,7 +82,7 @@ const resolveKeyLabels = (
     const def = grouped[id];
     if (def) {
       const style = def.annotation;
-      const item: KeyLabel = { key: def.id, label: def.name };
+      const item: KeyLabel = { key: def.id, label: def.title ?? def.name };
       if (style.icon) item.icon = style.icon;
       acc.push(item);
     }

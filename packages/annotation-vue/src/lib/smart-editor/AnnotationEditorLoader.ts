@@ -1,8 +1,10 @@
+import { inject, nextTick, ref } from 'vue';
+
 import {
-  AnnotationJsonResource,
+  type AnnotationJsonResource,
   type SourceModel,
 } from '@ghentcdh/annotation-core';
-import { inject, nextTick, ref } from 'vue';
+
 import {
   ANNOTATION_DEFINITIONS_KEY,
   type AnnotationDefinitionsState,
