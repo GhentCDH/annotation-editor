@@ -11,6 +11,13 @@ on:
 jobs:
   npm:
     uses: GhentCDH/crouton/.github/workflows/shared-publish-npm.yml@main
+    with:
+      # A prerelease tag never becomes `latest`: v0.1.0-rc.0 publishes under the
+      # `rc` dist-tag, any other prerelease (v0.1.0-alpha.1) under `alpha`.
+      # A plain version (v0.1.0) publishes as `latest`.
+      publish-args: >-
+        --access public --verbose
+        ${{ contains(github.ref_name, '-rc.') && '--tag rc' || (contains(github.ref_name, '-') && '--tag alpha' || '') }}
     permissions:
       contents: read
       id-token: write
