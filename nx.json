@@ -80,6 +80,7 @@
   ],
   "release": {
     "projects": ["annotation-api", "annotation-core", "annotation-vue"],
+    "projectsRelationship": "fixed",
     "version": {
       "conventionalCommits": true,
       "preVersionCommand": "npx nx run-many -t build"
