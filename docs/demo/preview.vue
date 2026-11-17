@@ -17,14 +17,11 @@ import {
   layout,
   sourcesPlainTxt,
 } from '@demo/demo-text';
-import { AnnotationEditor, configureApi } from '@ghentcdh/annotation-vue';
-import axios from 'axios';
+import { AnnotationEditor } from '@ghentcdh/annotation-vue';
 import {
   parseAnnotations,
   w3cAnnotationTransformer,
 } from '../../packages/annotation-ui/src';
-
-configureApi(axios);
 
 const annotations = parseAnnotations(w3cAnnotationTransformer, w3cAnnotations);
 </script>

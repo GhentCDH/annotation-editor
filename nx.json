@@ -62,7 +62,8 @@
         "packages/annotation-api/**/*",
         "packages/annotation-core/**/*",
         "packages/annotation-editor/**/*",
-        "packages/annotation-ui/**/*"
+        "packages/annotation-ui/**/*",
+        "packages/annotation-vue/**/*"
       ]
     },
     {
@@ -74,7 +75,9 @@
       "include": [
         "packages/annotation-api/**/*",
         "packages/annotation-core/**/*",
-        "packages/annotation-editor/**/*"
+        "packages/annotation-editor/**/*",
+        "packages/annotation-ui/**/*",
+        "packages/annotation-vue/**/*"
       ]
     }
   ],

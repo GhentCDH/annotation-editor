@@ -1,9 +1,11 @@
 import { createApp, defineComponent, h, nextTick } from 'vue';
+
 import {
   AnnotationConfigSchema,
   type AnnotationDefConfig,
   type AnnotationResource,
 } from '@ghentcdh/annotation-core';
+
 import { type DefinitionsFetchFn } from '../annotation-definition.loader';
 import {
   type AnnotationDefinitionsState,

@@ -1,5 +1,8 @@
 <template>
-  <Drawer class="_h-full" :width-left="300">
+  <Drawer
+    class="_h-full"
+    :width-left="300"
+  >
     <Loading
       :loading="store.loading || !props.loader.definitionsLoaded.value"
     />
@@ -37,15 +40,17 @@
 </template>
 
 <script lang="ts" setup>
-import { AnnotationEditor } from '@ghentcdh/annotation-editor';
 import { getCurrentInstance, onMounted, ref, watch } from 'vue';
-import type { W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { useRoute, useRouter } from 'vue-router';
+
+import { AnnotationEditor } from '@ghentcdh/annotation-editor';
 import { Drawer, Loading } from '@ghentcdh/crouton-vue';
-import { provideEditorStore } from './editorStore';
-import { SmartEditorProperties } from './SmartEditor.properties';
+import type { W3CAnnotation } from '@ghentcdh/w3c-utils';
+
 import { useAnnotationDefinitions } from '../definitions/useAnnotationDefinitions';
 import AnnotationFilter from '../filter/AnnotationFilter.vue';
+import { SmartEditorProperties } from './SmartEditor.properties';
+import { provideEditorStore } from './editorStore';
 
 const props = defineProps(SmartEditorProperties);
 const emit = defineEmits(['annotationtype-click']);

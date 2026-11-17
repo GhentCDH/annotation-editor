@@ -32,7 +32,7 @@ export const createAnnotationContext = (
   return {
     id: resource.id,
     styling: {
-      name: resource.name,
+      name: resource.title ?? resource.name,
       id: resource.id,
       target: resource.annotation.target,
       color: resource.annotation.color,

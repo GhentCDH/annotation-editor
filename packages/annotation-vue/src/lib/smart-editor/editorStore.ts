@@ -1,20 +1,22 @@
 import {
-  computed,
   type InjectionKey,
+  computed,
   provide,
   reactive,
   ref,
   watch,
 } from 'vue';
-import { type SourceModel } from '@ghentcdh/annotation-core';
+
 import { type BaseAnnotation } from '@ghentcdh/annotated-text';
+import { type SourceModel } from '@ghentcdh/annotation-core';
 import {
-  type EditorAnnotation,
   type AnnotationTransformer,
+  type EditorAnnotation,
   parseAnnotations,
 } from '@ghentcdh/annotation-ui';
-import { type AnnotationEditorLoader } from './AnnotationEditorLoader';
+
 import { useAnnotationDefinitions } from '../definitions/useAnnotationDefinitions';
+import { type AnnotationEditorLoader } from './AnnotationEditorLoader';
 
 const createEditState = <ANNOTATION extends BaseAnnotation>(
   annotationLoader: AnnotationEditorLoader<ANNOTATION>,

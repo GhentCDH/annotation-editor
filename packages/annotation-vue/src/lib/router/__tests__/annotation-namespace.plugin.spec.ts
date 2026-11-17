@@ -1,10 +1,11 @@
 import { type AnnotationResource } from '@ghentcdh/annotation-core';
+
 import { AnnotationDefinitionService } from '../../definitions/annotation-definition.service';
+import { installAnnotationNamespaceRoutes } from '../annotation-namespace.plugin';
 import {
   createAnnotationNamespacePaths,
   createAnnotationNamespaceRoutes,
 } from '../annotation-namespace.routes';
-import { installAnnotationNamespaceRoutes } from '../annotation-namespace.plugin';
 
 const createMockDefinition = (
   id: string,

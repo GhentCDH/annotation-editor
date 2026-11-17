@@ -2,6 +2,7 @@ import {
   type AnnotationDefConfig,
   type AnnotationJsonResource,
 } from '@ghentcdh/annotation-core';
+
 import {
   loadAnnotationDefinitionsFromConfigs,
   loadAnnotationDefinitionsFromGlob,

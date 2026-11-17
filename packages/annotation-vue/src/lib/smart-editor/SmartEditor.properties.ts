@@ -1,10 +1,12 @@
 import type { PropType } from 'vue';
+
 import { type BaseAnnotation, type TextAdapter } from '@ghentcdh/annotated-text';
+import { type GridLayout } from '@ghentcdh/annotation-core';
 import {
   type AnnotationTransformer,
   w3cAnnotationTransformer,
 } from '@ghentcdh/annotation-ui';
-import { type GridLayout } from '@ghentcdh/annotation-core';
+
 import { type AnnotationEditorLoader } from './AnnotationEditorLoader';
 
 export const SmartEditorProperties = {
