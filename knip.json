@@ -51,7 +51,8 @@
     },
     "packages/annotation-api": {
       "entry": ["src/index.ts", "src/**/*.spec.ts"],
-      "project": ["src/**/*.{ts,vue}"]
+      "project": ["src/**/*.{ts,vue}"],
+      "ignoreDependencies": ["@ghentcdh/annotated-text"]
     }
   },
   "ignoreUnresolved": ["\\*"]
