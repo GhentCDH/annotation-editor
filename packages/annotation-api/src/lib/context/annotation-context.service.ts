@@ -41,7 +41,9 @@ export class AnnotationContextService {
     const find = this.contextConfigMap.get(annotationId);
     if (find) return find;
 
-    const resource = await this.configRegistry.findById(annotationId);
+    const resource = (await this.configRegistry.getAll()).find(
+      (r) => r.id === annotationId,
+    );
     if (!resource) return null;
 
     const context = createAnnotationContext(this.annotationDefConfig, resource);
