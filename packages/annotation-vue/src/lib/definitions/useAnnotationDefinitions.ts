@@ -84,7 +84,7 @@ const resolveKeyLabels = (
     const def = grouped[id];
     if (def) {
       const style = def.annotation;
-      const item: KeyLabel = { key: def.id, label: def.name };
+      const item: KeyLabel = { key: def.id, label: def.title ?? def.name };
       if (style.icon) item.icon = style.icon;
       acc.push(item);
     }

@@ -3,6 +3,7 @@ import {
   type AnnotationJsonResource,
   AnnotationJsonResourceSchema,
   type AnnotationResource,
+  withResourceId,
 } from '@ghentcdh/annotation-core';
 import { parseSchema } from '@ghentcdh/crouton-core';
 
@@ -127,8 +128,14 @@ export const loadAnnotationDefinitionsFromConfigs = (
   return resources.map(buildAnnotationDefFromJson).filter((def) => !!def);
 };
 
-// ponytail: response is trusted as AnnotationResource (served by annotation-api); validate with AnnotationResourceSchema if other sources appear
+// ponytail: response is trusted as an annotation resource (served by annotation-api); validate with AnnotationResourceSchema if other sources appear
 export const loadAnnotationDefinitionsFromUrls = async (
   urls: string[],
 ): Promise<AnnotationResource[]> =>
-  Promise.all(urls.map((url) => fetch(url).then((r) => r.json())));
+  Promise.all(
+    urls.map((url) =>
+      fetch(url)
+        .then((r) => r.json())
+        .then((resource) => withResourceId(resource)),
+    ),
+  );

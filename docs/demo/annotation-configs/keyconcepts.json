@@ -1,38 +1,43 @@
 {
-  "id": "keyconcepts",
-  "name": "Key Concepts",
+  "$schema": "https://ghentcdh.github.io/crouton/schema/v1/resource.schema.json",
+  "schemaVersion": 1,
   "kind": "custom",
+  "name": "keyconcepts",
   "annotation": {
     "color": "#712793",
     "target": "highlight"
   },
   "columns": {
     "concept": {
-      "id": "concept",
       "label": "Concept",
-      "type": { "type": "string" },
+      "type": {
+        "type": "string"
+      },
       "fieldInput": {
         "type": "text",
         "options": {}
       }
     },
     "domain": {
-      "id": "domain",
       "label": "Domain",
-      "type": { "type": "string" },
+      "type": {
+        "type": "string"
+      },
       "fieldInput": {
         "type": "text",
         "options": {}
       }
     },
     "abstractConcept": {
-      "id": "abstractConcept",
       "label": "Abstract Concept",
-      "type": { "type": "boolean" },
+      "type": {
+        "type": "boolean"
+      },
       "fieldInput": {
         "type": "boolean",
         "options": {}
       }
     }
-  }
+  },
+  "title": "Key Concepts"
 }

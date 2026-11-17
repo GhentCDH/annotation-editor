@@ -2023,9 +2023,6 @@
         }
       }
     },
-    "id": {
-      "type": "string"
-    },
     "annotation": {
       "default": {
         "isRoot": true,
@@ -2075,8 +2072,7 @@
     }
   },
   "required": [
-    "name",
-    "id"
+    "name"
   ],
   "additionalProperties": {},
   "definitions": {

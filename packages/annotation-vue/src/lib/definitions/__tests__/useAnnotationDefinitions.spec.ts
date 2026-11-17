@@ -77,7 +77,7 @@ describe('provideAnnotationDefinitions', () => {
 
   it('should auto-load from resourceFolder', () => {
     const modules = {
-      './a.json': { default: { id: 'a', name: 'Alpha', color: '#000' } },
+      './a.json': { default: { name: 'a', title: 'Alpha', color: '#000' } },
     };
     const factory = (id: string) => ({
       toJsonLdContext: () => ({ '@context': id }),
@@ -285,8 +285,8 @@ describe('loadFromUrl', () => {
     const state = withProvide({ config: mockConfig });
 
     const mockFetchFn: DefinitionsFetchFn = vi.fn().mockResolvedValue([
-      { id: 'url-a', name: 'UrlAlpha', color: '#aaa' },
-      { id: 'url-b', name: 'UrlBeta', color: '#bbb' },
+      { name: 'url-a', title: 'UrlAlpha', color: '#aaa' },
+      { name: 'url-b', title: 'UrlBeta', color: '#bbb' },
     ]);
 
     await state.loadFromUrl('/api/ns', mockFetchFn);
@@ -319,7 +319,7 @@ describe('loadFromUrl', () => {
   it('should auto-fetch when definitionsUrl provided', async () => {
     const mockFetchFn: DefinitionsFetchFn = vi
       .fn()
-      .mockResolvedValue([{ id: 'auto', name: 'Auto', color: '#000' }]);
+      .mockResolvedValue([{ name: 'auto', title: 'Auto', color: '#000' }]);
 
     const state = withProvide({
       config: mockConfig,

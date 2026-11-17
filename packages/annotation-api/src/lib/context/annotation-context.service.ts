@@ -5,6 +5,7 @@ import {
   type AnnotationDefConfig,
   type AnnotationResource,
   createAnnotationContext,
+  withResourceId,
 } from '@ghentcdh/annotation-core';
 import { ResourceConfigRegistry } from '@ghentcdh/crouton-api';
 
@@ -14,7 +15,7 @@ import { ANNOTATION_DEF_CONFIG_TOKEN } from './annotation-def-config.token';
 export type AnnotationRegistryResource = Awaited<
   ReturnType<ResourceConfigRegistry['getAll']>
 >[number] &
-  AnnotationResource;
+  Omit<AnnotationResource, 'id'>;
 
 @Injectable()
 export class AnnotationContextService {
@@ -34,12 +35,12 @@ export class AnnotationContextService {
     (await this.configRegistry.getAll()).forEach((resource) => {
       const context = createAnnotationContext(
         this.annotationDefConfig,
-        resource,
+        withResourceId(resource),
       );
 
-      this.contextConfigMap.set(resource.id, context);
+      this.contextConfigMap.set(resource.name, context);
 
-      this.prefixMap.set(context.prefix, resource.id);
+      this.prefixMap.set(context.prefix, resource.name);
     });
   }
 
@@ -48,11 +49,14 @@ export class AnnotationContextService {
     if (find) return find;
 
     const resource = (await this.configRegistry.getAll()).find(
-      (r) => r.id === annotationId,
+      (r) => r.name === annotationId,
     );
     if (!resource) return null;
 
-    const context = createAnnotationContext(this.annotationDefConfig, resource);
+    const context = createAnnotationContext(
+      this.annotationDefConfig,
+      withResourceId(resource),
+    );
     this.contextConfigMap.set(annotationId, context);
 
     return context;

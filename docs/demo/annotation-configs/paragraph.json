@@ -1,12 +1,14 @@
 {
-  "id": "paragraph",
-  "name": "paragraph",
+  "$schema": "https://ghentcdh.github.io/crouton/schema/v1/resource.schema.json",
+  "schemaVersion": 1,
   "kind": "custom",
+  "name": "paragraph",
   "annotation": {
     "color": "#1e55cf",
     "target": "gutter",
     "allowedChildren": ["animals", "keyconcepts", "emotion"],
     "isRoot": true
   },
-  "columns": {}
+  "columns": {},
+  "title": "paragraph"
 }

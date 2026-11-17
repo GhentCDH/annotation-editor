@@ -28,10 +28,10 @@ export class AnnotationNamespaceController {
 
     return {
       annotations: all.map((a) => ({
-        id: a.id,
-        name: a.name,
-        schemas: `${base}/${SCHEMA_PREFIX}/${a.id}/schemas`,
-        jsonld: `${base}/ns/${a.id}.jsonld`,
+        id: a.name,
+        name: a.title ?? a.name,
+        schemas: `${base}/${SCHEMA_PREFIX}/${a.name}/schemas`,
+        jsonld: `${base}/ns/${a.name}.jsonld`,
       })),
     };
   }

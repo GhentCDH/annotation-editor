@@ -1,8 +1,8 @@
 {
   "$schema": "https://ghentcdh.github.io/crouton/schema/v1/resource.schema.json",
-  "id": "animals",
-  "name": "Animals",
+  "schemaVersion": 1,
   "kind": "custom",
+  "name": "animals",
   "annotation": {
     "color": "#65a378",
     "target": "highlight",
@@ -10,75 +10,117 @@
   },
   "columns": {
     "name": {
-      "id": "name",
       "label": "name",
-      "type": { "type": "string" },
-      "fieldInput": {
-        "position": 1,
-        "options": {}
+      "type": {
+        "type": "string"
       }
     },
     "gender": {
-      "id": "gender",
       "label": "Gender",
-      "type": { "type": "string" },
+      "type": {
+        "type": "string"
+      },
       "fieldInput": {
         "type": "select",
-        "position": 2,
         "options": {
-          "colspan": 4,
           "clearable": false,
           "storeValue": true,
           "emitObject": true,
           "values": [
-            { "value": "female", "label": "Female" },
-            { "value": "male", "label": "Male" }
+            {
+              "value": "female",
+              "label": "Female"
+            },
+            {
+              "value": "male",
+              "label": "Male"
+            }
           ]
         }
       }
     },
     "animalType": {
-      "id": "animalType",
       "label": "Animal Type",
-      "type": { "type": "string" },
+      "type": {
+        "type": "string"
+      },
       "fieldInput": {
         "type": "select",
-        "position": 3,
         "options": {
-          "colspan": 6,
           "clearable": false,
           "storeValue": true,
           "emitObject": true,
           "values": [
-            { "value": "dog", "label": "Dog" },
-            { "value": "parrot", "label": "parrot" }
+            {
+              "value": "dog",
+              "label": "Dog"
+            },
+            {
+              "value": "parrot",
+              "label": "parrot"
+            }
           ]
         }
       }
     },
     "breed": {
-      "id": "breed",
       "label": "breed",
       "required": false,
-      "type": { "type": "string" },
-      "fieldInput": {
-        "position": 4,
-        "options": {
-          "colspan": 6
-        }
+      "type": {
+        "type": "string"
       }
     },
     "species": {
-      "id": "species",
       "label": "Species",
       "required": false,
-      "type": { "type": "string" },
-      "fieldInput": {
-        "position": 4,
-        "options": {
+      "type": {
+        "type": "string"
+      }
+    }
+  },
+  "title": "Animals",
+  "layout": {
+    "form": {
+      "items": [
+        "name",
+        {
+          "id": "gender",
+          "colspan": 4
+        },
+        {
+          "id": "animalType",
+          "colspan": 6
+        },
+        {
+          "id": "breed",
+          "colspan": 6
+        },
+        {
+          "id": "species",
           "colspan": 6
         }
-      }
+      ]
+    },
+    "view": {
+      "items": [
+        "name",
+        {
+          "id": "gender",
+          "colspan": 4
+        },
+        {
+          "id": "animalType",
+          "colspan": 6
+        },
+        {
+          "id": "breed",
+          "colspan": 6
+        },
+        {
+          "id": "species",
+          "colspan": 6
+        }
+      ]
     }
   }
 }
