@@ -68,6 +68,18 @@ pnpm nx affected -t test --base=origin/main
 pnpm nx affected -t typecheck --base=origin/main
 ```
 
+### Releasing
+
+```bash
+pnpm release prerelease --preid rc   # next release candidate (0.1.0-rc.N)
+pnpm release 0.1.0                   # final release
+```
+
+The script bumps the versions, updates `RELEASE_NOTES.md`, tags `v<version>` and pushes; the tag triggers the
+`Publish` workflow, which publishes to npm (`rc`/`alpha` dist-tag for prereleases, `latest` otherwise) and
+creates the GitHub release. Only the `ghentcdh-developers` team can push release tags. Details, dry run and
+undo: [CONTRIBUTING.md](./CONTRIBUTING.md#releasing-maintainers).
+
 ---
 
 ## License

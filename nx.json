@@ -93,6 +93,18 @@
       "workspaceChangelog": {
         "file": "RELEASE_NOTES.md"
       }
+    },
+    "releaseTag": {
+      "strictPreid": false
+    },
+    "conventionalCommits": {
+      "types": {
+        "refactor": {
+          "changelog": {
+            "title": "🏡 Refactor"
+          }
+        }
+      }
     }
   },
   "migrate": {
