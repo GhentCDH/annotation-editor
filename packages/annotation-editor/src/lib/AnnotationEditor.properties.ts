@@ -16,9 +16,9 @@ export const AnnotationEditorProperties = {
     required: false as const,
   },
   annotationTransformer: {
-    type: Object as PropType<AnnotationTransformer<any>>,
+    type: Object as PropType<AnnotationTransformer>,
     required: true as const,
-    default: () => w3cAnnotationTransformer,
+    default: (): AnnotationTransformer => w3cAnnotationTransformer,
   },
   sources: { type: Array as PropType<SourceModel[]>, required: true as const },
   annotations: {
@@ -57,17 +57,10 @@ export type AnnotationEditorProps = ExtractPublicPropTypes<
 >;
 
 export const AnnotationEditorEmits = {
-  'update:annotation': <ANNOTATION>(_annotation: ANNOTATION) =>
-    Promise<ANNOTATION>,
-  'delete:annotation': <ANNOTATION>(_annotation: ANNOTATION) =>
-    Promise<ANNOTATION>,
-  'create:annotation': <ANNOTATION>(_annotation: ANNOTATION) =>
-    Promise<ANNOTATION>,
-  'create:annotation:events': (_payload: any) => true,
-  'select:annotation': <ANNOTATION>(
-    _annotation: ANNOTATION | null,
-    _action: string | null,
-  ) => true,
+  'update:annotation': (_annotation: unknown) => true,
+  'delete:annotation': (_annotation: unknown) => true,
+  'create:annotation': (_annotation: unknown) => true,
+  'select:annotation': (_annotation: unknown, _action: string | null) => true,
 };
 
 export type AnnotationEditorEmitsFn = EmitFn<typeof AnnotationEditorEmits>;

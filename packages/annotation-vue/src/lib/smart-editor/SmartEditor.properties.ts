@@ -1,5 +1,5 @@
 import type { PropType } from 'vue';
-import { type TextAdapter } from '@ghentcdh/annotated-text';
+import { type BaseAnnotation, type TextAdapter } from '@ghentcdh/annotated-text';
 import {
   type AnnotationTransformer,
   w3cAnnotationTransformer,
@@ -9,7 +9,7 @@ import { type AnnotationEditorLoader } from './AnnotationEditorLoader';
 
 export const SmartEditorProperties = {
   loader: {
-    type: Object as PropType<AnnotationEditorLoader<any>>,
+    type: Object as PropType<AnnotationEditorLoader<BaseAnnotation>>,
     required: true as const,
   },
   textAdapter: {
@@ -17,9 +17,9 @@ export const SmartEditorProperties = {
     required: false as const,
   },
   annotationTransformer: {
-    type: Object as PropType<AnnotationTransformer<any>>,
+    type: Object as PropType<AnnotationTransformer>,
     required: false as const,
-    default: () => w3cAnnotationTransformer,
+    default: (): AnnotationTransformer => w3cAnnotationTransformer,
   },
   watchQueryParams: {
     type: Boolean,
@@ -27,7 +27,7 @@ export const SmartEditorProperties = {
     required: false as const,
   },
   sourceUris: {
-    type: Array<string>,
+    type: Array as PropType<string[]>,
     required: true as const,
   },
   readonly: {

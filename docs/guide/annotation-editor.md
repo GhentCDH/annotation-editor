@@ -111,7 +111,6 @@ const source: SourceModel = {
 | `create:annotation` | `W3CAnnotation` | Emitted when the user completes a new annotation form |
 | `update:annotation` | `W3CAnnotation` | Emitted when the user saves an edit |
 | `delete:annotation` | `W3CAnnotation` | Emitted after the user confirms deletion |
-| `create:annotation:events` | `any` | Raw internal creation event payload (advanced use) |
 | `select:annotation` | `(W3CAnnotation \| null, string \| null)` | Emitted on annotation selection/deselection. Second arg is the action name. |
 
 All mutation events (`create`, `update`, `delete`) expect async handlers — the component waits for the promise to settle before clearing modal state.

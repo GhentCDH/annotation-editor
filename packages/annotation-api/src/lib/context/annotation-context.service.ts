@@ -10,6 +10,12 @@ import { ResourceConfigRegistry } from '@ghentcdh/crouton-api';
 
 import { ANNOTATION_DEF_CONFIG_TOKEN } from './annotation-def-config.token';
 
+/** Crouton resource config that also carries the annotation definition fields. */
+export type AnnotationRegistryResource = Awaited<
+  ReturnType<ResourceConfigRegistry['getAll']>
+>[number] &
+  AnnotationResource;
+
 @Injectable()
 export class AnnotationContextService {
   private readonly contextConfigMap = new Map<string, AnnotationContext>();
@@ -17,7 +23,7 @@ export class AnnotationContextService {
 
   constructor(
     @Inject(ResourceConfigRegistry)
-    private readonly configRegistry: ResourceConfigRegistry<any>,
+    private readonly configRegistry: ResourceConfigRegistry<AnnotationRegistryResource>,
     @Inject(ANNOTATION_DEF_CONFIG_TOKEN)
     private readonly annotationDefConfig: AnnotationDefConfig,
   ) {}
@@ -25,7 +31,7 @@ export class AnnotationContextService {
   async reloadAll() {
     this.contextConfigMap.clear();
 
-    (await this.configRegistry.getAll()).forEach((resource: AnnotationResource) => {
+    (await this.configRegistry.getAll()).forEach((resource) => {
       const context = createAnnotationContext(
         this.annotationDefConfig,
         resource,

@@ -127,10 +127,8 @@ export const loadAnnotationDefinitionsFromConfigs = (
   return resources.map(buildAnnotationDefFromJson).filter((def) => !!def);
 };
 
-export const loadAnnotationDefinitionsFromUrls = async (urls: string[]) => {
-  return Promise.all(
-    urls.map((a) => {
-      return fetch(a).then((r) => r.json());
-    }),
-  );
-};
+// ponytail: response is trusted as AnnotationResource (served by annotation-api); validate with AnnotationResourceSchema if other sources appear
+export const loadAnnotationDefinitionsFromUrls = async (
+  urls: string[],
+): Promise<AnnotationResource[]> =>
+  Promise.all(urls.map((url) => fetch(url).then((r) => r.json())));

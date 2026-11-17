@@ -73,7 +73,7 @@ const emit = defineEmits(['update:modelValue', 'annotationtype-click']);
 const model = defineModel<string[]>({ default: () => [] });
 const props = defineProps({
   count: {
-    type: Object as PropType<Record<string, any[]>>,
+    type: Object as PropType<Record<string, unknown[]>>,
     default: undefined,
   },
 });

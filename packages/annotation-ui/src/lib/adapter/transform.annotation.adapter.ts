@@ -13,17 +13,19 @@ import {
 /**
  * Converts between a domain annotation model and `EditorAnnotation`.
  * Only `parse` and `format` are required.
+ * Method syntax (not arrow properties) keeps the parameters bivariant, so any
+ * `AnnotationTransformer<T>` fits a prop typed `AnnotationTransformer`.
  */
 export type AnnotationTransformer<
   ANNOTATION extends BaseAnnotation = BaseAnnotation,
 > = {
-  parse: (annotation: ANNOTATION) => EditorAnnotation | null;
-  format: (annotation: EditorAnnotation, isNew: boolean) => ANNOTATION;
+  parse(annotation: ANNOTATION): EditorAnnotation | null;
+  format(annotation: EditorAnnotation, isNew: boolean): ANNOTATION;
   /** Adjust metadata before it is saved. Defaults to identity. */
-  transformMetadata?: (
+  transformMetadata?(
     metadata: AnnotationMetadata,
     selector: Selector,
-  ) => AnnotationMetadata;
+  ): AnnotationMetadata;
   /** Params passed to the annotated-text adapter. Defaults to `{}`. */
   defaultParams?: AnnotationAdapterParams;
 };

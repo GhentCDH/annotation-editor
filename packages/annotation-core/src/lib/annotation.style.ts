@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { Debugger } from '@ghentcdh/annotated-text';
-import { type ContextBuilder, contextBuilder } from '@ghentcdh/w3c-utils';
+import { contextBuilder } from '@ghentcdh/w3c-utils';
 
 import { type AnnotationResource } from './types/annotation-definition.type';
 import {
@@ -32,7 +32,7 @@ export const AnnotationStyleContextBuilder = (
   return contextBuilder(prefix, baseUrl)
     .setType(prefix, AnnotationStyleType)
     .setContextUri(`${contextUrl}${AnnotationStyleType}.jsonld`)
-    .parseZodSchema(AnnotationStyleSchema as any) as ContextBuilder<any>;
+    .parseZodSchema(AnnotationStyleSchema);
 };
 
 export const createAnnotationStyleBodyUnsafe = (
