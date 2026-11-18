@@ -8,8 +8,8 @@ import {
   type KeyLabel,
 } from '@ghentcdh/annotation-ui';
 import { type SourceModel } from '@ghentcdh/annotation-core';
-import { type AnnotationEditorEmitsFn } from '../../../AnnotationEditor.properties';
-import { type EditorConfig, type EditorState_ } from '../../editorState';
+import { type AnnotationEditorEmitsFn } from '../../AnnotationEditor.properties';
+import { type EditorConfig, type EditorState_ } from '../editorState';
 import { type AnnotationEvents, sendAnnotationEvent } from '../annotation.events';
 
 const createEditorState = (): EditorState_ =>

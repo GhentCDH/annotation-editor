@@ -20,7 +20,10 @@ import {
   type AnnotationEditorEmitsFn,
   type AnnotationEditorProps,
 } from '../AnnotationEditor.properties';
-import { annotationModalDefaults } from '../modals/AnnotationModal.defaults';
+import {
+  annotationModalDefaults,
+  type AnnotationModalActionMap,
+} from '../modals/AnnotationModal.defaults';
 import {
   selectAnnotationById,
   type SelectByIdContext,
@@ -34,7 +37,7 @@ type EditorState = {
   sendAnnotationEvent: <KEY extends keyof AnnotationEvents>(
     event: KEY,
     data: AnnotationEvents[KEY],
-    callback?: (response: any) => void,
+    callback?: (response: unknown) => void,
   ) => void;
   annotations: ComputedRef<Readonly<EditorAnnotation[]>>;
   allDefinitions: ComputedRef<Readonly<UIAnnotationDefinition[]>>;
@@ -55,7 +58,7 @@ export const useProvideEditorState = (
     return groupById(props.annotationDefinitions) as DefinitionMap;
   });
   const config = shallowReactive<EditorConfig>({
-    modal: createModalConfig(annotationModalDefaults),
+    modal: createModalConfig<AnnotationModalActionMap>(annotationModalDefaults),
     createAnnotatedText: createAnnotationConfiguration(
       props.textAdapter,
       props.annotationTransformer.defaultParams,
@@ -82,9 +85,13 @@ export const useProvideEditorState = (
     readonly: props.readonly ?? false,
     show: () => showEditorState(),
     reset: () => resetEditorState(),
-    format:
-      props.annotationTransformer?.format.bind(props.annotationTransformer) ??
-      (() => null),
+    format: (annotation: EditorAnnotation, isNew: boolean): EditorAnnotation => {
+      if (!props.annotationTransformer) {
+        return null as unknown as EditorAnnotation;
+      }
+
+      return props.annotationTransformer.format(annotation, isNew) as EditorAnnotation;
+    },
     transformMetadata:
       props.annotationTransformer?.transformMetadata.bind(
         props.annotationTransformer,

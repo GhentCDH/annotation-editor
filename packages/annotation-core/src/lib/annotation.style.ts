@@ -30,7 +30,9 @@ export const AnnotationStyleContextBuilder = (
   return contextBuilder(prefix, baseUrl)
     .setType(prefix, AnnotationStyleType)
     .setContextUri(`${contextUrl}${AnnotationStyleType}.jsonld`)
-    .parseZodSchema(AnnotationStyleSchema as any) as ContextBuilder<any>;
+    .parseZodSchema(
+      AnnotationStyleSchema as unknown as z.ZodObject<z.ZodRawShape>,
+    ) as ContextBuilder;
 };
 
 export const createAnnotationStyleBodyUnsafe = (

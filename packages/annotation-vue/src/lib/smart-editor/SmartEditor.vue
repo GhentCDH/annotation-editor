@@ -53,7 +53,7 @@ const hasItemClick =
   !!getCurrentInstance()?.vnode.props?.['onAnnotationtypeClick'];
 const itemClickBind = hasItemClick
   ? {
-      onAnnotationtypeClick: (item: Record<string, any>) =>
+      onAnnotationtypeClick: (item: Record<string, unknown>) =>
         emit('annotationtype-click', item),
     }
   : {};

@@ -54,12 +54,25 @@ export type AnnotationModalActionMap = {
   confirm: ModalTypeConfig<ConfirmProps, ConfirmProps, ConfirmCloseEvent>;
 };
 
-type AnnotationModalAction = keyof AnnotationModalActionMap;
-
-export const annotationModalDefaults: Record<
-  AnnotationModalAction,
-  ModalDefinition
-> = {
+export const annotationModalDefaults: {
+  'info-card': ModalDefinition<
+    AnnotationInfoCardProp,
+    AnnotationInfoCardShow,
+    AnnotationInfoCardEvent
+  >;
+  confirm: ModalDefinition<ConfirmProps, ConfirmProps, ConfirmCloseEvent>;
+  'link-annotation': ModalDefinition<
+    LinkAnnotationProps,
+    LinkAnnotationShow,
+    LinkAnnotationCloseEvent
+  >;
+  toast: ModalDefinition<EditToast, EditToast, void>;
+  'edit-annotation': ModalDefinition<
+    AnnotationEditModalType,
+    AnnotationEditModalShow,
+    AnnotationEditModalEvent
+  >;
+} = {
   'info-card': {
     component: AnnotationInfoCardComponent,
     useFn: useAnnotationInfo,

@@ -37,7 +37,8 @@
     },
     "packages/annotation-editor": {
       "entry": [
-        "src/index.ts"
+        "src/index.ts",
+        "src/**/*.spec.ts"
       ],
       "project": [
         "src/**/*.{ts,vue}"

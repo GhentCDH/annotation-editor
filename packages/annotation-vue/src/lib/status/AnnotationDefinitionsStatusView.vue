@@ -195,14 +195,14 @@
                     Edit form
                   </div>
                   <CroutonForm
-                    :views="(def.schemas ?? {}) as any"
+                    :views="(def.schemas ?? {}) as Record<string, ViewConfig>"
                     :data="{}"
                   />
                   <div class="font-bold mt-2">
                     Readonly form
                   </div>
                   <CroutonForm
-                    :views="(def.schemas ?? {}) as any"
+                    :views="(def.schemas ?? {}) as Record<string, ViewConfig>"
                     :data="{}"
                     :readonly="true"
                   />
@@ -231,6 +231,7 @@
 import { computed, ref } from 'vue';
 import { type UIAnnotationDefinition } from '@ghentcdh/annotation-ui';
 import { CroutonForm } from '@ghentcdh/crouton-vue';
+import { type ViewConfig } from '@ghentcdh/crouton-core';
 import { peekAnnotationDefinitionsState } from '../definitions/useAnnotationDefinitions';
 
 const tick = ref(0);
@@ -270,7 +271,7 @@ const rawJson = (id: string): string => {
 };
 
 const compiledJson = (def: UIAnnotationDefinition): string => {
-  const { resource: _r, style: _s, ...rest } = def as any;
+  const { resource: _r, style: _s, ...rest } = def;
   return JSON.stringify(rest, null, 2);
 };
 

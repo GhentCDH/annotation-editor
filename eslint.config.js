@@ -91,7 +91,7 @@ export default [
           caughtErrorsIgnorePattern: '^_',
         },
       ],
-      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-explicit-any': 'error',
       'import-x/default': 'off',
       'import-x/named': 'off',
       'import-x/no-unresolved': 'off',

@@ -1,4 +1,4 @@
-import { type DynamicModule, Module } from '@nestjs/common';
+import { type DynamicModule, Module, type Type } from '@nestjs/common';
 
 import {
   AnnotationConfigSchema,
@@ -21,8 +21,8 @@ registerResourceExtensions({
 });
 
 type AnnotationRepositoryConfig<ANNOTATION> = {
-  repository: new (...args: any[]) => AnnotationCrudRepository<ANNOTATION>;
-  mapper: new (...args: any[]) => AnnotationW3cMapperService<ANNOTATION>;
+  repository: Type<AnnotationCrudRepository<ANNOTATION>>;
+  mapper: Type<AnnotationW3cMapperService<ANNOTATION>>;
 };
 
 @Module({

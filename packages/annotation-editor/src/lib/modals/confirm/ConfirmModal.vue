@@ -9,7 +9,7 @@
     </template>
     <template #actions>
       <Btn
-        :color="'secondary' as any"
+        :color="'secondary'"
         :outline="true"
         @click="closeMe(false)"
       >

@@ -15,7 +15,7 @@ export class AnnotationContextService {
 
   constructor(
     @Inject(ResourceConfigRegistry)
-    private readonly configRegistry: ResourceConfigRegistry<any>,
+    private readonly configRegistry: ResourceConfigRegistry,
     @Inject(ANNOTATION_DEF_CONFIG_TOKEN)
     private readonly annotationDefConfig: AnnotationDefConfig,
   ) {}
@@ -23,15 +23,16 @@ export class AnnotationContextService {
   async reloadAll() {
     this.contextConfigMap.clear();
 
-    (await this.configRegistry.getAll()).forEach((resource: AnnotationResource) => {
+    (await this.configRegistry.getAll()).forEach((resource) => {
+      const annotation = resource as unknown as AnnotationResource;
       const context = createAnnotationContext(
         this.annotationDefConfig,
-        resource,
+        annotation,
       );
 
-      this.contextConfigMap.set(resource.id, context);
+      this.contextConfigMap.set(annotation.id, context);
 
-      this.prefixMap.set(context.prefix, resource.id);
+      this.prefixMap.set(context.prefix, annotation.id);
     });
   }
 
@@ -42,7 +43,10 @@ export class AnnotationContextService {
     const resource = await this.configRegistry.findById(annotationId);
     if (!resource) return null;
 
-    const context = createAnnotationContext(this.annotationDefConfig, resource);
+    const context = createAnnotationContext(
+      this.annotationDefConfig,
+      resource as unknown as AnnotationResource,
+    );
     this.contextConfigMap.set(annotationId, context);
 
     return context;

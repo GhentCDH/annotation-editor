@@ -1,5 +1,5 @@
 import type { EmitFn, ExtractPublicPropTypes, PropType } from 'vue';
-import { type TextAdapter } from '@ghentcdh/annotated-text';
+import { type BaseAnnotation, type TextAdapter } from '@ghentcdh/annotated-text';
 import { type EditorAnnotation, type TransformAnnotationAdapter, type UIAnnotationDefinition, W3cTransformAnnotationAdapter } from '@ghentcdh/annotation-ui';
 import { type GridLayout, type SourceModel } from '@ghentcdh/annotation-core';
 
@@ -11,7 +11,7 @@ export const AnnotationEditorProperties = {
   },
   // TODO this should become only setmetadata etc functions
   annotationTransformer: {
-    type: Object as PropType<TransformAnnotationAdapter<any>>,
+    type: Object as PropType<TransformAnnotationAdapter<BaseAnnotation>>,
     required: true as const,
     default: new W3cTransformAnnotationAdapter(),
   },
@@ -58,7 +58,7 @@ export const AnnotationEditorEmits = {
     Promise<ANNOTATION>,
   'create:annotation': <ANNOTATION>(_annotation: ANNOTATION) =>
     Promise<ANNOTATION>,
-  'create:annotation:events': (_payload: any) => true,
+  'create:annotation:events': (_payload: unknown) => true,
   'select:annotation': <ANNOTATION>(
     _annotation: ANNOTATION | null,
     _action: string | null,

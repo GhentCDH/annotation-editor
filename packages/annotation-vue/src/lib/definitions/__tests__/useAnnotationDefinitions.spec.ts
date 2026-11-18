@@ -220,7 +220,7 @@ describe('provideAnnotationDefinitions', () => {
 
     state.loadFromDefinitions([
       createCoreDef('a', 'Alpha', {
-        views: mockViews as any,
+        views: mockViews as unknown as Partial<AnnotationResource>,
       }),
     ]);
     await nextTick();

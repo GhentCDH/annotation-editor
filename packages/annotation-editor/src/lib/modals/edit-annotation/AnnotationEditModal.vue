@@ -12,7 +12,7 @@
         v-if="definition"
         layout="rows"
         :data="metadata"
-        :views="(definition.schemas as any)"
+        :views="views"
         :format-before-save="formatBeforeSave"
         form-max-width="w-max max-w-lg form-scroll min-w-[1/2]"
         :save-id="annotation?.id !== undefined ? String(annotation!.id) : undefined"
@@ -53,6 +53,7 @@ import {
   Modal,
 } from '@ghentcdh/crouton-vue';
 import { computed, onMounted, onUnmounted } from 'vue';
+import { type ViewConfig } from '@ghentcdh/crouton-core';
 import {
   type AnnotationMetadata,
   type UiAnnotatedText,
@@ -84,6 +85,11 @@ const {
 } = UseAnnotationEdit(props, emits);
 
 const editId = `edit-select-annotation-${Date.now()}--`;
+
+const views = computed(
+  (): Record<string, ViewConfig> =>
+    (definition?.schemas ?? {}) as Record<string, ViewConfig>,
+);
 
 const label = computed(() => {
   const _label = definition.label;

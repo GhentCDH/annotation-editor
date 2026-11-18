@@ -10,7 +10,7 @@
       <CroutonForm
         layout="rows"
         :data="metadata"
-        :views="(definition.schemas as any)"
+        :views="views"
         :format-before-save="formatBeforeSave"
         form-max-width="w-max max-w-lg"
         @save="save"
@@ -38,6 +38,7 @@
 import { CroutonForm, FormMessage, Modal } from '@ghentcdh/crouton-vue';
 import { computed } from 'vue';
 import { type AnnotationMetadata } from '@ghentcdh/annotation-ui';
+import { type ViewConfig } from '@ghentcdh/crouton-core';
 import {
   LinkAnnotationProperties,
   LinkEmits,
@@ -64,6 +65,11 @@ const formatBeforeSave = ((formData: AnnotationMetadata) =>
   onChangeValue({ metadata: formData })) as unknown as (
   formData: AnnotationMetadata,
 ) => Promise<AnnotationMetadata>;
+
+const views = computed((): Record<string, ViewConfig> => {
+  const schemas = definition.schemas;
+  return (schemas ?? {}) as Record<string, ViewConfig>;
+});
 
 const label = computed(() => {
   const _label = definition.label;

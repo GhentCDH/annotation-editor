@@ -81,7 +81,7 @@ export class W3cTransformAnnotationAdapter extends TransformAnnotationAdapter<W3
         purpose: 'styling',
         id: annotation.definitionUri,
         name: annotation.definitionUri,
-      } as any);
+      });
     }
 
     if (annotation.metadata) {

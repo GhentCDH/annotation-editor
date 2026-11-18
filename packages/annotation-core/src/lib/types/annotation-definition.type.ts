@@ -12,7 +12,7 @@ import {
 
 export type ViewDef = 'table' | 'view' | 'form';
 
-export const annotationColumnDefinition = z.custom<any>();
+export const annotationColumnDefinition = z.custom<unknown>();
 
 // Explicit type avoids TS2883 ("cannot be named without a reference to $ZodType")
 // that arises from complex Zod v4 schema chains in .d.ts output.
