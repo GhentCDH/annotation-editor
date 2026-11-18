@@ -25,14 +25,11 @@ annotations are mutated.
   import {
     SmartAnnotationEditor,
     AnnotationEditorLoader,
+    editorAnnotationSchema,
+    type AnnotationTransformer,
     type SourceModel,
   } from '@ghentcdh/annotation-vue';
   import { TextLineAdapter } from '@ghentcdh/annotated-text';
-  import {
-    editorAnnotationSchema,
-    TransformAnnotationAdapter,
-    type EditorAnnotation,
-  } from '@ghentcdh/annotation-ui';
   import type { W3CAnnotation } from '@ghentcdh/w3c-utils';
 
   // ─── 1. Loader ───────────────────────────────────────────────────────────────
@@ -80,10 +77,8 @@ annotations are mutated.
 
   // ─── 2. Transformer ──────────────────────────────────────────────────────────
 
-  class MyTransformAdapter extends TransformAnnotationAdapter<W3CAnnotation> {
-    name = 'MyTransformAdapter';
-
-    parse(raw: W3CAnnotation): EditorAnnotation | null {
+  const transformer: AnnotationTransformer<W3CAnnotation> = {
+    parse: (raw) => {
       const { definition, ...metadata } = raw as any;
       return editorAnnotationSchema.parse({
         id: raw.id,
@@ -94,22 +89,20 @@ annotations are mutated.
         selectors: [{ ...(raw as any).selector, uri: (raw as any).sourceUri }],
         metadata,
       });
-    }
-
-    format(annotation: EditorAnnotation): W3CAnnotation {
+    },
+    format: (annotation) => {
       const selector = annotation.selectors[0];
       return {
         id: annotation.id,
         ...annotation.metadata,
         selector,
       } as unknown as W3CAnnotation;
-    }
-  }
+    },
+  };
 
   // ─── 3. Wire up ──────────────────────────────────────────────────────────────
 
   const loader = new MyLoader();
-  const transformer = new MyTransformAdapter();
   const textAdapter = () => TextLineAdapter({});
   const sourceUris = ref<string[]>(['text:1']);
 </script>
@@ -121,11 +114,44 @@ annotations are mutated.
 |-------------------------|---------------------------------|----------|----------------------------------|-------------------------------------------------------------------------------|
 | `loader`                | `AnnotationEditorLoader<T>`     | ✓        | —                                | Loads sources, annotations, and annotation definition resources               |
 | `sourceUris`            | `string[]`                      | ✓        | —                                | URIs identifying the sources to load. Change them to trigger a reload         |
-| `annotationTransformer` | `TransformAnnotationAdapter<T>` | —        | `new W3cTransformAnnotationAdapter()` | Converts between your domain model and `EditorAnnotation`. Defaults to the built-in W3C adapter. |
+| `annotationTransformer` | `AnnotationTransformer<T>`      | —        | `w3cAnnotationTransformer`       | Converts between your domain model and `EditorAnnotation`. Defaults to the built-in W3C adapter. |
 | `layout`                | `GridLayout`                    | —        | `undefined`                      | Custom CSS grid layout — see [AnnotationEditor custom layout](./annotation-editor.md#custom-layout) |
 | `textAdapter`           | `() => TextAdapter`             | —        | `undefined`                      | Custom text rendering adapter (e.g. `TextLineAdapter`)                        |
 | `watchQueryParams`      | `boolean`                       | —        | `true`                           | Sync selected annotation and action with the URL query string                 |
 | `readonly`              | `boolean`                       | —        | `false`                          | Disable editing — only display annotations, no create/edit/delete             |
+
+::: warning Requires vue-router
+`SmartAnnotationEditor` uses `useRoute()` / `useRouter()` to sync the selection with the URL, so it must be rendered
+inside an app with `vue-router` installed (also when `watchQueryParams` is `false`). `vue-router` is an optional peer
+dependency of `@ghentcdh/annotation-vue`, so install it yourself.
+:::
+
+## Events
+
+| Event                  | Payload               | Description                                                                                  |
+|------------------------|-----------------------|----------------------------------------------------------------------------------------------|
+| `annotationtype-click` | `Record<string, any>` | Emitted when an annotation type in the filter sidebar is clicked. Only active when a listener is attached. |
+
+Create, update and delete are handled internally: the component reloads annotations from the `loader` after each
+mutation.
+
+## Slots
+
+| Slot              | Description                                                         |
+|-------------------|---------------------------------------------------------------------|
+| `before-editor`   | Content rendered above the editor, e.g. a toolbar or source header |
+| `annotation-menu` | Extra content in the left drawer, below the annotation type filter  |
+
+```vue
+<SmartAnnotationEditor :loader="loader" :source-uris="sourceUris">
+  <template #before-editor>
+    <h2>{{ title }}</h2>
+  </template>
+  <template #annotation-menu>
+    <RouterLink to="/help">Annotation guidelines</RouterLink>
+  </template>
+</SmartAnnotationEditor>
+```
 
 ## AnnotationEditorLoader
 
@@ -163,42 +189,43 @@ let _loader: MyLoader | null = null;
 export const myLoader = () => (_loader ??= new MyLoader());
 ```
 
-## TransformAnnotationAdapter
+## AnnotationTransformer
 
-Extend `TransformAnnotationAdapter<T>` from `@ghentcdh/annotation-ui` to convert between your domain model `T` and the
-editor's internal `EditorAnnotation`.
+An `AnnotationTransformer<T>` is a plain object that converts between your domain model `T` and the editor's internal
+`EditorAnnotation`. Only `parse` and `format` are required. The built-in `w3cAnnotationTransformer` handles W3C
+annotations.
 
 ```ts
-import {
-  TransformAnnotationAdapter,
-  editorAnnotationSchema,
-  type EditorAnnotation,
-  type AnnotationAdapterParams,
-} from '@ghentcdh/annotation-ui';
+import { type AnnotationTransformer } from '@ghentcdh/annotation-vue';
 
-class MyTransformAdapter extends TransformAnnotationAdapter<MyAnnotation> {
-  name = 'MyAnnotationAdapter';
-  /** Required — passed to the text adapter to control selection behaviour */
-  defaultParams: AnnotationAdapterParams = { startOffset: 0 };
-
+const myTransformer: AnnotationTransformer<MyAnnotation> = {
   /** Raw API object → EditorAnnotation (return null to skip) */
-  parse(raw: MyAnnotation): EditorAnnotation | null { …
-  }
+  parse: (raw) => { … },
 
   /** EditorAnnotation → payload sent to your API */
-  format(annotation: EditorAnnotation, isNew: boolean): MyAnnotation { …
-  }
+  format: (annotation, isNew) => { … },
 
-  /** Optional — transform metadata when selector changes */
-  override transformMetadata(metadata: any, selector: Selector) { …
-  }
-}
+  /** Optional — transform metadata when the selector changes (default: unchanged) */
+  transformMetadata: (metadata, selector) => { … },
+
+  /** Optional — passed to the text adapter to control selection behaviour (default: `{}`) */
+  defaultParams: { startOffset: 0 },
+};
 ```
+
+Reuse the W3C transformer and override one function with a spread:
+`{ ...w3cAnnotationTransformer, transformMetadata: (m, s) => ({ ...m, length: s.end - s.start }) }`.
+
+::: tip Migrating from `TransformAnnotationAdapter` (≤ 0.0.1-alpha.30)
+The abstract class is gone. Replace `class X extends TransformAnnotationAdapter<T>` with an object of type
+`AnnotationTransformer<T>` (drop `name`), `new W3cTransformAnnotationAdapter()` with `w3cAnnotationTransformer`, and
+`transformer.createLinks(raw.map(transformer.parse))` with `parseAnnotations(transformer, raw)`.
+:::
 
 ## Read-only mode
 
-Pass `:read-only="true"` to render `AnnotationPreview` instead of `AnnotationEditor`. The loader still fetches data;
-events for mutation are not emitted.
+Pass `:readonly="true"` to disable creating, editing and deleting annotations. The loader still fetches data and
+annotations can still be selected.
 
 ```vue
 
@@ -206,7 +233,7 @@ events for mutation are not emitted.
   :loader="loader"
   :annotation-transformer="transformer"
   :source-uris="sourceUris"
-  :read-only="true"
+  :readonly="true"
 />
 ```
 

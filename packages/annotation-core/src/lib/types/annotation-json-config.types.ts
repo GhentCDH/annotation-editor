@@ -1,9 +1,11 @@
 import { z } from 'zod';
+
 import {
   JsonOperationsSchema,
-  labelFromId,
   ResourceJsonShape,
+  labelFromId,
 } from '@ghentcdh/crouton-core';
+
 import { BASELINE_RESOURCE_VERSION } from './version';
 
 const AnnotationTargetEnum = z.enum(['gutter', 'underline', 'highlight']);
@@ -25,7 +27,6 @@ export const AnnotationJsonResourceShape = ResourceJsonShape.extend({
   operations: JsonOperationsSchema.optional().default(
     JsonOperationsSchema.parse({}),
   ),
-  id: z.string(),
   // columns: z.array(JsonColumnSchema).optional().default([]),
   annotation: AnnotationConfigSchema.optional().default(
     AnnotationConfigSchema.parse({}),
@@ -38,7 +39,8 @@ export const AnnotationJsonResourceSchema = AnnotationJsonResourceShape
     const title = labelFromId(obj.name);
     const schemaVersion = obj.schemaVersion ?? BASELINE_RESOURCE_VERSION;
 
-    return { schemaVersion, title, ...obj };
+    // crouton 0.1.0: the resource id is always `name`.
+    return { schemaVersion, title, ...obj, id: obj.name };
   });
 
 export type AnnotationJsonResource = z.infer<

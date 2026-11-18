@@ -17,9 +17,10 @@ import {
   sourcesPlainTxt,
 } from '@demo/demo-text';
 import { AnnotationEditor } from '@ghentcdh/annotation-vue';
-import { W3cTransformAnnotationAdapter } from '../../packages/annotation-ui/src';
+import {
+  parseAnnotations,
+  w3cAnnotationTransformer,
+} from '../../packages/annotation-ui/src';
 
-const transformer = new W3cTransformAnnotationAdapter();
-let annotations = w3cAnnotations.map((a) => transformer.parse(a));
-annotations = transformer.createLinks(annotations);
+const annotations = parseAnnotations(w3cAnnotationTransformer, w3cAnnotations);
 </script>

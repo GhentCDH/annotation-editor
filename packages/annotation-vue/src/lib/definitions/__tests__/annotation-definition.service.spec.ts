@@ -1,4 +1,5 @@
 import { type AnnotationResource } from '@ghentcdh/annotation-core';
+
 import { AnnotationDefinitionService } from '../annotation-definition.service';
 
 const createMockDefinition = (

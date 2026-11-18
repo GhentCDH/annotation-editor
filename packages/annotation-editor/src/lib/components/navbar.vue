@@ -57,6 +57,7 @@
 
 <script setup lang="ts">
 import { Icon } from '@ghentcdh/crouton-vue';
+
 import {
   type NavbarAction,
   type NavbarChildAction,

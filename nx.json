@@ -4,7 +4,7 @@
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "production": ["default"],
-    "sharedGlobals": ["{workspaceRoot}/.github/workflows/ci.yml"]
+    "sharedGlobals": ["{workspaceRoot}/.github/workflows/merge-request.yml"]
   },
   "plugins": [
     {
@@ -62,7 +62,8 @@
         "packages/annotation-api/**/*",
         "packages/annotation-core/**/*",
         "packages/annotation-editor/**/*",
-        "packages/annotation-ui/**/*"
+        "packages/annotation-ui/**/*",
+        "packages/annotation-vue/**/*"
       ]
     },
     {
@@ -74,12 +75,15 @@
       "include": [
         "packages/annotation-api/**/*",
         "packages/annotation-core/**/*",
-        "packages/annotation-editor/**/*"
+        "packages/annotation-editor/**/*",
+        "packages/annotation-ui/**/*",
+        "packages/annotation-vue/**/*"
       ]
     }
   ],
   "release": {
     "projects": ["annotation-api", "annotation-core", "annotation-vue"],
+    "projectsRelationship": "fixed",
     "version": {
       "conventionalCommits": true,
       "preVersionCommand": "npx nx run-many -t build"
@@ -87,8 +91,19 @@
     "changelog": {
       "automaticFromRef": true,
       "workspaceChangelog": {
-        "createRelease": "github",
         "file": "RELEASE_NOTES.md"
+      }
+    },
+    "releaseTag": {
+      "strictPreid": false
+    },
+    "conventionalCommits": {
+      "types": {
+        "refactor": {
+          "changelog": {
+            "title": "🏡 Refactor"
+          }
+        }
       }
     }
   },

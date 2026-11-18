@@ -1,18 +1,19 @@
 import {
-  createAnnotatedText,
-  createHighlightStyle,
   type CustomAnnotationStyle,
   PlainTextAdapter,
   type TextAdapter,
+  createAnnotatedText,
+  createHighlightStyle,
 } from '@ghentcdh/annotated-text';
 import { type SourceModel } from '@ghentcdh/annotation-core';
-import { defaultRender, styleFn } from './annotation-render.style';
+
+import { type EditorAnnotation } from '../adapter';
+import { AnnotationEditorAnnotationAdapter } from '../adapter/editor.annotation.adapter';
 import {
   type DefinitionMap,
   type UIAnnotationDefinition,
 } from '../types/ui-annotation-definition.type';
-import { AnnotationEditorAnnotationAdapter } from '../adapter/editor.annotation.adapter';
-import { type EditorAnnotation } from '../adapter';
+import { defaultRender, styleFn } from './annotation-render.style';
 
 export const groupById = <KEY extends keyof UIAnnotationDefinition>(
   defs: UIAnnotationDefinition[],

@@ -8,10 +8,11 @@
   />
 </template>
 <script setup lang="ts">
-import { CroutonForm } from '@ghentcdh/crouton-vue';
+import { computed } from 'vue';
+
 import { type UIAnnotationDefinition } from '@ghentcdh/annotation-ui';
 import { type ViewConfig } from '@ghentcdh/crouton-core';
-import { computed } from 'vue';
+import { CroutonForm } from '@ghentcdh/crouton-vue';
 
 const properties = defineProps<{
   data: Record<string, unknown>;

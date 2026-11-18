@@ -1,15 +1,16 @@
-import { type TemplateRef, ref } from 'vue';
 import { describe, expect, it, vi } from 'vitest';
+import { type TemplateRef, ref } from 'vue';
 
+import { type SourceModel } from '@ghentcdh/annotation-core';
 import {
   type EditorAnnotation,
   type UIAnnotationDefinition,
   editorAnnotationSchema,
 } from '@ghentcdh/annotation-ui';
-import { type SourceModel } from '@ghentcdh/annotation-core';
+
 import { type AnnotationEditorEmitsFn } from '../../AnnotationEditor.properties';
 import { type EditorConfig, type EditorState_ } from '../../composables/editorState';
-import { selectAnnotationById, type SelectByIdContext } from '../open-modal';
+import { type SelectByIdContext, selectAnnotationById } from '../open-modal';
 
 const createEditorState = (): EditorState_ =>
   ({

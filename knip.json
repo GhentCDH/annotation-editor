@@ -46,7 +46,8 @@
     },
     "packages/annotation-core": {
       "entry": [
-        "src/index.ts"
+        "src/index.ts",
+        "src/**/*.spec.ts"
       ],
       "project": [
         "src/**/*.{ts,vue}"
@@ -54,7 +55,8 @@
     },
     "packages/annotation-ui": {
       "entry": [
-        "src/index.ts"
+        "src/index.ts",
+        "src/**/*.spec.ts"
       ],
       "project": [
         "src/**/*.{ts,vue}"
@@ -70,10 +72,14 @@
     },
     "packages/annotation-api": {
       "entry": [
-        "src/index.ts"
+        "src/index.ts",
+        "src/**/*.spec.ts"
       ],
       "project": [
         "src/**/*.{ts,vue}"
+      ],
+      "ignoreDependencies": [
+        "@ghentcdh/annotated-text"
       ]
     }
   },

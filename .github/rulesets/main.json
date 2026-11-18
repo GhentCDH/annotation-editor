@@ -1,0 +1,49 @@
+{
+  "name": "main",
+  "target": "branch",
+  "enforcement": "active",
+  "bypass_actors": [
+    {
+      "actor_id": 10315561,
+      "actor_type": "Team",
+      "bypass_mode": "always"
+    }
+  ],
+  "conditions": {
+    "ref_name": {
+      "include": ["~DEFAULT_BRANCH"],
+      "exclude": []
+    }
+  },
+  "rules": [
+    {
+      "type": "deletion"
+    },
+    {
+      "type": "non_fast_forward"
+    },
+    {
+      "type": "required_status_checks",
+      "parameters": {
+        "strict_required_status_checks_policy": false,
+        "required_status_checks": [
+          {
+            "context": "ci / build"
+          },
+          {
+            "context": "ci / test"
+          },
+          {
+            "context": "ci / lint"
+          },
+          {
+            "context": "ci / typecheck"
+          },
+          {
+            "context": "ci / knip"
+          }
+        ]
+      }
+    }
+  ]
+}

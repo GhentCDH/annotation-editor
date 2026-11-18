@@ -1,9 +1,9 @@
-import { type W3CAnnotationBuilder } from '@ghentcdh/w3c-utils';
 import {
   AnnotationMetadataType,
   type AnnotationStyle,
   AnnotationStyleType,
 } from '@ghentcdh/annotation-core';
+import { type W3CAnnotationBuilder } from '@ghentcdh/w3c-utils';
 
 type AnnotationStyleBody = AnnotationStyle & { type: string };
 

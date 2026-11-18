@@ -1,0 +1,18 @@
+# Keeps the GitHub Actions used by the workflows up to date (same setup as crouton).
+# npm dependencies are not listed: vulnerable ones get a PR from Dependabot security
+# updates (repo setting), Nx is upgraded with `nx migrate`.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directories:
+      - /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ['*']
+    commit-message:
+      prefix: ci
+    labels:
+      - dependencies
+      - ci

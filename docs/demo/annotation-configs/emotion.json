@@ -1,26 +1,31 @@
 {
-  "id": "emotion",
-  "name": "Emotion",
+  "$schema": "https://ghentcdh.github.io/crouton/schema/v1/resource.schema.json",
+  "schemaVersion": 1,
   "kind": "custom",
+  "name": "emotion",
   "annotation": {
     "color": "#f3ff4d",
     "target": "highlight"
   },
   "columns": {
     "concept": {
-      "id": "concept",
       "label": "Concept",
-      "type": { "type": "string" }
+      "type": {
+        "type": "string"
+      }
     },
     "domain": {
-      "id": "domain",
       "label": "Domain",
-      "type": { "type": "string" }
+      "type": {
+        "type": "string"
+      }
     },
     "sentiment": {
-      "id": "sentiment",
       "label": "Sentiment",
-      "type": { "type": "string" }
+      "type": {
+        "type": "string"
+      }
     }
-  }
+  },
+  "title": "Emotion"
 }

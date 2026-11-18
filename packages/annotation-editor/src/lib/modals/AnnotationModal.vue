@@ -14,11 +14,11 @@
   </template>
 </template>
 <script lang="ts" setup>
-import { onUnmounted, type UnwrapNestedRefs } from 'vue';
+import { type UnwrapNestedRefs, onUnmounted } from 'vue';
 
+import { useEditorState } from '../composables/useEditorState';
 import { type AnnotationModalFn } from './AnnotationModal.definition';
 import { AnnotationModalProperties } from './AnnotationModal.properties';
-import { useEditorState } from '../composables/useEditorState';
 
 defineProps(AnnotationModalProperties);
 const { config } = useEditorState();

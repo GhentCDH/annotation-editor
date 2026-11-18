@@ -2,10 +2,13 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import dts from 'vite-plugin-dts';
+import { checkDtsImports } from '../../tools/vite/check-dts-imports.mts';
 import { copyPackageJson } from '../../tools/vite/copy-package-json.mts';
 import * as path from 'path';
 import tailwindcss from '@tailwindcss/vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
+
+const PRIVATE_PACKAGES = ['annotation-ui', 'annotation-editor'];
 
 export default defineConfig(() => ({
   root: import.meta.dirname,
@@ -14,10 +17,22 @@ export default defineConfig(() => ({
     vue(),
     tailwindcss(),
     tsconfigPaths(),
+    // annotation-ui and annotation-editor are private (bundled into the JS), so
+    // emit their declarations next to ours and rewrite imports to relative paths.
     dts({
-      entryRoot: 'src',
-      tsconfigPath: path.join(import.meta.dirname, 'tsconfig.lib.json'),
+      entryRoot: '..',
+      // tsconfig.dts.json adds the private sources as root files: the plugin only
+      // emits root files and files Vite transforms, so type-only imports would
+      // otherwise be dropped.
+      tsconfigPath: path.join(import.meta.dirname, 'tsconfig.dts.json'),
       pathsToAliases: false,
+      aliases: PRIVATE_PACKAGES.map((p) => ({
+        find: `@ghentcdh/${p}`,
+        replacement: path.join(import.meta.dirname, `../${p}/src`),
+      })),
+      afterBuild: checkDtsImports(
+        PRIVATE_PACKAGES.map((p) => `@ghentcdh/${p}`),
+      ),
     }),
     copyPackageJson(),
   ],

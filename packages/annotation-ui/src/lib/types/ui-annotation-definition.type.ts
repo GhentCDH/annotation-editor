@@ -1,15 +1,17 @@
+import { z } from 'zod';
+
 import {
   type AnnotatedText,
   type CustomAnnotationStyle,
   type TextAdapter,
 } from '@ghentcdh/annotated-text';
-import { type ResourceDefinition } from '@ghentcdh/crouton-core';
 import {
   type AnnotationResource,
   AnnotationResourceSchema,
 } from '@ghentcdh/annotation-core';
-import { z } from 'zod';
+import { type ResourceDefinition } from '@ghentcdh/crouton-core';
 import { resourceApi } from '@ghentcdh/crouton-vue';
+
 import {
   type AnnotationEditorAnnotationAdapter,
   type EditorAnnotation,

@@ -229,9 +229,11 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
+
 import { type UIAnnotationDefinition } from '@ghentcdh/annotation-ui';
-import { CroutonForm } from '@ghentcdh/crouton-vue';
 import { type ViewConfig } from '@ghentcdh/crouton-core';
+import { CroutonForm } from '@ghentcdh/crouton-vue';
+
 import { peekAnnotationDefinitionsState } from '../definitions/useAnnotationDefinitions';
 
 const tick = ref(0);

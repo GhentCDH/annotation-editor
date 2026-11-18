@@ -1,4 +1,5 @@
-import { contextBuilder, type ContextBuilder } from '@ghentcdh/w3c-utils';
+import { type ContextBuilder, contextBuilder } from '@ghentcdh/w3c-utils';
+
 import { AnnotationMetadataType } from '../types/annotation.contex';
 
 export type AnnotationDefConfig = {

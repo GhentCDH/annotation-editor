@@ -1,11 +1,13 @@
+import { type EmitFn, ref } from 'vue';
+
 import {
   type EditorAnnotation,
   type UIAnnotationDefinition,
 } from '@ghentcdh/annotation-ui';
 import { NotificationService } from '@ghentcdh/crouton-vue';
-import { type EmitFn, ref } from 'vue';
-import { useEditorState } from './useEditorState';
+
 import { type AnnotationEditModalEvent } from '../modals/edit-annotation/AnnotationEditModal.properties';
+import { useEditorState } from './useEditorState';
 
 type AnnotationMetadataEditEmits = {
   close: (event: AnnotationEditModalEvent | null) => true;
@@ -43,10 +45,11 @@ export const useAnnotationResource = (
     if (annotation.id && !definition.canEdit) return;
 
     _save(update)
-      .then((annotation) => {
+      .then((response) => {
         emits('close', {
-          annotation,
-          rawData: annotation,
+          // ponytail: API response trusted as EditorAnnotation (was implicit any before crouton-vue bump); parse with editorAnnotationSchema if API shape drifts
+          annotation: response as EditorAnnotation,
+          rawData: response,
           selectors: update.selectors,
         });
       })

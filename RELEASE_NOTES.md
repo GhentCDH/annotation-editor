@@ -1,3 +1,73 @@
+## 0.0.1-rc.1 (2026-11-17)
+
+This was a version bump only, there were no code changes.
+
+## 0.1.0-rc.0 (2026-11-17)
+
+### 🩹 Fixes
+
+- ⚠️  use resource name as annotation id (crouton 0.1.0) ([e6efdb52](https://github.com/GhentCDH/annotation-editor/commit/e6efdb52))
+- declare every package the published bundles import ([59189b8b](https://github.com/GhentCDH/annotation-editor/commit/59189b8b))
+- **annotation-api:** replace removed registry findById with getAll lookup ([3aaf9609](https://github.com/GhentCDH/annotation-editor/commit/3aaf9609))
+- **annotation-editor:** cast resource response to EditorAnnotation ([4f7706f9](https://github.com/GhentCDH/annotation-editor/commit/4f7706f9))
+- **annotation-editor:** respect adapter startOffset in select-all ([7bf9be91](https://github.com/GhentCDH/annotation-editor/commit/7bf9be91))
+
+### 🏡 Chore / refactor
+
+- update to crouton 0.1.0 ([05d4372e](https://github.com/GhentCDH/annotation-editor/commit/05d4372e))
+- ⚠️  **annotation-vue:** replace TransformAnnotationAdapter class with AnnotationTransformer functions ([0d5533d5](https://github.com/GhentCDH/annotation-editor/commit/0d5533d5))
+- ⚠️  freeze public API types for release candidate ([27018d91](https://github.com/GhentCDH/annotation-editor/commit/27018d91))
+- ⚠️  run annotation-vue lint/tests in CI, add smoke specs, remove `configureApi` ([c28904b9](https://github.com/GhentCDH/annotation-editor/commit/c28904b9))
+- align repo governance with crouton: rulesets, CODEOWNERS, prereleases publish under `rc` / `alpha` dist-tags ([ac49c2fb](https://github.com/GhentCDH/annotation-editor/commit/ac49c2fb))
+
+### ⚠️  Breaking Changes
+
+- use resource name as annotation id (crouton 0.1.0)  ([e6efdb52](https://github.com/GhentCDH/annotation-editor/commit/e6efdb52))
+  annotation resource configs must use `name` as the id and
+  `title` as the label: { "id": "animals", "name": "Animals" } becomes
+  { "name": "animals", "title": "Animals" }. Remove `id` from column entries
+  and run `crouton migrate resources`. AnnotationResource.id is still set at
+  runtime and always equals name.
+- annotation transformer is a plain object  ([0d5533d5](https://github.com/GhentCDH/annotation-editor/commit/0d5533d5))
+  `TransformAnnotationAdapter` and `W3cTransformAnnotationAdapter` are removed. Pass an
+  `AnnotationTransformer<T>` object (`{ parse, format, transformMetadata?, defaultParams? }`),
+  use `w3cAnnotationTransformer` for W3C annotations, and `parseAnnotations(transformer, raw)`
+  instead of `transformer.createLinks(raw.map(transformer.parse))`.
+- public API cleanup  ([27018d91](https://github.com/GhentCDH/annotation-editor/commit/27018d91))
+  `annotationColumnDefinition` (annotation-core) and the unused `create:annotation:events` emit
+  are removed.
+- `configureApi` and the `api` option of `provideAnnotationDefinitions` are removed (both were no-ops)  ([c28904b9](https://github.com/GhentCDH/annotation-editor/commit/c28904b9))
+- packaging: `vue-router` and `zod` are required peers of `@ghentcdh/annotation-vue`; `zod` and
+  `@nestjs/swagger` are peers of `@ghentcdh/annotation-api`  ([59189b8b](https://github.com/GhentCDH/annotation-editor/commit/59189b8b))
+
+### ❤️ Thank You
+
+- Bo Vandersteene
+
+## 0.0.1-alpha.30 (2026-11-12)
+
+### 🩹 Fixes
+
+- **annotation-vue:** emit declarations for type-only modules of bundled packages ([e30a2feb](https://github.com/GhentCDH/annotation-editor/commit/e30a2feb))
+
+### ❤️ Thank You
+
+- Bo Vandersteene
+
+## 0.0.1-alpha.29 (2026-11-10)
+
+### 🩹 Fixes
+
+- type annotation modal show/close per key and pass real annotations ([fa8aba06](https://github.com/GhentCDH/annotation-editor/commit/fa8aba06))
+- pass a parsed draft annotation when creating from the navbar ([22a32f27](https://github.com/GhentCDH/annotation-editor/commit/22a32f27))
+- **annotation-core:** make annotated-text a peer dependency ([78debdf3](https://github.com/GhentCDH/annotation-editor/commit/78debdf3))
+- **annotation-vue:** make annotated-text a peer dependency ([07681a44](https://github.com/GhentCDH/annotation-editor/commit/07681a44))
+- **annotation-vue:** ship declarations for bundled private packages and .vue files ([0721d1be](https://github.com/GhentCDH/annotation-editor/commit/0721d1be))
+
+### ❤️ Thank You
+
+- Bo Vandersteene
+
 ## 0.0.1-alpha.28 (2026-11-10)
 
 ### 🚀 Features

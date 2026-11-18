@@ -1,16 +1,18 @@
 import { type EmitFn } from 'vue';
+
 import {
   type AnnotationMetadata,
-  editorAnnotationSchema,
   type Selector,
   SelectorSchema,
+  editorAnnotationSchema,
 } from '@ghentcdh/annotation-ui';
+
+import { useEditorState } from '../../composables/useEditorState';
+import { useMetadataEdit } from '../../composables/useMetadataEdit';
 import {
   type AnnotationEditEmits,
   type AnnotationEditModal,
 } from './AnnotationEditModal.properties';
-import { useMetadataEdit } from '../../composables/useMetadataEdit';
-import { useEditorState } from '../../composables/useEditorState';
 
 export const UseAnnotationEdit = (
   props: AnnotationEditModal,

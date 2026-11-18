@@ -1,12 +1,21 @@
 import { Inject, Injectable } from '@nestjs/common';
+
 import {
   type AnnotationContext,
   type AnnotationDefConfig,
   type AnnotationResource,
   createAnnotationContext,
+  withResourceId,
 } from '@ghentcdh/annotation-core';
 import { ResourceConfigRegistry } from '@ghentcdh/crouton-api';
+
 import { ANNOTATION_DEF_CONFIG_TOKEN } from './annotation-def-config.token';
+
+/** Crouton resource config that also carries the annotation definition fields. */
+export type AnnotationRegistryResource = Awaited<
+  ReturnType<ResourceConfigRegistry['getAll']>
+>[number] &
+  Omit<AnnotationResource, 'id'>;
 
 @Injectable()
 export class AnnotationContextService {
@@ -15,7 +24,7 @@ export class AnnotationContextService {
 
   constructor(
     @Inject(ResourceConfigRegistry)
-    private readonly configRegistry: ResourceConfigRegistry,
+    private readonly configRegistry: ResourceConfigRegistry<AnnotationRegistryResource>,
     @Inject(ANNOTATION_DEF_CONFIG_TOKEN)
     private readonly annotationDefConfig: AnnotationDefConfig,
   ) {}
@@ -24,15 +33,14 @@ export class AnnotationContextService {
     this.contextConfigMap.clear();
 
     (await this.configRegistry.getAll()).forEach((resource) => {
-      const annotation = resource as unknown as AnnotationResource;
       const context = createAnnotationContext(
         this.annotationDefConfig,
-        annotation,
+        withResourceId(resource),
       );
 
-      this.contextConfigMap.set(annotation.id, context);
+      this.contextConfigMap.set(resource.name, context);
 
-      this.prefixMap.set(context.prefix, annotation.id);
+      this.prefixMap.set(context.prefix, resource.name);
     });
   }
 
@@ -40,12 +48,14 @@ export class AnnotationContextService {
     const find = this.contextConfigMap.get(annotationId);
     if (find) return find;
 
-    const resource = await this.configRegistry.findById(annotationId);
+    const resource = (await this.configRegistry.getAll()).find(
+      (r) => r.name === annotationId,
+    );
     if (!resource) return null;
 
     const context = createAnnotationContext(
       this.annotationDefConfig,
-      resource as unknown as AnnotationResource,
+      withResourceId(resource),
     );
     this.contextConfigMap.set(annotationId, context);
 

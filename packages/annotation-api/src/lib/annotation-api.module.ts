@@ -7,13 +7,14 @@ import {
 } from '@ghentcdh/annotation-core';
 import { CroutonApiModule } from '@ghentcdh/crouton-api';
 import { registerResourceExtensions } from '@ghentcdh/crouton-core';
-import { AnnotationNamespaceController } from './annotation-namespace.controller';
+
 import { AnnotationController } from './annotation/annotation.controller';
+import { AnnotationW3cMapperService } from './annotation/annotation.mapper.service';
+import { AnnotationCrudRepository } from './annotation/annotation.repository';
+import { AnnotationNamespaceController } from './annotation-namespace.controller';
+import { AnnotationContextService } from './context/annotation-context.service';
 import { ANNOTATION_DEF_CONFIG_TOKEN } from './context/annotation-def-config.token';
 import { SCHEMA_PREFIX } from './prefix';
-import { AnnotationContextService } from './context/annotation-context.service';
-import { AnnotationCrudRepository } from './annotation/annotation.repository';
-import { AnnotationW3cMapperService } from './annotation/annotation.mapper.service';
 import { createSchemaEnricher } from './utils/schemaEnricher.utils';
 
 registerResourceExtensions({

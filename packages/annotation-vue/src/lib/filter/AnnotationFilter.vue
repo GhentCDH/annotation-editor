@@ -38,7 +38,7 @@
           @change="
             toggleItem(item.id, ($event.target as HTMLInputElement).checked)
           "
-        />
+        >
         <span
           v-if="item.color"
           class="w-3 h-3 rounded-full shrink-0 ring-1 ring-black/10"
@@ -47,7 +47,10 @@
         <span class="text-sm flex-1 select-none break-words min-w-0">{{
           item.label
         }}</span>
-        <span v-if="item.count > 0" class="badge badge-sm badge-ghost">
+        <span
+          v-if="item.count > 0"
+          class="badge badge-sm badge-ghost"
+        >
           {{ item.count }}
         </span>
         <Btn
@@ -56,18 +59,19 @@
           size="xs"
           color="ghost"
           @click.prevent.stop="emit('annotationtype-click', item)"
-        >
-        </Btn>
+        />
       </label>
     </div>
   </Collapse>
 </template>
 
 <script setup lang="ts">
-import { computed, getCurrentInstance, type PropType } from 'vue';
-import { Btn, Collapse } from '@ghentcdh/crouton-vue';
-import { useAnnotationDefinitions } from '../definitions/useAnnotationDefinitions';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/24/solid';
+import { type PropType, computed, getCurrentInstance } from 'vue';
+
+import { Btn, Collapse } from '@ghentcdh/crouton-vue';
+
+import { useAnnotationDefinitions } from '../definitions/useAnnotationDefinitions';
 
 const emit = defineEmits(['update:modelValue', 'annotationtype-click']);
 const model = defineModel<string[]>({ default: () => [] });

@@ -1,26 +1,32 @@
 export {
-  TransformAnnotationAdapter,
-  W3cTransformAnnotationAdapter,
+  type AnnotationTransformer,
+  type EditorAnnotation,
+  type Selector,
+  type UIAnnotationDefinition,
+  createLinks,
+  editorAnnotationSchema,
+  parseAnnotations,
+  w3cAnnotationTransformer,
 } from '@ghentcdh/annotation-ui';
+export { type AnnotationAdapterParams } from '@ghentcdh/annotated-text';
 
 export { AnnotationDefinitionService } from './lib/definitions/annotation-definition.service';
 export {
   type GlobModules,
-  loadAnnotationDefinitionsFromGlob,
   loadAnnotationDefinitionsFromConfigs,
+  loadAnnotationDefinitionsFromGlob,
   loadAnnotationDefinitionsFromUrls,
 } from './lib/definitions/annotation-definition.loader';
 export {
   type AnnotationDefinitionsState,
   type AnnotationLoadError,
   type ProvideAnnotationDefinitionsOptions,
-  provideAnnotationDefinitions,
-  useAnnotationDefinitions,
   createAnnotationDefinitionsState,
   peekAnnotationDefinitionsState,
+  provideAnnotationDefinitions,
+  useAnnotationDefinitions,
 } from './lib/definitions/useAnnotationDefinitions';
 export * from './lib/status';
-export { configureApi } from './lib/service/useApi';
 export * from '@ghentcdh/annotation-core';
 export * from '@ghentcdh/annotation-editor';
 

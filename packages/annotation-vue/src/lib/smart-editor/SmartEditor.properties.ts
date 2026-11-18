@@ -1,7 +1,9 @@
 import type { PropType } from 'vue';
+
 import { type BaseAnnotation, type TextAdapter } from '@ghentcdh/annotated-text';
-import { type TransformAnnotationAdapter, W3cTransformAnnotationAdapter } from '@ghentcdh/annotation-ui';
 import { type GridLayout } from '@ghentcdh/annotation-core';
+import { type AnnotationTransformer, w3cAnnotationTransformer } from '@ghentcdh/annotation-ui';
+
 import { type AnnotationEditorLoader } from './AnnotationEditorLoader';
 
 export const SmartEditorProperties = {
@@ -14,9 +16,9 @@ export const SmartEditorProperties = {
     required: false as const,
   },
   annotationTransformer: {
-    type: Object as PropType<TransformAnnotationAdapter<BaseAnnotation>>,
+    type: Object as PropType<AnnotationTransformer<BaseAnnotation>>,
     required: false as const,
-    default: new W3cTransformAnnotationAdapter(),
+    default: (): AnnotationTransformer<BaseAnnotation> => w3cAnnotationTransformer,
   },
   watchQueryParams: {
     type: Boolean,

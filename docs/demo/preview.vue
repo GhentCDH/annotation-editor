@@ -17,13 +17,11 @@ import {
   layout,
   sourcesPlainTxt,
 } from '@demo/demo-text';
-import { AnnotationEditor, configureApi } from '@ghentcdh/annotation-vue';
-import axios from 'axios';
-import { W3cTransformAnnotationAdapter } from '../../packages/annotation-ui/src';
+import { AnnotationEditor } from '@ghentcdh/annotation-vue';
+import {
+  parseAnnotations,
+  w3cAnnotationTransformer,
+} from '../../packages/annotation-ui/src';
 
-configureApi(axios);
-
-const transformer = new W3cTransformAnnotationAdapter();
-let annotations = w3cAnnotations.map((a) => transformer.parse(a));
-annotations = transformer.createLinks(annotations);
+const annotations = parseAnnotations(w3cAnnotationTransformer, w3cAnnotations);
 </script>

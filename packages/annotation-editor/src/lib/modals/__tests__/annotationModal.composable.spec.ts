@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { createModalConfig } from '../annotationModal.composable';
 import {
-  annotationModalDefaults,
   type AnnotationModalAction,
+  annotationModalDefaults,
 } from '../AnnotationModal.defaults';
+import { createModalConfig } from '../annotationModal.composable';
 
 describe('createModalConfig', () => {
   it('should create a modal state for every default modal', () => {

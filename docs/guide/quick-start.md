@@ -5,13 +5,13 @@ Get annotation editing running in a Vue 3 app in under 10 minutes.
 ## Install
 
 ```bash
-pnpm add @ghentcdh/annotation-editor @ghentcdh/annotation-preview @ghentcdh/annotation-vue
+pnpm add @ghentcdh/annotation-vue @ghentcdh/annotation-core @ghentcdh/annotated-text @ghentcdh/w3c-utils
 ```
 
 Import the CSS once in your app entry point:
 
 ```ts
-import '@ghentcdh/annotation-editor/index.css';
+import '@ghentcdh/annotation-vue/styles.css';
 ```
 
 ## Concepts
@@ -21,7 +21,7 @@ Before adding a component, you need three things:
 **`AnnotationDefConfig`** — tells the library where your annotation namespace lives:
 
 ```ts
-import { type AnnotationDefConfig } from '@ghentcdh/annotation-core';
+import { type AnnotationDefConfig } from '@ghentcdh/annotation-vue';
 
 const config: AnnotationDefConfig = {
   baseUrl: 'https://api.example.com/',
@@ -36,7 +36,7 @@ display, etc). Load these with `provideAnnotationDefinitions` from `@ghentcdh/an
 **`SourceModel[]`** — the text sources to annotate. Each source is a plain object:
 
 ```ts
-import { type SourceModel } from '@ghentcdh/annotation-editor';
+import { type SourceModel } from '@ghentcdh/annotation-vue';
 
 const sources: SourceModel[] = [
   {
@@ -71,11 +71,11 @@ const sources: SourceModel[] = [
 
 <script setup lang="ts">
   import { computed, ref } from 'vue';
-  import { AnnotationEditor } from '@ghentcdh/annotation-editor';
-  import { TransformAnnotationAdapter, editorAnnotationSchema, type EditorAnnotation, type AnnotationAdapterParams } from '@ghentcdh/annotation-ui';
+  import { AnnotationEditor } from '@ghentcdh/annotation-vue';
+  import { parseAnnotations, editorAnnotationSchema, type AnnotationTransformer, type EditorAnnotation } from '@ghentcdh/annotation-vue';
   import { provideAnnotationDefinitions } from '@ghentcdh/annotation-vue';
   import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
-  import { type AnnotationDefConfig, type SourceModel } from '@ghentcdh/annotation-core';
+  import { type AnnotationDefConfig, type SourceModel } from '@ghentcdh/annotation-vue';
 
   const config: AnnotationDefConfig = {
     baseUrl: 'https://api.example.com/',
@@ -101,24 +101,15 @@ const sources: SourceModel[] = [
     },
   ];
 
-  // Implement TransformAnnotationAdapter for your domain model
-  class MyAdapter extends TransformAnnotationAdapter<W3CAnnotation> {
-    name = 'MyAdapter';
-    defaultParams: AnnotationAdapterParams = {};
+  // Converts between your domain model and EditorAnnotation
+  const transformer: AnnotationTransformer<W3CAnnotation> = {
+    parse: (raw) => editorAnnotationSchema.parse({ id: raw.id, /* map fields */ }),
+    format: (annotation, isNew) => ({ id: annotation.id, /* map fields */ }) as W3CAnnotation,
+  };
 
-    parse(raw: W3CAnnotation): EditorAnnotation | null {
-      return editorAnnotationSchema.parse({ id: raw.id, /* map fields */ });
-    }
-
-    format(annotation: EditorAnnotation, isNew: boolean): W3CAnnotation {
-      return { id: annotation.id, /* map fields */ } as W3CAnnotation;
-    }
-  }
-
-  const transformer = new MyAdapter();
   const rawAnnotations = ref<W3CAnnotation[]>([]);
-  // Convert raw annotations to the editor's internal format
-  const editorAnnotations = computed(() => transformer.setAnnotations(rawAnnotations.value));
+  // Convert raw annotations to the editor's internal format (parse + resolve links)
+  const editorAnnotations = computed(() => parseAnnotations(transformer, rawAnnotations.value));
 
   const onCreate = async (annotation: W3CAnnotation) => {
     // persist to your API, then push to local state

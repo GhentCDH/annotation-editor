@@ -1,4 +1,5 @@
-import { reactive, type UnwrapNestedRefs } from 'vue';
+import { type UnwrapNestedRefs, reactive } from 'vue';
+
 import {
   type AnnotationModalConfig,
   type AnnotationModalFn,

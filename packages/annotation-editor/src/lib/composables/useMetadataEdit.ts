@@ -1,12 +1,14 @@
+import { ref, toRaw } from 'vue';
+
 import {
   type AnnotationMetadata,
   type EditorAnnotation,
   type Selector,
   type UIAnnotationDefinition,
 } from '@ghentcdh/annotation-ui';
-import { ref, toRaw } from 'vue';
-import { useEditorState } from './useEditorState';
+
 import { useAnnotationResource } from './useAnnotationResource';
+import { useEditorState } from './useEditorState';
 
 export const useMetadataEdit = (
   annotation: EditorAnnotation,

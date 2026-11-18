@@ -1,4 +1,5 @@
 import { type JsonResourceOperations } from '@ghentcdh/crouton-core';
+
 import { SCHEMA_PREFIX } from '../prefix';
 
 export const createSchemaEnricher =

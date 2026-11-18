@@ -32,16 +32,18 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { Alert, IconEnum } from '@ghentcdh/crouton-vue';
-import { type UIAnnotationDefinition } from '@ghentcdh/annotation-ui';
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
+
+import { type UIAnnotationDefinition } from '@ghentcdh/annotation-ui';
+import { Alert, IconEnum } from '@ghentcdh/crouton-vue';
+
+import { type NavbarAction } from '../../components/navbar.properties';
+import Navbar from '../../components/navbar.vue';
+import { useEditorState } from '../../composables/useEditorState';
+import { getAnnotationElementCenter } from '../../utils/mouse-events';
 import { AnnotationInfoCardProperties } from './AnnotationInfoCard.properties';
 import LinksDetail from './LinksDetail.vue';
 import { default as Metadata } from './Metadata.vue';
-import { useEditorState } from '../../composables/useEditorState';
-import Navbar from '../../components/navbar.vue';
-import { type NavbarAction } from '../../components/navbar.properties';
-import { getAnnotationElementCenter } from '../../utils/mouse-events';
 
 const properties = defineProps(AnnotationInfoCardProperties);
 

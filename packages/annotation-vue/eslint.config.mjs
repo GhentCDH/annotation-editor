@@ -1,6 +1,7 @@
 import vue from 'eslint-plugin-vue';
 import tseslint from 'typescript-eslint';
-import baseConfig from '../../eslint.config.js';
+
+import baseConfig from '../../eslint.config.mjs';
 
 export default [
   ...baseConfig,
@@ -16,7 +17,9 @@ export default [
       '@nx/dependency-checks': [
         'error',
         {
-          ignoredDependencies: ['@ghentcdh/annotation-core'],
+          // axios: not imported here, but satisfies the axios peer of @ghentcdh/crouton-vue.
+          // zod: imported by the bundled private packages (annotation-ui/editor), invisible to this rule.
+          ignoredDependencies: ['@ghentcdh/annotation-core', 'axios', 'zod'],
           ignoredFiles: [
             '{projectRoot}/eslint.config.{js,cjs,mjs,ts,cts,mts}',
             '{projectRoot}/vite.config.{js,ts,mjs,mts}',

@@ -1,9 +1,9 @@
+import { AnnotationModal } from '../AnnotationModal.definition';
 import {
   type ConfirmCloseEvent,
   type ConfirmProps,
 } from './confirm.properties';
 
-import { AnnotationModal } from '../AnnotationModal.definition';
 
 class Confirm extends AnnotationModal<
   ConfirmProps,

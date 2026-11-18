@@ -22,10 +22,10 @@ Interactive editor component for creating, editing, and deleting W3C annotations
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { AnnotationEditor } from '@ghentcdh/annotation-editor';
-import { TransformAnnotationAdapter, editorAnnotationSchema, type EditorAnnotation } from '@ghentcdh/annotation-ui';
-import { type SourceModel } from '@ghentcdh/annotation-core';
-import { type AnnotationDefConfig } from '@ghentcdh/annotation-core';
+import { AnnotationEditor } from '@ghentcdh/annotation-vue';
+import { parseAnnotations, editorAnnotationSchema, type AnnotationTransformer } from '@ghentcdh/annotation-vue';
+import { type SourceModel } from '@ghentcdh/annotation-vue';
+import { type AnnotationDefConfig } from '@ghentcdh/annotation-vue';
 import { provideAnnotationDefinitions } from '@ghentcdh/annotation-vue';
 import { type W3CAnnotation } from '@ghentcdh/w3c-utils';
 
@@ -47,23 +47,15 @@ const sources: SourceModel[] = [
   },
 ];
 
-// Extend TransformAnnotationAdapter for your domain model
-class MyAdapter extends TransformAnnotationAdapter<W3CAnnotation> {
-  name = 'MyAdapter';
-  defaultParams = {};
+// Converts between your domain model and EditorAnnotation
+const transformer: AnnotationTransformer<W3CAnnotation> = {
+  parse: (raw) => editorAnnotationSchema.parse({ id: raw.id, /* map fields */ }),
+  format: (annotation, isNew) => ({ id: annotation.id, /* map fields */ }) as W3CAnnotation,
+};
 
-  parse(raw: W3CAnnotation): EditorAnnotation | null {
-    return editorAnnotationSchema.parse({ id: raw.id, /* map fields */ });
-  }
-
-  format(annotation: EditorAnnotation, isNew: boolean): W3CAnnotation {
-    return { id: annotation.id, /* map fields */ } as W3CAnnotation;
-  }
-}
-
-const transformer = new MyAdapter();
 const rawAnnotations = ref<W3CAnnotation[]>([]);
-const editorAnnotations = computed(() => transformer.setAnnotations(rawAnnotations.value));
+// Convert raw annotations to the editor's internal format (parse + resolve links)
+const editorAnnotations = computed(() => parseAnnotations(transformer, rawAnnotations.value));
 
 const onCreate  = async (a: W3CAnnotation) => { rawAnnotations.value = [...rawAnnotations.value, a]; };
 const onUpdate  = async (a: W3CAnnotation) => { rawAnnotations.value = rawAnnotations.value.map((x) => (x.id === a.id ? a : x)); };
@@ -82,9 +74,9 @@ For most use cases — fetching sources, annotations, and definitions from an AP
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `sources` | `SourceModel[]` | ✓ | — | Text sources to render and annotate |
-| `annotations` | `EditorAnnotation[]` | ✓ | — | Pre-converted annotations (use your adapter's `setAnnotations()`) |
+| `annotations` | `EditorAnnotation[]` | ✓ | — | Pre-converted annotations (convert with `parseAnnotations(transformer, raw)`) |
 | `annotationDefinitions` | `UIAnnotationDefinition[]` | ✓ | — | Available annotation types (label, colour, views for table/form/detail) |
-| `annotationTransformer` | `TransformAnnotationAdapter<T>` | ✓ | — | Adapter that converts between your domain model and `EditorAnnotation` |
+| `annotationTransformer` | `AnnotationTransformer<T>` | — | `w3cAnnotationTransformer` | Converts between your domain model and `EditorAnnotation` |
 | `cols` | `number` | — | `2` | Number of grid columns (ignored when `layout` is set) |
 | `layout` | `GridLayout` | — | `undefined` | Custom CSS grid layout — see [Custom layout](#custom-layout) |
 | `modalView` | `boolean` | — | `true` | Show annotation details in a modal (`true`) or inline (`false`) |
@@ -96,7 +88,7 @@ For most use cases — fetching sources, annotations, and definitions from an AP
 ### SourceModel
 
 ```ts
-import { type SourceModel } from '@ghentcdh/annotation-editor';
+import { type SourceModel } from '@ghentcdh/annotation-vue';
 
 const source: SourceModel = {
   id: 'original',                          // stable identifier used for layout
@@ -119,17 +111,28 @@ const source: SourceModel = {
 | `create:annotation` | `W3CAnnotation` | Emitted when the user completes a new annotation form |
 | `update:annotation` | `W3CAnnotation` | Emitted when the user saves an edit |
 | `delete:annotation` | `W3CAnnotation` | Emitted after the user confirms deletion |
-| `create:annotation:events` | `any` | Raw internal creation event payload (advanced use) |
 | `select:annotation` | `(W3CAnnotation \| null, string \| null)` | Emitted on annotation selection/deselection. Second arg is the action name. |
 
 All mutation events (`create`, `update`, `delete`) expect async handlers — the component waits for the promise to settle before clearing modal state.
+
+## Zoom
+
+Each source pane has built-in zoom. Only the text is zoomed, not the page: the text reflows to the pane width and annotations are redrawn to match.
+
+| Control | Action |
+|---------|--------|
+| Buttons | `−` / `%` / `+` buttons rendered on top of the text (`%` resets) |
+| Mouse wheel / trackpad pinch | `Ctrl`/`Cmd` + wheel, or pinch, over the text |
+| Keyboard | `Ctrl`/`Cmd` + `+` / `-` / `0` while the text has focus |
+
+All three controls are always enabled; no props are needed.
 
 ## Custom layout
 
 By default sources are placed in an equal-width column grid controlled by `cols`. For more control — e.g. a commentary pane spanning the full width below two source panes — pass a `GridLayout` object.
 
 ```ts
-import { type GridLayout } from '@ghentcdh/annotation-editor';
+import { type GridLayout } from '@ghentcdh/annotation-vue';
 
 const layout: GridLayout = {
   // 2-D array of CSS grid-area names; repeat a name to span
@@ -190,8 +193,8 @@ Use `cols` to control the number of columns. Each `SourceModel` gets its own col
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { AnnotationEditor } from '@ghentcdh/annotation-editor';
-import { type SourceModel } from '@ghentcdh/annotation-core';
+import { AnnotationEditor } from '@ghentcdh/annotation-vue';
+import { type SourceModel } from '@ghentcdh/annotation-vue';
 
 const sources: SourceModel[] = [
   {
@@ -208,8 +211,8 @@ const sources: SourceModel[] = [
   },
 ];
 
-// transformer and rawAnnotations defined as in the Usage example above
-const editorAnnotations = computed(() => transformer.setAnnotations(rawAnnotations.value));
+// transformer, rawAnnotations and toEditorAnnotations defined as in the Usage example above
+const editorAnnotations = computed(() => toEditorAnnotations(rawAnnotations.value));
 const onCreate  = async (a: W3CAnnotation) => { rawAnnotations.value = [...rawAnnotations.value, a]; };
 const onUpdate  = async (a: W3CAnnotation) => { rawAnnotations.value = rawAnnotations.value.map((x) => (x.id === a.id ? a : x)); };
 const onDelete  = async (a: W3CAnnotation) => { rawAnnotations.value = rawAnnotations.value.filter((x) => x.id !== a.id); };
@@ -236,8 +239,8 @@ Original and translation side by side, commentary spanning the full width below.
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { AnnotationEditor } from '@ghentcdh/annotation-editor';
-import { type SourceModel, type GridLayout } from '@ghentcdh/annotation-core';
+import { AnnotationEditor } from '@ghentcdh/annotation-vue';
+import { type SourceModel, type GridLayout } from '@ghentcdh/annotation-vue';
 
 const sources: SourceModel[] = [
   {
@@ -273,8 +276,8 @@ const layout: GridLayout = {
   ],
 };
 
-// transformer and rawAnnotations defined as in the Usage example above
-const editorAnnotations = computed(() => transformer.setAnnotations(rawAnnotations.value));
+// transformer, rawAnnotations and toEditorAnnotations defined as in the Usage example above
+const editorAnnotations = computed(() => toEditorAnnotations(rawAnnotations.value));
 const onCreate  = async (a: W3CAnnotation) => { rawAnnotations.value = [...rawAnnotations.value, a]; };
 const onUpdate  = async (a: W3CAnnotation) => { rawAnnotations.value = rawAnnotations.value.map((x) => (x.id === a.id ? a : x)); };
 const onDelete  = async (a: W3CAnnotation) => { rawAnnotations.value = rawAnnotations.value.filter((x) => x.id !== a.id); };
@@ -288,7 +291,6 @@ Pass `selectedAnnotationId` (and optionally `selectedAnnotationAction`) to open 
 ```vue
 <template>
   <AnnotationEditor
-    :configuration="config"
     :sources="sources"
     :annotations="annotations"
     :annotation-definitions="definitions"

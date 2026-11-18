@@ -1,16 +1,17 @@
+import { type Mock, describe, expect, it, vi } from 'vitest';
 import { type TemplateRef, ref } from 'vue';
-import { describe, expect, it, vi, type Mock } from 'vitest';
 
+import { type SourceModel } from '@ghentcdh/annotation-core';
 import {
   type EditorAnnotation,
+  type KeyLabel,
   type UIAnnotationDefinition,
   editorAnnotationSchema,
-  type KeyLabel,
 } from '@ghentcdh/annotation-ui';
-import { type SourceModel } from '@ghentcdh/annotation-core';
+
 import { type AnnotationEditorEmitsFn } from '../../AnnotationEditor.properties';
-import { type EditorConfig, type EditorState_ } from '../editorState';
 import { type AnnotationEvents, sendAnnotationEvent } from '../annotation.events';
+import { type EditorConfig, type EditorState_ } from '../editorState';
 
 const createEditorState = (): EditorState_ =>
   ({

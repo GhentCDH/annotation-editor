@@ -1,7 +1,8 @@
 import type { EmitFn, ExtractPublicPropTypes, PropType } from 'vue';
+
 import { type BaseAnnotation, type TextAdapter } from '@ghentcdh/annotated-text';
-import { type EditorAnnotation, type TransformAnnotationAdapter, type UIAnnotationDefinition, W3cTransformAnnotationAdapter } from '@ghentcdh/annotation-ui';
 import { type GridLayout, type SourceModel } from '@ghentcdh/annotation-core';
+import { type AnnotationTransformer, type EditorAnnotation, type UIAnnotationDefinition, w3cAnnotationTransformer } from '@ghentcdh/annotation-ui';
 
 export const AnnotationEditorProperties = {
   modalView: { type: Boolean, required: false as const, default: true },
@@ -9,11 +10,10 @@ export const AnnotationEditorProperties = {
     type: Function as PropType<() => TextAdapter>,
     required: false as const,
   },
-  // TODO this should become only setmetadata etc functions
   annotationTransformer: {
-    type: Object as PropType<TransformAnnotationAdapter<BaseAnnotation>>,
+    type: Object as PropType<AnnotationTransformer<BaseAnnotation>>,
     required: true as const,
-    default: new W3cTransformAnnotationAdapter(),
+    default: (): AnnotationTransformer<BaseAnnotation> => w3cAnnotationTransformer,
   },
   sources: { type: Array as PropType<SourceModel[]>, required: true as const },
   annotations: {

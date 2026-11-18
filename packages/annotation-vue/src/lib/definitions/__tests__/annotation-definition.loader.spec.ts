@@ -2,6 +2,7 @@ import {
   type AnnotationDefConfig,
   type AnnotationJsonResource,
 } from '@ghentcdh/annotation-core';
+
 import {
   loadAnnotationDefinitionsFromConfigs,
   loadAnnotationDefinitionsFromGlob,
@@ -21,11 +22,11 @@ const mockFactory = (id: string) => ({
 });
 
 const createJsonConfig = (
-  id: string,
   name: string,
+  title: string,
 ): AnnotationJsonResource => ({
-  id,
   name,
+  title,
   color: '#ff0000',
 });
 
@@ -76,15 +77,17 @@ describe('loadAnnotationDefinitionsFromConfigs', () => {
       mockFactory,
     );
     expect(defs).toHaveLength(2);
-    expect(defs[0].name).toBe('Alpha');
-    expect(defs[1].name).toBe('Beta');
+    expect(defs.map((d) => [d.id, d.name, d.title])).toEqual([
+      ['a', 'a', 'Alpha'],
+      ['b', 'b', 'Beta'],
+    ]);
   });
 
   it('should preserve config properties in definitions', () => {
     const configs: AnnotationJsonResource[] = [
       {
-        id: 'test',
-        name: 'Test',
+        name: 'test',
+        title: 'Test',
         color: '#123456',
         icon: 'star',
         type: 'custom',

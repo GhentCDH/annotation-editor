@@ -1,9 +1,9 @@
-import { type AnnotationResource } from './annotation-definition.type';
 import { type AnnotationStyle } from '../annotation.style';
 import {
   type AnnotationDefConfig,
   baseContextBuilder,
 } from '../utils/annotation.context-builder';
+import { type AnnotationResource } from './annotation-definition.type';
 
 export const AnnotationMetadataType = 'AnnotationMetadata';
 
@@ -37,7 +37,7 @@ export const createAnnotationContext = (
   return {
     id: resource.id,
     styling: {
-      name: resource.name,
+      name: resource.title ?? resource.name,
       id: resource.id,
       target: resource.annotation.target,
       color: resource.annotation.color,

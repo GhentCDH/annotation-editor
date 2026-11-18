@@ -20,6 +20,12 @@ Monorepo for W3C-compliant annotation editing. Provides a NestJS API module for 
 | `@ghentcdh/annotation-vue`  | Vue 3 annotation editor and preview components (bundled, ready to use) |
 | `@ghentcdh/annotation-api`  | NestJS module for serving annotation definitions                       |
 
+> **Status: release candidate (0.1.0-rc).** The public API is frozen until 0.1.0; only bug fixes land in RCs.
+> Prereleases publish under the npm dist-tags `rc` / `alpha` (`npm i @ghentcdh/annotation-vue@rc`).
+> Coming from `0.0.1-alpha.x`? See the migration notes for the
+> [annotation transformer](https://ghentcdh.github.io/annotation-editor/guide/smart-annotation-editor.html#annotationtransformer)
+> and [resource `name` as id](https://ghentcdh.github.io/annotation-editor/guide/resource/resource.html).
+
 ## Getting started
 
 See the [documentation](https://ghentcdh.github.io/annotation-editor/) for installation, configuration, and usage guides.
@@ -61,6 +67,18 @@ pnpm nx affected -t test --base=origin/main
 # Type check
 pnpm nx affected -t typecheck --base=origin/main
 ```
+
+### Releasing
+
+```bash
+pnpm release prerelease --preid rc   # next release candidate (0.1.0-rc.N)
+pnpm release 0.1.0                   # final release
+```
+
+The script bumps the versions, updates `RELEASE_NOTES.md`, tags `v<version>` and pushes; the tag triggers the
+`Publish` workflow, which publishes to npm (`rc`/`alpha` dist-tag for prereleases, `latest` otherwise) and
+creates the GitHub release. Only the `ghentcdh-developers` team can push release tags. Details, dry run and
+undo: [CONTRIBUTING.md](./CONTRIBUTING.md#releasing-maintainers).
 
 ---
 

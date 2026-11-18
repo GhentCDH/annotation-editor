@@ -1,11 +1,13 @@
 import { type EmitFn } from 'vue';
-import { type AnnotationMetadata, editorAnnotationSchema, type EditorAnnotation } from '@ghentcdh/annotation-ui';
+
+import { type AnnotationMetadata, type EditorAnnotation, editorAnnotationSchema } from '@ghentcdh/annotation-ui';
+
+import { useEditorState } from '../../composables/useEditorState';
+import { useMetadataEdit } from '../../composables/useMetadataEdit';
 import {
   type LinkAnnotationProps,
   type LinkEmits,
 } from './link-annotation.properties';
-import { useEditorState } from '../../composables/useEditorState';
-import { useMetadataEdit } from '../../composables/useMetadataEdit';
 
 export const useAnnotationLink = (
   props: LinkAnnotationProps,

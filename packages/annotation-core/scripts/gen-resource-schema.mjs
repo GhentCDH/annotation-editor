@@ -3,10 +3,11 @@
 // Writes two copies:
 //   - dist/resource.schema.json                → shipped in the npm package
 //   - src/lib/types/resource.schema.json       → committed copy, for drift detection in CI
+import { z } from 'zod';
+
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { z } from 'zod';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const pkgRoot = join(here, '..');
