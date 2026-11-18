@@ -135,7 +135,7 @@
               />
               <div class="flex-1 min-w-0">
                 <div class="font-medium text-base-content text-sm">
-                  {{ def.title ?? def.name }}
+                  {{ def.name }}
                 </div>
                 <div class="text-xs text-base-content/50 font-mono mt-0.5">
                   {{ def.id }}
@@ -195,14 +195,14 @@
                     Edit form
                   </div>
                   <CroutonForm
-                    :views="(def.schemas ?? {}) as any"
+                    :views="(def.schemas ?? {}) as Record<string, ViewConfig>"
                     :data="{}"
                   />
                   <div class="font-bold mt-2">
                     Readonly form
                   </div>
                   <CroutonForm
-                    :views="(def.schemas ?? {}) as any"
+                    :views="(def.schemas ?? {}) as Record<string, ViewConfig>"
                     :data="{}"
                     :readonly="true"
                   />
@@ -231,6 +231,7 @@
 import { computed, ref } from 'vue';
 
 import { type UIAnnotationDefinition } from '@ghentcdh/annotation-ui';
+import { type ViewConfig } from '@ghentcdh/crouton-core';
 import { CroutonForm } from '@ghentcdh/crouton-vue';
 
 import { peekAnnotationDefinitionsState } from '../definitions/useAnnotationDefinitions';
@@ -272,7 +273,7 @@ const rawJson = (id: string): string => {
 };
 
 const compiledJson = (def: UIAnnotationDefinition): string => {
-  const { resource: _r, style: _s, ...rest } = def as any;
+  const { resource: _r, style: _s, ...rest } = def;
   return JSON.stringify(rest, null, 2);
 };
 

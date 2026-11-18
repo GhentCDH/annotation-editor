@@ -10,47 +10,49 @@ export type ModalTypeConfig<
   closeEvent: CLOSE_EVENT;
 };
 
-type AnnotationModalFn<
-  DATA = any,
+export type AnnotationModalFn<
+  DATA = unknown,
   SHOW_DATA = DATA,
   CLOSE_EVENT = void,
 > = {
   isVisible: Ref<boolean>;
   data: Ref<DATA | null>;
-  close: (result: CLOSE_EVENT) => void;
-  show: (data: SHOW_DATA) => Promise<CLOSE_EVENT>;
+  close(result: CLOSE_EVENT): void;
+  show(data: SHOW_DATA): Promise<CLOSE_EVENT>;
 };
 
-export type UseAnnotationModal<DATA, SHOW_DATA, CLOSE_EVENT> =
-  () => AnnotationModalFn<DATA, SHOW_DATA, CLOSE_EVENT>;
+export type UseAnnotationModal<DATA, SHOW_DATA, CLOSE_EVENT> = () => AnnotationModalFn<DATA, SHOW_DATA, CLOSE_EVENT>;
 
-export type ModalDefinition = {
+export type ModalDefinition<
+  DATA = unknown,
+  SHOW_DATA = DATA,
+  CLOSE_EVENT = void,
+> = {
   component: Component;
-  useFn: UseAnnotationModal<any, any, any>;
+  useFn: UseAnnotationModal<DATA, SHOW_DATA, CLOSE_EVENT>;
 };
 
-export type ModalStateDefinition<DATA, SHOW_DATA, CLOSE_EVENT> = {
+export type ModalStateDefinition<
+  DATA = unknown,
+  SHOW_DATA = DATA,
+  CLOSE_EVENT = void,
+> = {
   key: string;
   component: Component;
   state: UnwrapNestedRefs<AnnotationModalFn<DATA, SHOW_DATA, CLOSE_EVENT>>;
 };
 
 export type AnnotationModalConfig<
-  T extends Record<string, ModalTypeConfig<any, any, any>> = Record<
+  T extends Record<string, ModalTypeConfig<unknown, unknown, unknown>> = Record<
     string,
     ModalTypeConfig
   >,
 > = {
-  modals: ModalStateDefinition<any, any, any>[];
+  modals: ModalStateDefinition[];
   destroy: () => void;
-  getModal: <K extends keyof T>(
-    modal: K,
-  ) => ModalStateDefinition<T[K]['data'], T[K]['show'], T[K]['closeEvent']>;
+  getModal: <K extends keyof T>(modal: K) => ModalStateDefinition<T[K]['data'], T[K]['show'], T[K]['closeEvent']>;
   close: <K extends keyof T>(modal: K, data?: T[K]['closeEvent']) => void;
-  show: <K extends keyof T>(
-    modal: K,
-    data: T[K]['show'],
-  ) => Promise<T[K]['closeEvent'] | null>;
+  show: <K extends keyof T>(modal: K, data: T[K]['show']) => Promise<T[K]['closeEvent'] | null>;
 };
 
 export abstract class AnnotationModal<DATA, SHOW_DATA, CLOSE_EVENT>

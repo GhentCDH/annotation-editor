@@ -1,13 +1,8 @@
 import type { EmitFn, ExtractPublicPropTypes, PropType } from 'vue';
 
-import { type TextAdapter } from '@ghentcdh/annotated-text';
+import { type BaseAnnotation, type TextAdapter } from '@ghentcdh/annotated-text';
 import { type GridLayout, type SourceModel } from '@ghentcdh/annotation-core';
-import {
-  type AnnotationTransformer,
-  type EditorAnnotation,
-  type UIAnnotationDefinition,
-  w3cAnnotationTransformer,
-} from '@ghentcdh/annotation-ui';
+import { type AnnotationTransformer, type EditorAnnotation, type UIAnnotationDefinition, w3cAnnotationTransformer } from '@ghentcdh/annotation-ui';
 
 export const AnnotationEditorProperties = {
   modalView: { type: Boolean, required: false as const, default: true },
@@ -16,9 +11,9 @@ export const AnnotationEditorProperties = {
     required: false as const,
   },
   annotationTransformer: {
-    type: Object as PropType<AnnotationTransformer>,
+    type: Object as PropType<AnnotationTransformer<BaseAnnotation>>,
     required: true as const,
-    default: (): AnnotationTransformer => w3cAnnotationTransformer,
+    default: (): AnnotationTransformer<BaseAnnotation> => w3cAnnotationTransformer,
   },
   sources: { type: Array as PropType<SourceModel[]>, required: true as const },
   annotations: {
@@ -57,10 +52,17 @@ export type AnnotationEditorProps = ExtractPublicPropTypes<
 >;
 
 export const AnnotationEditorEmits = {
-  'update:annotation': (_annotation: unknown) => true,
-  'delete:annotation': (_annotation: unknown) => true,
-  'create:annotation': (_annotation: unknown) => true,
-  'select:annotation': (_annotation: unknown, _action: string | null) => true,
+  'update:annotation': <ANNOTATION>(_annotation: ANNOTATION) =>
+    Promise<ANNOTATION>,
+  'delete:annotation': <ANNOTATION>(_annotation: ANNOTATION) =>
+    Promise<ANNOTATION>,
+  'create:annotation': <ANNOTATION>(_annotation: ANNOTATION) =>
+    Promise<ANNOTATION>,
+  'create:annotation:events': (_payload: unknown) => true,
+  'select:annotation': <ANNOTATION>(
+    _annotation: ANNOTATION | null,
+    _action: string | null,
+  ) => true,
 };
 
 export type AnnotationEditorEmitsFn = EmitFn<typeof AnnotationEditorEmits>;

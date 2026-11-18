@@ -90,8 +90,12 @@ const resolveKeyLabels = (
   }, []);
 };
 
+type VueAnnotationDefinitionSource = AnnotationResource & {
+  views?: Record<string, unknown> | null;
+};
+
 const toVueDefinition = (
-  def: AnnotationResource,
+  def: VueAnnotationDefinitionSource,
   grouped: Record<string, AnnotationResource>,
   createStyle: typeof createHighlightStyle,
   activeStyle: typeof createHighlightStyle,
@@ -112,7 +116,7 @@ const toVueDefinition = (
     ...parsed,
     color: style.color,
     target: style.target,
-    views: def.schemas ?? (def as any).views,
+    views: def.schemas ?? def.views ?? null,
     _core: def,
   } as UIAnnotationDefinition;
 };

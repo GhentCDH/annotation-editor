@@ -9,6 +9,7 @@ import {
   type AnnotationResource,
   AnnotationResourceSchema,
 } from '@ghentcdh/annotation-core';
+import { type ResourceDefinition } from '@ghentcdh/crouton-core';
 import { resourceApi } from '@ghentcdh/crouton-vue';
 
 import {
@@ -50,14 +51,25 @@ export const UiAnnotionDefinitionSchema: z.ZodType<UIAnnotationDefinition> =
       allowedChildren: z.array(KeyLabelSchema).optional().default([]),
       allowedLinks: z.array(KeyLabelSchema).optional().default([]),
     })
-    .transform((def: any) => {
+    .transform((def) => {
+      const d = def as AnnotationResource;
       return {
-        ...def,
-        label: def.title ?? def.name,
-        canEdit: !!def.operations?.patch,
-        canDelete: !!def.operations?.delete,
-        canCreate: !!def.operations?.create,
-        resource: resourceApi({ idField: 'id', ...def } as any, {}),
+        ...d,
+        label: d.name,
+        canEdit: !!d.operations?.patch,
+        canDelete: !!d.operations?.delete,
+        canCreate: !!d.operations?.create,
+        resource: resourceApi(
+          {
+            id: d.id,
+            operations: d.operations,
+            idField: 'id',
+          } as unknown as Pick<
+            ResourceDefinition,
+            'id' | 'operations' | 'idField'
+          >,
+          {},
+        ),
       };
     }) as unknown as z.ZodType<UIAnnotationDefinition>;
 

@@ -12,7 +12,7 @@
         v-if="definition"
         layout="rows"
         :data="metadata"
-        :views="(definition.schemas as any)"
+        :views="views"
         :format-before-save="formatBeforeSave"
         form-max-width="w-max max-w-lg form-scroll min-w-[1/2]"
         :save-id="annotation?.id !== undefined ? String(annotation!.id) : undefined"
@@ -52,6 +52,7 @@ import {
   type UiAnnotatedText,
   updateAnnotation,
 } from '@ghentcdh/annotation-ui';
+import { type ViewConfig } from '@ghentcdh/crouton-core';
 import {
   Btn,
   Collapse,
@@ -87,6 +88,11 @@ const {
 
 const editId = `edit-select-annotation-${Date.now()}--`;
 
+const views = computed(
+  (): Record<string, ViewConfig> =>
+    (definition?.schemas ?? {}) as Record<string, ViewConfig>,
+);
+
 const label = computed(() => {
   const _label = definition.label;
   const isNew = !props.annotation?.id;
@@ -106,11 +112,9 @@ const formatBeforeSave = ((formData: AnnotationMetadata) =>
 
 const selectFull = () => {
   const { source, annotation } = props;
-  // Same offset the annotation adapter uses for created/edited selections.
-  const startOffset = annotatedTextConfig.annotationAdapter.startOffset;
   const maxRange = {
-    start: startOffset,
-    end: startOffset + source!.content.text.length + 1,
+    start: 0,
+    end: source!.content.text.length + 1,
   };
   if (parent) {
     const selector = parent.getSelector(source.uri);
@@ -126,7 +130,7 @@ const selectFull = () => {
     maxRange,
     {
       fullFlatText: props.source.content.text,
-      startOffset,
+      startOffset: 0, // TODO implement it
     },
     original,
   );

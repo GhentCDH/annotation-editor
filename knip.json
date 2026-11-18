@@ -4,7 +4,9 @@
   "vite": false,
   "vitest": false,
   "playwright": false,
-  "ignoreBinaries": ["production"],
+  "ignoreBinaries": [
+    "production"
+  ],
   "ignoreDependencies": [
     "@nx/vitest",
     "@tailwindcss/vite",
@@ -34,26 +36,54 @@
       "project": []
     },
     "packages/annotation-editor": {
-      "entry": ["src/index.ts"],
-      "project": ["src/**/*.{ts,vue}"]
+      "entry": [
+        "src/index.ts",
+        "src/**/*.spec.ts"
+      ],
+      "project": [
+        "src/**/*.{ts,vue}"
+      ]
     },
     "packages/annotation-core": {
-      "entry": ["src/index.ts", "src/**/*.spec.ts"],
-      "project": ["src/**/*.{ts,vue}"]
+      "entry": [
+        "src/index.ts",
+        "src/**/*.spec.ts"
+      ],
+      "project": [
+        "src/**/*.{ts,vue}"
+      ]
     },
     "packages/annotation-ui": {
-      "entry": ["src/index.ts", "src/**/*.spec.ts"],
-      "project": ["src/**/*.{ts,vue}"]
+      "entry": [
+        "src/index.ts",
+        "src/**/*.spec.ts"
+      ],
+      "project": [
+        "src/**/*.{ts,vue}"
+      ]
     },
     "packages/annotation-vue": {
-      "entry": ["src/**/*.spec.ts"],
-      "project": ["src/**/*.{ts,vue}"]
+      "entry": [
+        "src/**/*.spec.ts"
+      ],
+      "project": [
+        "src/**/*.{ts,vue}"
+      ]
     },
     "packages/annotation-api": {
-      "entry": ["src/index.ts", "src/**/*.spec.ts"],
-      "project": ["src/**/*.{ts,vue}"],
-      "ignoreDependencies": ["@ghentcdh/annotated-text"]
+      "entry": [
+        "src/index.ts",
+        "src/**/*.spec.ts"
+      ],
+      "project": [
+        "src/**/*.{ts,vue}"
+      ],
+      "ignoreDependencies": [
+        "@ghentcdh/annotated-text"
+      ]
     }
   },
-  "ignoreUnresolved": ["\\*"]
+  "ignoreUnresolved": [
+    "\\*"
+  ]
 }

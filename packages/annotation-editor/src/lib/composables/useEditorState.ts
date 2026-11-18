@@ -11,20 +11,16 @@ import {
 } from 'vue';
 
 import { type SourceModel } from '@ghentcdh/annotation-core';
-import {
-  type AnnotationId,
-  type DefinitionMap,
-  type EditorAnnotation,
-  type UIAnnotationDefinition,
-  createAnnotationConfiguration,
-  groupById,
-} from '@ghentcdh/annotation-ui';
+import { type AnnotationId, type DefinitionMap, type EditorAnnotation, type UIAnnotationDefinition, createAnnotationConfiguration, groupById } from '@ghentcdh/annotation-ui';
 
 import {
   type AnnotationEditorEmitsFn,
   type AnnotationEditorProps,
 } from '../AnnotationEditor.properties';
-import { annotationModalDefaults } from '../modals/AnnotationModal.defaults';
+import {
+  type AnnotationModalActionMap,
+  annotationModalDefaults,
+} from '../modals/AnnotationModal.defaults';
 import { createModalConfig } from '../modals/annotationModal.composable';
 import {
   type SelectByIdContext,
@@ -43,7 +39,7 @@ type EditorState = {
   sendAnnotationEvent: <KEY extends keyof AnnotationEvents>(
     event: KEY,
     data: AnnotationEvents[KEY],
-    callback?: (response: any) => void,
+    callback?: (response: unknown) => void,
   ) => void;
   annotations: ComputedRef<Readonly<EditorAnnotation[]>>;
   allDefinitions: ComputedRef<Readonly<UIAnnotationDefinition[]>>;
@@ -64,10 +60,10 @@ export const useProvideEditorState = (
     return groupById(props.annotationDefinitions) as DefinitionMap;
   });
   const config = shallowReactive<EditorConfig>({
-    modal: createModalConfig(annotationModalDefaults),
+    modal: createModalConfig<AnnotationModalActionMap>(annotationModalDefaults),
     createAnnotatedText: createAnnotationConfiguration(
       props.textAdapter,
-      props.annotationTransformer.defaultParams ?? {},
+      props.annotationTransformer.defaultParams,
       definitionsMap.value,
     ),
   });
@@ -91,11 +87,17 @@ export const useProvideEditorState = (
     readonly: props.readonly ?? false,
     show: () => showEditorState(),
     reset: () => resetEditorState(),
-    format: (annotation, isNew) =>
-      props.annotationTransformer.format(annotation, isNew),
-    transformMetadata: (metadata, selector) =>
-      props.annotationTransformer.transformMetadata?.(metadata, selector) ??
-      metadata,
+    format: (annotation: EditorAnnotation, isNew: boolean): EditorAnnotation => {
+      if (!props.annotationTransformer) {
+        return null as unknown as EditorAnnotation;
+      }
+
+      return props.annotationTransformer.format(annotation, isNew) as EditorAnnotation;
+    },
+    transformMetadata:
+      props.annotationTransformer?.transformMetadata?.bind(
+        props.annotationTransformer,
+      ) ?? ((m) => m),
   });
 
   watch(
@@ -107,7 +109,7 @@ export const useProvideEditorState = (
     () => {
       config.createAnnotatedText = createAnnotationConfiguration(
         props.textAdapter,
-        props.annotationTransformer.defaultParams ?? {},
+        props.annotationTransformer.defaultParams,
         definitionsMap.value,
       );
     },
@@ -121,12 +123,7 @@ export const useProvideEditorState = (
 
     const sourceUri = annotation.selectors?.[0]?.uri;
 
-    if (!sourceUri)
-      return {
-        annotation,
-        source: undefined,
-        definition: getDefinition(annotation.definitionUri),
-      };
+    if (!sourceUri) return { annotation, source: undefined, definition: getDefinition(annotation.definitionUri) };
 
     const source = (props.sources ?? []).find((s) => s.uri === sourceUri);
     return {
@@ -150,12 +147,7 @@ export const useProvideEditorState = (
       () => props.annotations,
     ],
     ([id, action]) =>
-      selectAnnotationById(
-        containerRef,
-        id !== undefined ? String(id) : undefined,
-        action,
-        selectByIdCtx,
-      ),
+      selectAnnotationById(containerRef, id !== undefined ? String(id) : undefined, action, selectByIdCtx),
     { immediate: true },
   );
 

@@ -81,7 +81,7 @@ const format = (
       purpose: 'styling',
       id: annotation.definitionUri,
       name: annotation.definitionUri,
-    } as any);
+    });
   }
 
   if (annotation.metadata) {

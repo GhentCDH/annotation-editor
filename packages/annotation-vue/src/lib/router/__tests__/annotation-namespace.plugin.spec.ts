@@ -1,3 +1,5 @@
+import { type Router } from 'vue-router';
+
 import { type AnnotationResource } from '@ghentcdh/annotation-core';
 
 import { AnnotationDefinitionService } from '../../definitions/annotation-definition.service';
@@ -84,7 +86,7 @@ describe('installAnnotationNamespaceRoutes', () => {
   it('should add routes to router', () => {
     const service = new AnnotationDefinitionService();
     const addRoute = vi.fn();
-    const mockRouter = { addRoute } as any;
+    const mockRouter = { addRoute } as unknown as Router;
 
     installAnnotationNamespaceRoutes(mockRouter, service);
 
@@ -94,14 +96,14 @@ describe('installAnnotationNamespaceRoutes', () => {
   it('should use custom basePath', () => {
     const service = new AnnotationDefinitionService();
     const addRoute = vi.fn();
-    const mockRouter = { addRoute } as any;
+    const mockRouter = { addRoute } as unknown as Router;
 
     installAnnotationNamespaceRoutes(mockRouter, service, {
       basePath: '/custom',
     });
 
     const paths = addRoute.mock.calls.map(
-      (call: any[]) => call[0].path as string,
+      (call: unknown[]) => (call[0] as { path: string }).path,
     );
     expect(paths.every((p: string) => p.startsWith('/custom'))).toBe(true);
   });

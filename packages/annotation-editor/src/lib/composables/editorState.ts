@@ -22,6 +22,6 @@ export type EditorState_ = {
   selectedAnnotation: EditorAnnotation | null;
   reset: () => void;
   show: () => void;
-  format: (annotation: EditorAnnotation, isNew: boolean) => any;
+  format: (annotation: EditorAnnotation, isNew: boolean) => EditorAnnotation;
   transformMetadata: (metadata: AnnotationMetadata, selector: Selector) => AnnotationMetadata;
 };

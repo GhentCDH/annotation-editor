@@ -174,9 +174,11 @@ const startLinking = (
   state.editorState = 'link';
   state.disableEdits = true;
   state.info = { message: infoMessage, short: data.link.label };
-  (config.modal.getModal('link-annotation').state as any).startLink(
-    data.link.key,
-  );
+  (
+    config.modal.getModal('link-annotation').state as unknown as {
+      startLink: (type: string) => void;
+    }
+  ).startLink(data.link.key);
   config.modal.show('toast', {
     toastMessage: infoMessage,
     action: {

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { Debugger } from '@ghentcdh/annotated-text';
-import { contextBuilder } from '@ghentcdh/w3c-utils';
+import { type ContextBuilder, contextBuilder } from '@ghentcdh/w3c-utils';
 
 import { type AnnotationResource } from './types/annotation-definition.type';
 import {
@@ -32,19 +32,16 @@ export const AnnotationStyleContextBuilder = (
   return contextBuilder(prefix, baseUrl)
     .setType(prefix, AnnotationStyleType)
     .setContextUri(`${contextUrl}${AnnotationStyleType}.jsonld`)
-    .parseZodSchema(AnnotationStyleSchema);
+    .parseZodSchema(
+      AnnotationStyleSchema as unknown as z.ZodObject<z.ZodRawShape>,
+    ) as ContextBuilder;
 };
 
 export const createAnnotationStyleBodyUnsafe = (
   annotationConfig: Partial<AnnotationDefConfig> | undefined,
   style: Partial<AnnotationResource>,
 ) => {
-  const resource = {
-    ...style,
-    ...style.annotation,
-    // `name` is the id since crouton 0.1.0; the style body carries the label.
-    name: style.title ?? style.name,
-  };
+  const resource = { ...style, ...style.annotation };
   const parsed =
     AnnotationStyleContextBuilder(annotationConfig).toAnnotationBodyUnsafe(
       resource,
