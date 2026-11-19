@@ -41,7 +41,12 @@ export const createAnnotationStyleBodyUnsafe = (
   annotationConfig: Partial<AnnotationDefConfig> | undefined,
   style: Partial<AnnotationResource>,
 ) => {
-  const resource = { ...style, ...style.annotation };
+  const resource = {
+    ...style,
+    ...style.annotation,
+    // `name` is the id since crouton 0.1.0; the style body carries the label.
+    name: style.title ?? style.name,
+  };
   const parsed =
     AnnotationStyleContextBuilder(annotationConfig).toAnnotationBodyUnsafe(
       resource,

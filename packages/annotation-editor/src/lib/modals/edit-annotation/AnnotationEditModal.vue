@@ -67,6 +67,7 @@ import {
   AnnotationEditModalProperties,
 } from './AnnotationEditModal.properties';
 import { UseAnnotationEdit } from './UseAnnotationEdit';
+import { fullSelectionRange } from './fullSelectionRange';
 
 let annotatedTextConfig: UiAnnotatedText;
 const props = defineProps(AnnotationEditModalProperties);
@@ -112,27 +113,18 @@ const formatBeforeSave = ((formData: AnnotationMetadata) =>
 
 const selectFull = () => {
   const { source, annotation } = props;
-  const maxRange = {
-    start: 0,
-    end: source!.content.text.length + 1,
-  };
-  if (parent) {
-    const selector = parent.getSelector(source.uri);
-    if (selector) {
-      maxRange.start = selector.start;
-      maxRange.end = selector.end;
-    }
-  }
+  const startOffset = annotatedTextConfig.annotationAdapter.startOffset;
+  const maxRange = fullSelectionRange(
+    source!.content.text,
+    startOffset,
+    parent?.getSelector(source.uri),
+  );
 
-  const original = annotation!;
   return updateAnnotation(
     source.uri,
     maxRange,
-    {
-      fullFlatText: props.source.content.text,
-      startOffset: 0, // TODO implement it
-    },
-    original,
+    { fullFlatText: source.content.text, startOffset },
+    annotation!,
   );
 };
 
