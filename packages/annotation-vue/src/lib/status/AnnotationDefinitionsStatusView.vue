@@ -135,7 +135,7 @@
               />
               <div class="flex-1 min-w-0">
                 <div class="font-medium text-base-content text-sm">
-                  {{ def.name }}
+                  {{ def.title ?? def.name }}
                 </div>
                 <div class="text-xs text-base-content/50 font-mono mt-0.5">
                   {{ def.id }}

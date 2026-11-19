@@ -10,7 +10,6 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "noPropertyAccessFromIndexSignature": true,
-    "strictPropertyInitialization": false,
     "allowSyntheticDefaultImports": true,
     "ignoreDeprecations": "6.0"
   },

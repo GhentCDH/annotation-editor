@@ -55,7 +55,7 @@ export const UiAnnotionDefinitionSchema: z.ZodType<UIAnnotationDefinition> =
       const d = def as AnnotationResource;
       return {
         ...d,
-        label: d.name,
+        label: d.title ?? d.name,
         canEdit: !!d.operations?.patch,
         canDelete: !!d.operations?.delete,
         canCreate: !!d.operations?.create,
