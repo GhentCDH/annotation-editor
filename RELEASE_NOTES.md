@@ -1,3 +1,13 @@
+## 0.1.1-rc.0 (2026-11-19)
+
+### 🩹 Fixes
+
+- restore fixes reverted by #51 squash; full strict in annotation-ui ([#53](https://github.com/GhentCDH/annotation-editor/pull/53), [#51](https://github.com/GhentCDH/annotation-editor/issues/51))
+
+### ❤️ Thank You
+
+- Bo Vandersteene @bovandersteene
+
 ## 0.0.1-rc.1 (2026-11-17)
 
 This was a version bump only, there were no code changes.
