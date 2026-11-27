@@ -1,3 +1,8 @@
+---
+name: lint
+description: Run ESLint via Nx for one project or all affected projects and fix errors.
+---
+
 Run linting for this project.
 
 If `$ARGUMENTS` specifies a project name, lint that specific project:

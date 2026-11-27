@@ -1,3 +1,8 @@
+---
+name: component
+description: Create a new Vue component (Name.vue + Name.properties.ts) following this repo's props/emits conventions. Use when adding any .vue component.
+---
+
 Create a new Vue component following this project's conventions.
 
 `$ARGUMENTS` should contain the component name and optionally the target library/app path.

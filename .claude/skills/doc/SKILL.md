@@ -1,3 +1,8 @@
+---
+name: doc
+description: Create or update a VuePress docs page under docs/ with Preview/Vue tabs. Use when documenting a component or feature.
+---
+
 Create or update VuePress documentation for a component or feature.
 
 `$ARGUMENTS` should describe the component/feature to document and optionally the target path under `docs/`.

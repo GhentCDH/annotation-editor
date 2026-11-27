@@ -1,3 +1,8 @@
+---
+name: schema
+description: Create or update a Zod schema with its inferred type and spec. Use when adding or changing data shapes (resource JSON, annotations, sources).
+---
+
 Create or update a Zod schema following this project's conventions.
 
 `$ARGUMENTS` should describe the schema name and purpose, and optionally the target path.

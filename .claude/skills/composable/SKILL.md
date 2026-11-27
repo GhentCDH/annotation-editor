@@ -1,3 +1,8 @@
+---
+name: composable
+description: Create a new Vue composable (useFeatureName.ts in a composables/ folder). Use when extracting or adding reactive logic.
+---
+
 Create a new Vue composable following this project's conventions.
 
 `$ARGUMENTS` should contain the composable name and optionally the target path.

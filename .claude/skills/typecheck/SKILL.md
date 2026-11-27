@@ -1,3 +1,8 @@
+---
+name: typecheck
+description: Run TypeScript type checking via Nx for one project or all affected projects and fix type errors.
+---
+
 Run TypeScript type checking for this project.
 
 If `$ARGUMENTS` specifies a project name, typecheck that specific project:
