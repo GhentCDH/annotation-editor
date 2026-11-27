@@ -1,3 +1,8 @@
+---
+name: test-file
+description: Create a Vitest spec in __tests__/ for an existing source file, using it.each tables. Use when adding tests for a file.
+---
+
 Create a test file for an existing source file.
 
 `$ARGUMENTS` should be the path to the source file to test.
