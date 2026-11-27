@@ -19,7 +19,7 @@
       </div>
       <slot name="content" />
       <div
-        v-if="$slots.actions"
+        v-if="$slots['actions']"
         class="card-actions justify-end"
       >
         <slot name="actions" />
@@ -39,7 +39,7 @@
       <slot name="content" />
     </template>
     <template
-      v-if="$slots.actions"
+      v-if="$slots['actions']"
       #actions
     >
       <slot name="actions" />
