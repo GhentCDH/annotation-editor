@@ -18,7 +18,7 @@ import type { ExtractPublicPropTypes, PropType } from 'vue';
 import { type EmitFn } from 'vue';
 
 export const ComponentNameProperties = {
-  // Add props here, always with explicit required: true as const or required: false
+  // Add props here, always with explicit required: true as const or required: false as const
   // Example: myProp: { type: String, required: true as const },
 };
 
