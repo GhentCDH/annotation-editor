@@ -13,8 +13,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { v4 as uuid } from 'uuid';
-import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
+import { nextTick, onMounted, onUnmounted, ref, useId, watch } from 'vue';
 
 import { type AnnotatedText } from '@ghentcdh/annotated-text';
 import { type EditorAnnotation } from '@ghentcdh/annotation-ui';
@@ -28,7 +27,7 @@ const properties = defineProps(SourceEditProperties);
 const { config, sendAnnotationEvent, editorState, getDefinition, ...state } =
   useEditorState();
 
-const textUuid = `text-content-${uuid()}`;
+const textUuid = `text-content-${useId()}`;
 
 let textAnnotation: AnnotatedText<EditorAnnotation> | undefined = undefined;
 

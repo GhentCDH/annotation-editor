@@ -5,11 +5,6 @@
   "projectType": "library",
   "tags": ["scope:annotation", "type:ui", "tech:vue", "feature:editor"],
   "targets": {
-    "nx-release-publish": {
-      "options": {
-        "packageRoot": "dist/{projectRoot}"
-      }
-    },
     "build": {
       "outputs": [
         "{projectRoot}/{options.outDir}",
