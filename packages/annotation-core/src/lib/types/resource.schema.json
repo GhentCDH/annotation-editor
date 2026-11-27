@@ -1390,8 +1390,7 @@
               "sql"
             ]
           }
-        },
-        "additionalProperties": false
+        }
       }
     },
     "source": {
