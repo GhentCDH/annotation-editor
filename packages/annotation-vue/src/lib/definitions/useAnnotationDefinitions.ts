@@ -13,9 +13,13 @@ import {
   type AnnotationResource,
   type AnnotationResource as CoreAnnotationDefinition,
 } from '@ghentcdh/annotation-core';
-import { type KeyLabel,
+import {
+  type DefinitionMap,
+  type KeyLabel,
   type UIAnnotationDefinition,
-  UiAnnotionDefinitionSchema } from '@ghentcdh/annotation-ui';
+  UiAnnotionDefinitionSchema,
+  groupById,
+} from '@ghentcdh/annotation-ui';
 
 import {
   type DefinitionsFetchFn,
@@ -131,14 +135,6 @@ const buildVueDefinitions = (
     toVueDefinition(def, grouped, createStyle, activeStyle),
   );
 
-const buildDefinitionsMap = (
-  definitions: UIAnnotationDefinition[],
-): Record<string, UIAnnotationDefinition> =>
-  definitions.reduce((acc: Record<string, UIAnnotationDefinition>, def) => {
-    acc[def.id] = def;
-    return acc;
-  }, {});
-
 export const createAnnotationDefinitionsState = (
   options: ProvideAnnotationDefinitionsOptions,
 ): AnnotationDefinitionsState => {
@@ -157,7 +153,7 @@ export const createAnnotationDefinitionsState = (
       createStyle,
       activeStyle,
     );
-    state.definitionsMap = buildDefinitionsMap(state.definitions);
+    state.definitionsMap = groupById(state.definitions) as DefinitionMap;
   };
 
   const state: AnnotationDefinitionsState = shallowReactive({

@@ -26,8 +26,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { v4 as uuidv4 } from 'uuid';
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, onMounted, onUnmounted, ref, useId, watch } from 'vue';
 
 import { type AnnotatedText } from '@ghentcdh/annotated-text';
 import { type EditorAnnotation } from '@ghentcdh/annotation-ui';
@@ -41,8 +40,9 @@ const properties = defineProps<{
   showSource?: boolean;
 }>();
 
-const annotationTextId = `annotation-text-${uuidv4()}`;
-const annotationTextFullId = `annotation-text-full-${uuidv4()}`;
+const id = useId();
+const annotationTextId = `annotation-text-${id}`;
+const annotationTextFullId = `annotation-text-full-${id}`;
 const showHover = ref(false);
 
 let annotatedText: AnnotatedText<EditorAnnotation>;
