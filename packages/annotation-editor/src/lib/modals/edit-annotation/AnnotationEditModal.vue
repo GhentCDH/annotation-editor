@@ -21,8 +21,12 @@
         @on-save-success="save"
         @cancel="cancel"
       >
-        <template #content-before>
-          <div :class="['flex-grow', { 'before-scroll': !inline }]">
+        <!-- Right drawer: selection is adjusted in the main source text instead -->
+        <template
+          v-if="!inline"
+          #content-before
+        >
+          <div class="flex-grow before-scroll">
             <Collapse
               :title="label.selectLabel"
               :scrollable="true"
@@ -46,7 +50,7 @@
   </EditorContainer>
 </template>
 <script lang="ts" setup>
-import { computed, onMounted, onUnmounted } from 'vue';
+import { computed, onMounted, onUnmounted, watch } from 'vue';
 
 import { EditorPosition } from '@ghentcdh/annotation-core';
 import {
@@ -70,6 +74,7 @@ import {
 } from './AnnotationEditModal.properties';
 import { fullSelectionRange } from './fullSelectionRange';
 import { useAnnotationEditForm } from './useAnnotationEditForm';
+import { getEditModalState } from './useAnnotationEditModal';
 
 let annotatedTextConfig: UiAnnotatedText;
 const props = defineProps(AnnotationEditModalProperties);
@@ -141,8 +146,16 @@ const selectAll = () => {
   if (sel) updateSelector(sel);
 };
 
+// Right drawer: SourceEdit writes the drawn selector into the edit modal state
+watch(
+  () => getEditModalState(config.modal).selector,
+  (selector) => {
+    if (selector) updateSelector(selector);
+  },
+);
+
 onMounted(() => {
-  if (!props.source) return;
+  if (!props.source || inline.value) return;
 
   const annotations = props.annotation ? [props.annotation] : [];
 
@@ -180,7 +193,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  annotatedTextConfig.annotatedText?.destroy();
+  annotatedTextConfig?.annotatedText?.destroy();
 });
 </script>
 

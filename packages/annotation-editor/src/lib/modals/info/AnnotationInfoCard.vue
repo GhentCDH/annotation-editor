@@ -3,12 +3,12 @@
     ref="cardRef"
     :class="
       inline
-        ? 'card bg-base-100 border border-base-300'
+        ? 'bg-base-100'
         : 'card bg-base-100 shadow-xl absolute z-50'
     "
     :style="cardStyle"
   >
-    <div class="card-body p-2 overflow-y-auto">
+    <div :class="['overflow-y-auto p-2', { 'card-body': !inline }]">
       <div class="flex items-center justify-between gap-2">
         <div><strong>Type:</strong> {{ purposeLabel }}</div>
         <Btn

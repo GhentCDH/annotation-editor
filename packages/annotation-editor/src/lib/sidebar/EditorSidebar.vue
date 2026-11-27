@@ -1,7 +1,7 @@
 <template>
   <div
     data-testid="editor-sidebar"
-    class="p-2"
+    class="-m-4"
   >
     <component
       :is="active.component"
@@ -12,13 +12,15 @@
     />
     <p
       v-else
-      class="text-sm opacity-60"
+      class="p-4 text-sm opacity-60"
     >
       Select an annotation
     </p>
   </div>
 </template>
 <script lang="ts" setup>
+// ponytail: -m-4 cancels crouton Drawer's fixed p-4 on the right panel; drop when Drawer gets a padding prop
+
 import { computed } from 'vue';
 
 import { useEditorState } from '../composables/useEditorState';

@@ -2,9 +2,9 @@
   <div
     v-if="inline"
     data-testid="editor-container-inline"
-    class="card bg-base-100 border border-base-300"
+    class="bg-base-100"
   >
-    <div class="card-body p-2 gap-2">
+    <div class="flex flex-col p-2 gap-2">
       <div class="flex items-center justify-between gap-2">
         <h3 class="card-title text-base">
           {{ title }}
