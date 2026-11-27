@@ -45,6 +45,8 @@ annotations are mutated.
     async loadSource(sourceUri: string): Promise<SourceModel> {
       const id = sourceUri.split(':')[1];
       const res = await fetch(`/api/texts/${id}`);
+      // Surface HTTP failures so SmartAnnotationEditor can show an error state
+      if (!res.ok) throw { response: { status: res.status, statusText: res.statusText } };
       const text = await res.json();
       return {
         id,
@@ -141,6 +143,7 @@ mutation.
 |-------------------|---------------------------------------------------------------------|
 | `before-editor`   | Content rendered above the editor, e.g. a toolbar or source header |
 | `annotation-menu` | Extra content in the left drawer, below the annotation type filter  |
+| `error`           | Replaces the editor when loading fails. Receives `{ error, retry }` |
 
 ```vue
 <SmartAnnotationEditor :loader="loader" :source-uris="sourceUris">
@@ -248,3 +251,37 @@ const sourceUris = ref<string[]>(['text:1']);
 // navigate to another text
 sourceUris.value = ['text:42'];
 ```
+
+## Error handling
+
+When `loadSource`, `loadAnnotations` or `loadResources` reject, the editor is replaced by an error panel instead of
+showing a blank screen or spinning forever. A `404` response gets a dedicated "Text not found" message; other failures
+show the backend detail when available. The panel has a **Try again** button that re-runs the failed loaders.
+
+The status is detected from axios (`error.response.status`), `error.status`, `error.statusCode`, or — as a last resort —
+a `404` in the error message, so throwing the raw HTTP error from your loader is enough:
+
+```ts
+async loadSource(sourceUri: string): Promise<SourceModel> {
+  const id = sourceUri.split(':')[1];
+  const res = await fetch(`/api/texts/${id}`);
+  if (!res.ok) throw { response: { status: res.status, statusText: res.statusText } };
+  // …
+}
+```
+
+Override the default panel with the `error` slot:
+
+```vue
+<SmartAnnotationEditor :loader="loader" :source-uris="sourceUris">
+  <template #error="{ error, retry }">
+    <div>
+      <p>{{ error.isNotFound ? 'That text does not exist.' : error.message }}</p>
+      <button @click="retry">Retry</button>
+    </div>
+  </template>
+</SmartAnnotationEditor>
+```
+
+The normalised `EditorLoadError` (`{ message, detail, status, isNotFound, cause }`) is also available for host apps via
+`toEditorLoadError`.

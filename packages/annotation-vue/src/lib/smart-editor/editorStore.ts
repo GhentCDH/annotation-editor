@@ -17,6 +17,7 @@ import {
 
 import { useAnnotationDefinitions } from '../definitions/useAnnotationDefinitions';
 import { type AnnotationEditorLoader } from './AnnotationEditorLoader';
+import { type EditorLoadError, toEditorLoadError } from './editorError';
 
 const createEditState = <ANNOTATION extends BaseAnnotation>(
   annotationLoader: AnnotationEditorLoader<ANNOTATION>,
@@ -29,6 +30,13 @@ const createEditState = <ANNOTATION extends BaseAnnotation>(
   const annotations = ref<EditorAnnotation[]>([]);
   const loadingSources = ref(true);
   const loadingAnnotations = ref(true);
+  const sourcesError = ref<EditorLoadError | null>(null);
+  const annotationsError = ref<EditorLoadError | null>(null);
+
+  /** First error from either loader; `null` when everything loaded fine. */
+  const error = computed<EditorLoadError | null>(
+    () => sourcesError.value ?? annotationsError.value,
+  );
 
   const filteredDefinitions = computed(() => {
     return definitions.definitions;
@@ -41,10 +49,16 @@ const createEditState = <ANNOTATION extends BaseAnnotation>(
     const uris = sourceUris.value ?? [];
     const seq = ++sourcesSeq;
     loadingSources.value = true;
+    sourcesError.value = null;
     Promise.all(uris.map((uri) => annotationLoader.loadSource(uri)))
       .then((response) => {
         if (seq !== sourcesSeq) return;
         sources.value = response;
+      })
+      .catch((e: unknown) => {
+        if (seq !== sourcesSeq) return;
+        console.error(e);
+        sourcesError.value = toEditorLoadError(e);
       })
       .finally(() => {
         if (seq === sourcesSeq) loadingSources.value = false;
@@ -57,11 +71,17 @@ const createEditState = <ANNOTATION extends BaseAnnotation>(
     const uris = sourceUris.value ?? [];
     const seq = ++annotationsSeq;
     loadingAnnotations.value = true;
+    annotationsError.value = null;
 
     Promise.all(uris.map((uri) => annotationLoader.loadAnnotations(uri)))
       .then((response) => {
         if (seq !== annotationsSeq) return;
         annotations.value = parseAnnotations(transformer, response.flat());
+      })
+      .catch((e: unknown) => {
+        if (seq !== annotationsSeq) return;
+        console.error(e);
+        annotationsError.value = toEditorLoadError(e);
       })
       .finally(() => {
         if (seq === annotationsSeq) loadingAnnotations.value = false;
@@ -72,8 +92,9 @@ const createEditState = <ANNOTATION extends BaseAnnotation>(
     sourceUris.value = uris;
     sources.value = [];
     annotations.value = [];
+    sourcesError.value = null;
+    annotationsError.value = null;
     loadSources();
-    reloadAnnotations();
   };
 
   watch(
@@ -95,7 +116,15 @@ const createEditState = <ANNOTATION extends BaseAnnotation>(
   const selectedAnnotationTypes = ref<string[]>([]);
 
   const reload = () => {
+    annotationsError.value = null;
     reloadAnnotations();
+  };
+
+  /** Reload both sources and annotations, e.g. after a failed load. */
+  const reloadAll = () => {
+    sourcesError.value = null;
+    annotationsError.value = null;
+    loadSources();
   };
 
   const filteredAnnotations = computed(() => {
@@ -114,12 +143,14 @@ const createEditState = <ANNOTATION extends BaseAnnotation>(
 
   return reactive({
     loading,
+    error,
     annotations,
     filteredAnnotations,
     sources,
     selectedAnnotationTypes,
     annotationsGroupedByPurpose,
     reload,
+    reloadAll,
     setSourceUris,
   });
 };

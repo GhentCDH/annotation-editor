@@ -6,27 +6,44 @@
     <Loading
       :loading="store.loading || !props.loader.definitionsLoaded.value"
     />
-    <slot name="before-editor" />
-    <AnnotationEditor
-      :readonly="readonly"
-      :configuration="definitionsState.configuration"
-      :sources="store.sources"
-      :annotations="store.filteredAnnotations"
-      :annotation-definitions="definitionsState.definitions"
-      :text-adapter="textAdapter"
-      :annotation-transformer="annotationTransformer"
-      :selected-annotation-id="selectedAnnotationId"
-      :selected-annotation-action="selectedAnnotationAction"
-      :cols="1"
-      :modal-view="false"
-      :layout="layout"
-      @select:annotation="selectAnnotation"
-      @delete:annotation="store.reload"
-      @update:annotation="store.reload"
-      @create:annotation="store.reload"
-    />
+    <template v-if="loadError">
+      <slot
+        name="error"
+        :error="loadError"
+        :retry="retry"
+      >
+        <SmartEditorError
+          :error="loadError"
+          @retry="retry"
+        />
+      </slot>
+    </template>
+    <template v-else>
+      <slot name="before-editor" />
+      <AnnotationEditor
+        :readonly="readonly"
+        :configuration="definitionsState.configuration"
+        :sources="store.sources"
+        :annotations="store.filteredAnnotations"
+        :annotation-definitions="definitionsState.definitions"
+        :text-adapter="textAdapter"
+        :annotation-transformer="annotationTransformer"
+        :selected-annotation-id="selectedAnnotationId"
+        :selected-annotation-action="selectedAnnotationAction"
+        :cols="1"
+        :modal-view="false"
+        :layout="layout"
+        @select:annotation="selectAnnotation"
+        @delete:annotation="store.reload"
+        @update:annotation="store.reload"
+        @create:annotation="store.reload"
+      />
+    </template>
     <template #left-drawer>
-      <div class="gap-2 flex flex-col">
+      <div
+        v-if="!loadError"
+        class="gap-2 flex flex-col"
+      >
         <AnnotationFilter
           v-model="store.selectedAnnotationTypes"
           :count="store.annotationsGroupedByPurpose"
@@ -40,7 +57,7 @@
 </template>
 
 <script lang="ts" setup>
-import { getCurrentInstance, onMounted, ref, watch } from 'vue';
+import { computed, getCurrentInstance, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import { AnnotationEditor } from '@ghentcdh/annotation-editor';
@@ -50,6 +67,8 @@ import type { W3CAnnotation } from '@ghentcdh/w3c-utils';
 import { useAnnotationDefinitions } from '../definitions/useAnnotationDefinitions';
 import AnnotationFilter from '../filter/AnnotationFilter.vue';
 import { SmartEditorProperties } from './SmartEditor.properties';
+import SmartEditorError from './SmartEditorError.vue';
+import { type EditorLoadError, toEditorLoadError } from './editorError';
 import { provideEditorStore } from './editorStore';
 
 const props = defineProps(SmartEditorProperties);
@@ -71,6 +90,27 @@ const router = useRouter();
 const store = provideEditorStore(props.loader, props.annotationTransformer);
 
 const definitionsState = useAnnotationDefinitions();
+
+const loadError = computed<EditorLoadError | null>(() => {
+  if (store.error) return store.error;
+
+  if (props.loader.definitionsError?.value) {
+    return props.loader.definitionsError.value;
+  }
+
+  if (definitionsState.error) {
+    return toEditorLoadError(definitionsState.error);
+  }
+
+  return null;
+});
+
+const retry = () => {
+  if (props.loader.definitionsError?.value || definitionsState.error) {
+    props.loader.reloadDefinitions?.();
+  }
+  store.reloadAll();
+};
 
 onMounted(() => {
   if (!props.watchQueryParams) return;
