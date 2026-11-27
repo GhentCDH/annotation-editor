@@ -43,7 +43,7 @@ export default defineConfig(() => ({
     lib: {
       entry: 'src/index.ts',
       name: 'AnnotationEditor',
-      fileName: (format) => (format === 'es' ? 'index.mjs' : 'index.js'),
+      fileName: () => 'index.mjs',
       formats: ['es'],
     },
     rolldownOptions: {
@@ -51,8 +51,6 @@ export default defineConfig(() => ({
         '@ghentcdh/annotated-text',
         '@ghentcdh/crouton-vue',
         '@ghentcdh/w3c-utils',
-        '@jsonforms/core',
-        'uuid',
         'vue',
         'zod',
       ],
