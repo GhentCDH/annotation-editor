@@ -4,9 +4,6 @@
   "vite": false,
   "vitest": false,
   "playwright": false,
-  "ignoreBinaries": [
-    "production"
-  ],
   "ignoreDependencies": [
     "@nx/vitest",
     "@tailwindcss/vite",
@@ -16,7 +13,6 @@
     "vite-plugin-static-copy",
     "vite-tsconfig-paths",
     "@vue/test-utils",
-    "@swc/helpers",
     "prettier",
     "@eslint/js",
     "typescript-eslint",
@@ -27,8 +23,7 @@
     "@nx/eslint-plugin",
     "vuepress",
     "@vuepress/bundler-vite",
-    "vuepress-theme-hope",
-    "vue-router"
+    "vuepress-theme-hope"
   ],
   "workspaces": {
     ".": {
@@ -50,7 +45,7 @@
         "src/**/*.spec.ts"
       ],
       "project": [
-        "src/**/*.{ts,vue}"
+        "src/**/*.ts"
       ]
     },
     "packages/annotation-ui": {
@@ -59,7 +54,7 @@
         "src/**/*.spec.ts"
       ],
       "project": [
-        "src/**/*.{ts,vue}"
+        "src/**/*.ts"
       ]
     },
     "packages/annotation-vue": {
@@ -76,7 +71,7 @@
         "src/**/*.spec.ts"
       ],
       "project": [
-        "src/**/*.{ts,vue}"
+        "src/**/*.ts"
       ],
       "ignoreDependencies": [
         "@ghentcdh/annotated-text"

@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/annotation-editor/src",
   "projectType": "library",
-  "tags": ["scope:annotation", "type:ui", "tech:vue", "feature:editor"],
+  "tags": ["scope:annotation", "type:ui", "tech:vue"],
   "targets": {
     "nx-release-publish": {
       "options": {

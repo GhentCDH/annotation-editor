@@ -1,11 +1,12 @@
-# annotation-core
+# @ghentcdh/annotation-core
 
-This library was generated with [Nx](https://nx.dev).
+Framework-free types and Zod schemas shared by `@ghentcdh/annotation-api` and `@ghentcdh/annotation-vue`:
+resource JSON (`AnnotationJsonResourceSchema`, `AnnotationConfigSchema`), `SourceModel`, JSON-LD context
+builders, grid layout and annotation style helpers.
 
-## Building
+**Docs:** https://ghentcdh.github.io/annotation-editor/
 
-Run `nx build annotation-core` to build the library.
-
-## Running unit tests
-
-Run `nx test annotation-core` to execute the unit tests via [Vitest](https://vitest.dev/).
+```sh
+pnpm nx build annotation-core
+pnpm nx test annotation-core
+```

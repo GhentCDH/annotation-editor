@@ -47,13 +47,13 @@ function generateDirectoryObject(fsDir, linkDir, exclude) {
     }
 
     if (stat.isDirectory()) {
-      items.push(
-        generateDirectoryObject(
-          path.join(fsDir, file),
-          path.join(linkDir, file),
-          exclude,
-        ),
+      const child = generateDirectoryObject(
+        path.join(fsDir, file),
+        path.join(linkDir, file),
+        exclude,
       );
+      // Skip folders without pages (e.g. docs/demo/composables).
+      if (child.items.length || child.link) items.push(child);
     }
   });
 

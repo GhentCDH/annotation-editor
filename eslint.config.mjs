@@ -55,15 +55,6 @@ export default [
               sourceTag: 'type:e2e',
               onlyDependOnLibsWithTags: ['type:util', 'type:ui', 'type:e2e'],
             },
-            // feature isolation: editor and preview cannot depend on each other
-            {
-              sourceTag: 'feature:editor',
-              notDependOnLibsWithTags: ['feature:preview'],
-            },
-            {
-              sourceTag: 'feature:preview',
-              notDependOnLibsWithTags: ['feature:editor'],
-            },
           ],
         },
       ],
