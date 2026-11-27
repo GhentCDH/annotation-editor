@@ -1,4 +1,4 @@
-import { type EmitFn, type ExtractPublicPropTypes, type PropType } from 'vue';
+import { type PropType } from 'vue';
 
 import { type StatusState } from '../status.utils';
 
@@ -13,11 +13,6 @@ export const StatusHeaderProperties = {
     default: null,
   },
 };
-export type StatusHeaderPropsType = ExtractPublicPropTypes<
-  typeof StatusHeaderProperties
->;
 export const StatusHeaderEmits = {
   refresh: () => true,
 };
-export type StatusHeaderEmitsType = typeof StatusHeaderEmits;
-export type StatusHeaderEmitsFn = EmitFn<StatusHeaderEmitsType>;
