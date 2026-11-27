@@ -1,18 +1,23 @@
 <template>
   <div
     ref="cardRef"
-    class="card bg-base-100 shadow-xl absolute z-50"
-    :style="{
-      left: `${adjustedX}px`,
-      top: `${adjustedY}px`,
-      maxHeight: `calc(100vh - ${adjustedY}px - 16px)`,
-      minHeight: '100px',
-      minWidth: '320px',
-    }"
+    :class="
+      inline
+        ? 'card bg-base-100 border border-base-300'
+        : 'card bg-base-100 shadow-xl absolute z-50'
+    "
+    :style="cardStyle"
   >
     <div class="card-body p-2 overflow-y-auto">
       <div class="flex items-center justify-between gap-2">
         <div><strong>Type:</strong> {{ purposeLabel }}</div>
+        <Btn
+          v-if="inline"
+          :icon="IconEnum.Close"
+          :outline="true"
+          aria-label="Close"
+          @click="close"
+        />
       </div>
       <Metadata
         v-if="annotationDef"
@@ -34,8 +39,9 @@
 <script lang="ts" setup>
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 
+import { EditorPosition } from '@ghentcdh/annotation-core';
 import { type UIAnnotationDefinition } from '@ghentcdh/annotation-ui';
-import { Alert, IconEnum } from '@ghentcdh/crouton-vue';
+import { Alert, Btn, IconEnum } from '@ghentcdh/crouton-vue';
 
 import { type NavbarAction } from '../../components/Navbar.properties';
 import Navbar from '../../components/Navbar.vue';
@@ -47,7 +53,11 @@ import { default as Metadata } from './Metadata.vue';
 
 const properties = defineProps(AnnotationInfoCardProperties);
 
-const { editorState, sendAnnotationEvent, getDefinition } = useEditorState();
+const { config, editorState, sendAnnotationEvent, getDefinition } =
+  useEditorState();
+
+// Right-drawer mode: static card, no floating position / outside-click close.
+const inline = computed(() => config.position === EditorPosition.Right);
 
 const annotationDef = computed(() =>
   getDefinition(properties.annotation.definitionUri),
@@ -89,6 +99,18 @@ const recalcPosition = async () => {
   }
 };
 
+const cardStyle = computed(() =>
+  inline.value
+    ? undefined
+    : {
+        left: `${adjustedX.value}px`,
+        top: `${adjustedY.value}px`,
+        maxHeight: `calc(100vh - ${adjustedY.value}px - 16px)`,
+        minHeight: '100px',
+        minWidth: '320px',
+      },
+);
+
 watch(
   () => properties.position,
   (pos) => applyPosition(pos.x, pos.y),
@@ -104,6 +126,7 @@ watch(
 );
 
 onMounted(() => {
+  if (inline.value) return;
   document.addEventListener('click', handleOutsideClick);
   window.addEventListener('resize', recalcPosition);
 });

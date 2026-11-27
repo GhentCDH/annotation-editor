@@ -10,7 +10,7 @@ import {
   watch,
 } from 'vue';
 
-import { type SourceModel } from '@ghentcdh/annotation-core';
+import { EditorPosition, type SourceModel } from '@ghentcdh/annotation-core';
 import {
   type AnnotationId,
   type DefinitionMap,
@@ -66,7 +66,9 @@ export const useProvideEditorState = (
   const definitionsMap = computed(() => {
     return groupById(props.annotationDefinitions) as DefinitionMap;
   });
+
   const config = shallowReactive<EditorConfig>({
+    position: props.layout?.editorPosition ?? EditorPosition.Modal,
     modal: createModalConfig<AnnotationModalActionMap>(annotationModalDefaults),
     createAnnotatedText: createAnnotationConfiguration(
       props.textAdapter,

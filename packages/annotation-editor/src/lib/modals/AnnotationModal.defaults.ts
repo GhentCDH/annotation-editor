@@ -87,3 +87,10 @@ export const annotationModalDefaults: {
     useFn: useAnnotationEdit,
   },
 };
+
+/** Keys rendered inline in the right drawer when `editorPosition === 'right'`. Priority order: first visible wins. */
+export const SIDEBAR_KEYS: (keyof AnnotationModalActionMap)[] = [
+  'edit-annotation',
+  'link-annotation',
+  'info-card',
+];

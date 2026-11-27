@@ -3,7 +3,7 @@
     v-for="{ key, component: comp, state } in config.modal.modals"
     :key="key"
   >
-    <template v-if="state?.isVisible">
+    <template v-if="state?.isVisible && !exclude.includes(key)">
       <component
         :is="comp"
         v-bind="getModalData(state)"

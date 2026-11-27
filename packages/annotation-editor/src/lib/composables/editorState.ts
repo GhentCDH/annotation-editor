@@ -1,4 +1,4 @@
-import { type SourceModel } from '@ghentcdh/annotation-core';
+import { type EditorPosition, type SourceModel } from '@ghentcdh/annotation-core';
 import {
   type AnnotationMetadata,
   type EditorAnnotation,
@@ -12,6 +12,8 @@ import { type AnnotationModalConfig } from '../modals/AnnotationModal.definition
 type EditorStatus = 'show' | 'create' | 'edit' | 'link' | null;
 
 export type EditorConfig = {
+  /** Where modal-type components render: as overlay or inline in the right drawer */
+  position: EditorPosition;
   modal: AnnotationModalConfig<AnnotationModalActionMap>;
   createAnnotatedText: (
     id: string,

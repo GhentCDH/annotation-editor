@@ -1,11 +1,8 @@
 <template>
-  <Modal
-    :modal-title="label.title"
-    :open="true"
-    :disable-close="false"
+  <EditorContainer
+    :title="label.title"
     width="xl"
-    role="dialog"
-    @close-modal="cancel"
+    @close="cancel"
   >
     <template #content>
       <CroutonForm
@@ -14,7 +11,9 @@
         :data="metadata"
         :views="views"
         :format-before-save="formatBeforeSave"
-        form-max-width="w-max max-w-lg form-scroll min-w-[1/2]"
+        :form-max-width="
+          inline ? 'w-full' : 'w-max max-w-lg form-scroll min-w-[1/2]'
+        "
         :save-id="
           annotation?.id !== undefined ? String(annotation!.id) : undefined
         "
@@ -23,7 +22,7 @@
         @cancel="cancel"
       >
         <template #content-before>
-          <div class="flex-grow before-scroll">
+          <div :class="['flex-grow', { 'before-scroll': !inline }]">
             <Collapse
               :title="label.selectLabel"
               :scrollable="true"
@@ -44,11 +43,12 @@
         </template>
       </CroutonForm>
     </template>
-  </Modal>
+  </EditorContainer>
 </template>
 <script lang="ts" setup>
 import { computed, onMounted, onUnmounted } from 'vue';
 
+import { EditorPosition } from '@ghentcdh/annotation-core';
 import {
   type AnnotationMetadata,
   type UiAnnotatedText,
@@ -60,9 +60,9 @@ import {
   Collapse,
   CroutonForm,
   FormMessage,
-  Modal,
 } from '@ghentcdh/crouton-vue';
 
+import EditorContainer from '../../components/EditorContainer.vue';
 import { useEditorState } from '../../composables/useEditorState';
 import {
   AnnotationEditEmits,
@@ -75,6 +75,7 @@ let annotatedTextConfig: UiAnnotatedText;
 const props = defineProps(AnnotationEditModalProperties);
 
 const { config } = useEditorState();
+const inline = computed(() => config.position === EditorPosition.Right);
 
 const emits = defineEmits(AnnotationEditEmits);
 
