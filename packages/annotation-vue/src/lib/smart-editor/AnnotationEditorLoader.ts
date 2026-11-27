@@ -10,6 +10,7 @@ import {
   type AnnotationDefinitionsState,
   provideAnnotationDefinitions,
 } from '../definitions/useAnnotationDefinitions';
+import { type EditorLoadError, toEditorLoadError } from './editorError';
 
 export abstract class AnnotationEditorLoader<ANNOTATION> {
   private readonly useAnnotationDefinitions: AnnotationDefinitionsState;
@@ -17,6 +18,7 @@ export abstract class AnnotationEditorLoader<ANNOTATION> {
   protected isSchema = false;
 
   public readonly definitionsLoaded = ref(false);
+  public readonly definitionsError = ref<EditorLoadError | null>(null);
 
   constructor() {
     const existing = inject(ANNOTATION_DEFINITIONS_KEY, null);
@@ -30,35 +32,48 @@ export abstract class AnnotationEditorLoader<ANNOTATION> {
   abstract loadResources(): Promise<Array<string | AnnotationJsonResource>>;
 
   async loadDefinitions() {
-    const resources = await this.loadResources();
+    this.definitionsLoaded.value = false;
+    this.definitionsError.value = null;
 
-    if (!resources.length) {
-      this.useAnnotationDefinitions.loadFromResourceUris(resources as string[]).then(() => {
-        nextTick(() => (this.definitionsLoaded.value = true));
-      });
+    try {
+      const resources = await this.loadResources();
 
-      return;
-    }
-
-    const isUrls = typeof resources[0] === 'string';
-
-    if (!isUrls) {
-      this.useAnnotationDefinitions.loadFromConfigs(
-        resources as AnnotationJsonResource[],
-      );
-      return;
-    }
-
-    // If the schema is already parsed to the crouton format then load it directly
-    const promise = this.isSchema
-      ? this.useAnnotationDefinitions.loadFromUrls(resources as string[])
-      : this.useAnnotationDefinitions.loadFromResourceUris(
+      if (!resources.length) {
+        await this.useAnnotationDefinitions.loadFromResourceUris(
           resources as string[],
         );
+        return;
+      }
 
-    promise.then(() => {
+      const isUrls = typeof resources[0] === 'string';
+
+      if (!isUrls) {
+        this.useAnnotationDefinitions.loadFromConfigs(
+          resources as AnnotationJsonResource[],
+        );
+        return;
+      }
+
+      // If the schema is already parsed to the crouton format then load it directly
+      const promise = this.isSchema
+        ? this.useAnnotationDefinitions.loadFromUrls(resources as string[])
+        : this.useAnnotationDefinitions.loadFromResourceUris(
+            resources as string[],
+          );
+
+      await promise;
+    } catch (e) {
+      console.error(e);
+      this.definitionsError.value = toEditorLoadError(e);
+    } finally {
       nextTick(() => (this.definitionsLoaded.value = true));
-    });
+    }
+  }
+
+  /** Retry loading the annotation definition resources. */
+  async reloadDefinitions() {
+    this.definitionsError.value = null;
+    await this.loadDefinitions();
   }
 
   getDefinitions() {
