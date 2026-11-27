@@ -1055,6 +1055,10 @@
                 "description": "Override the Prisma relation field name when it differs from the column id.",
                 "type": "string"
               },
+              "displayKey": {
+                "description": "Field on the related record shown in tables and lookups (e.g. \"name\"). Column-level `displayKey` wins when both are set.",
+                "type": "string"
+              },
               "sort": {
                 "description": "Field to sort related records by",
                 "type": "string"
@@ -1153,6 +1157,13 @@
                       "disabled": {
                         "description": "Always render the input disabled",
                         "type": "boolean"
+                      },
+                      "errorMessage": {
+                        "description": "Replace the validation error text shown under the input",
+                        "examples": [
+                          "Please fill this in"
+                        ],
+                        "type": "string"
                       },
                       "disabledWhen": {
                         "description": "Disable the input when the condition matches another field",
@@ -1379,8 +1390,7 @@
               "sql"
             ]
           }
-        },
-        "additionalProperties": false
+        }
       }
     },
     "source": {
@@ -1613,6 +1623,14 @@
                           "label": {
                             "description": "Optional label rendered above the component slot.",
                             "type": "string"
+                          },
+                          "props": {
+                            "description": "Static props passed to the component, next to the runtime props `data` (current record), `readonly`, `schema` and `uischema`.",
+                            "type": "object",
+                            "propertyNames": {
+                              "type": "string"
+                            },
+                            "additionalProperties": {}
                           }
                         },
                         "required": [
@@ -1693,7 +1711,7 @@
                             "type": "string"
                           },
                           "data": {
-                            "description": "Static query or body params passed to the procedure endpoint.",
+                            "description": "Static data passed to the procedure as `ctx.data`: `(prisma, ctx)` for table actions, `(prisma, recordId, ctx)` for row actions.",
                             "type": "object",
                             "propertyNames": {
                               "type": "string"
@@ -1865,7 +1883,7 @@
                             "type": "string"
                           },
                           "data": {
-                            "description": "Static query or body params passed to the procedure endpoint.",
+                            "description": "Static data passed to the procedure as `ctx.data`: `(prisma, ctx)` for table actions, `(prisma, recordId, ctx)` for row actions.",
                             "type": "object",
                             "propertyNames": {
                               "type": "string"
@@ -2013,11 +2031,25 @@
                 "emptyText": {
                   "description": "Message shown when the table has no rows.",
                   "type": "string"
+                },
+                "download": {
+                  "description": "Table export options. Overrides the global `rules.tableDownload` from crouton.json.",
+                  "type": "object",
+                  "properties": {
+                    "csv": {
+                      "description": "Show a \"Download CSV\" toolbar button. Omit to inherit `rules.tableDownload.csv` from crouton.json (default false).",
+                      "type": "boolean"
+                    },
+                    "fileName": {
+                      "description": "File name without extension. Defaults to the resource name.",
+                      "type": "string"
+                    }
+                  }
                 }
               }
             },
             {
-              "$ref": "#/definitions/__schema3"
+              "$ref": "#/definitions/__schema4"
             }
           ]
         }
@@ -2206,18 +2238,39 @@
       "additionalProperties": {}
     },
     "__schema2": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/__schema3"
+        }
+      ]
+    },
+    "__schema3": {
       "type": "object",
       "properties": {
         "type": {
-          "description": "Layout container type. \"grid\" arranges items in a CSS grid; \"vertical\"/\"horizontal\" stack them; \"collapse\" is a collapsible section; \"group\" is a labeled group.",
+          "description": "Layout container type. \"grid\" arranges items in a CSS grid; \"vertical\"/\"horizontal\" stack them; \"collapse\" is a collapsible section; \"group\" is a labeled group; \"tabs\" shows one tab per child node (title from the child's `title`); \"custom\" renders the registered component named in `component`.",
           "type": "string",
           "enum": [
             "grid",
             "vertical",
             "horizontal",
             "collapse",
-            "group"
+            "group",
+            "tabs",
+            "custom"
           ]
+        },
+        "component": {
+          "description": "Name of the registered Vue layout component that renders this node and its items. Required when type is \"custom\".",
+          "type": "string"
+        },
+        "props": {
+          "description": "Static props passed to the custom layout component, next to the runtime props `elements`, `data`, `readonly`, `schema` and `uischema`.",
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {}
         },
         "columns": {
           "description": "Number of grid columns (1–12). Only applies when type is \"grid\".",
@@ -2402,6 +2455,18 @@
                 ]
               },
               {
+                "allOf": [
+                  {
+                    "allOf": [
+                      {
+                        "$ref": "#/definitions/__schema3"
+                      }
+                    ],
+                    "$ref": "#/definitions/__schema2"
+                  }
+                ]
+              },
+              {
                 "type": "object",
                 "properties": {
                   "component": {
@@ -2430,21 +2495,26 @@
                   "label": {
                     "description": "Optional label rendered above the component slot.",
                     "type": "string"
+                  },
+                  "props": {
+                    "description": "Static props passed to the component, next to the runtime props `data` (current record), `readonly`, `schema` and `uischema`.",
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string"
+                    },
+                    "additionalProperties": {}
                   }
                 },
                 "required": [
                   "component"
                 ]
-              },
-              {
-                "$ref": "#/definitions/__schema2"
               }
             ]
           }
         }
       }
     },
-    "__schema3": {
+    "__schema4": {
       "type": "object",
       "properties": {
         "type": {
@@ -2514,6 +2584,14 @@
                   "label": {
                     "description": "Optional label rendered above the component slot.",
                     "type": "string"
+                  },
+                  "props": {
+                    "description": "Static props passed to the component, next to the runtime props `data` (current record), `readonly`, `schema` and `uischema`.",
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string"
+                    },
+                    "additionalProperties": {}
                   }
                 },
                 "required": [
@@ -2521,7 +2599,7 @@
                 ]
               },
               {
-                "$ref": "#/definitions/__schema3"
+                "$ref": "#/definitions/__schema4"
               },
               {
                 "type": "object",
@@ -2609,6 +2687,14 @@
                             "label": {
                               "description": "Optional label rendered above the component slot.",
                               "type": "string"
+                            },
+                            "props": {
+                              "description": "Static props passed to the component, next to the runtime props `data` (current record), `readonly`, `schema` and `uischema`.",
+                              "type": "object",
+                              "propertyNames": {
+                                "type": "string"
+                              },
+                              "additionalProperties": {}
                             }
                           },
                           "required": [
@@ -2689,7 +2775,7 @@
                               "type": "string"
                             },
                             "data": {
-                              "description": "Static query or body params passed to the procedure endpoint.",
+                              "description": "Static data passed to the procedure as `ctx.data`: `(prisma, ctx)` for table actions, `(prisma, recordId, ctx)` for row actions.",
                               "type": "object",
                               "propertyNames": {
                                 "type": "string"
@@ -2861,7 +2947,7 @@
                               "type": "string"
                             },
                             "data": {
-                              "description": "Static query or body params passed to the procedure endpoint.",
+                              "description": "Static data passed to the procedure as `ctx.data`: `(prisma, ctx)` for table actions, `(prisma, recordId, ctx)` for row actions.",
                               "type": "object",
                               "propertyNames": {
                                 "type": "string"
@@ -3009,6 +3095,20 @@
                   "emptyText": {
                     "description": "Message shown when the table has no rows.",
                     "type": "string"
+                  },
+                  "download": {
+                    "description": "Table export options. Overrides the global `rules.tableDownload` from crouton.json.",
+                    "type": "object",
+                    "properties": {
+                      "csv": {
+                        "description": "Show a \"Download CSV\" toolbar button. Omit to inherit `rules.tableDownload.csv` from crouton.json (default false).",
+                        "type": "boolean"
+                      },
+                      "fileName": {
+                        "description": "File name without extension. Defaults to the resource name.",
+                        "type": "string"
+                      }
+                    }
                   }
                 }
               }

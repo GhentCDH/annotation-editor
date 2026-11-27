@@ -28,8 +28,8 @@
     "@ghentcdh/annotation-core": "workspace:*",
     "@ghentcdh/annotation-editor": "workspace:*",
     "@ghentcdh/annotation-ui": "workspace:*",
-    "@ghentcdh/crouton-core": "0.1.0",
-    "@ghentcdh/crouton-vue": "0.1.0",
+    "@ghentcdh/crouton-core": "0.2.0-rc.6",
+    "@ghentcdh/crouton-vue": "0.2.0-rc.6",
     "@heroicons/vue": "^2.2.0",
     "axios": "^1.21.1"
   },
