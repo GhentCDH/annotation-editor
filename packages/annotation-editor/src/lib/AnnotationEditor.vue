@@ -1,7 +1,7 @@
 <template>
   <Drawer
     class="_h-full"
-    :width-right="400"
+    :width-right="sidebarWidth"
     :initial-right-open="isRight"
   >
     <div
@@ -23,13 +23,13 @@
       v-if="isRight"
       #right-drawer
     >
-      <EditorSidebar />
+      <EditorSidebar v-model:width="sidebarWidth" />
     </template>
   </Drawer>
   <AnnotationModal :exclude="isRight ? SIDEBAR_KEYS : []" />
 </template>
 <script lang="ts" setup>
-import { computed, useTemplateRef } from 'vue';
+import { computed, ref, useTemplateRef } from 'vue';
 
 import {
   EditorPosition,
@@ -48,6 +48,7 @@ import { useProvideEditorState } from './composables/useEditorState';
 import { SIDEBAR_KEYS } from './modals/AnnotationModal.defaults';
 import AnnotationModal from './modals/AnnotationModal.vue';
 import EditorSidebar from './sidebar/EditorSidebar.vue';
+import { clampSidebarWidth } from './sidebar/sidebarWidth';
 
 const props = defineProps(AnnotationEditorProperties);
 const emit = defineEmits(AnnotationEditorEmits);
@@ -55,6 +56,8 @@ const containerRef = useTemplateRef<HTMLElement>('containerRef');
 
 // Each instance of EditorRoot gets its own isolated state
 useProvideEditorState(props, emit, containerRef);
+
+const sidebarWidth = ref(clampSidebarWidth(window.innerWidth / 3));
 
 const isRight = computed(
   () => props.layout?.editorPosition === EditorPosition.Right,

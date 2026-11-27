@@ -37,7 +37,7 @@ describe('EditorSidebar', () => {
     setModal('edit-annotation', edit);
     setModal('link-annotation', link);
 
-    const wrapper = mount(EditorSidebar);
+    const wrapper = mount(EditorSidebar, { props: { width: 400 } });
 
     expect(wrapper.find(`[data-testid="${expected}"]`).exists()).toBe(true);
     expect(wrapper.findAll('[data-testid$="-card"], [data-testid$="-annotation"]')).toHaveLength(1);
@@ -45,7 +45,7 @@ describe('EditorSidebar', () => {
 
   it('renders empty state when nothing visible', () => {
     setModal('info-card', false);
-    const wrapper = mount(EditorSidebar);
+    const wrapper = mount(EditorSidebar, { props: { width: 400 } });
     expect(wrapper.text()).toContain('Select an annotation');
   });
 });
