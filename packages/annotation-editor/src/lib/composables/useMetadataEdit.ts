@@ -28,8 +28,13 @@ export const useMetadataEdit = (
     selector?: Selector;
   }) => {
     hasChanged.value = true;
-    const transformed = editorState.transformMetadata(_metadata, selector!);
-    metadata.value = structuredClone(toRaw(transformed));
+    // Inputs may be (nested) reactive proxies — form data, drawer selector — and
+    // structuredClone throws DataCloneError on proxies; toRaw on the result is only shallow.
+    const transformed = editorState.transformMetadata(
+      toRaw(_metadata),
+      toRaw(selector)!,
+    );
+    metadata.value = structuredClone(transformed);
     return metadata.value;
   };
 
