@@ -13,12 +13,14 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { nextTick, onMounted, onUnmounted, ref, useId, watch } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref, useId, watch } from 'vue';
 
 import { type AnnotatedText } from '@ghentcdh/annotated-text';
+import { EditorPosition } from '@ghentcdh/annotation-core';
 import { type EditorAnnotation } from '@ghentcdh/annotation-ui';
 
 import { useEditorState } from '../composables/useEditorState';
+import { getEditModalState } from '../modals/edit-annotation/useAnnotationEditModal';
 import { SourceEditProperties } from './SourceEdit.properties';
 import SourceNavbar from './SourceNavbar.vue';
 
@@ -49,9 +51,39 @@ watch(
   },
 );
 
+const editModal = getEditModalState(config.modal);
+
+// Right drawer: the edit panel has no text of its own, so this source text
+// switches to edit mode and shows only the annotation being edited.
+const editingAnnotation = computed(() => {
+  if (config.position !== EditorPosition.Right || !editModal.isVisible)
+    return null;
+  const data = editModal.data;
+  if (!data?.annotation || data.source?.uri !== properties.source.uri)
+    return null;
+  return data.annotation;
+});
+
+const applyEditMode = () => {
+  const annotation = editingAnnotation.value;
+  if (!annotation) {
+    // Redraw so the transformer's default adapter params apply again
+    textAnnotation?.destroy();
+    nextTick(() => drawTextAnnotation());
+    return;
+  }
+  // ponytail: no parent-selector limit here (the modal limits the text); add if child edits drift outside parent
+  textAnnotation
+    ?.setAnnotationAdapterParams({ edit: true, create: !annotation.id })
+    .setAnnotations(annotation.id ? [annotation] : []);
+};
+
+watch(editingAnnotation, applyEditMode);
+
 watch(
   () => state.annotations.value,
   () => {
+    if (editingAnnotation.value) return;
     textAnnotation?.setAnnotations([...state.annotations.value]);
   },
 );
@@ -97,8 +129,20 @@ const drawTextAnnotation = () => {
         definition,
       });
     })
+    .on('annotation-create--end', ({ data }) => {
+      const selector = data.annotation.getSelector(properties.source.uri);
+      if (selector) editModal.selector = selector;
+      textAnnotation?.setAnnotationAdapterParams({ create: false, edit: true });
+    })
+    .on('annotation-edit--end', ({ data }) => {
+      const selector = data.annotation.getSelector(properties.source.uri);
+      if (selector) editModal.selector = selector;
+    })
     .setText(properties.source?.content.text ?? '')
     .setAnnotations([...(state.annotations.value ?? [])]);
+  if (editorState.selectedAnnotation)
+    textAnnotation.selectAnnotations([editorState.selectedAnnotation.id]);
+  if (editingAnnotation.value) applyEditMode();
 };
 
 onUnmounted(() => {

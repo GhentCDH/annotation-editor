@@ -1,10 +1,8 @@
 <template>
-  <Modal
-    :modal-title="label.title"
-    :open="true"
-    :disable-close="false"
+  <EditorContainer
+    :title="label.title"
     width="lg"
-    @close-modal="cancel"
+    @close="cancel"
   >
     <template #content>
       <CroutonForm
@@ -12,7 +10,7 @@
         :data="metadata"
         :views="views"
         :format-before-save="formatBeforeSave"
-        form-max-width="w-max max-w-lg"
+        :form-max-width="inline ? 'w-full' : 'w-max max-w-lg'"
         @save="save"
         @on-save-success="save"
         @cancel="cancel"
@@ -32,15 +30,18 @@
         </template>
       </CroutonForm>
     </template>
-  </Modal>
+  </EditorContainer>
 </template>
 <script setup lang="ts">
 import { computed } from 'vue';
 
+import { EditorPosition } from '@ghentcdh/annotation-core';
 import { type AnnotationMetadata } from '@ghentcdh/annotation-ui';
 import { type ViewConfig } from '@ghentcdh/crouton-core';
-import { CroutonForm, FormMessage, Modal } from '@ghentcdh/crouton-vue';
+import { CroutonForm, FormMessage } from '@ghentcdh/crouton-vue';
 
+import EditorContainer from '../../components/EditorContainer.vue';
+import { useEditorState } from '../../composables/useEditorState';
 import AnnotationText from '../info/AnnotationText.vue';
 import {
   LinkAnnotationProperties,
@@ -49,6 +50,8 @@ import {
 import { useAnnotationLinkForm } from './useAnnotationLinkForm';
 
 const props = defineProps(LinkAnnotationProperties);
+const { config } = useEditorState();
+const inline = computed(() => config.position === EditorPosition.Right);
 const emits = defineEmits(LinkEmits);
 
 const {
