@@ -1,9 +1,16 @@
-import type { PropType } from 'vue';
+import { type EmitFn, type ExtractPublicPropTypes, type PropType } from 'vue';
 
-import { type BaseAnnotation, type TextAdapter } from '@ghentcdh/annotated-text';
+import {
+  type BaseAnnotation,
+  type TextAdapter,
+} from '@ghentcdh/annotated-text';
 import { type GridLayout } from '@ghentcdh/annotation-core';
-import { type AnnotationTransformer, w3cAnnotationTransformer } from '@ghentcdh/annotation-ui';
+import {
+  type AnnotationTransformer,
+  w3cAnnotationTransformer,
+} from '@ghentcdh/annotation-ui';
 
+import { type AnnotationTypeItem } from '../filter/AnnotationFilter.properties';
 import { type AnnotationEditorLoader } from './AnnotationEditorLoader';
 
 export const SmartEditorProperties = {
@@ -18,7 +25,8 @@ export const SmartEditorProperties = {
   annotationTransformer: {
     type: Object as PropType<AnnotationTransformer<BaseAnnotation>>,
     required: false as const,
-    default: (): AnnotationTransformer<BaseAnnotation> => w3cAnnotationTransformer,
+    default: (): AnnotationTransformer<BaseAnnotation> =>
+      w3cAnnotationTransformer,
   },
   watchQueryParams: {
     type: Boolean,
@@ -36,7 +44,15 @@ export const SmartEditorProperties = {
   },
   layout: {
     type: Object as PropType<GridLayout>,
-    required: false,
+    required: false as const,
     default: undefined,
   },
 };
+export type SmartEditorProps = ExtractPublicPropTypes<
+  typeof SmartEditorProperties
+>;
+
+export const SmartEditorEmits = {
+  'annotationtype-click': (_item: AnnotationTypeItem) => true,
+};
+export type SmartEditorEmitsFn = EmitFn<typeof SmartEditorEmits>;

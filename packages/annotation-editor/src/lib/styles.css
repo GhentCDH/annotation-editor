@@ -3,3 +3,12 @@
 @import '@ghentcdh/annotated-text/annotated-text.css';
 
 @source "../";
+
+/* Set by EditorSidebar while dragging: crouton's drawer width transition would lag behind the pointer */
+.editor-sidebar-resizing {
+  cursor: col-resize;
+  user-select: none;
+}
+.editor-sidebar-resizing #drawer-right-panel {
+  transition: none;
+}

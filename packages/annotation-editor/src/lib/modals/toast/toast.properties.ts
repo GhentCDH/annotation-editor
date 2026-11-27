@@ -4,7 +4,7 @@ type ToastAction = { label: string; onClick: () => void };
 
 export const ToastProperties = {
   toastMessage: { type: String, required: true as const },
-  action: { type: Object as PropType<ToastAction>, required: false },
+  action: { type: Object as PropType<ToastAction>, required: false as const },
 };
 
 export type EditToast = ExtractPublicPropTypes<typeof ToastProperties>;

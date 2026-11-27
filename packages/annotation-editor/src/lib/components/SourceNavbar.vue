@@ -8,18 +8,18 @@ import { computed } from 'vue';
 import { IconEnum } from '@ghentcdh/crouton-vue';
 
 import { useEditorState } from '../composables/useEditorState';
+import Navbar from './Navbar.vue';
 import {
   SourceNavbarEmits,
   SourceNavbarProperties,
 } from './SourceNavbar.properties';
-import Navbar from './navbar.vue';
 
 const properties = defineProps(SourceNavbarProperties);
 const emits = defineEmits(SourceNavbarEmits);
 const { editorState, allDefinitions } = useEditorState();
 
 const actions = computed(() => {
-  const rootTypes = allDefinitions.value
+  const rootTypes = (allDefinitions.value ?? [])
     .filter((d) => d.annotation.isRoot)
     .map((d) => ({ key: d.id, label: d.label }));
 

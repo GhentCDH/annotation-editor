@@ -40,7 +40,7 @@ export type UIAnnotationConfiguration = ReturnType<
 
 export const createAnnotationConfiguration = (
   textAdapter: (() => TextAdapter) | undefined,
-  defaultAannotationAdapterParams = {},
+  defaultAnnotationAdapterParams = {},
   definitionsMap: DefinitionMap,
 ) => {
   const definitions = Object.values(definitionsMap);
@@ -72,7 +72,7 @@ export const createAnnotationConfiguration = (
     });
     const annotationAdapter = new AnnotationEditorAnnotationAdapter({
       sourceModel,
-      ...defaultAannotationAdapterParams,
+      ...defaultAnnotationAdapterParams,
     });
     const annotatedText = createAnnotatedText<EditorAnnotation>(id, {
       annotationAdapter,
@@ -84,8 +84,6 @@ export const createAnnotationConfiguration = (
       .setStyleParams(styleParams())
       .registerStyles(styles)
       .setZoomControls({ buttons: true, wheel: true, keyboard: true });
-    ;
-
     if (sourceModel) {
       const { content } = sourceModel;
       annotatedText

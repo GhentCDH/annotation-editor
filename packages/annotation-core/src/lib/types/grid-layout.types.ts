@@ -1,3 +1,9 @@
+export enum EditorPosition {
+  Modal = 'modal',
+  Right = 'right',
+}
+
+
 /**
  * CSS grid-area-based layout configuration for annotation components.
  *
@@ -37,15 +43,17 @@ export type GridLayout = {
   rows?: string;
   /** Mapping of source IDs to their grid area name. */
   panes: PaneConfig[];
+  editorPosition?: EditorPosition;
 };
 
 /** Computed CSS styles for the grid container */
 export const buildGridStyle = (layout: GridLayout): Record<string, string> => {
-  const templateAreas = layout.areas
-    .map((row) => `"${row.join(' ')}"`)
+  const areas = layout.areas ?? [];
+  const templateAreas = areas
+    .map((row) => `"${(row ?? []).join(' ')}"`)
     .join(' ');
 
-  const colCount = layout.areas[0]?.length ?? 1;
+  const colCount = areas[0]?.length ?? 1;
   const columns =
     layout.columns ?? Array(colCount).fill('minmax(0, 1fr)').join(' ');
 
@@ -66,5 +74,5 @@ export const getPaneArea = (
   layout: GridLayout,
   sourceId: string,
 ): string | undefined => {
-  return layout.panes.find((p) => p.sourceId === sourceId)?.area;
+  return (layout.panes ?? []).find((p) => p.sourceId === sourceId)?.area;
 };

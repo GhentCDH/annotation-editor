@@ -18,7 +18,7 @@ import type { ExtractPublicPropTypes, PropType } from 'vue';
 import { type EmitFn } from 'vue';
 
 export const ComponentNameProperties = {
-  // Add props here, always with explicit required: true as const or required: false
+  // Add props here, always with explicit required: true as const or required: false as const
   // Example: myProp: { type: String, required: true as const },
 };
 
@@ -50,7 +50,8 @@ const emit = defineEmits(ComponentNameEmits);
 Key rules:
 - `<template>` block comes first, then `<script setup lang="ts">`
 - Use `<script lang="ts" setup>` syntax
-- Props use Vue object syntax with `PropType`, every prop has explicit `required: true as const` or `required: false`
+- Props use Vue object syntax with `PropType`, every prop has explicit `required: true as const` or `required: false as const`
 - Use Tailwind CSS utility classes for styling, no inline styles
+- Drop the `...Props` / `...EmitsFn` type exports nobody imports (knip fails on unused exports)
 - Export the component from the nearest `index.ts` if appropriate
 - If the component needs composables, create a `composables/` folder next to it

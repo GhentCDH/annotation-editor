@@ -1,11 +1,8 @@
 <template>
-  <Modal
-    :modal-title="label.title"
-    :open="true"
-    :disable-close="false"
+  <EditorContainer
+    :title="label.title"
     width="xl"
-    role="dialog"
-    @close-modal="cancel"
+    @close="cancel"
   >
     <template #content>
       <CroutonForm
@@ -14,13 +11,21 @@
         :data="metadata"
         :views="views"
         :format-before-save="formatBeforeSave"
-        form-max-width="w-max max-w-lg form-scroll min-w-[1/2]"
-        :save-id="annotation?.id !== undefined ? String(annotation!.id) : undefined"
+        :form-max-width="
+          inline ? 'w-full' : 'w-max max-w-lg form-scroll min-w-[1/2]'
+        "
+        :save-id="
+          annotation?.id !== undefined ? String(annotation!.id) : undefined
+        "
         @save="save"
         @on-save-success="save"
         @cancel="cancel"
       >
-        <template #content-before>
+        <!-- Right drawer: selection is adjusted in the main source text instead -->
+        <template
+          v-if="!inline"
+          #content-before
+        >
           <div class="flex-grow before-scroll">
             <Collapse
               :title="label.selectLabel"
@@ -42,11 +47,12 @@
         </template>
       </CroutonForm>
     </template>
-  </Modal>
+  </EditorContainer>
 </template>
 <script lang="ts" setup>
-import { computed, onMounted, onUnmounted } from 'vue';
+import { computed, onMounted, onUnmounted, watch } from 'vue';
 
+import { EditorPosition } from '@ghentcdh/annotation-core';
 import {
   type AnnotationMetadata,
   type UiAnnotatedText,
@@ -58,21 +64,23 @@ import {
   Collapse,
   CroutonForm,
   FormMessage,
-  Modal,
 } from '@ghentcdh/crouton-vue';
 
+import EditorContainer from '../../components/EditorContainer.vue';
 import { useEditorState } from '../../composables/useEditorState';
 import {
   AnnotationEditEmits,
   AnnotationEditModalProperties,
 } from './AnnotationEditModal.properties';
-import { UseAnnotationEdit } from './UseAnnotationEdit';
 import { fullSelectionRange } from './fullSelectionRange';
+import { useAnnotationEditForm } from './useAnnotationEditForm';
+import { getEditModalState } from './useAnnotationEditModal';
 
 let annotatedTextConfig: UiAnnotatedText;
 const props = defineProps(AnnotationEditModalProperties);
 
 const { config } = useEditorState();
+const inline = computed(() => config.position === EditorPosition.Right);
 
 const emits = defineEmits(AnnotationEditEmits);
 
@@ -85,7 +93,7 @@ const {
   updateSelector,
   definition,
   parent,
-} = UseAnnotationEdit(props, emits);
+} = useAnnotationEditForm(props, emits);
 
 const editId = `edit-select-annotation-${Date.now()}--`;
 
@@ -138,8 +146,16 @@ const selectAll = () => {
   if (sel) updateSelector(sel);
 };
 
+// Right drawer: SourceEdit writes the drawn selector into the edit modal state
+watch(
+  () => getEditModalState(config.modal).selector,
+  (selector) => {
+    if (selector) updateSelector(selector);
+  },
+);
+
 onMounted(() => {
-  if (!props.source) return;
+  if (!props.source || inline.value) return;
 
   const annotations = props.annotation ? [props.annotation] : [];
 
@@ -177,7 +193,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  annotatedTextConfig.annotatedText?.destroy();
+  annotatedTextConfig?.annotatedText?.destroy();
 });
 </script>
 

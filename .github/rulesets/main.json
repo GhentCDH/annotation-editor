@@ -41,6 +41,9 @@
           },
           {
             "context": "ci / knip"
+          },
+          {
+            "context": "merge-gate / gate"
           }
         ]
       }

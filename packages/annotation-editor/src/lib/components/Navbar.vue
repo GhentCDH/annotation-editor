@@ -62,7 +62,7 @@ import {
   type NavbarAction,
   type NavbarChildAction,
   NavbarProperties,
-} from './navbar.properties';
+} from './Navbar.properties';
 
 defineProps(NavbarProperties);
 

@@ -9,10 +9,10 @@ import {
 } from '@ghentcdh/annotation-ui';
 
 import { type AnnotationEditorEmitsFn } from '../../AnnotationEditor.properties';
-import { type EditorConfig, type EditorState_ } from '../../composables/editorState';
+import { type EditorConfig, type EditorUiState } from '../../composables/editorState';
 import { type SelectByIdContext, selectAnnotationById } from '../open-modal';
 
-const createEditorState = (): EditorState_ =>
+const createEditorState = (): EditorUiState =>
   ({
     info: null,
     editorState: null,
@@ -23,7 +23,7 @@ const createEditorState = (): EditorState_ =>
     show: vi.fn(),
     format: vi.fn(),
     transformMetadata: vi.fn(),
-  }) as unknown as EditorState_;
+  }) as unknown as EditorUiState;
 
 const createEmits = (): AnnotationEditorEmitsFn => vi.fn() as unknown as AnnotationEditorEmitsFn;
 

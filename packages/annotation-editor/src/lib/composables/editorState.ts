@@ -1,5 +1,10 @@
-import { type SourceModel } from '@ghentcdh/annotation-core';
-import { type AnnotationMetadata, type EditorAnnotation, type Selector, type UiAnnotatedText } from '@ghentcdh/annotation-ui';
+import { type EditorPosition, type SourceModel } from '@ghentcdh/annotation-core';
+import {
+  type AnnotationMetadata,
+  type EditorAnnotation,
+  type Selector,
+  type UiAnnotatedText,
+} from '@ghentcdh/annotation-ui';
 
 import { type AnnotationModalActionMap } from '../modals/AnnotationModal.defaults';
 import { type AnnotationModalConfig } from '../modals/AnnotationModal.definition';
@@ -7,6 +12,8 @@ import { type AnnotationModalConfig } from '../modals/AnnotationModal.definition
 type EditorStatus = 'show' | 'create' | 'edit' | 'link' | null;
 
 export type EditorConfig = {
+  /** Where modal-type components render: as overlay or inline in the right drawer */
+  position: EditorPosition;
   modal: AnnotationModalConfig<AnnotationModalActionMap>;
   createAnnotatedText: (
     id: string,
@@ -14,7 +21,7 @@ export type EditorConfig = {
   ) => UiAnnotatedText;
 };
 
-export type EditorState_ = {
+export type EditorUiState = {
   info: { message: string; short: string } | null;
   editorState: EditorStatus;
   disableEdits: boolean;
@@ -23,5 +30,8 @@ export type EditorState_ = {
   reset: () => void;
   show: () => void;
   format: (annotation: EditorAnnotation, isNew: boolean) => EditorAnnotation;
-  transformMetadata: (metadata: AnnotationMetadata, selector: Selector) => AnnotationMetadata;
+  transformMetadata: (
+    metadata: AnnotationMetadata,
+    selector: Selector,
+  ) => AnnotationMetadata;
 };

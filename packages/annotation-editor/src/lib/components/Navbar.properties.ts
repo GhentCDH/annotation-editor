@@ -1,4 +1,4 @@
-import type { PropType } from 'vue';
+import { type PropType } from 'vue';
 
 import type { IconEnum } from '@ghentcdh/crouton-vue';
 

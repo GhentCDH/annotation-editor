@@ -11,9 +11,9 @@ import {
 
 import { type AnnotationEditorEmitsFn } from '../../AnnotationEditor.properties';
 import { type AnnotationEvents, sendAnnotationEvent } from '../annotation.events';
-import { type EditorConfig, type EditorState_ } from '../editorState';
+import { type EditorConfig, type EditorUiState } from '../editorState';
 
-const createEditorState = (): EditorState_ =>
+const createEditorState = (): EditorUiState =>
   ({
     info: null,
     editorState: null,
@@ -24,7 +24,7 @@ const createEditorState = (): EditorState_ =>
     show: vi.fn(),
     format: vi.fn(),
     transformMetadata: vi.fn(),
-  }) as unknown as EditorState_;
+  }) as unknown as EditorUiState;
 
 const createEmits = (): AnnotationEditorEmitsFn => vi.fn() as unknown as AnnotationEditorEmitsFn;
 

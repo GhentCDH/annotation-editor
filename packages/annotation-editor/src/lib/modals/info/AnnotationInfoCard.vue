@@ -1,18 +1,23 @@
 <template>
   <div
     ref="cardRef"
-    class="card bg-base-100 shadow-xl absolute z-50"
-    :style="{
-      left: `${adjustedX}px`,
-      top: `${adjustedY}px`,
-      maxHeight: `calc(100vh - ${adjustedY}px - 16px)`,
-      minHeight: '100px',
-      minWidth: '320px',
-    }"
+    :class="
+      inline
+        ? 'bg-base-100'
+        : 'card bg-base-100 shadow-xl absolute z-50'
+    "
+    :style="cardStyle"
   >
-    <div class="card-body p-2 overflow-y-auto">
+    <div :class="['overflow-y-auto p-2', { 'card-body': !inline }]">
       <div class="flex items-center justify-between gap-2">
         <div><strong>Type:</strong> {{ purposeLabel }}</div>
+        <Btn
+          v-if="inline"
+          :icon="IconEnum.Close"
+          :outline="true"
+          aria-label="Close"
+          @click="close"
+        />
       </div>
       <Metadata
         v-if="annotationDef"
@@ -34,11 +39,12 @@
 <script lang="ts" setup>
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 
+import { EditorPosition } from '@ghentcdh/annotation-core';
 import { type UIAnnotationDefinition } from '@ghentcdh/annotation-ui';
-import { Alert, IconEnum } from '@ghentcdh/crouton-vue';
+import { Alert, Btn, IconEnum } from '@ghentcdh/crouton-vue';
 
-import { type NavbarAction } from '../../components/navbar.properties';
-import Navbar from '../../components/navbar.vue';
+import { type NavbarAction } from '../../components/Navbar.properties';
+import Navbar from '../../components/Navbar.vue';
 import { useEditorState } from '../../composables/useEditorState';
 import { getAnnotationElementCenter } from '../../utils/mouse-events';
 import { AnnotationInfoCardProperties } from './AnnotationInfoCard.properties';
@@ -47,7 +53,11 @@ import { default as Metadata } from './Metadata.vue';
 
 const properties = defineProps(AnnotationInfoCardProperties);
 
-const { editorState, sendAnnotationEvent, getDefinition } = useEditorState();
+const { config, editorState, sendAnnotationEvent, getDefinition } =
+  useEditorState();
+
+// Right-drawer mode: static card, no floating position / outside-click close.
+const inline = computed(() => config.position === EditorPosition.Right);
 
 const annotationDef = computed(() =>
   getDefinition(properties.annotation.definitionUri),
@@ -62,7 +72,8 @@ const adjustedY = ref(properties.position.y);
 
 const clampX = (x: number, parent: HTMLElement) => {
   const margin = 8;
-  const maxLeft = parent.clientWidth - (cardRef.value?.offsetWidth ?? 0) - margin;
+  const maxLeft =
+    parent.clientWidth - (cardRef.value?.offsetWidth ?? 0) - margin;
   adjustedX.value = Math.max(margin, Math.min(x, maxLeft));
 };
 
@@ -79,11 +90,26 @@ const recalcPosition = async () => {
   if (!cardRef.value) return;
   const parent = cardRef.value.offsetParent as HTMLElement;
   if (!parent) return;
-  const pos = getAnnotationElementCenter(parent, String(properties.annotation.id));
+  const pos = getAnnotationElementCenter(
+    parent,
+    String(properties.annotation.id),
+  );
   if (pos) {
     await applyPosition(pos.x, pos.y);
   }
 };
+
+const cardStyle = computed(() =>
+  inline.value
+    ? undefined
+    : {
+        left: `${adjustedX.value}px`,
+        top: `${adjustedY.value}px`,
+        maxHeight: `calc(100vh - ${adjustedY.value}px - 16px)`,
+        minHeight: '100px',
+        minWidth: '320px',
+      },
+);
 
 watch(
   () => properties.position,
@@ -100,6 +126,7 @@ watch(
 );
 
 onMounted(() => {
+  if (inline.value) return;
   document.addEventListener('click', handleOutsideClick);
   window.addEventListener('resize', recalcPosition);
 });
@@ -112,7 +139,7 @@ const skipNextClose = () => {
   closeNextClick.value = true;
 };
 
-function handleOutsideClick(e: MouseEvent) {
+const handleOutsideClick = (e: MouseEvent) => {
   if (editorState.disableEdits) return;
 
   if (closeNextClick.value) {
@@ -123,7 +150,7 @@ function handleOutsideClick(e: MouseEvent) {
   if (cardRef.value && !cardRef.value.contains(e.target as Node)) {
     close();
   }
-}
+};
 
 const close = () => {
   sendAnnotationEvent('select', null);
@@ -166,7 +193,7 @@ const addActions = (definition: UIAnnotationDefinition) => {
 };
 
 const createActionLinks = (definition: UIAnnotationDefinition) => {
-  return definition?.allowedLinks.map((link) => ({
+  return (definition?.allowedLinks ?? []).map((link) => ({
     icon: link.icon ?? IconEnum.Link,
     label: `Add ${link.label}`,
     disabled: editorState.disableEdits,

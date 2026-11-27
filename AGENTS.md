@@ -49,15 +49,16 @@ Same checks as CI. Husky pre-commit runs `nx affected -t lint --fix`.
 
 - Vue 3.5 with `<script setup lang="ts">`. `<template>` first, then `<script setup>`
 - Component: `Name.vue` + `Name.properties.ts`
-- Props: Vue object syntax with `PropType`, always explicit `required: true/false`
+- Props: Vue object syntax with `PropType`, always explicit `required: true as const` / `required: false as const`
 - Always use `required: true as const` (literal `true`) so `ExtractPublicPropTypes` correctly marks required props as non-optional
 - Always use `ExtractPublicPropTypes` (never `ExtractPropTypes`) for props type extraction
-- Export `ExtractPublicPropTypes<typeof XProps>`, emits type, and `EmitFn` from properties file:
+- Export `ExtractPublicPropTypes<typeof XProps>`, emits type, and `EmitFn` from properties file — but only the ones
+  something imports: knip fails CI on unused exports:
 
 ```ts
 export const XProps = {
   options: { type: Array as PropType<T[]>, required: true as const },
-  label: { type: String, required: false, default: 'label' },
+  label: { type: String, required: false as const, default: 'label' },
 };
 export type XPropsType = ExtractPublicPropTypes<typeof XProps>;
 export const XEmits = {

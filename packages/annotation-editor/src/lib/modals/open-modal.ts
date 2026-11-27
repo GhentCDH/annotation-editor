@@ -1,11 +1,14 @@
 import { type TemplateRef, nextTick } from 'vue';
 
 import { type SourceModel } from '@ghentcdh/annotation-core';
-import { type EditorAnnotation, type UIAnnotationDefinition } from '@ghentcdh/annotation-ui';
+import {
+  type EditorAnnotation,
+  type UIAnnotationDefinition,
+} from '@ghentcdh/annotation-ui';
 
 import type { AnnotationEditorEmitsFn } from '../AnnotationEditor.properties';
 import { editAnnotation } from '../composables/annotation.events';
-import type { EditorConfig, EditorState_ } from '../composables/editorState';
+import type { EditorConfig, EditorUiState } from '../composables/editorState';
 import { getAnnotationElementCenter } from '../utils/mouse-events';
 
 type AnnotationData = {
@@ -16,7 +19,7 @@ type AnnotationData = {
 
 export type SelectByIdContext = {
   config: EditorConfig;
-  editorState: EditorState_;
+  editorState: EditorUiState;
   emits: AnnotationEditorEmitsFn;
   findAnnotationData: (id: string) => AnnotationData | null;
 };

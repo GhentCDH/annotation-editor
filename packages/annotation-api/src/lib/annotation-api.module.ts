@@ -17,6 +17,8 @@ import { ANNOTATION_DEF_CONFIG_TOKEN } from './context/annotation-def-config.tok
 import { SCHEMA_PREFIX } from './prefix';
 import { createSchemaEnricher } from './utils/schemaEnricher.utils';
 
+// Registered here (crouton-core registry) and again via `extensions` below:
+// crouton-api bundles its own copy of the registry, so both are needed.
 registerResourceExtensions({
   annotation: AnnotationConfigSchema,
 });
@@ -53,36 +55,28 @@ export class AnnotationApiModule {
       },
     );
 
-    if (annotation) {
-      return {
-        module: AnnotationApiModule,
-        global: true,
-        imports: [crouton],
-        controllers: [AnnotationNamespaceController, AnnotationController],
-        providers: [
-          AnnotationContextService,
-          { provide: ANNOTATION_DEF_CONFIG_TOKEN, useValue: _config },
-          {
-            provide: AnnotationCrudRepository,
-            useExisting: annotation.repository,
-          },
-          {
-            provide: AnnotationW3cMapperService,
-            useExisting: annotation.mapper,
-          },
-        ],
-        exports: [AnnotationContextService],
-      };
-    }
-
     return {
       module: AnnotationApiModule,
       global: true,
       imports: [crouton],
-      controllers: [AnnotationNamespaceController],
+      controllers: annotation
+        ? [AnnotationNamespaceController, AnnotationController]
+        : [AnnotationNamespaceController],
       providers: [
         AnnotationContextService,
         { provide: ANNOTATION_DEF_CONFIG_TOKEN, useValue: _config },
+        ...(annotation
+          ? [
+              {
+                provide: AnnotationCrudRepository,
+                useExisting: annotation.repository,
+              },
+              {
+                provide: AnnotationW3cMapperService,
+                useExisting: annotation.mapper,
+              },
+            ]
+          : []),
       ],
       exports: [AnnotationContextService],
     };
