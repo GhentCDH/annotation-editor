@@ -14,7 +14,7 @@ import {
   type AnnotationEditModal,
 } from './AnnotationEditModal.properties';
 
-export const UseAnnotationEdit = (
+export const useAnnotationEditForm = (
   props: AnnotationEditModal,
   emits: EmitFn<typeof AnnotationEditEmits>,
 ) => {
@@ -84,7 +84,11 @@ export const UseAnnotationEdit = (
     return metadataEdit.save(cloned, emits);
   };
 
-  const onChangeValue = ({ metadata: _metadata }: { metadata: AnnotationMetadata }) => {
+  const onChangeValue = ({
+    metadata: _metadata,
+  }: {
+    metadata: AnnotationMetadata;
+  }) => {
     return metadataEdit.onChangeValue({ metadata: _metadata, selector });
   };
 

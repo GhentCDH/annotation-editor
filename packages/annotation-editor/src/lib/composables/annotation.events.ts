@@ -11,7 +11,7 @@ import { NotificationService } from '@ghentcdh/crouton-vue';
 
 import { type AnnotationEditorEmitsFn } from '../AnnotationEditor.properties';
 import { type AnnotationEditModalShow } from '../modals/edit-annotation/AnnotationEditModal.properties';
-import { type EditorConfig, type EditorState_ } from './editorState';
+import { type EditorConfig, type EditorUiState } from './editorState';
 
 type SelectAnnotationData = {
   annotation: EditorAnnotation;
@@ -58,7 +58,7 @@ export type AnnotationEvents = {
 const createAnnotation = (
   data: CreateAnnotationData,
   config: EditorConfig,
-  state: EditorState_,
+  state: EditorUiState,
   emits: AnnotationEditorEmitsFn,
 ) => {
   if (state.disableEdits) return;
@@ -90,7 +90,7 @@ const createAnnotation = (
 export const editAnnotation = (
   data: EditAnnotationData,
   config: EditorConfig,
-  state: EditorState_,
+  state: EditorUiState,
   emits: AnnotationEditorEmitsFn,
 ) => {
   if (state.disableEdits) return;
@@ -118,7 +118,7 @@ export const editAnnotation = (
 const deleteAnnotation = (
   data: DeleteAnnotationData,
   config: EditorConfig,
-  state: EditorState_,
+  state: EditorUiState,
   emits: AnnotationEditorEmitsFn,
 ) => {
   const { annotation } = data;
@@ -162,7 +162,7 @@ const deleteAnnotation = (
 const startLinking = (
   data: LinkData,
   config: EditorConfig,
-  state: EditorState_,
+  state: EditorUiState,
 ) => {
   if (!state.selectedAnnotation) {
     console.warn('No annotation selected, linking not possible');
@@ -193,7 +193,7 @@ const startLinking = (
 const endLink = (
   data: SelectAnnotationData | null,
   config: EditorConfig,
-  state: EditorState_,
+  state: EditorUiState,
   emits: AnnotationEditorEmitsFn,
 ) => {
   if (!state.selectedAnnotation) {
@@ -234,7 +234,7 @@ const endLink = (
 const handleSelectAnnotation = (
   data: SelectAnnotationData | null,
   config: EditorConfig,
-  state: EditorState_,
+  state: EditorUiState,
   emits: AnnotationEditorEmitsFn,
   containerRef: HTMLElement,
 ) => {
@@ -264,7 +264,7 @@ const handleSelectAnnotation = (
 export const sendAnnotationEvent =
   (
     config: EditorConfig,
-    editorState: EditorState_,
+    editorState: EditorUiState,
     emits: AnnotationEditorEmitsFn,
     containerRef: TemplateRef<HTMLElement>,
   ) =>

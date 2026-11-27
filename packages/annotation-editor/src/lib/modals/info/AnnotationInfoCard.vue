@@ -37,8 +37,8 @@ import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { type UIAnnotationDefinition } from '@ghentcdh/annotation-ui';
 import { Alert, IconEnum } from '@ghentcdh/crouton-vue';
 
-import { type NavbarAction } from '../../components/navbar.properties';
-import Navbar from '../../components/navbar.vue';
+import { type NavbarAction } from '../../components/Navbar.properties';
+import Navbar from '../../components/Navbar.vue';
 import { useEditorState } from '../../composables/useEditorState';
 import { getAnnotationElementCenter } from '../../utils/mouse-events';
 import { AnnotationInfoCardProperties } from './AnnotationInfoCard.properties';
@@ -62,7 +62,8 @@ const adjustedY = ref(properties.position.y);
 
 const clampX = (x: number, parent: HTMLElement) => {
   const margin = 8;
-  const maxLeft = parent.clientWidth - (cardRef.value?.offsetWidth ?? 0) - margin;
+  const maxLeft =
+    parent.clientWidth - (cardRef.value?.offsetWidth ?? 0) - margin;
   adjustedX.value = Math.max(margin, Math.min(x, maxLeft));
 };
 
@@ -79,7 +80,10 @@ const recalcPosition = async () => {
   if (!cardRef.value) return;
   const parent = cardRef.value.offsetParent as HTMLElement;
   if (!parent) return;
-  const pos = getAnnotationElementCenter(parent, String(properties.annotation.id));
+  const pos = getAnnotationElementCenter(
+    parent,
+    String(properties.annotation.id),
+  );
   if (pos) {
     await applyPosition(pos.x, pos.y);
   }
@@ -112,7 +116,7 @@ const skipNextClose = () => {
   closeNextClick.value = true;
 };
 
-function handleOutsideClick(e: MouseEvent) {
+const handleOutsideClick = (e: MouseEvent) => {
   if (editorState.disableEdits) return;
 
   if (closeNextClick.value) {
@@ -123,7 +127,7 @@ function handleOutsideClick(e: MouseEvent) {
   if (cardRef.value && !cardRef.value.contains(e.target as Node)) {
     close();
   }
-}
+};
 
 const close = () => {
   sendAnnotationEvent('select', null);

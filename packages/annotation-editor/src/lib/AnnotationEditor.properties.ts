@@ -1,11 +1,23 @@
 import type { EmitFn, ExtractPublicPropTypes, PropType } from 'vue';
 
-import { type BaseAnnotation, type TextAdapter } from '@ghentcdh/annotated-text';
+import {
+  type BaseAnnotation,
+  type TextAdapter,
+} from '@ghentcdh/annotated-text';
 import { type GridLayout, type SourceModel } from '@ghentcdh/annotation-core';
-import { type AnnotationTransformer, type EditorAnnotation, type UIAnnotationDefinition, w3cAnnotationTransformer } from '@ghentcdh/annotation-ui';
+import {
+  type AnnotationTransformer,
+  type EditorAnnotation,
+  type UIAnnotationDefinition,
+  w3cAnnotationTransformer,
+} from '@ghentcdh/annotation-ui';
 
 export const AnnotationEditorProperties = {
-  modalView: { type: Boolean, required: false as const, default: true },
+  modalView: {
+    type: Boolean,
+    required: false as const,
+    default: true,
+  },
   textAdapter: {
     type: Function as PropType<() => TextAdapter>,
     required: false as const,
@@ -13,17 +25,18 @@ export const AnnotationEditorProperties = {
   annotationTransformer: {
     type: Object as PropType<AnnotationTransformer<BaseAnnotation>>,
     required: true as const,
-    default: (): AnnotationTransformer<BaseAnnotation> => w3cAnnotationTransformer,
+    default: (): AnnotationTransformer<BaseAnnotation> =>
+      w3cAnnotationTransformer,
   },
   sources: { type: Array as PropType<SourceModel[]>, required: true as const },
   annotations: {
     type: Array as PropType<EditorAnnotation[]>,
     required: true as const,
   },
-  cols: { type: Number, required: false, default: 2 },
+  cols: { type: Number, required: false as const, default: 2 },
   layout: {
     type: Object as PropType<GridLayout>,
-    required: false,
+    required: false as const,
     default: undefined,
   },
   annotationDefinitions: {
@@ -37,12 +50,12 @@ export const AnnotationEditorProperties = {
   },
   selectedAnnotationAction: {
     type: String,
-    required: false,
+    required: false as const,
     default: undefined,
   },
   readonly: {
     type: Boolean,
-    required: false,
+    required: false as const,
     default: false,
   },
 };

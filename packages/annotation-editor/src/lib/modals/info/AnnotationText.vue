@@ -33,12 +33,9 @@ import { type EditorAnnotation } from '@ghentcdh/annotation-ui';
 import { Collapse } from '@ghentcdh/crouton-vue';
 
 import { useEditorState } from '../../composables/useEditorState';
+import { AnnotationTextProperties } from './AnnotationText.properties';
 
-const properties = defineProps<{
-  annotation: EditorAnnotation;
-  maxCharacters?: number;
-  showSource?: boolean;
-}>();
+const properties = defineProps(AnnotationTextProperties);
 
 const id = useId();
 const annotationTextId = `annotation-text-${id}`;

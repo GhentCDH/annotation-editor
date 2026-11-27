@@ -4,7 +4,10 @@ import { type SourceModel } from '@ghentcdh/annotation-core';
 import { type EditorAnnotation, type Selector } from '@ghentcdh/annotation-ui';
 
 export const AnnotationEditModalProperties = {
-  annotation: { type: Object as PropType<EditorAnnotation>, required: false },
+  annotation: {
+    type: Object as PropType<EditorAnnotation>,
+    required: false as const,
+  },
   source: { type: Object as PropType<SourceModel>, required: true as const },
 };
 

@@ -17,9 +17,13 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { computed, onMounted, useTemplateRef } from 'vue';
+import { computed, useTemplateRef } from 'vue';
 
-import { type SourceModel, buildGridStyle, getPaneArea } from '@ghentcdh/annotation-core';
+import {
+  type SourceModel,
+  buildGridStyle,
+  getPaneArea,
+} from '@ghentcdh/annotation-core';
 import { Collapse } from '@ghentcdh/crouton-vue';
 
 import {
@@ -47,6 +51,4 @@ const paneStyle = (source: SourceModel): Record<string, string> => {
   const area = getPaneArea(props.layout, source.id);
   return area ? { gridArea: area } : {};
 };
-
-onMounted(() => {});
 </script>

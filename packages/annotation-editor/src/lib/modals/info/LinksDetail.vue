@@ -29,12 +29,13 @@ import {
 } from '@ghentcdh/annotation-ui';
 import { IconEnum } from '@ghentcdh/crouton-vue';
 
-import { type NavbarAction } from '../../components/navbar.properties';
-import Navbar from '../../components/navbar.vue';
+import { type NavbarAction } from '../../components/Navbar.properties';
+import Navbar from '../../components/Navbar.vue';
 import { useEditorState } from '../../composables/useEditorState';
-import AnnotationText from './Annotation-text.vue';
+import AnnotationText from './AnnotationText.vue';
+import { LinksDetailProperties } from './LinksDetail.properties';
 
-const props = defineProps<{ annotation: EditorAnnotation }>();
+const props = defineProps(LinksDetailProperties);
 
 const { editorState, sendAnnotationEvent, findAnnotation, getDefinition } =
   useEditorState();

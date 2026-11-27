@@ -8,11 +8,11 @@ import { computed } from 'vue';
 import { IconEnum } from '@ghentcdh/crouton-vue';
 
 import { useEditorState } from '../composables/useEditorState';
+import Navbar from './Navbar.vue';
 import {
   SourceNavbarEmits,
   SourceNavbarProperties,
 } from './SourceNavbar.properties';
-import Navbar from './navbar.vue';
 
 const properties = defineProps(SourceNavbarProperties);
 const emits = defineEmits(SourceNavbarEmits);

@@ -4,7 +4,7 @@ import {
   type AnnotationModalAction,
   annotationModalDefaults,
 } from '../AnnotationModal.defaults';
-import { createModalConfig } from '../annotationModal.composable';
+import { createModalConfig } from '../createModalConfig';
 
 describe('createModalConfig', () => {
   it('should create a modal state for every default modal', () => {
@@ -25,14 +25,18 @@ describe('createModalConfig', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     const config = createModalConfig(annotationModalDefaults);
 
-    expect(config.getModal('unknown-modal' as AnnotationModalAction)).toBeNull();
+    expect(
+      config.getModal('unknown-modal' as AnnotationModalAction),
+    ).toBeNull();
     expect(warn).toHaveBeenCalledWith('Modal unknown-modal not found');
   });
 
   it('should resolve a pending show promise once the modal is closed', async () => {
     const config = createModalConfig(annotationModalDefaults);
 
-    const pending = config.show('toast', { toastMessage: 'Saving your changes' });
+    const pending = config.show('toast', {
+      toastMessage: 'Saving your changes',
+    });
     config.close('toast');
 
     await expect(pending).resolves.toBeUndefined();

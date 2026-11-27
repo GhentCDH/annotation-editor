@@ -17,7 +17,7 @@ import {
   type DefinitionMap,
   type KeyLabel,
   type UIAnnotationDefinition,
-  UiAnnotionDefinitionSchema,
+  UiAnnotationDefinitionSchema,
   groupById,
 } from '@ghentcdh/annotation-ui';
 
@@ -106,7 +106,7 @@ const toVueDefinition = (
 ): UIAnnotationDefinition => {
   const style = def.annotation ?? {};
 
-  const parsed = UiAnnotionDefinitionSchema.parse({
+  const parsed = UiAnnotationDefinitionSchema.parse({
     ...def,
     allowedChildren: resolveKeyLabels(style.allowedChildren, grouped),
     allowedLinks: resolveKeyLabels(style.allowedLinks, grouped),

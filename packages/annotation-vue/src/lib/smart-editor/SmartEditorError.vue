@@ -33,15 +33,13 @@ import { computed } from 'vue';
 
 import { Alert } from '@ghentcdh/crouton-vue';
 
-import { type EditorLoadError } from './editorError';
+import {
+  SmartEditorErrorEmits,
+  SmartEditorErrorProperties,
+} from './SmartEditorError.properties';
 
-const props = defineProps<{
-  error: EditorLoadError;
-}>();
-
-const emit = defineEmits<{
-  retry: [];
-}>();
+const props = defineProps(SmartEditorErrorProperties);
+const emit = defineEmits(SmartEditorErrorEmits);
 
 const title = computed(() =>
   props.error.isNotFound ? 'Text not found' : 'Could not load the editor',

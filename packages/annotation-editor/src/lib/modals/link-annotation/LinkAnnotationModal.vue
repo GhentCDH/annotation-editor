@@ -41,12 +41,12 @@ import { type AnnotationMetadata } from '@ghentcdh/annotation-ui';
 import { type ViewConfig } from '@ghentcdh/crouton-core';
 import { CroutonForm, FormMessage, Modal } from '@ghentcdh/crouton-vue';
 
-import AnnotationText from '../info/Annotation-text.vue';
-import { useAnnotationLink } from './UseAnnotationLink';
+import AnnotationText from '../info/AnnotationText.vue';
 import {
   LinkAnnotationProperties,
   LinkEmits,
 } from './link-annotation.properties';
+import { useAnnotationLinkForm } from './useAnnotationLinkForm';
 
 const props = defineProps(LinkAnnotationProperties);
 const emits = defineEmits(LinkEmits);
@@ -59,7 +59,7 @@ const {
   annotations,
   metadata,
   definition,
-} = useAnnotationLink(props, emits);
+} = useAnnotationLinkForm(props, emits);
 
 // crouton-vue types formatBeforeSave as returning a Promise, but calls it synchronously.
 const formatBeforeSave = ((formData: AnnotationMetadata) =>

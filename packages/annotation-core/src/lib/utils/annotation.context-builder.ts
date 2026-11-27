@@ -1,6 +1,6 @@
 import { type ContextBuilder, contextBuilder } from '@ghentcdh/w3c-utils';
 
-import { AnnotationMetadataType } from '../types/annotation.contex';
+import { AnnotationMetadataType } from '../types/annotation.context';
 
 export type AnnotationDefConfig = {
   baseUrl: string;
