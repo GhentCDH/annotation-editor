@@ -1,6 +1,10 @@
 import { type EmitFn } from 'vue';
 
-import { type AnnotationMetadata, type EditorAnnotation, editorAnnotationSchema } from '@ghentcdh/annotation-ui';
+import {
+  type AnnotationMetadata,
+  type EditorAnnotation,
+  editorAnnotationSchema,
+} from '@ghentcdh/annotation-ui';
 
 import { useEditorState } from '../../composables/useEditorState';
 import { useMetadataEdit } from '../../composables/useMetadataEdit';
@@ -9,7 +13,7 @@ import {
   type LinkEmits,
 } from './link-annotation.properties';
 
-export const useAnnotationLink = (
+export const useAnnotationLinkForm = (
   props: LinkAnnotationProps,
   emits: EmitFn<typeof LinkEmits>,
 ) => {
@@ -47,7 +51,11 @@ export const useAnnotationLink = (
 
     return metadataEdit.save(cloned, emits);
   };
-  const onChangeValue = ({ metadata: _metadata }: { metadata: AnnotationMetadata }) => {
+  const onChangeValue = ({
+    metadata: _metadata,
+  }: {
+    metadata: AnnotationMetadata;
+  }) => {
     return metadataEdit.onChangeValue({ metadata });
   };
 

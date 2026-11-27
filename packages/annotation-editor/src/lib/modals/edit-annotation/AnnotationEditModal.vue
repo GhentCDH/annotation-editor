@@ -15,7 +15,9 @@
         :views="views"
         :format-before-save="formatBeforeSave"
         form-max-width="w-max max-w-lg form-scroll min-w-[1/2]"
-        :save-id="annotation?.id !== undefined ? String(annotation!.id) : undefined"
+        :save-id="
+          annotation?.id !== undefined ? String(annotation!.id) : undefined
+        "
         @save="save"
         @on-save-success="save"
         @cancel="cancel"
@@ -66,8 +68,8 @@ import {
   AnnotationEditEmits,
   AnnotationEditModalProperties,
 } from './AnnotationEditModal.properties';
-import { UseAnnotationEdit } from './UseAnnotationEdit';
 import { fullSelectionRange } from './fullSelectionRange';
+import { useAnnotationEditForm } from './useAnnotationEditForm';
 
 let annotatedTextConfig: UiAnnotatedText;
 const props = defineProps(AnnotationEditModalProperties);
@@ -85,7 +87,7 @@ const {
   updateSelector,
   definition,
   parent,
-} = UseAnnotationEdit(props, emits);
+} = useAnnotationEditForm(props, emits);
 
 const editId = `edit-select-annotation-${Date.now()}--`;
 

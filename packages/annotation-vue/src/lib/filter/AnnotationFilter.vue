@@ -67,26 +67,26 @@
 
 <script setup lang="ts">
 import { ArrowTopRightOnSquareIcon } from '@heroicons/vue/24/solid';
-import { type PropType, computed, getCurrentInstance } from 'vue';
+import { computed, getCurrentInstance } from 'vue';
 
 import { Btn, Collapse } from '@ghentcdh/crouton-vue';
 
 import { useAnnotationDefinitions } from '../definitions/useAnnotationDefinitions';
+import {
+  AnnotationFilterEmits,
+  AnnotationFilterProperties,
+  type AnnotationTypeItem,
+} from './AnnotationFilter.properties';
 
-const emit = defineEmits(['update:modelValue', 'annotationtype-click']);
+const emit = defineEmits(AnnotationFilterEmits);
 const model = defineModel<string[]>({ default: () => [] });
-const props = defineProps({
-  count: {
-    type: Object as PropType<Record<string, unknown[]>>,
-    default: undefined,
-  },
-});
+const props = defineProps(AnnotationFilterProperties);
 
 const annotationDefinitions = useAnnotationDefinitions();
 const hasItemClick =
   !!getCurrentInstance()?.vnode.props?.['onAnnotationtypeClick'];
 
-const items = computed(() =>
+const items = computed<AnnotationTypeItem[]>(() =>
   annotationDefinitions.definitions.map((def) => ({
     id: def.id,
     label: def.label,
@@ -104,21 +104,14 @@ const selectedLabel = computed(() => {
   return `${count}`;
 });
 
-const selectAll = () =>
-  emit(
-    'update:modelValue',
-    items.value.map((i) => i.id),
-  );
-const selectNone = () => emit('update:modelValue', []);
+const selectAll = () => (model.value = items.value.map((i) => i.id));
+const selectNone = () => (model.value = []);
 
 const toggleItem = (id: string, checked: boolean) => {
   if (checked) {
-    emit('update:modelValue', [...model.value, id]);
+    model.value = [...model.value, id];
   } else {
-    emit(
-      'update:modelValue',
-      model.value.filter((v) => v !== id),
-    );
+    model.value = model.value.filter((v) => v !== id);
   }
 };
 </script>

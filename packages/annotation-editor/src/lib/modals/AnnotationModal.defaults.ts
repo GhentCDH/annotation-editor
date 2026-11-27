@@ -7,7 +7,7 @@ import {
   type ConfirmCloseEvent,
   type ConfirmProps,
 } from './confirm/confirm.properties';
-import { useConfirm } from './confirm/useConfirm.composable';
+import { useConfirm } from './confirm/useConfirm';
 import {
   type AnnotationEditModal as AnnotationEditModalType,
   type AnnotationEditModalEvent,
@@ -28,10 +28,10 @@ import {
   type LinkAnnotationProps,
   type LinkAnnotationShow,
 } from './link-annotation/link-annotation.properties';
-import { useLinkAnnotation } from './link-annotation/useLinkAnnotation.composable';
+import { useLinkAnnotation } from './link-annotation/useLinkAnnotationModal';
 import ToastComponent from './toast/Toast.vue';
 import { type EditToast } from './toast/toast.properties';
-import { useToast } from './toast/useToast.composable';
+import { useToast } from './toast/useToast';
 
 export type AnnotationModalActionMap = {
   toast: ModalTypeConfig<EditToast, EditToast, void>;

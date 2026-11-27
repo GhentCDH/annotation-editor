@@ -11,7 +11,14 @@ import {
 } from 'vue';
 
 import { type SourceModel } from '@ghentcdh/annotation-core';
-import { type AnnotationId, type DefinitionMap, type EditorAnnotation, type UIAnnotationDefinition, createAnnotationConfiguration, groupById } from '@ghentcdh/annotation-ui';
+import {
+  type AnnotationId,
+  type DefinitionMap,
+  type EditorAnnotation,
+  type UIAnnotationDefinition,
+  createAnnotationConfiguration,
+  groupById,
+} from '@ghentcdh/annotation-ui';
 
 import {
   type AnnotationEditorEmitsFn,
@@ -21,7 +28,7 @@ import {
   type AnnotationModalActionMap,
   annotationModalDefaults,
 } from '../modals/AnnotationModal.defaults';
-import { createModalConfig } from '../modals/annotationModal.composable';
+import { createModalConfig } from '../modals/createModalConfig';
 import {
   type SelectByIdContext,
   selectAnnotationById,
@@ -30,12 +37,12 @@ import {
   type AnnotationEvents,
   sendAnnotationEvent,
 } from './annotation.events';
-import { type EditorConfig, type EditorState_ } from './editorState';
+import { type EditorConfig, type EditorUiState } from './editorState';
 
 type EditorState = {
   sources: ComputedRef<Readonly<SourceModel[]>>;
   config: Readonly<EditorConfig>;
-  editorState: Readonly<EditorState_>;
+  editorState: Readonly<EditorUiState>;
   sendAnnotationEvent: <KEY extends keyof AnnotationEvents>(
     event: KEY,
     data: AnnotationEvents[KEY],
@@ -79,7 +86,7 @@ export const useProvideEditorState = (
     editorState.disableEdits = false;
   };
 
-  const editorState = reactive<EditorState_>({
+  const editorState = reactive<EditorUiState>({
     editorState: null,
     selectedAnnotation: null,
     disableEdits: false,
@@ -87,15 +94,10 @@ export const useProvideEditorState = (
     readonly: props.readonly ?? false,
     show: () => showEditorState(),
     reset: () => resetEditorState(),
-    format: (annotation: EditorAnnotation, isNew: boolean): EditorAnnotation => {
-      if (!props.annotationTransformer) {
-        return null as unknown as EditorAnnotation;
-      }
-
-      return props.annotationTransformer.format(annotation, isNew) as EditorAnnotation;
-    },
+    format: (annotation: EditorAnnotation, isNew: boolean): EditorAnnotation =>
+      props.annotationTransformer.format(annotation, isNew) as EditorAnnotation,
     transformMetadata:
-      props.annotationTransformer?.transformMetadata?.bind(
+      props.annotationTransformer.transformMetadata?.bind(
         props.annotationTransformer,
       ) ?? ((m) => m),
   });
@@ -123,7 +125,12 @@ export const useProvideEditorState = (
 
     const sourceUri = annotation.selectors?.[0]?.uri;
 
-    if (!sourceUri) return { annotation, source: undefined, definition: getDefinition(annotation.definitionUri) };
+    if (!sourceUri)
+      return {
+        annotation,
+        source: undefined,
+        definition: getDefinition(annotation.definitionUri),
+      };
 
     const source = (props.sources ?? []).find((s) => s.uri === sourceUri);
     return {
@@ -147,7 +154,12 @@ export const useProvideEditorState = (
       () => props.annotations,
     ],
     ([id, action]) =>
-      selectAnnotationById(containerRef, id !== undefined ? String(id) : undefined, action, selectByIdCtx),
+      selectAnnotationById(
+        containerRef,
+        id !== undefined ? String(id) : undefined,
+        action,
+        selectByIdCtx,
+      ),
     { immediate: true },
   );
 
@@ -174,7 +186,7 @@ export const useProvideEditorState = (
   provide(EDITOR_KEY, {
     sources,
     config: config as Readonly<EditorConfig>,
-    editorState: editorState as Readonly<EditorState_>,
+    editorState: editorState as Readonly<EditorUiState>,
     sendAnnotationEvent: sendAnnotationEvent(
       config,
       editorState,

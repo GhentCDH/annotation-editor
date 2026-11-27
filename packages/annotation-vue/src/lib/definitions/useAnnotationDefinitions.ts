@@ -13,9 +13,11 @@ import {
   type AnnotationResource,
   type AnnotationResource as CoreAnnotationDefinition,
 } from '@ghentcdh/annotation-core';
-import { type KeyLabel,
+import {
+  type KeyLabel,
   type UIAnnotationDefinition,
-  UiAnnotionDefinitionSchema } from '@ghentcdh/annotation-ui';
+  UiAnnotationDefinitionSchema,
+} from '@ghentcdh/annotation-ui';
 
 import {
   type DefinitionsFetchFn,
@@ -102,7 +104,7 @@ const toVueDefinition = (
 ): UIAnnotationDefinition => {
   const style = def.annotation ?? {};
 
-  const parsed = UiAnnotionDefinitionSchema.parse({
+  const parsed = UiAnnotationDefinitionSchema.parse({
     ...def,
     allowedChildren: resolveKeyLabels(style.allowedChildren, grouped),
     allowedLinks: resolveKeyLabels(style.allowedLinks, grouped),

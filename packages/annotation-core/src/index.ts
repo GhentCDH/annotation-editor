@@ -1,6 +1,6 @@
 export * from './lib/types/source.model';
 export * from './lib/types/grid-layout.types';
-export * from './lib/types/annotation.contex';
+export * from './lib/types/annotation.context';
 export * from './lib/types/version';
 export * from './lib/types/annotation-json-config.types';
 export * from './lib/types/annotation-definition.type';

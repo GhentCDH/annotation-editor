@@ -65,19 +65,23 @@ import { Drawer, Loading } from '@ghentcdh/crouton-vue';
 import type { W3CAnnotation } from '@ghentcdh/w3c-utils';
 
 import { useAnnotationDefinitions } from '../definitions/useAnnotationDefinitions';
+import { type AnnotationTypeItem } from '../filter/AnnotationFilter.properties';
 import AnnotationFilter from '../filter/AnnotationFilter.vue';
-import { SmartEditorProperties } from './SmartEditor.properties';
+import {
+  SmartEditorEmits,
+  SmartEditorProperties,
+} from './SmartEditor.properties';
 import SmartEditorError from './SmartEditorError.vue';
 import { type EditorLoadError, toEditorLoadError } from './editorError';
 import { provideEditorStore } from './editorStore';
 
 const props = defineProps(SmartEditorProperties);
-const emit = defineEmits(['annotationtype-click']);
+const emit = defineEmits(SmartEditorEmits);
 const hasItemClick =
   !!getCurrentInstance()?.vnode.props?.['onAnnotationtypeClick'];
 const itemClickBind = hasItemClick
   ? {
-      onAnnotationtypeClick: (item: Record<string, unknown>) =>
+      onAnnotationtypeClick: (item: AnnotationTypeItem) =>
         emit('annotationtype-click', item),
     }
   : {};

@@ -1,5 +1,9 @@
 export const SourceNavbarProperties = {
-  disabled: { type: Boolean, required: false, default: false },
+  disabled: {
+    type: Boolean,
+    required: false as const,
+    default: false,
+  },
 };
 
 export const SourceNavbarEmits = {

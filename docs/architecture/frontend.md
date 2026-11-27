@@ -96,7 +96,7 @@ Modals are typed by key. Adding one touches three places:
    `annotationModalDefaults` (component + `useFn`).
 3. Call it: `config.modal.show('<key>', data)` returns a `Promise<closeEvent | null>`.
 
-Types live in `modals/AnnotationModal.definition.ts`; the stack in `modals/annotationModal.composable.ts`;
+Types live in `modals/AnnotationModal.definition.ts`; the stack in `modals/createModalConfig.ts`;
 `AnnotationModal.vue` renders whatever is open. `open-modal.ts` handles opening by id from props
 (`selectedAnnotationId` / `selectedAnnotationAction`).
 
@@ -116,7 +116,7 @@ graph LR
   `parse` returns `null` for), `createLinks`.
 - `adapter/w3c.transform.annotation.adapter.ts` — `w3cAnnotationTransformer`, the default.
 - `annotated-text/annotation-configuration.factory.ts` — maps definitions to annotated-text styles.
-- `types/ui-annotation-definition.type.ts` — `UiAnnotionDefinitionSchema` turns a definition into a
+- `types/ui-annotation-definition.type.ts` — `UiAnnotationDefinitionSchema` turns a definition into a
   `UIAnnotationDefinition` (label = `title ?? name`, `resource` client, permissions).
 
 ## Where to change what

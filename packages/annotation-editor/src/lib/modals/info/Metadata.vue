@@ -10,21 +10,18 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { type UIAnnotationDefinition } from '@ghentcdh/annotation-ui';
 import { type ViewConfig } from '@ghentcdh/crouton-core';
 import { CroutonForm } from '@ghentcdh/crouton-vue';
 
-const properties = defineProps<{
-  data: Record<string, unknown>;
-  definition: UIAnnotationDefinition;
-}>();
+import { MetadataProperties } from './Metadata.properties';
+
+const properties = defineProps(MetadataProperties);
 
 const views = computed(
   (): Record<string, ViewConfig> =>
     (properties.definition?.schemas ?? {}) as Record<string, ViewConfig>,
 );
 const elements = views.value?.['view']?.['ui']?.['elements'] as
-  | unknown[]
-  | undefined;
+  unknown[] | undefined;
 const show = computed(() => (elements?.length ?? 0) > 0);
 </script>

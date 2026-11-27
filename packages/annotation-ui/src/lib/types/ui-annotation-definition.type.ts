@@ -44,7 +44,7 @@ export type UIAnnotationDefinition = AnnotationResource & {
 const baseSchema =
   AnnotationResourceSchema as unknown as z.ZodObject<z.ZodRawShape>;
 
-export const UiAnnotionDefinitionSchema: z.ZodType<UIAnnotationDefinition> =
+export const UiAnnotationDefinitionSchema: z.ZodType<UIAnnotationDefinition> =
   baseSchema
     .extend({
       style: z.custom<CustomAnnotationStyle>().optional(),
