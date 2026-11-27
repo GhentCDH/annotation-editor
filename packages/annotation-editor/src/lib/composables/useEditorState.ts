@@ -62,7 +62,7 @@ export const useProvideEditorState = (
   emits: AnnotationEditorEmitsFn,
   containerRef: TemplateRef<HTMLElement>,
 ) => {
-  const allDefinitions = computed(() => props.annotationDefinitions);
+  const allDefinitions = computed(() => props.annotationDefinitions ?? []);
   const definitionsMap = computed(() => {
     return groupById(props.annotationDefinitions) as DefinitionMap;
   });

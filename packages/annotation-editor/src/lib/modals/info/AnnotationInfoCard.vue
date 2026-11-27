@@ -170,7 +170,7 @@ const addActions = (definition: UIAnnotationDefinition) => {
 };
 
 const createActionLinks = (definition: UIAnnotationDefinition) => {
-  return definition?.allowedLinks.map((link) => ({
+  return (definition?.allowedLinks ?? []).map((link) => ({
     icon: link.icon ?? IconEnum.Link,
     label: `Add ${link.label}`,
     disabled: editorState.disableEdits,

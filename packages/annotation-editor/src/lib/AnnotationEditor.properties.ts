@@ -11,6 +11,7 @@ import {
   type UIAnnotationDefinition,
   w3cAnnotationTransformer,
 } from '@ghentcdh/annotation-ui';
+import { EditorPosition } from './composables/EditorPosition.type';
 
 export const AnnotationEditorProperties = {
   modalView: {
@@ -57,6 +58,11 @@ export const AnnotationEditorProperties = {
     type: Boolean,
     required: false as const,
     default: false,
+  },
+  editorPosition: {
+    type: String as PropType<EditorPosition>,
+    default: EditorPosition.Modal,
+    required: false as const,
   },
 };
 

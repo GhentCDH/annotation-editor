@@ -19,7 +19,7 @@ const emits = defineEmits(SourceNavbarEmits);
 const { editorState, allDefinitions } = useEditorState();
 
 const actions = computed(() => {
-  const rootTypes = allDefinitions.value
+  const rootTypes = (allDefinitions.value ?? [])
     .filter((d) => d.annotation.isRoot)
     .map((d) => ({ key: d.id, label: d.label }));
 

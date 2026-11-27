@@ -1,4 +1,5 @@
 <template>
+  Position of editor  = {{layout?.editorPosition}}
   <div
     ref="containerRef"
     data-testid="annotation-editor"
