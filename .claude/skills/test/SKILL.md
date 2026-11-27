@@ -1,3 +1,8 @@
+---
+name: test
+description: Run Vitest via Nx for one project or all affected projects and fix failures.
+---
+
 Run tests for this project.
 
 If `$ARGUMENTS` specifies a project name, run tests for that specific project:

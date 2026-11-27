@@ -6,6 +6,7 @@ import { hopeTheme } from 'vuepress-theme-hope';
 
 import guideSideBar from '../guide/typedoc_sidebar.json' with { type: 'json' };
 import demoSideBar from '../demo/typedoc_sidebar.json' with { type: 'json' };
+import architectureSideBar from '../architecture/typedoc_sidebar.json' with { type: 'json' };
 
 export default defineUserConfig({
   base: process.env.DOCS_BASE ? `${process.env.DOCS_BASE}/` : '/',
@@ -76,6 +77,7 @@ export default defineUserConfig({
     navbar: [
       { text: 'Home', link: '/' },
       { text: 'Guide', link: '/guide/quick-start' },
+      { text: 'Architecture', link: '/architecture/' },
     ],
     sidebar: [
       {
@@ -85,6 +87,11 @@ export default defineUserConfig({
       {
         text: 'Demo',
         children: demoSideBar,
+      },
+      {
+        text: 'Architecture',
+        link: '/architecture/',
+        children: architectureSideBar,
       },
     ],
   }),

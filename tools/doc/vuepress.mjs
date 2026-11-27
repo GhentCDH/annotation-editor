@@ -133,6 +133,7 @@ if (fs.existsSync('README.md')) {
 // Run after the README copy so demo.md is included in the generated sidebar.
 createMenu('guide');
 createMenu('demo');
+createMenu('architecture');
 
 // ── root README → docs home ───────────────────────────────────────────────────
 copyMd('', '', { depth: 1, readmeOnly: true });

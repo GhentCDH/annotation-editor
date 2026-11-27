@@ -1,3 +1,8 @@
+---
+name: build
+description: Build one Nx project or all affected projects and fix build errors. Use when asked to build, or after changes to vite/package config.
+---
+
 Build a project in this workspace.
 
 If `$ARGUMENTS` specifies a project name, build that specific project:
