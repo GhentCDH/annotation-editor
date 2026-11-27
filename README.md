@@ -17,7 +17,7 @@ Monorepo for W3C-compliant annotation editing. Provides a NestJS API module for 
 | Package                     | Description                                                            |
 |-----------------------------|------------------------------------------------------------------------|
 | `@ghentcdh/annotation-core` | Shared types, Zod schemas, and configuration utilities                 |
-| `@ghentcdh/annotation-vue`  | Vue 3 annotation editor and preview components (bundled, ready to use) |
+| `@ghentcdh/annotation-vue`  | Vue 3 annotation editor components (bundled, ready to use)             |
 | `@ghentcdh/annotation-api`  | NestJS module for serving annotation definitions                       |
 
 > **Status: release candidate (0.1.0-rc).** The public API is frozen until 0.1.0; only bug fixes land in RCs.
@@ -34,7 +34,7 @@ See the [documentation](https://ghentcdh.github.io/annotation-editor/) for insta
 
 ```
 ┌─────────────────────┐
-│  annotation-vue     │  Vue 3 editor + preview components
+│  annotation-vue     │  Vue 3 editor components
 │  (frontend)         │
 └────────┬────────────┘
          │ uses types from

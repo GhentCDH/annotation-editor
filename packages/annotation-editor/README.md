@@ -1,7 +1,9 @@
-# annotation-editor
+# annotation-editor (private)
 
-This library was generated with [Nx](https://nx.dev).
+The `AnnotationEditor` Vue component: renders sources, handles create/edit/delete/link through modals. It loads
+nothing itself — data comes in as props, changes go out as events. Not published: bundled into
+`@ghentcdh/annotation-vue`.
 
-## Running unit tests
-
-Run `nx test annotation-editor` to execute the unit tests via [Vitest](https://vitest.dev/).
+```sh
+pnpm nx test annotation-editor
+```
